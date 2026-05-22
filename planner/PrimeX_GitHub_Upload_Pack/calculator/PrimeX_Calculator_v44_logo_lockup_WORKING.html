@@ -1,0 +1,3052 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0a0c;--bg2:#0f1218;--bg3:#141920;
+  --bdr:#1e2d3d;--bdr2:#243447;
+  --blue:#4a9eff;--blue2:#2a6abf;--blue3:#0d2040;
+  --green:#3adf7a;--green3:#0a2318;--green-bdr:#1a4a28;
+  --amber:#f5a623;--amber3:#1a1200;--amber-bdr:#3a2a00;
+  --text:#dde8f0;--text2:#8aaac8;--text3:#3a5a78;
+  --mono:'Space Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  --glow-green:rgba(58,223,122,.035);
+  --glow-blue:rgba(74,158,255,.08);
+}
+body{background:var(--bg);margin:0;padding:0}
+.px{background:var(--bg);color:var(--text);font-family:var(--sans);width:100%;max-width:600px;margin:0 auto}
+
+/* HEADER */
+.hdr{background:var(--bg);border-bottom:1px solid var(--bdr);padding:13px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.14em;color:var(--blue)}
+.logo em{color:var(--text);font-style:normal}
+.logo small{color:var(--text3);font-weight:400;font-size:10px;margin-left:6px}
+.badge-ruo{font-family:var(--mono);font-size:8px;color:var(--text3);background:transparent;border:1px solid var(--bdr2);border-radius:3px;padding:3px 8px;letter-spacing:.12em;text-transform:uppercase}
+
+/* MODE CARDS */
+.mode-section{padding:14px 16px;border-bottom:1px solid var(--bdr);background:var(--bg2)}
+.mode-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--text3);text-transform:uppercase;margin-bottom:9px}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mode-card{padding:12px 11px;border-radius:7px;cursor:pointer;border:1.5px solid var(--bdr);background:var(--bg3);position:relative;transition:all .2s;user-select:none;overflow:hidden}
+.mode-card.on{border-color:var(--blue);background:var(--blue3)}
+.mode-icon{font-size:18px;margin-bottom:5px}
+.mode-name{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.05em;margin-bottom:3px}
+.mode-card.on .mode-name{color:var(--blue)}
+.mode-desc{font-size:11px;color:var(--text3);line-height:1.45}
+.mode-card.on .mode-desc{color:var(--text2)}
+.mode-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);position:absolute;top:9px;right:9px;display:none}
+.mode-card.on .mode-dot{display:block}
+
+/* PROGRESS — bolder, clearer */
+.prog-bar{display:flex;align-items:center;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--bdr);gap:3px}
+.prog-step{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.prog-dot{width:26px;height:26px;min-width:26px;border-radius:50%;border:2px solid var(--bdr2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text3);transition:all .3s}
+.prog-dot.done{background:var(--green3);border-color:var(--green);color:var(--green)}
+.prog-dot.active{background:var(--blue3);border-color:var(--blue);color:var(--blue);box-shadow:0 0 6px rgba(74,158,255,.25)}
+.prog-lbl{font-size:11px;font-weight:600;color:var(--text3);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog-lbl.active{color:var(--blue)}
+.prog-lbl.done{color:var(--green)}
+.prog-line{height:2px;background:var(--bdr);flex:1;min-width:4px;border-radius:2px;margin:0 3px;transition:background .3s}
+.prog-line.done{background:var(--green)}
+
+/* TIP BOX */
+.tip-box{margin:10px 16px;background:var(--amber3);border:1px solid var(--amber-bdr);border-radius:6px;padding:10px 12px;display:flex;gap:9px;align-items:flex-start}
+.tip-text{font-size:12px;color:#b89050;line-height:1.5;flex:1}
+.tip-close{font-size:14px;color:var(--amber-bdr);cursor:pointer;flex-shrink:0;line-height:1.3;padding:0 2px}
+
+/* SECTIONS */
+.section{padding:15px 16px;border-bottom:1px solid var(--bdr);border-left:3px solid transparent;transition:border-left-color .4s,background .4s}
+.section.input-s{border-left-color:var(--green-bdr)}
+.section.result-s{border-left-color:var(--blue2);background:var(--bg2)}
+/* V12: softer pulse — instrument panel feel */
+@keyframes softPulse{
+  0%{border-left-color:var(--blue2);background:transparent}
+  50%{border-left-color:var(--blue2);background:var(--glow-blue)}
+  100%{border-left-color:var(--blue2);background:transparent}
+}
+.section.pulsing{animation:softPulse 3s ease-in-out infinite}
+
+/* STEP HEAD — clearer, not bulky */
+.step-head{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.step-badge{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--blue);background:var(--blue3);border:1px solid var(--blue2);border-radius:3px;padding:2px 7px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;transition:all .3s}
+.step-badge.done{background:var(--green3);border-color:var(--green-bdr);color:var(--green)}
+.step-title{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);letter-spacing:.08em;text-transform:uppercase}
+.field-desc{font-size:12.5px;color:var(--text2);margin-bottom:11px;line-height:1.55}
+
+/* UNIT TOGGLE — V12: smaller, refined */
+.unit-tog{display:inline-flex;background:var(--bg3);border:1px solid var(--bdr);border-radius:5px;overflow:hidden;margin-bottom:10px}
+.ut-btn{padding:6px 16px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text3);background:transparent;border:none;cursor:pointer;text-align:center;transition:all .18s;min-height:30px;position:relative;overflow:hidden;letter-spacing:.06em}
+.ut-btn.on{background:var(--blue3);color:var(--blue)}
+
+/* RIPPLE */
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+.ripple-el{position:absolute;border-radius:50%;background:rgba(74,158,255,.2);width:36px;height:36px;margin-top:-18px;margin-left:-18px;animation:ripple .45s linear;pointer-events:none}
+
+/* PRIMARY CHIPS — main dose row */
+.chips-primary{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+/* SECONDARY CHIPS — advanced / higher doses */
+.adv-toggle{display:flex;align-items:center;gap:6px;margin:6px 0;cursor:pointer;user-select:none}
+.adv-toggle-line{flex:1;height:1px;background:var(--bdr)}
+.adv-toggle-btn{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;white-space:nowrap;padding:3px 8px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg3);cursor:pointer;transition:all .2s}
+.adv-toggle-btn:hover{border-color:var(--bdr2);color:var(--text2)}
+.chips-secondary{display:none;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chips-secondary.open{display:flex}
+
+.chip{padding:8px 12px;background:var(--bg3);border:1.5px solid var(--bdr);border-radius:20px;font-family:var(--mono);font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s;user-select:none;min-height:38px;display:flex;align-items:center;white-space:nowrap;position:relative;overflow:hidden}
+.chip:active{transform:scale(.94)}
+.chip.on{background:var(--blue3);border-color:var(--blue);color:var(--blue)}
+.chip.rec::before{content:'↩ ';font-size:9px;color:var(--amber);margin-right:2px}
+
+/* DOSE CHIP — expandable, V12: clearer affordance */
+.chip-wrap{position:relative;display:inline-block}
+.chip.expandable{padding-right:10px;border-style:solid;border-color:var(--bdr2)}
+.chip.expandable .exp-indicator{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:var(--blue2);font-size:10px;font-weight:700;color:#c0deff;margin-left:5px;flex-shrink:0;transition:all .2s}
+.chip.expandable.on .exp-indicator{background:var(--blue);color:#fff}
+.chip.expandable:hover .exp-indicator,.chip.expandable:active .exp-indicator{background:var(--blue);color:#fff}
+
+/* V12: clearer expand microcopy */
+.expand-hint{font-size:11px;color:var(--text2);margin-bottom:9px;font-family:var(--sans);letter-spacing:.01em;display:flex;align-items:center;gap:6px;line-height:1.5}
+.expand-hint::before{content:'';width:6px;height:1px;background:var(--bdr2);display:inline-block;flex-shrink:0}
+
+/* SUB POPUP */
+.sub-popup{display:none;position:absolute;top:calc(100% + 7px);left:0;z-index:30;background:var(--bg2);border:1.5px solid var(--blue2);border-radius:7px;padding:8px;box-shadow:0 6px 20px rgba(0,0,0,.55);min-width:160px}
+.sub-popup.open{display:block}
+.sub-popup-title{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;padding:0 2px}
+.sub-popup-arrow{position:absolute;top:-6px;width:10px;height:10px;background:var(--bg2);border-left:1.5px solid var(--blue2);border-top:1.5px solid var(--blue2);transform:rotate(45deg);left:14px}
+.sub-chip{padding:7px 12px;background:var(--bg3);border:1.5px solid var(--bdr2);border-radius:16px;font-family:var(--mono);font-size:12px;color:var(--text2);cursor:pointer;min-height:36px;display:flex;align-items:center;transition:all .15s;user-select:none;white-space:nowrap;position:relative;overflow:hidden}
+.sub-chip:active{transform:scale(.94)}
+.sub-chip.on{background:var(--blue3);border-color:var(--blue);color:var(--blue)}
+
+/* MANUAL INPUT — V13: clearly secondary, compact */
+.manual-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed var(--bdr)}
+.manual-lbl{font-size:9px;color:var(--text3);margin-bottom:4px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.inp{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:4px;color:var(--text3);font-family:var(--mono);font-size:12px;font-weight:400;padding:5px 9px;outline:none;-webkit-appearance:none;min-height:0;height:30px;transition:border-color .2s,color .2s}
+.inp:focus{border-color:var(--blue2);color:var(--text2);background:var(--bg2)}
+.inp::placeholder{color:var(--text3);font-size:11px;opacity:.6}
+
+/* SYRINGE SELECTOR V19 — single selected card + dropdown */
+.syr-main-card{background:var(--blue3);border:1.5px solid var(--blue2);border-radius:7px;padding:13px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:default;position:relative;overflow:hidden}
+.syr-main-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue)}
+.syr-main-sub{font-size:11px;color:var(--text2);margin-top:3px}
+.syr-badge{font-family:var(--mono);font-size:8px;color:var(--blue2);background:transparent;border:1px solid var(--blue2);border-radius:2px;padding:2px 7px;letter-spacing:.1em;text-transform:uppercase}
+/* Change type trigger */
+.syr-change-btn{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em;cursor:pointer;border:1px solid var(--bdr);border-radius:5px;background:transparent;transition:all .18s;user-select:none;margin-bottom:2px}
+.syr-change-btn:hover{color:var(--text2);border-color:var(--bdr2)}
+.syr-change-btn.open{color:var(--blue);border-color:var(--blue2);background:var(--blue3)}
+.syr-change-btn .syr-chg-arr{font-size:10px;transition:transform .18s}
+.syr-change-btn.open .syr-chg-arr{transform:rotate(180deg)}
+/* Dropdown */
+.syr-dropdown{display:none;border:1px solid var(--bdr2);border-radius:6px;overflow:hidden;margin-top:4px}
+.syr-dropdown.open{display:block}
+.syr-drop-item{padding:11px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.syr-drop-item:last-child{border-bottom:none}
+.syr-drop-item:hover{background:var(--bg2)}
+.syr-drop-item:active{background:var(--blue3)}
+.syr-drop-name{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text2)}
+.syr-drop-sub{font-size:10px;color:var(--text3);margin-top:2px}
+
+/* SYRINGE VISUAL */
+.syr-section{padding:14px 16px;background:var(--bg2);border-bottom:1px solid var(--bdr);border-left:3px solid var(--blue)}
+.syr-vis-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.syr-interact-hint{font-size:11px;color:var(--blue2);margin-bottom:9px;font-family:var(--mono);letter-spacing:.04em}
+.draw-big{text-align:center;margin-bottom:10px}
+.draw-sub{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--text2);text-transform:uppercase;margin-bottom:4px}
+.draw-val{font-family:var(--mono);font-size:34px;font-weight:700;color:var(--blue);letter-spacing:.04em;text-shadow:0 0 20px rgba(74,158,255,.35)}
+.syr-svg-wrap{border-radius:7px;background:var(--bg);border:1px solid var(--bdr2);padding:10px 0 8px;margin-top:4px;user-select:none}
+
+/* RESULTS */
+.results-section{padding:15px 16px;background:var(--bg2);border-bottom:1px solid var(--bdr);border-left:3px solid var(--blue2)}
+.rt{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--blue);text-transform:uppercase;margin-bottom:11px}
+.sr{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.sr:last-child{border-bottom:none}
+.sl{font-size:13px;color:var(--text2)}
+.sv{font-family:var(--mono);font-size:13px;color:var(--text);font-weight:700}
+.sv.hi{color:var(--blue)}
+.dose-row{display:grid;grid-template-columns:1fr 1fr;background:var(--bg3);border:1px solid var(--bdr);border-radius:6px;overflow:hidden;margin-top:11px}
+.dc{padding:13px 11px;text-align:center}
+.dc:first-child{border-right:1px solid var(--bdr)}
+.dc-l{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+.dc.mcg .dc-l{color:var(--blue)}
+.dc.mgg .dc-l{color:var(--green)}
+.dc-v{font-family:var(--mono);font-size:19px;font-weight:700}
+.dc.mcg .dc-v{color:var(--blue)}
+.dc.mgg .dc-v{color:var(--green)}
+
+.hint-section{padding:11px 16px;border-bottom:1px solid var(--bdr)}
+.hint{border-left:2px solid var(--blue2);padding:9px 12px;border-radius:0 5px 5px 0;font-size:12px;color:var(--text2);line-height:1.7}
+.hv{font-family:var(--mono);color:var(--text);font-size:12px}
+.err{background:#150606;border:1px solid #2a0f0f;border-radius:5px;padding:8px 12px;font-size:12px;color:#d04040;margin:0 16px 10px;display:none;font-family:var(--mono)}
+.ml-eq{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:6px;padding:5px 10px;background:var(--bg3);border:1px solid var(--bdr);border-radius:4px;display:inline-block}
+.disc-section{padding:11px 16px}
+.disc-t{font-family:var(--mono);font-size:8px;letter-spacing:.18em;color:#4a2828;text-transform:uppercase;margin-bottom:4px}
+.disc-tx{font-size:10px;color:#3a2020;line-height:1.6}
+
+/* PrimeX Calculator v34 — Netlify Visual Candidate
+   Base: v20 final stable.
+   IMPORTANT:
+   - CSS / typography / visual polish only.
+   - Original JS builders and calculator logic untouched.
+   - Designed for real browser / Netlify testing.
+*/
+
+:root{
+  --bg:#030507!important;
+  --bg2:#070d14!important;
+  --bg3:#0d1724!important;
+  --bdr:rgba(255,255,255,.072)!important;
+  --bdr2:rgba(255,255,255,.115)!important;
+
+  --blue:#4f91b4!important;
+  --blue2:#2f7fa8!important;
+  --blue3:rgba(79,145,180,.13)!important;
+
+  --green:#74ad8d!important;
+  --green3:rgba(116,173,141,.075)!important;
+  --green-bdr:rgba(116,173,141,.22)!important;
+
+  --amber:#c9923a!important;
+  --amber3:rgba(201,146,58,.06)!important;
+  --amber-bdr:rgba(201,146,58,.20)!important;
+
+  --text:#d9e4ec!important;
+  --text2:#b8c8d6!important;
+  --text3:#7890a6!important;
+
+  --mono:'Space Mono',monospace;
+  --sans:'Inter','IBM Plex Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+
+  --glow-green:rgba(116,173,141,.016)!important;
+  --glow-blue:rgba(79,145,180,.026)!important;
+}
+
+*{
+  -webkit-font-smoothing:antialiased!important;
+  text-rendering:optimizeLegibility!important;
+}
+
+body{
+  background:
+    radial-gradient(circle at 85% 7%,rgba(79,145,180,.052),transparent 34%),
+    radial-gradient(circle at 12% 86%,rgba(79,145,180,.026),transparent 32%),
+    linear-gradient(rgba(255,255,255,.007) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.005) 1px,transparent 1px),
+    #030507!important;
+  background-size:auto,auto,104px 104px,104px 104px,auto!important;
+}
+
+.px{
+  background:transparent!important;
+  color:var(--text)!important;
+  font-family:var(--sans)!important;
+  max-width:640px!important;
+  min-height:100vh!important;
+}
+
+/* Header */
+.hdr{
+  position:sticky!important;
+  top:0!important;
+  z-index:50!important;
+  background:rgba(3,5,7,.965)!important;
+  backdrop-filter:blur(14px)!important;
+  border-bottom:1px solid rgba(255,255,255,.075)!important;
+  padding:17px 16px 15px!important;
+}
+
+.logo{
+  font-family:var(--sans)!important;
+  font-size:21px!important;
+  line-height:1!important;
+  font-weight:700!important;
+  letter-spacing:-.046em!important;
+  color:rgba(247,250,252,.98)!important;
+}
+
+.logo em{
+  color:var(--blue)!important;
+  font-style:normal!important;
+}
+
+.logo small{
+  display:block!important;
+  margin-left:0!important;
+  margin-top:7px!important;
+  font-family:var(--mono)!important;
+  font-size:7.5px!important;
+  letter-spacing:2.05px!important;
+  text-transform:uppercase!important;
+  color:rgba(150,168,186,.72)!important;
+}
+
+.badge-ruo{
+  font-family:var(--mono)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  background:rgba(255,255,255,.018)!important;
+  color:rgba(150,168,186,.72)!important;
+  border-radius:2px!important;
+  padding:4px 8px!important;
+}
+
+/* Route selector */
+.mode-section{
+  background:linear-gradient(180deg,rgba(8,16,26,.96),rgba(5,8,13,.99))!important;
+  border-bottom:1px solid rgba(255,255,255,.062)!important;
+  padding:21px 16px 23px!important;
+}
+
+.mode-lbl{
+  font-family:var(--mono)!important;
+  color:rgba(79,145,180,.88)!important;
+  letter-spacing:2.55px!important;
+  margin-bottom:15px!important;
+}
+
+.mode-cards{
+  gap:11px!important;
+}
+
+.mode-card{
+  background:linear-gradient(180deg,rgba(13,23,36,.90),rgba(7,12,19,.98))!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-left:2px solid rgba(79,145,180,.25)!important;
+  border-radius:12px!important;
+  padding:16px 14px!important;
+  box-shadow:none!important;
+}
+
+.mode-card.on{
+  background:linear-gradient(180deg,rgba(79,145,180,.145),rgba(8,14,23,.99))!important;
+  border-color:rgba(255,255,255,.12)!important;
+  border-left-color:rgba(79,145,180,.82)!important;
+}
+
+.mode-icon{
+  display:none!important;
+}
+
+.mode-name{
+  font-family:var(--sans)!important;
+  color:rgba(236,244,249,.96)!important;
+  font-size:12px!important;
+  font-weight:680!important;
+  letter-spacing:-.005em!important;
+  text-transform:none!important;
+  margin-bottom:6px!important;
+}
+
+.mode-card.on .mode-name{
+  color:rgba(250,252,253,.99)!important;
+}
+
+.mode-desc{
+  font-family:var(--sans)!important;
+  color:rgba(184,202,218,.84)!important;
+  font-size:12.3px!important;
+  line-height:1.5!important;
+}
+
+.mode-card.on .mode-desc{
+  color:rgba(210,223,234,.92)!important;
+}
+
+.mode-dot{
+  width:26px!important;
+  height:1px!important;
+  border-radius:0!important;
+  top:13px!important;
+  right:13px!important;
+  background:rgba(79,145,180,.74)!important;
+}
+
+/* Progress rail */
+.prog-bar{
+  position:sticky!important;
+  top:59px!important;
+  z-index:45!important;
+  background:rgba(3,5,7,.955)!important;
+  backdrop-filter:blur(12px)!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  padding:11px 16px!important;
+}
+
+.prog-dot{
+  background:rgba(13,23,36,.92)!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  color:rgba(120,144,166,.82)!important;
+  box-shadow:none!important;
+}
+
+.prog-dot.active{
+  background:rgba(79,145,180,.14)!important;
+  border-color:rgba(79,145,180,.58)!important;
+  color:rgba(218,236,246,.98)!important;
+  box-shadow:none!important;
+}
+
+.prog-dot.done{
+  background:rgba(116,173,141,.08)!important;
+  border-color:rgba(116,173,141,.24)!important;
+  color:rgba(142,204,165,.76)!important;
+}
+
+.prog-lbl{
+  font-family:var(--mono)!important;
+  font-size:8.5px!important;
+  color:rgba(120,144,166,.72)!important;
+}
+
+.prog-lbl.active{
+  color:rgba(218,236,246,.92)!important;
+}
+
+.prog-lbl.done{
+  color:rgba(142,204,165,.72)!important;
+}
+
+.prog-line{
+  background:rgba(255,255,255,.055)!important;
+}
+
+.prog-line.done{
+  background:rgba(116,173,141,.30)!important;
+}
+
+/* Helper tip */
+.tip-box{
+  margin:14px 14px!important;
+  background:rgba(201,146,58,.045)!important;
+  border:1px solid rgba(201,146,58,.14)!important;
+  border-left:2px solid rgba(201,146,58,.34)!important;
+  border-radius:10px!important;
+  padding:12px 13px!important;
+  opacity:.86!important;
+}
+
+.tip-text{
+  font-family:var(--sans)!important;
+  color:rgba(204,181,136,.84)!important;
+  font-size:13px!important;
+  line-height:1.45!important;
+}
+
+/* Step cards */
+.section{
+  margin:14px 12px!important;
+  padding:20px 16px!important;
+  background:linear-gradient(180deg,rgba(7,12,19,.80),rgba(5,8,13,.90))!important;
+  border:1px solid rgba(255,255,255,.068)!important;
+  border-left:3px solid rgba(255,255,255,.045)!important;
+  border-radius:14px!important;
+}
+
+.section.input-s{
+  border-left-color:rgba(255,255,255,.055)!important;
+}
+
+.section.input-s.pulsing{
+  background:linear-gradient(180deg,rgba(13,23,36,.98),rgba(8,14,23,.99))!important;
+  border-color:rgba(255,255,255,.11)!important;
+  border-left-color:rgba(79,145,180,.84)!important;
+}
+
+.section.result-s{
+  background:linear-gradient(180deg,rgba(13,23,36,.92),rgba(8,14,23,.98))!important;
+  border-left-color:rgba(79,145,180,.48)!important;
+}
+
+@keyframes softPulse{
+  0%{border-left-color:rgba(79,145,180,.52);background:rgba(8,14,23,.90)}
+  50%{border-left-color:rgba(79,145,180,.84);background:rgba(13,23,36,.98)}
+  100%{border-left-color:rgba(79,145,180,.52);background:rgba(8,14,23,.90)}
+}
+
+.step-head{
+  align-items:center!important;
+  gap:12px!important;
+  margin-bottom:12px!important;
+}
+
+.step-badge{
+  font-family:var(--mono)!important;
+  min-width:82px!important;
+  min-height:36px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(79,145,180,.105)!important;
+  border:1px solid rgba(79,145,180,.30)!important;
+  color:rgba(198,225,239,.90)!important;
+  border-radius:3px!important;
+  padding:3px 8px!important;
+  font-size:9.2px!important;
+  letter-spacing:1.35px!important;
+  font-weight:700!important;
+}
+
+.section.pulsing .step-badge{
+  background:rgba(79,145,180,.18)!important;
+  border-color:rgba(79,145,180,.62)!important;
+  color:rgba(230,244,250,.99)!important;
+}
+
+.step-badge.done{
+  background:rgba(116,173,141,.07)!important;
+  border-color:rgba(116,173,141,.22)!important;
+  color:rgba(142,204,165,.76)!important;
+}
+
+.step-title{
+  font-family:var(--sans)!important;
+  font-size:19px!important;
+  font-weight:680!important;
+  letter-spacing:-.025em!important;
+  line-height:1.15!important;
+  text-transform:none!important;
+  color:rgba(244,248,251,.98)!important;
+}
+
+.field-desc{
+  font-family:var(--sans)!important;
+  color:rgba(188,204,218,.90)!important;
+  font-size:14.8px!important;
+  line-height:1.48!important;
+  margin-bottom:15px!important;
+}
+
+/* Controls */
+.unit-tog,
+.adv-toggle-btn,
+.inp,
+.syr-change-btn,
+.ml-eq{
+  background:rgba(13,23,36,.95)!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  border-radius:10px!important;
+}
+
+.ut-btn,
+.adv-toggle-btn,
+.syr-change-btn,
+.inp,
+.chip,
+.sub-chip{
+  font-family:var(--sans)!important;
+}
+
+.unit-tog{
+  min-height:46px!important;
+  margin-bottom:13px!important;
+}
+
+.ut-btn{
+  min-height:46px!important;
+  padding:9px 23px!important;
+  font-size:15px!important;
+  font-weight:700!important;
+  color:rgba(120,144,166,.84)!important;
+}
+
+.ut-btn.on{
+  background:rgba(79,145,180,.15)!important;
+  color:rgba(224,240,248,.98)!important;
+}
+
+.chips-primary,
+.chips-secondary.open{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:9px!important;
+  margin:16px 0 14px!important;
+}
+
+.chip,
+.sub-chip{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:46px!important;
+  padding:12px 17px!important;
+  background:rgba(13,23,36,.96)!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  color:rgba(188,204,218,.92)!important;
+  border-radius:999px!important;
+  font-size:14.5px!important;
+  font-weight:660!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+
+.chip.on,
+.sub-chip.on{
+  background:rgba(79,145,180,.20)!important;
+  border-color:rgba(79,145,180,.70)!important;
+  color:rgba(245,251,253,.99)!important;
+}
+
+.chip.expandable .exp-indicator{
+  background:rgba(79,145,180,.25)!important;
+  color:rgba(224,240,248,.95)!important;
+}
+
+.expand-hint{
+  font-family:var(--sans)!important;
+  color:rgba(184,202,218,.76)!important;
+  font-size:13px!important;
+  line-height:1.42!important;
+}
+
+.expand-hint span{
+  background:rgba(79,145,180,.25)!important;
+  color:rgba(224,240,248,.95)!important;
+}
+
+.manual-wrap{
+  opacity:.72!important;
+  border-top:1px solid rgba(255,255,255,.06)!important;
+  margin-top:14px!important;
+  padding-top:13px!important;
+}
+
+.manual-lbl{
+  font-family:var(--mono)!important;
+  font-size:8.2px!important;
+}
+
+.inp{
+  height:46px!important;
+  font-size:15px!important;
+  color:rgba(224,236,244,.94)!important;
+  padding:11px 13px!important;
+}
+
+.inp:focus{
+  border-color:rgba(79,145,180,.50)!important;
+  background:rgba(8,14,23,.98)!important;
+}
+
+/* Syringe selection */
+.syr-main-card{
+  min-height:78px!important;
+  padding:16px 16px!important;
+  background:rgba(79,145,180,.105)!important;
+  border:1px solid rgba(79,145,180,.32)!important;
+  border-radius:12px!important;
+}
+
+.syr-main-name,
+.syr-main-sub,
+.syr-drop-name,
+.syr-drop-sub{
+  font-family:var(--sans)!important;
+}
+
+.syr-main-name{
+  color:rgba(224,240,248,.96)!important;
+  font-size:16px!important;
+  line-height:1.22!important;
+}
+
+.syr-main-sub{
+  color:rgba(184,202,218,.82)!important;
+  font-size:13px!important;
+  margin-top:5px!important;
+}
+
+.syr-badge,
+.syr-vis-lbl,
+.rt,
+.draw-sub{
+  font-family:var(--mono)!important;
+}
+
+.syr-badge{
+  border-color:rgba(79,145,180,.28)!important;
+  color:rgba(79,145,180,.84)!important;
+  border-radius:2px!important;
+}
+
+.syr-change-btn{
+  min-height:48px!important;
+  padding:13px 15px!important;
+  font-size:14px!important;
+  border-radius:10px!important;
+}
+
+/* Output */
+.syr-section,
+.results-section{
+  margin:14px 12px 0!important;
+  padding:20px 16px!important;
+  border:1px solid rgba(255,255,255,.075)!important;
+  border-left:3px solid rgba(79,145,180,.58)!important;
+  border-radius:14px!important;
+}
+
+.syr-section{
+  background:linear-gradient(180deg,rgba(8,14,23,.98),rgba(3,5,7,.99))!important;
+}
+
+.results-section{
+  background:linear-gradient(180deg,rgba(13,23,36,.96),rgba(8,14,23,.99))!important;
+}
+
+.syr-vis-lbl,
+.rt{
+  color:rgba(79,145,180,.88)!important;
+  font-size:9px!important;
+  letter-spacing:2px!important;
+}
+
+.syr-interact-hint{
+  font-family:var(--sans)!important;
+  color:rgba(79,145,180,.68)!important;
+  font-size:13px!important;
+}
+
+.draw-val{
+  font-family:var(--sans)!important;
+  color:rgba(226,240,248,.99)!important;
+  text-shadow:none!important;
+  letter-spacing:-.035em!important;
+  font-size:42px!important;
+}
+
+.syr-svg-wrap{
+  background:#030507!important;
+  border:1px solid rgba(255,255,255,.085)!important;
+  border-radius:12px!important;
+  padding:12px 0 10px!important;
+}
+
+.sl,
+.sv,
+.hv,
+.dc-l,
+.dc-v,
+.hint,
+.err{
+  font-family:var(--sans)!important;
+}
+
+.sr{
+  padding:11px 0!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+}
+
+.sl{
+  color:rgba(184,202,218,.84)!important;
+  font-size:14px!important;
+}
+
+.sv,
+.hv{
+  color:rgba(235,242,248,.95)!important;
+  font-size:15px!important;
+  font-weight:650!important;
+}
+
+.sv.hi,
+.dc.mcg .dc-l,
+.dc.mcg .dc-v{
+  color:rgba(190,222,238,.96)!important;
+}
+
+.dc.mgg .dc-l,
+.dc.mgg .dc-v{
+  color:rgba(135,200,162,.84)!important;
+}
+
+.dose-row{
+  background:rgba(3,5,7,.78)!important;
+  border:1px solid rgba(255,255,255,.075)!important;
+  border-radius:12px!important;
+  margin-top:13px!important;
+}
+
+.dc{
+  padding:16px 11px!important;
+}
+
+.dc-l{
+  font-size:11px!important;
+  font-weight:550!important;
+}
+
+.dc-v{
+  font-size:23px!important;
+  font-weight:700!important;
+  letter-spacing:-.025em!important;
+}
+
+.hint-section{
+  border-bottom:0!important;
+  padding:13px 16px!important;
+}
+
+.hint{
+  border-left:2px solid rgba(79,145,180,.42)!important;
+  color:rgba(184,202,218,.84)!important;
+  font-size:13.5px!important;
+  line-height:1.52!important;
+}
+
+.err{
+  background:rgba(231,91,104,.06)!important;
+  border:1px solid rgba(231,91,104,.18)!important;
+  color:rgba(231,139,148,.88)!important;
+}
+
+.disc-section{
+  opacity:.64!important;
+}
+
+.disc-t,
+.disc-tx{
+  font-family:var(--sans)!important;
+  color:rgba(145,105,110,.58)!important;
+}
+
+/* SVG softening */
+svg text{
+  fill:#81b1c8!important;
+}
+
+/* Mobile boost */
+@media(max-width:520px){
+  .hdr{
+    padding:16px 14px 14px!important;
+  }
+
+  .logo{
+    font-size:20px!important;
+  }
+
+  .badge-ruo{
+    font-size:7.5px!important;
+  }
+
+  .mode-section{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+
+  .mode-cards{
+    grid-template-columns:1fr!important;
+  }
+
+  .mode-card{
+    min-height:88px!important;
+    padding:17px 15px!important;
+  }
+
+  .mode-name{
+    font-size:14px!important;
+  }
+
+  .mode-desc{
+    font-size:13.5px!important;
+  }
+
+  .prog-bar{
+    top:57px!important;
+    padding:13px 16px!important;
+  }
+
+  .prog-lbl{
+    display:none!important;
+  }
+
+  .prog-dot{
+    width:32px!important;
+    height:32px!important;
+    min-width:32px!important;
+    font-size:12px!important;
+  }
+
+  .prog-line{
+    height:3px!important;
+  }
+
+  .section,
+  .syr-section,
+  .results-section{
+    margin-left:10px!important;
+    margin-right:10px!important;
+    padding-left:15px!important;
+    padding-right:15px!important;
+  }
+
+  .step-badge{
+    min-width:86px!important;
+    min-height:38px!important;
+    font-size:9.8px!important;
+  }
+
+  .step-title{
+    font-size:22px!important;
+  }
+
+  .field-desc{
+    font-size:15.5px!important;
+  }
+
+  .chip,
+  .sub-chip{
+    min-height:50px!important;
+    padding:13px 18px!important;
+    font-size:15.5px!important;
+  }
+
+  .inp{
+    height:50px!important;
+    font-size:16px!important;
+  }
+
+  .draw-val{
+    font-size:45px!important;
+  }
+
+  .syr-main-name{
+    font-size:16.5px!important;
+  }
+}
+
+/* Very small iPhones */
+@media(max-width:390px){
+  .mode-name{font-size:13.5px!important;}
+  .mode-desc{font-size:13px!important;}
+  .step-title{font-size:21px!important;}
+  .field-desc{font-size:15px!important;}
+  .chip,.sub-chip{font-size:15px!important;padding-left:16px!important;padding-right:16px!important;}
+}
+
+
+/* PrimeX Calculator v35 — visible mobile controls + stronger scan
+   Base: v34.
+   Goal:
+   - physical chips visible in mobile preview
+   - Netlify interaction via simple delegated handler
+   - brighter readable app UI
+   - stronger step scan
+*/
+
+/* Overall readability lift */
+:root{
+  --text:#e2ebf2!important;
+  --text2:#c7d4df!important;
+  --text3:#8fa5b8!important;
+  --blue:#579abd!important;
+  --blue2:#3b86ad!important;
+  --blue3:rgba(87,154,189,.15)!important;
+}
+
+.mode-desc,
+.field-desc,
+.tip-text,
+.sl,
+.hint,
+.syr-main-sub,
+.expand-hint{
+  color:rgba(207,220,231,.92)!important;
+}
+
+.manual-lbl,
+.logo small,
+.mode-lbl,
+.rt,
+.syr-vis-lbl{
+  color:rgba(118,174,204,.88)!important;
+}
+
+/* Step scan: more obvious, less tiny */
+.step-head{
+  display:grid!important;
+  grid-template-columns:auto 1fr!important;
+  align-items:center!important;
+  gap:14px!important;
+}
+
+.step-badge{
+  min-width:96px!important;
+  min-height:44px!important;
+  font-size:11px!important;
+  letter-spacing:1.75px!important;
+  font-weight:800!important;
+  border-width:1.5px!important;
+  background:rgba(87,154,189,.16)!important;
+  border-color:rgba(87,154,189,.52)!important;
+  color:rgba(230,246,252,.98)!important;
+}
+
+.section:not(.pulsing) .step-badge{
+  opacity:.92!important;
+}
+
+.step-title{
+  font-size:24px!important;
+  line-height:1.08!important;
+  font-weight:750!important;
+  color:rgba(248,251,253,.99)!important;
+}
+
+.field-desc{
+  font-size:16px!important;
+  line-height:1.46!important;
+}
+
+/* Physical chips must be visible */
+.chips-primary,
+.px-static-row{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:10px!important;
+  margin:18px 0 16px!important;
+  min-height:54px!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow:visible!important;
+}
+
+.px-static-chip,
+.chip{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:52px!important;
+  padding:14px 20px!important;
+  background:rgba(13,23,36,.98)!important;
+  border:1.5px solid rgba(255,255,255,.12)!important;
+  color:rgba(235,246,252,.98)!important;
+  border-radius:999px!important;
+  font-family:var(--sans)!important;
+  font-size:16px!important;
+  font-weight:750!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+}
+
+.px-static-chip.on,
+.chip.on{
+  background:rgba(87,154,189,.26)!important;
+  border-color:rgba(87,154,189,.88)!important;
+  color:#ffffff!important;
+}
+
+/* Make input cards less ghosted */
+.section{
+  background:linear-gradient(180deg,rgba(9,17,27,.94),rgba(5,8,13,.96))!important;
+  border-color:rgba(255,255,255,.09)!important;
+}
+
+.section.input-s.pulsing{
+  background:linear-gradient(180deg,rgba(14,27,41,.99),rgba(8,14,23,.99))!important;
+  border-left-color:rgba(87,154,189,.92)!important;
+}
+
+/* Inputs brighter */
+.inp{
+  color:rgba(226,238,246,.96)!important;
+  border-color:rgba(255,255,255,.13)!important;
+}
+
+.inp::placeholder{
+  color:rgba(130,151,169,.75)!important;
+}
+
+/* Mobile: app scale */
+@media(max-width:720px){
+  .section{
+    padding:24px 18px!important;
+    margin:15px 12px!important;
+    border-radius:17px!important;
+  }
+
+  .step-badge{
+    min-width:104px!important;
+    min-height:48px!important;
+    font-size:11.2px!important;
+  }
+
+  .step-title{
+    font-size:26px!important;
+  }
+
+  .field-desc{
+    font-size:17px!important;
+    margin-bottom:17px!important;
+  }
+
+  .chips-primary,
+  .px-static-row{
+    gap:11px!important;
+    margin:20px 0 18px!important;
+  }
+
+  .px-static-chip,
+  .chip{
+    min-height:56px!important;
+    padding:15px 21px!important;
+    font-size:17px!important;
+  }
+
+  .tip-box{
+    opacity:.94!important;
+  }
+
+  .tip-text{
+    font-size:15.5px!important;
+    line-height:1.42!important;
+  }
+
+  .manual-lbl{
+    font-size:10px!important;
+    letter-spacing:1.8px!important;
+  }
+
+  .inp{
+    height:54px!important;
+    font-size:17px!important;
+  }
+
+  .mode-name{
+    font-size:15px!important;
+  }
+
+  .mode-desc{
+    font-size:14.5px!important;
+  }
+}
+
+@media(max-width:390px){
+  .step-head{
+    gap:12px!important;
+  }
+
+  .step-badge{
+    min-width:92px!important;
+    min-height:44px!important;
+    font-size:10.2px!important;
+  }
+
+  .step-title{
+    font-size:23px!important;
+  }
+
+  .field-desc{
+    font-size:16px!important;
+  }
+
+  .px-static-chip,
+  .chip{
+    min-height:52px!important;
+    padding:14px 18px!important;
+    font-size:16px!important;
+  }
+}
+
+
+/* PrimeX Calculator v36 — readability + width polish
+   Base: v35 LOCKED as last-known-good buttons visible.
+   Scope only:
+   - wider mobile page/cards
+   - bigger STEP labels
+   - brighten important text
+   - no chip/JS changes
+*/
+
+/* Overall page width: less narrow / more app-like */
+.px{
+  max-width:680px!important;
+}
+
+/* Important text brightness lift */
+.step-title,
+.mode-name,
+.syr-main-name,
+.draw-val,
+.sv,
+.hv,
+.dc-v{
+  color:rgba(248,251,253,.99)!important;
+}
+
+.field-desc,
+.mode-desc,
+.tip-text,
+.syr-main-sub,
+.syr-interact-hint,
+.sl,
+.hint,
+.expand-hint{
+  color:rgba(218,228,237,.94)!important;
+}
+
+/* Keep genuinely secondary text softer */
+.manual-lbl,
+.logo small,
+.mode-lbl,
+.rt,
+.syr-vis-lbl,
+.disc-t,
+.disc-tx{
+  color:rgba(116,166,193,.82)!important;
+}
+
+/* STEP labels: make them eye anchors */
+.step-badge{
+  min-width:92px!important;
+  min-height:40px!important;
+  font-size:15px!important;
+  letter-spacing:2.4px!important;
+  font-weight:900!important;
+  background:rgba(87,154,189,.20)!important;
+  border:1.7px solid rgba(87,154,189,.66)!important;
+  color:rgba(238,249,253,.99)!important;
+}
+
+.section:not(.pulsing) .step-badge{
+  opacity:1!important;
+  background:rgba(87,154,189,.14)!important;
+  border-color:rgba(87,154,189,.46)!important;
+}
+
+/* Heading balance */
+.step-head{
+  gap:16px!important;
+}
+
+.step-title{
+  font-size:26px!important;
+  line-height:1.08!important;
+}
+
+.field-desc{
+  font-size:17px!important;
+  line-height:1.48!important;
+}
+
+/* Wider cards, less side squeeze */
+.section,
+.syr-section,
+.results-section{
+  margin-left:8px!important;
+  margin-right:8px!important;
+}
+
+/* Inputs and buttons remain visible, more comfortable */
+.px-static-chip,
+.chip{
+  min-height:56px!important;
+  padding:15px 22px!important;
+  font-size:17px!important;
+}
+
+.inp{
+  color:rgba(230,240,247,.98)!important;
+}
+
+.inp::placeholder{
+  color:rgba(139,160,178,.82)!important;
+}
+
+/* Mobile-specific width and scan improvements */
+@media(max-width:720px){
+  .px{
+    width:100%!important;
+    max-width:none!important;
+  }
+
+  .mode-section{
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+
+  .section,
+  .syr-section,
+  .results-section{
+    margin-left:6px!important;
+    margin-right:6px!important;
+    padding-left:18px!important;
+    padding-right:18px!important;
+    border-radius:18px!important;
+  }
+
+  .tip-box{
+    margin-left:8px!important;
+    margin-right:8px!important;
+  }
+
+  .step-head{
+    grid-template-columns:auto 1fr!important;
+    gap:16px!important;
+  }
+
+  .step-badge{
+    min-width:96px!important;
+    min-height:40px!important;
+    font-size:15px!important;
+    letter-spacing:2.5px!important;
+  }
+
+  .step-title{
+    font-size:27px!important;
+    line-height:1.06!important;
+  }
+
+  .field-desc{
+    font-size:17.2px!important;
+    line-height:1.45!important;
+  }
+
+  .chips-primary,
+  .px-static-row{
+    gap:11px!important;
+  }
+
+  .px-static-chip,
+  .chip{
+    min-height:58px!important;
+    padding:16px 23px!important;
+    font-size:17px!important;
+  }
+
+  .mode-name{
+    font-size:16px!important;
+  }
+
+  .mode-desc{
+    font-size:15px!important;
+    color:rgba(218,228,237,.94)!important;
+  }
+
+  .tip-text{
+    font-size:16px!important;
+    color:rgba(220,198,154,.92)!important;
+  }
+
+  .manual-lbl{
+    font-size:10.5px!important;
+    letter-spacing:1.9px!important;
+  }
+
+  .inp{
+    height:56px!important;
+    font-size:17px!important;
+  }
+
+  .sl{
+    font-size:15.5px!important;
+  }
+
+  .sv{
+    font-size:16.5px!important;
+  }
+}
+
+/* Very small iPhones: avoid crowding while still larger */
+@media(max-width:390px){
+  .section,
+  .syr-section,
+  .results-section{
+    margin-left:5px!important;
+    margin-right:5px!important;
+    padding-left:15px!important;
+    padding-right:15px!important;
+  }
+
+  .step-head{
+    gap:12px!important;
+  }
+
+  .step-badge{
+    min-width:88px!important;
+    min-height:38px!important;
+    font-size:14px!important;
+    letter-spacing:2.1px!important;
+  }
+
+  .step-title{
+    font-size:24px!important;
+  }
+
+  .field-desc{
+    font-size:16.2px!important;
+  }
+
+  .px-static-chip,
+  .chip{
+    min-height:54px!important;
+    padding:15px 18px!important;
+    font-size:16px!important;
+  }
+}
+
+
+/* PrimeX Calculator v38 — button shape + dose helper polish
+   Base: v37.
+   Scope:
+   - keep buttons visible/working
+   - slightly smaller buttons
+   - more squared engineered buttons
+   - restore + indicator on dose buttons
+   - improve half-step helper positioning
+*/
+
+/* Slightly smaller, more PrimeX-engineered option buttons */
+.px-static-chip,
+.chip,
+.sub-chip{
+  min-height:48px!important;
+  padding:12px 18px!important;
+  font-size:15.5px!important;
+  border-radius:10px!important;
+}
+
+/* Active state remains clear */
+.px-static-chip.on,
+.chip.on,
+.sub-chip.on{
+  border-color:rgba(87,154,189,.82)!important;
+  background:rgba(87,154,189,.23)!important;
+}
+
+/* Restore the + indicator on dose buttons only */
+#fDoseChips .px-static-chip::after,
+#fDoseChips .chip::after{
+  content:"+";
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  margin-left:8px;
+  border-radius:50%;
+  background:rgba(87,154,189,.58);
+  color:#f5fcff;
+  font-size:12px;
+  font-weight:800;
+  line-height:1;
+}
+
+/* Clean up the half-step helper area */
+.expand-hint{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  flex-wrap:wrap!important;
+  margin:10px 0 12px!important;
+  color:rgba(218,228,237,.90)!important;
+}
+
+.expand-hint span,
+.exp-indicator{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:20px!important;
+  height:20px!important;
+  min-width:20px!important;
+  border-radius:50%!important;
+  background:rgba(87,154,189,.58)!important;
+  color:#f5fcff!important;
+  font-size:12px!important;
+  font-weight:800!important;
+}
+
+/* Mobile: keep buttons comfortable but not oversized */
+@media(max-width:720px){
+  .px-static-chip,
+  .chip,
+  .sub-chip{
+    min-height:50px!important;
+    padding:13px 18px!important;
+    font-size:16px!important;
+    border-radius:11px!important;
+  }
+
+  #fDoseChips .px-static-chip::after,
+  #fDoseChips .chip::after{
+    width:19px;
+    height:19px;
+    margin-left:8px;
+    font-size:12px;
+  }
+
+  .expand-hint{
+    font-size:14.5px!important;
+    line-height:1.35!important;
+  }
+}
+
+/* Smaller iPhones */
+@media(max-width:390px){
+  .px-static-chip,
+  .chip,
+  .sub-chip{
+    min-height:48px!important;
+    padding:12px 15px!important;
+    font-size:15px!important;
+    border-radius:10px!important;
+  }
+}
+
+
+/* PrimeX Calculator v39 — micro heading readability pass
+   Goal:
+   - brighten tiny utility headings
+   - preserve intentional disabled/grey states
+   - improve scanability on mobile
+*/
+
+/* Tiny utility labels / headings */
+.manual-lbl,
+.mode-lbl,
+.sec-kicker,
+.step-kicker,
+.small-h,
+.micro-h,
+.mini-lbl,
+.chip-group-title,
+.field-kicker,
+.result-kicker,
+.syr-vis-lbl{
+  color:rgba(166,205,227,.96)!important;
+  opacity:1!important;
+  text-shadow:0 0 10px rgba(54,119,157,.14)!important;
+}
+
+/* Thin helper labels that were disappearing */
+.sl,
+.hint,
+.expand-hint,
+.expand-lbl{
+  color:rgba(206,223,236,.92)!important;
+}
+
+/* Top progress labels */
+.progress-label,
+.step-progress-lbl{
+  color:rgba(192,219,235,.94)!important;
+}
+
+/* Keep intentionally disabled stuff muted */
+.disabled,
+.is-disabled,
+[disabled],
+.dimmed{
+  opacity:.48!important;
+}
+
+/* Mobile readability */
+@media(max-width:720px){
+
+  .manual-lbl,
+  .mode-lbl,
+  .sec-kicker,
+  .step-kicker,
+  .small-h,
+  .micro-h,
+  .mini-lbl,
+  .chip-group-title,
+  .field-kicker,
+  .result-kicker,
+  .syr-vis-lbl{
+    font-size:11.5px!important;
+    letter-spacing:2px!important;
+  }
+
+  .sl,
+  .hint,
+  .expand-hint,
+  .expand-lbl{
+    font-size:14.5px!important;
+    line-height:1.42!important;
+  }
+
+  .progress-label,
+  .step-progress-lbl{
+    font-size:12.5px!important;
+  }
+}
+
+
+/* PrimeX Calculator v40 — top flow simplification + premium pass
+   Base: v39.
+   Goal:
+   - compact top section
+   - segmented app-style mode switcher
+   - calmer arrival hierarchy
+   - stronger active step guidance
+   - more premium results feel
+*/
+
+/* Overall app width + rhythm */
+.px{
+  max-width:760px!important;
+}
+
+/* Top brand strip tighter + cleaner */
+.hdr{
+  padding:14px 16px 12px!important;
+  background:rgba(2,4,6,.975)!important;
+}
+
+.logo{
+  font-size:20px!important;
+  letter-spacing:-.05em!important;
+}
+
+.logo small{
+  margin-top:5px!important;
+  opacity:.88!important;
+}
+
+/* MASSIVE FIX:
+   Turn top mode cards into compact segmented route switcher */
+.mode-section{
+  padding:10px 14px 12px!important;
+  background:linear-gradient(180deg,rgba(5,8,13,.98),rgba(4,6,9,.99))!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+}
+
+.mode-lbl{
+  display:none!important;
+}
+
+/* Collapse giant cards into compact segmented controls */
+.mode-cards{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+}
+
+.mode-card{
+  min-height:58px!important;
+  padding:12px 14px!important;
+  border-radius:12px!important;
+  border-left:1px solid rgba(255,255,255,.08)!important;
+  background:rgba(11,18,27,.92)!important;
+  transition:all .18s ease!important;
+}
+
+.mode-card.on{
+  background:linear-gradient(180deg,
+    rgba(87,154,189,.24),
+    rgba(18,29,42,.98))!important;
+  border-color:rgba(87,154,189,.42)!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(87,154,189,.12),
+    0 0 0 1px rgba(87,154,189,.10)!important;
+}
+
+.mode-name{
+  font-size:14px!important;
+  margin-bottom:2px!important;
+}
+
+.mode-desc{
+  font-size:11.8px!important;
+  line-height:1.32!important;
+  opacity:.88!important;
+}
+
+/* Progress rail gets more breathing room */
+.prog-bar{
+  padding:14px 16px!important;
+  background:rgba(3,5,7,.985)!important;
+}
+
+.prog-dot{
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  font-size:12px!important;
+}
+
+.prog-line{
+  height:3px!important;
+}
+
+/* Tip box calmer */
+.tip-box{
+  margin:10px 10px 12px!important;
+  opacity:.78!important;
+}
+
+/* Better active-step guidance */
+.section{
+  border-left:3px solid rgba(255,255,255,.06)!important;
+  transition:all .2s ease!important;
+}
+
+.section.input-s.pulsing{
+  border-left-width:4px!important;
+  border-left-color:rgba(87,154,189,.96)!important;
+  background:
+    linear-gradient(180deg,
+      rgba(15,27,40,.995),
+      rgba(7,12,19,.995))!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(87,154,189,.06),
+    0 0 0 1px rgba(87,154,189,.08)!important;
+}
+
+/* Step hierarchy cleaner */
+.step-head{
+  margin-bottom:14px!important;
+}
+
+.step-badge{
+  min-width:84px!important;
+  min-height:34px!important;
+  border-radius:8px!important;
+  font-size:12px!important;
+  letter-spacing:1.6px!important;
+  background:rgba(87,154,189,.16)!important;
+}
+
+.step-title{
+  font-size:28px!important;
+  line-height:1.02!important;
+  letter-spacing:-.035em!important;
+}
+
+.field-desc{
+  font-size:16px!important;
+  line-height:1.48!important;
+}
+
+/* Buttons now feel more instrument-panel */
+.px-static-chip,
+.chip,
+.sub-chip{
+  min-height:46px!important;
+  border-radius:9px!important;
+  background:
+    linear-gradient(180deg,
+      rgba(14,22,33,.98),
+      rgba(9,15,22,.99))!important;
+  border:1px solid rgba(255,255,255,.11)!important;
+}
+
+.px-static-chip.on,
+.chip.on,
+.sub-chip.on{
+  background:
+    linear-gradient(180deg,
+      rgba(87,154,189,.28),
+      rgba(20,35,48,.99))!important;
+  border-color:rgba(87,154,189,.82)!important;
+}
+
+/* Results section: more rewarding */
+.results-section{
+  background:
+    linear-gradient(180deg,
+      rgba(16,29,42,.99),
+      rgba(8,14,21,.995))!important;
+  border-left-width:4px!important;
+  border-left-color:rgba(87,154,189,.84)!important;
+}
+
+.draw-sub{
+  opacity:.92!important;
+}
+
+.draw-val{
+  font-size:56px!important;
+  line-height:.96!important;
+  margin:10px 0 14px!important;
+  color:rgba(247,251,253,.995)!important;
+  letter-spacing:-.05em!important;
+}
+
+.syr-svg-wrap{
+  margin-top:10px!important;
+  border-radius:16px!important;
+}
+
+/* Dose rows */
+.dose-row{
+  margin-top:16px!important;
+  border-radius:16px!important;
+}
+
+.dc{
+  padding:18px 14px!important;
+}
+
+.dc-l{
+  font-size:12px!important;
+  opacity:.92!important;
+}
+
+.dc-v{
+  font-size:26px!important;
+}
+
+/* Mobile */
+@media(max-width:720px){
+
+  .hdr{
+    padding:13px 14px 11px!important;
+  }
+
+  .logo{
+    font-size:19px!important;
+  }
+
+  .mode-section{
+    padding:10px 10px 11px!important;
+  }
+
+  .mode-cards{
+    gap:7px!important;
+  }
+
+  .mode-card{
+    min-height:56px!important;
+    padding:11px 12px!important;
+    border-radius:11px!important;
+  }
+
+  .mode-name{
+    font-size:13px!important;
+  }
+
+  .mode-desc{
+    font-size:11px!important;
+    line-height:1.25!important;
+  }
+
+  .prog-bar{
+    padding:13px 14px!important;
+  }
+
+  .section,
+  .results-section,
+  .syr-section{
+    margin-left:6px!important;
+    margin-right:6px!important;
+    border-radius:18px!important;
+  }
+
+  .step-badge{
+    min-width:78px!important;
+    min-height:32px!important;
+    font-size:11px!important;
+  }
+
+  .step-title{
+    font-size:25px!important;
+  }
+
+  .field-desc{
+    font-size:15.5px!important;
+  }
+
+  .draw-val{
+    font-size:50px!important;
+  }
+
+  .dc-v{
+    font-size:24px!important;
+  }
+}
+
+/* Small phones */
+@media(max-width:390px){
+
+  .mode-name{
+    font-size:12px!important;
+  }
+
+  .mode-desc{
+    font-size:10.5px!important;
+  }
+
+  .step-title{
+    font-size:22px!important;
+  }
+
+  .draw-val{
+    font-size:44px!important;
+  }
+}
+
+
+
+/* PrimeX Calculator v41 — steel-blue ecosystem refinement
+   Base: v40 premium final pass.
+   Scope:
+   - visual CSS only
+   - calculator logic untouched
+   - preserve mobile-first tap targets and flow
+   - align closer to planner steel-blue family
+*/
+
+:root{
+  --blue:#3e96c4!important;
+  --blue2:#2f7fa8!important;
+  --blue3:rgba(62,150,196,.155)!important;
+  --glow-blue:rgba(62,150,196,.024)!important;
+  --text:#dce8f0!important;
+  --text2:#c2d1dd!important;
+  --text3:#8299ad!important;
+}
+
+body{
+  background:
+    radial-gradient(circle at 82% 6%,rgba(62,150,196,.06),transparent 34%),
+    radial-gradient(circle at 14% 88%,rgba(62,150,196,.026),transparent 30%),
+    linear-gradient(rgba(255,255,255,.0065) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.0045) 1px,transparent 1px),
+    #030507!important;
+  background-size:auto,auto,112px 112px,112px 112px,auto!important;
+}
+
+/* Brand/header: calmer, closer to planner wordmark tone */
+.hdr{
+  border-bottom:1px solid rgba(255,255,255,.06)!important;
+  box-shadow:0 1px 0 rgba(62,150,196,.045)!important;
+}
+
+.logo em{
+  color:rgba(62,150,196,.96)!important;
+}
+
+.logo small{
+  color:rgba(150,168,186,.66)!important;
+  letter-spacing:2.25px!important;
+}
+
+.badge-ruo{
+  color:rgba(164,181,198,.72)!important;
+  border-color:rgba(255,255,255,.085)!important;
+  background:rgba(255,255,255,.014)!important;
+}
+
+/* Top route switcher: keep compact usability, make it less shouty */
+.mode-section{
+  background:linear-gradient(180deg,rgba(5,8,13,.99),rgba(3,5,8,.995))!important;
+}
+
+.mode-card{
+  background:linear-gradient(180deg,rgba(11,18,27,.90),rgba(7,11,17,.98))!important;
+  border-color:rgba(255,255,255,.07)!important;
+}
+
+.mode-card.on{
+  background:linear-gradient(180deg,rgba(62,150,196,.18),rgba(12,22,32,.99))!important;
+  border-color:rgba(62,150,196,.34)!important;
+  box-shadow:inset 0 0 0 1px rgba(62,150,196,.08)!important;
+}
+
+.mode-dot{
+  background:rgba(62,150,196,.68)!important;
+}
+
+.mode-name{
+  color:rgba(240,246,250,.97)!important;
+  letter-spacing:-.015em!important;
+}
+
+.mode-desc{
+  color:rgba(194,209,221,.86)!important;
+}
+
+/* Progress rail: more PrimeX steel, less app-neon */
+.prog-dot.active{
+  background:rgba(62,150,196,.135)!important;
+  border-color:rgba(62,150,196,.48)!important;
+  color:rgba(226,242,249,.96)!important;
+}
+
+.prog-lbl.active{
+  color:rgba(215,232,241,.90)!important;
+}
+
+.prog-line.done{
+  background:rgba(116,173,141,.25)!important;
+}
+
+/* Active step: keeps guidance obvious without aggressive glow */
+.section.input-s.pulsing{
+  border-left-color:rgba(62,150,196,.90)!important;
+  background:linear-gradient(180deg,rgba(13,24,35,.99),rgba(7,12,19,.995))!important;
+  box-shadow:
+    inset 0 0 0 1px rgba(62,150,196,.055),
+    0 0 0 1px rgba(62,150,196,.065)!important;
+}
+
+.step-badge{
+  background:rgba(62,150,196,.13)!important;
+  border-color:rgba(62,150,196,.42)!important;
+  color:rgba(226,242,249,.94)!important;
+}
+
+.section:not(.pulsing) .step-badge{
+  background:rgba(62,150,196,.095)!important;
+  border-color:rgba(62,150,196,.30)!important;
+  color:rgba(201,224,236,.86)!important;
+}
+
+.step-title{
+  color:rgba(247,250,252,.985)!important;
+  font-weight:720!important;
+}
+
+.field-desc{
+  color:rgba(202,216,228,.91)!important;
+}
+
+/* Controls: retain tap size, reduce heavy outline feel */
+.px-static-chip,
+.chip,
+.sub-chip,
+.ut-btn,
+.syr-change-btn,
+.inp{
+  box-shadow:none!important;
+}
+
+.px-static-chip,
+.chip,
+.sub-chip{
+  background:linear-gradient(180deg,rgba(13,22,33,.965),rgba(8,14,21,.99))!important;
+  border-color:rgba(255,255,255,.095)!important;
+  color:rgba(226,238,246,.96)!important;
+}
+
+.px-static-chip.on,
+.chip.on,
+.sub-chip.on{
+  background:linear-gradient(180deg,rgba(62,150,196,.23),rgba(16,31,43,.99))!important;
+  border-color:rgba(62,150,196,.72)!important;
+  color:rgba(250,253,255,.995)!important;
+}
+
+#fDoseChips .px-static-chip::after,
+#fDoseChips .chip::after,
+.expand-hint span,
+.exp-indicator{
+  background:rgba(62,150,196,.54)!important;
+}
+
+.unit-tog,
+.adv-toggle-btn,
+.inp,
+.syr-change-btn,
+.ml-eq{
+  border-color:rgba(255,255,255,.078)!important;
+  background:rgba(12,21,31,.94)!important;
+}
+
+.ut-btn.on{
+  background:rgba(62,150,196,.14)!important;
+  color:rgba(226,242,249,.97)!important;
+}
+
+/* Manual entries stay secondary but readable */
+.manual-wrap{
+  opacity:.78!important;
+}
+
+.manual-lbl,
+.mode-lbl,
+.rt,
+.syr-vis-lbl,
+.draw-sub{
+  color:rgba(146,190,214,.86)!important;
+  text-shadow:none!important;
+}
+
+/* Syringe + result: make output feel more premium/rewarding */
+.results-section{
+  background:linear-gradient(180deg,rgba(14,27,39,.99),rgba(7,13,20,.998))!important;
+  border-left-color:rgba(62,150,196,.82)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+
+.syr-section{
+  background:linear-gradient(180deg,rgba(8,15,24,.99),rgba(3,5,7,.995))!important;
+  border-left-color:rgba(62,150,196,.55)!important;
+}
+
+.draw-val{
+  color:rgba(248,252,254,.995)!important;
+  text-shadow:0 0 22px rgba(62,150,196,.10)!important;
+}
+
+.sv.hi,
+.dc.mcg .dc-l,
+.dc.mcg .dc-v{
+  color:rgba(199,228,240,.96)!important;
+}
+
+.dose-row,
+.syr-svg-wrap{
+  border-color:rgba(255,255,255,.07)!important;
+  background:rgba(3,6,9,.76)!important;
+}
+
+.hint{
+  border-left-color:rgba(62,150,196,.38)!important;
+  color:rgba(198,213,225,.86)!important;
+}
+
+.tip-box{
+  opacity:.74!important;
+  border-left-color:rgba(201,146,58,.30)!important;
+}
+
+/* Mobile safety: keep all useful sizes, only calm the visual intensity */
+@media(max-width:720px){
+  .mode-card{
+    border-color:rgba(255,255,255,.078)!important;
+  }
+
+  .mode-card.on{
+    border-color:rgba(62,150,196,.38)!important;
+  }
+
+  .section.input-s.pulsing{
+    border-left-width:4px!important;
+  }
+
+  .step-title{
+    font-weight:720!important;
+  }
+
+  .px-static-chip,
+  .chip,
+  .sub-chip{
+    border-color:rgba(255,255,255,.10)!important;
+  }
+
+  .px-static-chip.on,
+  .chip.on,
+  .sub-chip.on{
+    border-color:rgba(62,150,196,.76)!important;
+  }
+}
+
+
+
+/* PrimeX Calculator v44 — ecosystem logo lockup only
+   Scope: header logo styling only. Calculator logic untouched. */
+.hdr{
+  align-items:center!important;
+}
+.logo.px-calc-logo{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:5px!important;
+  font-family:Inter,system-ui,sans-serif!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  color:inherit!important;
+}
+.px-calc-word{
+  display:flex!important;
+  align-items:baseline!important;
+  gap:7px!important;
+  white-space:nowrap!important;
+}
+.px-calc-prime{
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:23px!important;
+  font-weight:650!important;
+  letter-spacing:-.052em!important;
+  color:rgba(248,250,252,.98)!important;
+}
+.px-calc-x{
+  color:#2f7fa8!important;
+  font-weight:650!important;
+}
+.px-calc-bio{
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:23px!important;
+  font-weight:300!important;
+  letter-spacing:-.035em!important;
+  color:#c9d1d9!important;
+}
+.logo.px-calc-logo small{
+  display:block!important;
+  margin:5px 0 0!important;
+  font-family:'Space Mono',monospace!important;
+  font-size:7.5px!important;
+  font-weight:400!important;
+  letter-spacing:2.05px!important;
+  line-height:1.25!important;
+  text-transform:uppercase!important;
+  color:rgba(150,168,186,.72)!important;
+}
+@media(max-width:520px){
+  .px-calc-word{gap:6px!important;}
+  .px-calc-prime{font-size:21px!important;}
+  .px-calc-bio{font-size:21px!important;}
+  .logo.px-calc-logo small{font-size:7px!important;letter-spacing:1.7px!important;}
+}
+@media(max-width:370px){
+  .px-calc-prime{font-size:19px!important;}
+  .px-calc-bio{font-size:19px!important;}
+}
+</style>
+</head>
+<body>
+<div class="px">
+
+<div class="hdr">
+  <div class="logo px-calc-logo"><span class="px-calc-word"><span class="px-calc-prime">Prime<span class="px-calc-x">X</span></span><span class="px-calc-bio">BioLabs</span></span><small>Research Calculator · RUO</small></div>
+  <span class="badge-ruo">Research Use Only</span>
+</div>
+
+<div class="mode-section">
+  <div class="mode-lbl">Select calculation mode</div>
+  <div class="mode-cards">
+    <div class="mode-card on" id="cardFwd" onclick="setMode('fwd');ripple(event,this)">
+      <div class="mode-dot"></div>
+      <div class="mode-icon">💉</div>
+      <div class="mode-name">CALCULATE DRAW</div>
+      <div class="mode-desc">I know my dose — show me how far to draw my syringe</div>
+    </div>
+    <div class="mode-card" id="cardRev" onclick="setMode('rev');ripple(event,this)">
+      <div class="mode-dot"></div>
+      <div class="mode-icon">🔍</div>
+      <div class="mode-name">FIND MY DOSE</div>
+      <div class="mode-desc">I know how far I drew — show me what dose that equals</div>
+    </div>
+  </div>
+</div>
+
+<div class="prog-bar">
+  <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-lbl active" id="pl1">Strength</div></div>
+  <div class="prog-line" id="pline1"></div>
+  <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-lbl" id="pl2">Water</div></div>
+  <div class="prog-line" id="pline2"></div>
+  <div class="prog-step"><div class="prog-dot" id="pd3">3</div><div class="prog-lbl" id="pl3">Dose</div></div>
+  <div class="prog-line" id="pline3"></div>
+  <div class="prog-step"><div class="prog-dot" id="pd4">✓</div><div class="prog-lbl" id="pl4">Result</div></div>
+</div>
+
+<div id="tipBox" class="tip-box">
+  <span style="font-size:14px;flex-shrink:0">💡</span>
+  <span class="tip-text" id="tipText">The softly glowing section is your next step. Tap any value to select it, or use manual entry below.</span>
+  <span class="tip-close" onclick="closeTip()">✕</span>
+</div>
+
+<!-- ===== FORWARD ===== -->
+<div id="panelFwd">
+
+  <div class="section input-s pulsing" id="fS1">
+    <div class="step-head"><span class="step-badge" id="fB1">STEP 1</span><span class="step-title">Strength of Peptide</span></div>
+    <div class="field-desc">Total peptide content in your vial (mg)</div>
+    <div class="chips-primary px-static-row" id="fVialChips"><button type="button" class="chip px-static-chip" data-target="fVA" data-value="1" data-calc="go">1 mg</button><button type="button" class="chip px-static-chip" data-target="fVA" data-value="2" data-calc="go">2 mg</button><button type="button" class="chip px-static-chip" data-target="fVA" data-value="5" data-calc="go">5 mg</button><button type="button" class="chip px-static-chip" data-target="fVA" data-value="10" data-calc="go">10 mg</button><button type="button" class="chip px-static-chip" data-target="fVA" data-value="15" data-calc="go">15 mg</button><button type="button" class="chip px-static-chip" data-target="fVA" data-value="20" data-calc="go">20 mg</button><button type="button" class="chip px-static-chip" data-target="fVA" data-value="50" data-calc="go">50 mg</button></div>
+    <div class="manual-wrap">
+      <div class="manual-lbl">Manual entry</div>
+      <input class="inp" type="number" id="fVA" value="" min="0.1" step="0.1" inputmode="decimal" placeholder="e.g. 5 mg" oninput="clrChips('fvial');go()">
+    </div>
+  </div>
+
+  <div class="section input-s" id="fS2">
+    <div class="step-head"><span class="step-badge" id="fB2">STEP 2</span><span class="step-title">BAC Water Added</span></div>
+    <div class="field-desc">Volume of bacteriostatic water used to reconstitute</div>
+    <div class="chips-primary px-static-row" id="fBacChips"><button type="button" class="chip px-static-chip" data-target="fBA" data-value="1" data-calc="go">1 ml</button><button type="button" class="chip px-static-chip" data-target="fBA" data-value="2" data-calc="go">2 ml</button><button type="button" class="chip px-static-chip" data-target="fBA" data-value="3" data-calc="go">3 ml</button></div>
+    <div class="manual-wrap">
+      <div class="manual-lbl">Manual entry</div>
+      <input class="inp" type="number" id="fBA" value="" min="0.1" step="0.1" inputmode="decimal" placeholder="e.g. 2 ml" oninput="clrChips('fbac');go()">
+    </div>
+  </div>
+
+  <div class="section input-s" id="fS3">
+    <div class="step-head"><span class="step-badge" id="fB3">STEP 3</span><span class="step-title">Desired Dose</span></div>
+    <div class="field-desc">Target dose per injection</div>
+    <div class="unit-tog" id="fDUT">
+      <button class="ut-btn on" onclick="setUnit('fdose','mg');ripple(event,this)">mg</button>
+      <button class="ut-btn" onclick="setUnit('fdose','mcg');ripple(event,this)">mcg</button>
+    </div>
+    <div class="expand-hint">Choose your dose &nbsp;·&nbsp; Tap a dose amount &nbsp;·&nbsp; Use <span style="font-family:var(--mono);font-size:10px;font-weight:700;background:var(--blue2);color:#c0deff;padding:1px 6px;border-radius:50%;line-height:1.6;display:inline-block">+</span> for half steps</div>
+    <div class="chips-primary px-static-row" id="fDoseChips"><button type="button" class="chip px-static-chip" data-target="fDA" data-value="0.5" data-calc="go">0.5 mg</button><button type="button" class="chip px-static-chip" data-target="fDA" data-value="1" data-calc="go">1 mg</button><button type="button" class="chip px-static-chip" data-target="fDA" data-value="2" data-calc="go">2 mg</button><button type="button" class="chip px-static-chip" data-target="fDA" data-value="3" data-calc="go">3 mg</button><button type="button" class="chip px-static-chip" data-target="fDA" data-value="4" data-calc="go">4 mg</button></div>
+    <div id="fAdvWrap">
+      <div class="adv-toggle" onclick="toggleAdv('fwd')">
+        <div class="adv-toggle-line"></div>
+        <div class="adv-toggle-btn" id="fAdvBtn">Higher doses ▾</div>
+        <div class="adv-toggle-line"></div>
+      </div>
+      <div class="chips-secondary" id="fDoseChipsAdv"></div>
+    </div>
+    <div class="manual-wrap">
+      <div class="manual-lbl">Manual entry</div>
+      <input class="inp" type="number" id="fDA" value="" min="0.01" step="0.01" inputmode="decimal" placeholder="e.g. 0.5 mg" oninput="clrChips('fdose');go()">
+    </div>
+  </div>
+
+  <div class="section input-s" id="fS4">
+    <div class="step-head"><span class="step-badge" id="fB4">STEP 4</span><span class="step-title">Syringe Type</span></div>
+    <div class="field-desc">Select the syringe you are using</div>
+    <div class="syr-main-card" id="fMainCard">
+      <div><div class="syr-main-name" id="fMainName">U-100 1ml Insulin Syringe</div><div class="syr-main-sub" id="fMainSub">Standard — most common</div></div>
+      <div class="syr-badge">ACTIVE</div>
+    </div>
+    <div class="syr-change-btn" id="fChangeBtn" onclick="toggleFDrop()">
+      <span>Change syringe type</span><span class="syr-chg-arr">▾</span>
+    </div>
+    <div class="syr-dropdown" id="fDropdown">
+      <div class="syr-drop-item" onclick="fPickSyr('u100');ripple(event,this)">
+        <div><div class="syr-drop-name">U-100 1ml Insulin Syringe</div><div class="syr-drop-sub">Standard — 100 units per ml</div></div>
+      </div>
+      <div class="syr-drop-item" onclick="fPickSyr('u40');ripple(event,this)">
+        <div><div class="syr-drop-name">U-40 1ml Insulin Syringe</div><div class="syr-drop-sub">U-40 scale — 40 units per ml</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="fErr" class="err"></div>
+
+  <div class="syr-section" id="fSyrSection">
+    <div class="syr-vis-lbl">Draw syringe to</div>
+    <div class="syr-interact-hint">Calculated draw amount</div>
+    <div class="draw-big">
+      <div class="draw-sub" id="fDrawSub">complete steps above</div>
+      <div class="draw-val" id="fDrawVal">—</div>
+    </div>
+    <div class="syr-svg-wrap">
+      <svg id="syrF" width="100%" height="auto" viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg" style="display:block;touch-action:none;pointer-events:none"></svg>
+    </div>
+  </div>
+
+  <div class="results-section">
+    <div class="rt">Calculation Results</div>
+    <div class="sr"><span class="sl">Reconstituted concentration</span><span class="sv hi" id="fConc">—</span></div>
+    <div class="sr"><span class="sl">Doses per vial</span><span class="sv" id="fDoses">—</span></div>
+    <div class="sr"><span class="sl">Volume per dose</span><span class="sv" id="fVol">—</span></div>
+    <div class="dose-row">
+      <div class="dc mcg"><div class="dc-l">Dose — mcg</div><div class="dc-v" id="fMcg">—</div></div>
+      <div class="dc mgg"><div class="dc-l">Dose — mg</div><div class="dc-v" id="fMg">—</div></div>
+    </div>
+  </div>
+  <div class="hint-section"><div class="hint" id="fHint">Complete all steps above to see your calculated draw amount.</div></div>
+</div>
+
+<!-- ===== REVERSE ===== -->
+<div id="panelRev" style="display:none">
+
+  <div class="section input-s pulsing" id="rS1">
+    <div class="step-head"><span class="step-badge" id="rB1">STEP 1</span><span class="step-title">Strength of Peptide</span></div>
+    <div class="field-desc">Total peptide content in your vial (mg)</div>
+    <div class="chips-primary px-static-row" id="rVialChips"><button type="button" class="chip px-static-chip" data-target="rVA" data-value="1" data-calc="goR">1 mg</button><button type="button" class="chip px-static-chip" data-target="rVA" data-value="2" data-calc="goR">2 mg</button><button type="button" class="chip px-static-chip" data-target="rVA" data-value="5" data-calc="goR">5 mg</button><button type="button" class="chip px-static-chip" data-target="rVA" data-value="10" data-calc="goR">10 mg</button><button type="button" class="chip px-static-chip" data-target="rVA" data-value="15" data-calc="goR">15 mg</button><button type="button" class="chip px-static-chip" data-target="rVA" data-value="20" data-calc="goR">20 mg</button><button type="button" class="chip px-static-chip" data-target="rVA" data-value="50" data-calc="goR">50 mg</button></div>
+    <div class="manual-wrap">
+      <div class="manual-lbl">Manual entry</div>
+      <input class="inp" type="number" id="rVA" value="" min="0.1" step="0.1" inputmode="decimal" placeholder="e.g. 5 mg" oninput="clrChips('rvial');goR()">
+    </div>
+  </div>
+
+  <div class="section input-s" id="rS2">
+    <div class="step-head"><span class="step-badge" id="rB2">STEP 2</span><span class="step-title">BAC Water Added</span></div>
+    <div class="field-desc">Volume of bacteriostatic water used to reconstitute</div>
+    <div class="chips-primary px-static-row" id="rBacChips"><button type="button" class="chip px-static-chip" data-target="rBA" data-value="1" data-calc="goR">1 ml</button><button type="button" class="chip px-static-chip" data-target="rBA" data-value="2" data-calc="goR">2 ml</button><button type="button" class="chip px-static-chip" data-target="rBA" data-value="3" data-calc="goR">3 ml</button></div>
+    <div class="manual-wrap">
+      <div class="manual-lbl">Manual entry</div>
+      <input class="inp" type="number" id="rBA" value="" min="0.1" step="0.1" inputmode="decimal" placeholder="e.g. 2 ml" oninput="clrChips('rbac');goR()">
+    </div>
+  </div>
+
+  <div class="section input-s" id="rS3">
+    <div class="step-head"><span class="step-badge" id="rB3">STEP 3</span><span class="step-title">Syringe Type</span></div>
+    <div class="field-desc">Select the syringe you used for this draw</div>
+    <div class="syr-main-card" id="rMainCard">
+      <div><div class="syr-main-name" id="rMainName">U-100 1ml Insulin Syringe</div><div class="syr-main-sub" id="rMainSub">Standard — most common</div></div>
+      <div class="syr-badge">ACTIVE</div>
+    </div>
+    <div class="syr-change-btn" id="rChangeBtn" onclick="toggleRDrop()">
+      <span>Change syringe type</span><span class="syr-chg-arr">▾</span>
+    </div>
+    <div class="syr-dropdown" id="rDropdown">
+      <div class="syr-drop-item" onclick="rPickSyr('u100');ripple(event,this)">
+        <div><div class="syr-drop-name">U-100 1ml Insulin Syringe</div><div class="syr-drop-sub">Standard — 100 units per ml</div></div>
+      </div>
+      <div class="syr-drop-item" onclick="rPickSyr('u40');ripple(event,this)">
+        <div><div class="syr-drop-name">U-40 1ml Insulin Syringe</div><div class="syr-drop-sub">U-40 scale — 40 units per ml</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section input-s" id="rS4">
+    <div class="step-head"><span class="step-badge" id="rB4">STEP 4</span><span class="step-title" id="rDrawSlbl">Syringe Draw Amount</span></div>
+    <div class="field-desc" id="rDrawDesc">Mark on the syringe barrel where the plunger stopped (U-100 units)</div>
+    <div class="chips-primary px-static-row" id="rDrawChips"><button type="button" class="chip px-static-chip" data-target="rDR" data-value="5" data-calc="goR">5 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="10" data-calc="goR">10 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="15" data-calc="goR">15 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="20" data-calc="goR">20 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="25" data-calc="goR">25 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="30" data-calc="goR">30 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="40" data-calc="goR">40 u</button><button type="button" class="chip px-static-chip" data-target="rDR" data-value="50" data-calc="goR">50 u</button></div>
+    <div class="manual-wrap">
+      <div class="manual-lbl">Manual entry</div>
+      <input class="inp" type="number" id="rDR" value="" min="0.001" step="0.001" inputmode="decimal" placeholder="e.g. 25" oninput="clrChips('rdraw');goR()">
+      <div class="ml-eq" id="rMlEq">= — ml</div>
+    </div>
+  </div>
+
+  <div id="rErr" class="err"></div>
+
+  <div class="syr-section" id="rSyrSection">
+    <div class="syr-vis-lbl">Syringe shown</div>
+    <div class="syr-interact-hint">Calculated draw amount</div>
+    <div class="draw-big">
+      <div class="draw-sub" id="rDrawSub">complete steps above</div>
+      <div class="draw-val" id="rDrawVal">—</div>
+    </div>
+    <div class="syr-svg-wrap">
+      <svg id="syrR" width="100%" height="auto" viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg" style="display:block;touch-action:none;pointer-events:none"></svg>
+    </div>
+  </div>
+
+  <div class="results-section">
+    <div class="rt">Calculated Dose</div>
+    <div class="sr"><span class="sl">Reconstituted concentration</span><span class="sv hi" id="rConc">—</span></div>
+    <div class="sr"><span class="sl">Volume drawn</span><span class="sv" id="rVol">—</span></div>
+    <div class="dose-row">
+      <div class="dc mcg"><div class="dc-l">Dose — mcg</div><div class="dc-v" id="rMcg">—</div></div>
+      <div class="dc mgg"><div class="dc-l">Dose — mg</div><div class="dc-v" id="rMg">—</div></div>
+    </div>
+  </div>
+  <div class="hint-section"><div class="hint" id="rHint">Complete all steps above to calculate your dose from this draw.</div></div>
+</div>
+
+<div class="disc-section">
+  <div class="disc-t">For Research Use Only</div>
+  <div class="disc-tx">PrimeX BioLabs products are supplied for research and calculation purposes only. Not intended for human or veterinary use. This tool performs mathematical calculations only and does not constitute advice of any kind. Always refer to qualified guidance when handling research compounds.</div>
+</div>
+</div>
+
+<script>
+var fSyr='u100',rSyr='u100';
+var fOtherOpen=false,rOtherOpen=false;
+var fAdvOpen=false,rAdvOpen=false;
+var UNITS={fvial:'mg',fdose:'mg',rvial:'mg'};
+var SEL={fvial:null,fbac:null,fdose:null,rvial:null,rbac:null,rdraw:null};
+var MEM={};
+var currentMode='fwd';
+var fPct=0,rPct=0,fDrag=false,rDrag=false;
+var SBX=46,SPW=260,SPY=24,SPH=46;
+
+function mem(k,v){if(v!==undefined){MEM[k]=v;try{localStorage.setItem('px12_'+k,JSON.stringify(v))}catch(e){}}else{try{var s=localStorage.getItem('px12_'+k);return s?JSON.parse(s):MEM[k]}catch(e){return MEM[k]}}}
+function r(n,d){return parseFloat(n.toFixed(d));}
+function closeTip(){document.getElementById('tipBox').style.display='none';}
+
+function ripple(e,el){
+  var rc=el.getBoundingClientRect();
+  var re=document.createElement('div');re.className='ripple-el';
+  re.style.left=((e.clientX||(e.touches&&e.touches[0].clientX)||rc.left+rc.width/2)-rc.left)+'px';
+  re.style.top=((e.clientY||(e.touches&&e.touches[0].clientY)||rc.top+rc.height/2)-rc.top)+'px';
+  el.appendChild(re);setTimeout(function(){re.remove();},460);
+}
+
+function gentleScroll(id){
+  setTimeout(function(){
+    var el=document.getElementById(id);if(!el)return;
+    var rect=el.getBoundingClientRect();
+    var off=56;
+    if(rect.top<off||rect.top>window.innerHeight*.75)
+      window.scrollTo({top:window.scrollY+rect.top-off,behavior:'smooth'});
+  },380);
+}
+
+function updateProgress(mode){
+  var v=parseFloat(document.getElementById(mode==='fwd'?'fVA':'rVA').value);
+  var b=parseFloat(document.getElementById(mode==='fwd'?'fBA':'rBA').value);
+  var d=parseFloat(document.getElementById(mode==='fwd'?'fDA':'rDR').value);
+  var steps=[v>0,b>0,d>0];
+  var next=steps.indexOf(false);
+  var allDone=steps.every(Boolean);
+  ['pd1','pd2','pd3'].forEach(function(id,i){
+    var dot=document.getElementById(id);
+    var lbl=document.getElementById('pl'+(i+1));
+    var isNext=next===i;
+    dot.className='prog-dot'+(steps[i]?' done':isNext?' active':'');
+    lbl.className='prog-lbl'+(steps[i]?' done':isNext?' active':'');
+    dot.textContent=steps[i]?'✓':(i+1);
+  });
+  document.getElementById('pd4').className='prog-dot'+(allDone?' done active':'');
+  document.getElementById('pl4').className='prog-lbl'+(allDone?' done':'');
+  ['pline1','pline2','pline3'].forEach(function(id,i){
+    document.getElementById(id).className='prog-line'+(steps[i]?' done':'');
+  });
+  var sects=mode==='fwd'?['fS1','fS2','fS3','fS4']:['rS1','rS2','rS3','rS4'];
+  var badges=mode==='fwd'?['fB1','fB2','fB3','fB4']:['rB1','rB2','rB3','rB4'];
+  sects.forEach(function(id,i){
+    var el=document.getElementById(id);if(!el)return;
+    el.classList.remove('pulsing');
+    var isDone=i<3?steps[i]:allDone;
+    var badge=document.getElementById(badges[i]);
+    if(badge) badge.className='step-badge'+(isDone?' done':'');
+    if(i===next) el.classList.add('pulsing');
+    if(allDone&&i===3) el.classList.add('pulsing');
+  });
+}
+
+// V14: Dose chips — 5 clean values, each opens +0.5 popup
+var VIAL_MG=[1,2,5,10,15,20,50];
+var VIAL_MCG=[100,250,500,1000];
+// V12: BAC water — just 2ml and 3ml as primary, others secondary
+var BAC_PRIMARY=[1,2,3];
+var BAC_ALL=[0.5,1,1.5,2,2.5,3];
+var DOSE_MG_PRIMARY=[0.5,1,2,3,4];
+var DOSE_MCG=[50,100,200,300,500,750,1000];
+var DRAW_U100=[5,10,15,20,25,30,40,50,75,100];
+var DRAW_U40=[2,4,5,8,10,15,20,30,40];
+var DRAW_ML=[0.05,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.75,1.0];
+
+function chipLbl(v,key){
+  if(key==='fbac'||key==='rbac') return v+' ml';
+  if(key==='fvial'||key==='rvial') return v+' mg';
+  if(key==='fdose') return v+(UNITS.fdose==='mg'?' mg':' mcg');
+  if(key==='rdraw') return rSyr==='1ml'?v+' ml':v+' u';
+  return String(v);
+}
+
+function closeAllPopups(){document.querySelectorAll('.sub-popup.open').forEach(function(p){p.classList.remove('open');});}
+document.addEventListener('click',closeAllPopups);
+
+function positionPopup(popup,chip){
+  // Reset to default so we can measure natural width
+  popup.style.left='0';
+  popup.style.right='';
+  popup.style.top='';
+  popup.style.bottom='';
+
+  var vw=window.innerWidth;
+  var margin=8; // min px from viewport edge
+  var chipR=chip.getBoundingClientRect();
+  var popW=popup.offsetWidth||160;
+  var popH=popup.offsetHeight||60;
+
+  // Horizontal: try to left-align with chip, then nudge if it overflows
+  var chipOffsetLeft=chip.offsetLeft; // relative to chip-wrap parent (position:relative)
+  var chipCentreVP=chipR.left+chipR.width/2; // chip centre in viewport px
+
+  // Ideal: popup left edge = chip left
+  var leftIdeal=chipOffsetLeft;
+  // Clamp so popup stays within viewport
+  // Convert popup left (relative to wrapper) to viewport: need wrapper's left
+  var wrapperR=chip.parentElement.getBoundingClientRect();
+  var popLeftVP=wrapperR.left+leftIdeal;
+  if(popLeftVP+popW>vw-margin){
+    // Shift left so right edge clears viewport
+    leftIdeal-=(popLeftVP+popW-(vw-margin));
+  }
+  if(wrapperR.left+leftIdeal<margin){
+    leftIdeal=margin-wrapperR.left;
+  }
+  popup.style.left=leftIdeal+'px';
+
+  // Arrow: position so it points at chip centre regardless of popup shift
+  var arrowLeft=chipOffsetLeft+chip.offsetWidth/2-leftIdeal-5; // 5 = half arrow width
+  arrowLeft=Math.min(Math.max(arrowLeft,8),popW-18);
+  var arrow=popup.querySelector('.sub-popup-arrow');
+  if(arrow) arrow.style.left=arrowLeft+'px';
+
+  // Vertical: default below chip. If not enough room, open above.
+  var spaceBelow=window.innerHeight-(chipR.bottom+7);
+  if(spaceBelow<popH+margin){
+    popup.style.top='auto';
+    popup.style.bottom='calc(100% + 7px)';
+    if(arrow){arrow.style.top='auto';arrow.style.bottom='-6px';arrow.style.transform='rotate(225deg)';}
+  } else {
+    popup.style.top='calc(100% + 7px)';
+    popup.style.bottom='';
+    if(arrow){arrow.style.top='-6px';arrow.style.bottom='';arrow.style.transform='rotate(45deg)';}
+  }
+}
+
+function makeChip(v,key,cur,lastMem,onSel,expandable){
+  var isOn=(cur!==null&&cur!==undefined&&Math.abs(cur-v)<0.0001);
+  var isRec=(lastMem!==undefined&&lastMem!==null&&Math.abs(parseFloat(lastMem)-v)<0.0001&&!isOn);
+  var wrapper=document.createElement('div');
+  wrapper.className='chip-wrap';
+  var ch=document.createElement('div');
+  ch.className='chip'+(isOn?' on':'')+(isRec?' rec':'')+(expandable?' expandable':'');
+  if(expandable){
+    ch.innerHTML=chipLbl(v,key)+'<span class="exp-indicator">+</span>';
+  } else {
+    ch.textContent=chipLbl(v,key);
+  }
+  if(expandable){
+    var popup=document.createElement('div');
+    popup.className='sub-popup';
+    // Arrow element — positioned dynamically
+    var arrow=document.createElement('div');
+    arrow.className='sub-popup-arrow';
+    popup.appendChild(arrow);
+    var ptitle=document.createElement('div');
+    ptitle.className='sub-popup-title';
+    ptitle.textContent='Select increment';
+    popup.appendChild(ptitle);
+    var sc_wrap=document.createElement('div');
+    sc_wrap.className='sub-chips';
+    [v,r(v+0.5,4)].forEach(function(sv){
+      var isSubOn=(cur!==null&&cur!==undefined&&Math.abs(cur-sv)<0.0001);
+      var sc=document.createElement('div');
+      sc.className='sub-chip'+(isSubOn?' on':'');
+      sc.textContent=chipLbl(sv,key);
+      sc.onclick=function(e){
+        e.stopPropagation();ripple(e,sc);
+        popup.classList.remove('open');
+        SEL[key]=sv;mem('m_'+key,sv);onSel(sv);
+      };
+      sc_wrap.appendChild(sc);
+    });
+    popup.appendChild(sc_wrap);
+    ch.onclick=function(e){
+      e.stopPropagation();ripple(e,ch);
+      var wasOpen=popup.classList.contains('open');
+      closeAllPopups();
+      if(!wasOpen){
+        popup.classList.add('open');
+        // Position after display so offsetWidth is available
+        requestAnimationFrame(function(){positionPopup(popup,ch);});
+      }
+    };
+    wrapper.appendChild(ch);wrapper.appendChild(popup);
+  } else {
+    ch.onclick=function(e){ripple(e,ch);SEL[key]=v;mem('m_'+key,v);onSel(v);};
+    wrapper.appendChild(ch);
+  }
+  return wrapper;
+}
+
+function buildChipSet(primaryId,vals,key,onSel,expandable,secondaryId,advVals){
+  var pw=document.getElementById(primaryId);if(!pw)return;
+  var cur=SEL[key];var lastMem=mem('m_'+key);
+  pw.innerHTML='';
+  vals.forEach(function(v){
+    pw.appendChild(makeChip(v,key,cur,lastMem,onSel,expandable));
+  });
+  if(secondaryId&&advVals){
+    var sw=document.getElementById(secondaryId);if(!sw)return;
+    sw.innerHTML='';
+    advVals.forEach(function(v){
+      sw.appendChild(makeChip(v,key,cur,lastMem,onSel,expandable));
+    });
+  }
+}
+
+function clrChips(key){SEL[key]=null;}
+
+function toggleAdv(mode){
+  if(mode==='fwd'){
+    fAdvOpen=!fAdvOpen;
+    document.getElementById('fDoseChipsAdv').className='chips-secondary'+(fAdvOpen?' open':'');
+    document.getElementById('fAdvBtn').textContent=fAdvOpen?'Higher doses ▴':'Higher doses ▾';
+  }
+}
+
+function setUnit(key,unit){
+  UNITS[key]=unit;SEL[key]=null;
+  if(key==='fdose'){
+    document.querySelectorAll('#fDUT .ut-btn').forEach(function(b,i){b.className='ut-btn'+(i===(unit==='mg'?0:1)?' on':'');});
+    document.getElementById('fDA').value='';buildFDose();go();
+  }
+}
+
+function buildFVial(){buildChipSet('fVialChips',VIAL_MG,'fvial',function(v){document.getElementById('fVA').value=v;buildFVial();go();gentleScroll('fS2');},false);}
+function buildFBac(){buildChipSet('fBacChips',BAC_PRIMARY,'fbac',function(v){document.getElementById('fBA').value=v;buildFBac();go();gentleScroll('fS3');},false);}
+function buildFDose(){
+  var isMg=UNITS.fdose==='mg';
+  buildChipSet('fDoseChips',isMg?DOSE_MG_PRIMARY:DOSE_MCG,'fdose',function(v){document.getElementById('fDA').value=v;buildFDose();go();gentleScroll('fS4');},isMg);
+  document.getElementById('fAdvWrap').style.display='none';
+}
+function buildRVial(){buildChipSet('rVialChips',VIAL_MG,'rvial',function(v){document.getElementById('rVA').value=v;buildRVial();goR();gentleScroll('rS2');},false);}
+function buildRBac(){buildChipSet('rBacChips',BAC_PRIMARY,'rbac',function(v){document.getElementById('rBA').value=v;buildRBac();goR();gentleScroll('rS3');},false);}
+function buildRDraw(){
+  var vals=rSyr==='u40'?DRAW_U40:DRAW_U100;
+  buildChipSet('rDrawChips',vals,'rdraw',function(v){document.getElementById('rDR').value=v;buildRDraw();goR();gentleScroll('rSyrSection');},false);
+  document.getElementById('rDrawDesc').textContent='Mark on the syringe barrel where the plunger stopped ('+(rSyr==='u40'?'U-40 units':'U-100 units')+')';
+}
+
+function setMode(m){
+  currentMode=m;
+  document.getElementById('panelFwd').style.display=m==='fwd'?'block':'none';
+  document.getElementById('panelRev').style.display=m==='rev'?'block':'none';
+  document.getElementById('cardFwd').className='mode-card'+(m==='fwd'?' on':'');
+  document.getElementById('cardRev').className='mode-card'+(m==='rev'?' on':'');
+  updateProgress(m);
+}
+function setSyrUI(p,t){
+  var names={u100:'U-100 1ml Insulin Syringe',u40:'U-40 1ml Insulin Syringe'};
+  var subs={u100:'Standard — most common',u40:'U-40 scale — selected'};
+  document.getElementById(p+'MainName').textContent=names[t];
+  document.getElementById(p+'MainSub').textContent=subs[t];
+  // Close dropdown
+  document.getElementById(p+'Dropdown').className='syr-dropdown';
+  document.getElementById(p+'ChangeBtn').className='syr-change-btn';
+}
+function toggleFDrop(){
+  var d=document.getElementById('fDropdown'),b=document.getElementById('fChangeBtn');
+  var open=d.classList.contains('open');
+  d.className='syr-dropdown'+(open?'':' open');
+  b.className='syr-change-btn'+(open?'':' open');
+}
+function toggleRDrop(){
+  var d=document.getElementById('rDropdown'),b=document.getElementById('rChangeBtn');
+  var open=d.classList.contains('open');
+  d.className='syr-dropdown'+(open?'':' open');
+  b.className='syr-change-btn'+(open?'':' open');
+}
+function fPickSyr(t){fSyr=t;setSyrUI('f',t);go();}
+function rPickSyr(t){rSyr=t;setSyrUI('r',t);buildRDraw();goR();}
+// Legacy aliases (keep go/goR calling these)
+function fMainPick(){fPickSyr('u100');}
+function fAltPick(){fPickSyr(fSyr==='u100'?'u40':'u100');}
+function rMainPick(){rPickSyr('u100');}
+function rAltPick(){rPickSyr(rSyr==='u100'?'u40':'u100');}
+
+// ── NEW SYRINGE ENGINE (v20) ─────────────────────────────────────────
+// ViewBox: 560 × 170. Called as drawSyr(svgId, pct, syrType)
+// pct = 0..1 (fraction of full syringe). syrType = 'u100' | 'u40'
+(function(){
+  var NY_MID=85;
+  var NX1=0,NX2=44;
+  var BAR_X=44,BAR_W=450,BAR_H=58,BAR_WALL=3.5;
+  var BAR_Y=NY_MID-(BAR_H/2);
+  var SCALE_PAD=20;
+  var SCALE_X0=BAR_X+SCALE_PAD;
+  var SCALE_X1=BAR_X+BAR_W-SCALE_PAD;
+  var SCALE_LEN=SCALE_X1-SCALE_X0;
+  var PLG_X=BAR_X+BAR_W,PLG_W=32;
+  var TICK_Y_BASE=BAR_Y+BAR_WALL;
+  var TICK_LONG=19,TICK_MED=13;
+
+  function uToX(u,maxV){return SCALE_X0+(u/maxV)*SCALE_LEN;}
+
+  function ticks(maxV){
+    var out='';
+    var step=maxV===100?2:1;   // U-100: 2u steps; U-40: 1u steps
+    var maj=maxV===100?10:5;
+    for(var u=0;u<=maxV;u+=step){
+      var x=uToX(u,maxV).toFixed(2);
+      var isMaj=(u%maj===0);
+      var h=isMaj?TICK_LONG:TICK_MED;
+      var col=isMaj?'#8fbfda':'#4a7fa8';
+      var sw=isMaj?1.8:1.5;
+      out+='<line x1="'+x+'" y1="'+TICK_Y_BASE.toFixed(1)+'" x2="'+x+'" y2="'+(TICK_Y_BASE+h).toFixed(1)+'" stroke="'+col+'" stroke-width="'+sw+'" opacity="0.95"/>';
+      if(isMaj){
+        out+='<text x="'+x+'" y="'+(TICK_Y_BASE-5).toFixed(1)+'" text-anchor="middle" font-family="Space Mono,monospace" font-size="10.8" fill="#6aabcc">'+u+'</text>';
+      }
+    }
+    return out;
+  }
+
+  window.drawSyr=function(svgId,pct,syrType){
+    var svg=document.getElementById(svgId);if(!svg)return;
+    pct=Math.min(Math.max(pct||0,0),1);
+    var maxV=syrType==='u40'?40:100;
+    var dose=pct*maxV;
+    var hasValue=pct>0.001;
+    var fluidTop=BAR_Y+BAR_WALL+1;
+    var fluidBot=BAR_Y+BAR_H-BAR_WALL-1;
+    var innerH=(fluidBot-fluidTop).toFixed(1);
+    var innerW=(BAR_W-BAR_WALL*2).toFixed(1);
+    var markerX=uToX(dose,maxV).toFixed(2);
+    var fluidW=hasValue?Math.max(0,uToX(dose,maxV)-SCALE_X0).toFixed(1):'0';
+
+    var h='<defs>'
+      +'<linearGradient id="bG_'+svgId+'" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0%" stop-color="#253545"/>'
+      +'<stop offset="40%" stop-color="#1c2a38"/>'
+      +'<stop offset="100%" stop-color="#111d28"/>'
+      +'</linearGradient>'
+      +'<linearGradient id="fG_'+svgId+'" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0%" stop-color="#2e8bc0" stop-opacity="0.9"/>'
+      +'<stop offset="100%" stop-color="#1a6fa8" stop-opacity="1"/>'
+      +'</linearGradient>'
+      +'<linearGradient id="nG_'+svgId+'" x1="0" y1="0" x2="0" y2="1">'
+      +'<stop offset="0%" stop-color="#b0c8d8"/>'
+      +'<stop offset="100%" stop-color="#607a8a"/>'
+      +'</linearGradient>'
+      +'<linearGradient id="pG_'+svgId+'" x1="0" y1="0" x2="1" y2="0">'
+      +'<stop offset="0%" stop-color="#2e4a60"/>'
+      +'<stop offset="100%" stop-color="#1a2e3e"/>'
+      +'</linearGradient>'
+      +'<clipPath id="bC_'+svgId+'">'
+      +'<rect x="'+(BAR_X+BAR_WALL).toFixed(1)+'" y="'+fluidTop.toFixed(1)+'" width="'+innerW+'" height="'+innerH+'"/>'
+      +'</clipPath>'
+      +'</defs>';
+
+    // Needle hub
+    h+='<polygon points="'+BAR_X+','+(BAR_Y+8).toFixed(1)+' '+BAR_X+','+(BAR_Y+BAR_H-8).toFixed(1)+' '+(NX2-4)+','+(NY_MID+5)+' '+(NX2-4)+','+(NY_MID-5)+'" fill="url(#nG_'+svgId+')" opacity="0.9"/>';
+    h+='<line x1="'+(NX2-4)+'" y1="'+(NY_MID-2.5)+'" x2="'+(NX1+2)+'" y2="'+NY_MID+'" stroke="url(#nG_'+svgId+')" stroke-width="3.5" stroke-linecap="round"/>';
+    h+='<line x1="'+(NX2-4)+'" y1="'+(NY_MID+2.5)+'" x2="'+(NX1+2)+'" y2="'+NY_MID+'" stroke="#506878" stroke-width="2" stroke-linecap="round"/>';
+
+    // Barrel
+    h+='<rect x="'+BAR_X+'" y="'+BAR_Y.toFixed(1)+'" width="'+BAR_W+'" height="'+BAR_H+'" rx="3.5" fill="url(#bG_'+svgId+')" stroke="#2a3f52" stroke-width="1.8"/>';
+
+    // Fluid fill
+    if(hasValue&&parseFloat(fluidW)>0.5){
+      h+='<rect x="'+SCALE_X0.toFixed(2)+'" y="'+fluidTop.toFixed(1)+'" width="'+fluidW+'" height="'+innerH+'" fill="url(#fG_'+svgId+')" clip-path="url(#bC_'+svgId+')" opacity="0.85"/>';
+    }
+
+    // Ticks + numbers
+    h+=ticks(maxV);
+
+    // Barrel shine
+    h+='<rect x="'+(BAR_X+2)+'" y="'+(BAR_Y+BAR_WALL).toFixed(1)+'" width="'+(BAR_W-4)+'" height="3.5" rx="1.5" fill="white" opacity="0.04"/>';
+
+    // Dose marker line
+    if(hasValue){
+      h+='<line x1="'+markerX+'" y1="'+(fluidTop-2).toFixed(1)+'" x2="'+markerX+'" y2="'+(fluidBot+2).toFixed(1)+'" stroke="#ff4e6a" stroke-width="2.5" opacity="1"/>';
+    }
+
+    // Plunger rod
+    h+='<rect x="'+PLG_X+'" y="'+(NY_MID-2.5)+'" width="44" height="5" rx="2.5" fill="#1a2e3e"/>';
+    // Stopper
+    h+='<rect x="'+(PLG_X-4)+'" y="'+(fluidTop-1).toFixed(1)+'" width="'+PLG_W+'" height="'+(parseFloat(innerH)+2).toFixed(1)+'" rx="3.5" fill="url(#pG_'+svgId+')" stroke="#2a4558" stroke-width="1.2"/>';
+    h+='<line x1="'+(PLG_X-2)+'" y1="'+(fluidTop+7).toFixed(1)+'" x2="'+(PLG_X+PLG_W-7)+'" y2="'+(fluidTop+7).toFixed(1)+'" stroke="#2a4558" stroke-width="1.8" opacity="0.6"/>';
+    h+='<line x1="'+(PLG_X-2)+'" y1="'+(fluidBot-7).toFixed(1)+'" x2="'+(PLG_X+PLG_W-7)+'" y2="'+(fluidBot-7).toFixed(1)+'" stroke="#2a4558" stroke-width="1.8" opacity="0.6"/>';
+    // Thumb ring
+    h+='<rect x="'+(PLG_X+40)+'" y="'+(NY_MID-17)+'" width="6" height="34" rx="3" fill="#1a2e3e" stroke="#2a3f52" stroke-width="1.2"/>';
+
+    svg.innerHTML=h;
+  };
+})();
+
+function setupSyr(svgId,mode){
+  var svg=document.getElementById(svgId);if(!svg)return;
+  svg.style.pointerEvents='none';
+  svg.style.touchAction='auto';
+  svg.style.cursor='default';
+}
+
+function go(){
+  var va=parseFloat(document.getElementById('fVA').value);
+  var ba=parseFloat(document.getElementById('fBA').value);
+  var da=parseFloat(document.getElementById('fDA').value);
+  updateProgress('fwd');
+  var err=document.getElementById('fErr');
+  if(!va||!ba||!da||va<=0||ba<=0||da<=0){err.textContent='Complete all steps to see your calculated result.';err.style.display='block';drawSyr('syrF',0,fSyr);return;}
+  var vMg=UNITS.fvial==='mg'?va:va/1000;
+  var dMg=UNITS.fdose==='mg'?da:da/1000;
+  if(dMg>vMg){err.textContent='Dose value ('+r(dMg,4)+' mg) exceeds vial content ('+r(vMg,4)+' mg). Check your inputs.';err.style.display='block';drawSyr('syrF',0,fSyr);return;}
+  err.style.display='none';
+  var conc=vMg/ba,vol=dMg/conc,doses=vMg/dMg;
+  document.getElementById('fConc').textContent=r(conc,4)+' mg/ml';
+  document.getElementById('fDoses').textContent=r(doses,2);
+  document.getElementById('fVol').textContent=r(vol,4)+' ml';
+  document.getElementById('fMcg').textContent=r(dMg*1000,2);
+  document.getElementById('fMg').textContent=r(dMg,4);
+  var dN,dD,pct,sub;
+  if(fSyr==='u100'){dN=vol*100;dD=r(dN,1)+' units';pct=vol;sub='U-100 1ml Insulin Syringe';}
+  else{dN=vol*40;dD=r(dN,1)+' units';pct=vol;sub='U-40 1ml Insulin Syringe';}
+  document.getElementById('fDrawSub').textContent=sub;
+  document.getElementById('fDrawVal').textContent=dD;
+  fPct=pct;drawSyr('syrF',pct,fSyr);
+  document.getElementById('fHint').innerHTML='Draw to <span class="hv">'+dD+'</span> on your '+sub+'. Calculated dose: <span class="hv">'+r(dMg*1000,2)+' mcg</span> / <span class="hv">'+r(dMg,4)+' mg</span>. Vial yields <span class="hv">'+r(doses,2)+' doses</span>.';
+}
+
+function goR(){
+  var va=parseFloat(document.getElementById('rVA').value);
+  var ba=parseFloat(document.getElementById('rBA').value);
+  var dr=parseFloat(document.getElementById('rDR').value);
+  updateProgress('rev');
+  var err=document.getElementById('rErr');
+  if(!va||!ba||!dr||va<=0||ba<=0||dr<=0){err.textContent='Complete all steps to calculate your dose.';err.style.display='block';drawSyr('syrR',0,rSyr);return;}
+  err.style.display='none';
+  var vMg=UNITS.rvial==='mg'?va:va/1000,conc=vMg/ba;
+  var volMl,pct,dD,sub;
+  if(rSyr==='u100'){volMl=dr/100;pct=volMl;dD=r(dr,1)+' units';sub='U-100 1ml Insulin Syringe';}
+  else{volMl=dr/40;pct=volMl;dD=r(dr,1)+' units';sub='U-40 1ml Insulin Syringe';}
+  document.getElementById('rMlEq').textContent='= '+r(volMl,4)+' ml';
+  var dMg=conc*volMl;
+  document.getElementById('rConc').textContent=r(conc,4)+' mg/ml';
+  document.getElementById('rVol').textContent=r(volMl,4)+' ml';
+  document.getElementById('rMcg').textContent=r(dMg*1000,2);
+  document.getElementById('rMg').textContent=r(dMg,4);
+  document.getElementById('rDrawSub').textContent=sub;
+  document.getElementById('rDrawVal').textContent=dD;
+  rPct=pct;drawSyr('syrR',pct,rSyr);
+  document.getElementById('rHint').innerHTML='A draw of <span class="hv">'+dD+'</span> from this reconstitution equals <span class="hv">'+r(dMg*1000,2)+' mcg</span> / <span class="hv">'+r(dMg,4)+' mg</span>.';
+}
+
+/* v35 static chips: dynamic chip builder init disabled to preserve mobile-rendered chips */
+drawSyr('syrF',0,fSyr);drawSyr('syrR',0,rSyr);
+setupSyr('syrF','fwd');setupSyr('syrR','rev');
+updateProgress('fwd');
+</script>
+
+<script id="v42-static-chip-controller-flow-safe">
+(function(){
+  /*
+    v42 safety patch
+    - restores half-step dose popups for the static mobile chips
+    - restores the exact guided scroll behaviour after each completed step
+    - does not touch calculator maths, syringe logic, or existing go/goR functions
+  */
+
+  function calc(fn){
+    try{
+      if(typeof window[fn] === 'function') window[fn]();
+    }catch(e){
+      console.warn('PrimeX calc call failed:', e);
+    }
+  }
+
+  function nextSectionFor(target){
+    return {
+      fVA:'fS2',
+      fBA:'fS3',
+      fDA:'fS4',
+      rVA:'rS2',
+      rBA:'rS3',
+      rDR:'rSyrSection'
+    }[target] || null;
+  }
+
+  function runGuidedScroll(target){
+    var next = nextSectionFor(target);
+    if(next && typeof window.gentleScroll === 'function'){
+      window.setTimeout(function(){ window.gentleScroll(next); }, 70);
+    }
+  }
+
+  function chipDisplayLabel(chip, value){
+    var v = value || chip.dataset.value;
+    if(chip.dataset.target === 'fDA') return v + ' mg';
+    if(chip.dataset.target === 'fVA' || chip.dataset.target === 'rVA') return v + ' mg';
+    if(chip.dataset.target === 'fBA' || chip.dataset.target === 'rBA') return v + ' ml';
+    if(chip.dataset.target === 'rDR') return v + ' u';
+    return chip.dataset.originalLabel || chip.textContent;
+  }
+
+  function resetStaticChipLabels(row){
+    if(!row) return;
+    row.querySelectorAll('.px-static-chip').forEach(function(c){
+      if(!c.dataset.originalLabel) c.dataset.originalLabel = c.textContent.trim();
+      c.textContent = c.dataset.originalLabel;
+    });
+  }
+
+  function setChipSelected(chip, value){
+    var row = chip.closest('.chips-primary,.chips-secondary');
+    if(row){
+      resetStaticChipLabels(row);
+      row.querySelectorAll('.px-static-chip,.chip,.sub-chip').forEach(function(c){
+        c.classList.remove('on');
+      });
+    }
+    if(!chip.dataset.originalLabel) chip.dataset.originalLabel = chip.textContent.trim();
+    chip.textContent = chipDisplayLabel(chip, value);
+    chip.classList.add('on');
+  }
+
+  function selectStaticChip(chip, value){
+    var selectedValue = value || chip.dataset.value;
+    var input = document.getElementById(chip.dataset.target);
+    if(input) input.value = selectedValue;
+    setChipSelected(chip, selectedValue);
+    calc(chip.dataset.calc || 'go');
+    runGuidedScroll(chip.dataset.target);
+  }
+
+  function isForwardMgDoseChip(chip){
+    return chip && chip.dataset && chip.dataset.target === 'fDA' &&
+      chip.closest('#fDoseChips,#fDoseChipsAdv') &&
+      (!window.UNITS || !window.UNITS.fdose || window.UNITS.fdose === 'mg');
+  }
+
+  function closeStaticPopups(except){
+    document.querySelectorAll('.sub-popup.static-dose-popup.open').forEach(function(p){
+      if(p !== except) p.classList.remove('open');
+    });
+  }
+
+  function ensureDosePopup(chip){
+    var wrapper = chip.parentElement;
+
+    if(!wrapper || !wrapper.classList.contains('chip-wrap')){
+      wrapper = document.createElement('div');
+      wrapper.className = 'chip-wrap static-chip-wrap';
+      chip.parentNode.insertBefore(wrapper, chip);
+      wrapper.appendChild(chip);
+    }
+
+    var popup = wrapper.querySelector('.static-dose-popup');
+    if(popup) return popup;
+
+    var base = parseFloat(chip.dataset.value);
+    popup = document.createElement('div');
+    popup.className = 'sub-popup static-dose-popup';
+    popup.innerHTML =
+      '<div class="sub-popup-arrow"></div>'+
+      '<div class="sub-popup-title">Select increment</div>'+
+      '<div class="sub-chips">'+
+        '<button type="button" class="sub-chip" data-sub-value="'+base+'">'+base+' mg</button>'+
+        '<button type="button" class="sub-chip" data-sub-value="'+(Math.round((base+0.5)*1000)/1000)+'">'+(Math.round((base+0.5)*1000)/1000)+' mg</button>'+
+      '</div>';
+
+    popup.addEventListener('click', function(e){
+      var sub = e.target.closest('.sub-chip');
+      if(!sub) return;
+      e.stopPropagation();
+      if(typeof window.ripple === 'function') window.ripple(e, sub);
+      popup.classList.remove('open');
+      selectStaticChip(chip, sub.dataset.subValue);
+      sub.classList.add('on');
+    });
+
+    wrapper.appendChild(popup);
+    return popup;
+  }
+
+  function openDosePopup(chip, e){
+    e.stopPropagation();
+    if(typeof window.ripple === 'function') window.ripple(e, chip);
+
+    var popup = ensureDosePopup(chip);
+    var wasOpen = popup.classList.contains('open');
+    closeStaticPopups(popup);
+
+    if(wasOpen){
+      popup.classList.remove('open');
+      return;
+    }
+
+    popup.classList.add('open');
+    if(typeof window.positionPopup === 'function'){
+      requestAnimationFrame(function(){ window.positionPopup(popup, chip); });
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var chip = e.target.closest('.px-static-chip');
+    if(!chip) return;
+
+    if(isForwardMgDoseChip(chip)){
+      openDosePopup(chip, e);
+      return;
+    }
+
+    e.stopPropagation();
+    if(typeof window.ripple === 'function') window.ripple(e, chip);
+    selectStaticChip(chip);
+  }, true);
+
+  document.addEventListener('click', function(){ closeStaticPopups(); });
+
+  window.addEventListener('load', function(){
+    try{
+      if(typeof window.drawSyr === 'function'){
+        window.drawSyr('syrF',0,window.fSyr || 'u100');
+        window.drawSyr('syrR',0,window.rSyr || 'u100');
+      }
+      if(typeof window.updateProgress === 'function') window.updateProgress('fwd');
+    }catch(e){}
+  });
+})();
+</script>
+
+</body>
+</html>
