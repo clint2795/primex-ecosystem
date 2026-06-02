@@ -11140,4 +11140,120 @@ html{
   #foundation .foundation-variants .plan-name{font-size:18px!important;}
 }
 </style>
+
+
+<style id="primex-v159-mobile-dropdown-behaviour-only">
+/* PrimeX v159 — mobile dropdown behaviour only.
+   Scope: chapter nav dropdown open/visibility on mobile.
+   Does not change the visual nav design. */
+@media(max-width:720px){
+  .chapter-nav,
+  .chapter-nav.is-fixed{
+    overflow:visible!important;
+    z-index:2147482000!important;
+  }
+
+  .chapter-nav-shell,
+  .wrap.chapter-nav-shell{
+    overflow:visible!important;
+  }
+
+  .chapter-rail{
+    overflow-x:auto!important;
+    overflow-y:visible!important;
+    position:relative!important;
+  }
+
+  .chapter-drop{
+    position:static!important;
+  }
+
+  .chapter-menu{
+    display:none!important;
+    position:fixed!important;
+    top:62px!important;
+    left:13px!important;
+    right:13px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-height:calc(100vh - 86px)!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    z-index:2147483001!important;
+    padding:8px!important;
+    border:1px solid rgba(255,255,255,.10)!important;
+    border-top:1px solid rgba(62,150,196,.32)!important;
+    border-radius:0 0 14px 14px!important;
+    background:linear-gradient(180deg,rgba(5,9,15,.995),rgba(2,5,9,.998))!important;
+    box-shadow:0 18px 36px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,255,255,.026)!important;
+  }
+
+  .chapter-drop[open] > .chapter-menu{
+    display:block!important;
+  }
+
+  .chapter-drop[open] > .chapter-drop-trigger{
+    color:rgba(235,241,247,.95)!important;
+    border-bottom-color:rgba(62,150,196,.86)!important;
+    background:linear-gradient(180deg,rgba(62,150,196,.12),rgba(62,150,196,.018))!important;
+  }
+}
+</style>
+
+<script id="primex-v159-mobile-dropdown-controller">
+(function(){
+  const nav = document.querySelector('.chapter-nav');
+  if(!nav) return;
+
+  const drops = Array.from(nav.querySelectorAll('.chapter-drop'));
+  const triggers = drops.map(drop => drop.querySelector('.chapter-drop-trigger')).filter(Boolean);
+
+  function isMobile(){
+    return window.matchMedia('(max-width: 720px)').matches;
+  }
+
+  function closeDrops(except){
+    drops.forEach(drop => {
+      if(drop !== except) drop.removeAttribute('open');
+    });
+  }
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', function(event){
+      if(!isMobile()) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if(event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+      const drop = trigger.closest('.chapter-drop');
+      if(!drop) return;
+      const willOpen = !drop.hasAttribute('open');
+      closeDrops(drop);
+      if(willOpen){
+        drop.setAttribute('open','');
+      }else{
+        drop.removeAttribute('open');
+      }
+    }, true);
+  });
+
+  nav.querySelectorAll('.chapter-menu-item').forEach(link => {
+    link.addEventListener('click', function(){
+      if(isMobile()) closeDrops();
+    }, true);
+  });
+
+  document.addEventListener('click', function(event){
+    if(!isMobile()) return;
+    if(!event.target.closest('.chapter-nav') && !event.target.closest('.chapter-menu')){
+      closeDrops();
+    }
+  }, true);
+
+  window.addEventListener('resize', function(){
+    if(!isMobile()) closeDrops();
+  });
+})();
+</script>
+
 </body></html>
