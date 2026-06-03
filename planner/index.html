@@ -11140,90 +11140,69 @@ html{
 </style>
 
 
-<!-- PrimeX v160 emergency nav dropdown stabilisation
-     Scope: chapter navigation only. No layout redesign.
-     Purpose: mobile dropdown menus were opening inside the horizontal rail and being clipped. -->
-<style id="primex-v160-mobile-dropdown-stabilisation">
-/* Keep the current chapter nav architecture, but stop mobile dropdowns being trapped by the scroll rail. */
-.chapter-nav,
-.chapter-nav.is-fixed,
-.chapter-nav-shell,
-.wrap.chapter-nav-shell{
-  overflow:visible!important;
-  contain:none!important;
-}
-
-.chapter-rail{
-  contain:none!important;
-}
-
-/* Desktop keeps the existing absolute dropdown feel. */
-.chapter-menu{
-  pointer-events:auto!important;
-}
-
-/* Mobile: render dropdown panels against the viewport, not inside the horizontal scroll rail. */
-@media(max-width:720px){
-  .chapter-nav,
-  .chapter-nav.is-fixed,
-  .chapter-nav-shell,
-  .wrap.chapter-nav-shell{
-    overflow:visible!important;
-    contain:none!important;
+<!-- PrimeX v164 — mobile dropdown portal repair. Nav-only. Does not touch sticky. -->
+<style id="primex-v164-mobile-dropdown-portal-repair">
+@media (max-width:720px){
+  /* Stop the native details menu being trapped inside the horizontal rail. */
+  .chapter-drop > .chapter-menu{
+    display:none!important;
   }
 
-  .chapter-rail{
-    overflow-x:auto!important;
-    overflow-y:visible!important;
-    contain:none!important;
-    position:relative!important;
-  }
-
-  .chapter-drop{
-    position:static!important;
-  }
-
-  .chapter-menu{
-    position:fixed!important;
-    top:var(--primex-dropdown-top, 62px)!important;
-    left:13px!important;
-    right:13px!important;
-    width:auto!important;
-    min-width:0!important;
-    max-width:none!important;
-    max-height:calc(100vh - var(--primex-dropdown-top, 62px) - 14px)!important;
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-    z-index:2147483646!important;
-    border-radius:0 0 14px 14px!important;
-  }
-
-  .chapter-menu-tools{
-    min-width:0!important;
-  }
-
-  .chapter-menu-item{
-    min-height:42px!important;
-    padding-left:14px!important;
-    padding-right:14px!important;
-  }
-
-  /* When a dropdown is open, do not let scroll-spy current state make another dropdown look selected. */
-  .chapter-nav.is-dropdown-open .chapter-drop.is-current:not([open]) > .chapter-drop-trigger{
-    color:rgba(184,199,217,.72)!important;
-    background:transparent!important;
-    border-bottom-color:transparent!important;
-  }
-
-  .chapter-nav.is-dropdown-open .chapter-drop[open] > .chapter-drop-trigger{
-    color:rgba(235,241,247,.95)!important;
+  .chapter-drop.px-mobile-open > .chapter-drop-trigger,
+  .chapter-drop.px-mobile-open > summary.chapter-drop-trigger{
+    color:rgba(235,241,247,.96)!important;
     border-bottom-color:rgba(62,150,196,.86)!important;
     background:linear-gradient(180deg,rgba(62,150,196,.12),rgba(62,150,196,.018))!important;
   }
+
+  .chapter-drop.px-mobile-open .chapter-drop-caret{
+    transform:translateY(-1px) rotate(180deg)!important;
+    opacity:.95!important;
+  }
+
+  .px-mobile-nav-panel{
+    position:fixed!important;
+    left:13px!important;
+    right:13px!important;
+    z-index:2147483640!important;
+    max-height:calc(100vh - 86px)!important;
+    overflow:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:8px!important;
+    border:1px solid rgba(255,255,255,.10)!important;
+    border-top:1px solid rgba(62,150,196,.34)!important;
+    border-radius:0 0 14px 14px!important;
+    background:linear-gradient(180deg,rgba(5,9,15,.992),rgba(2,5,9,.998))!important;
+    box-shadow:0 18px 34px rgba(0,0,0,.58), inset 0 1px 0 rgba(255,255,255,.026)!important;
+  }
+
+  .px-mobile-nav-panel[hidden]{display:none!important;}
+
+  .px-mobile-nav-panel .chapter-menu-item{
+    display:flex!important;
+    align-items:center!important;
+    min-height:38px!important;
+    padding:0 12px!important;
+    border-radius:8px!important;
+    color:rgba(184,199,217,.82)!important;
+    font-family:'Share Tech Mono',monospace!important;
+    font-size:9px!important;
+    line-height:1!important;
+    letter-spacing:1.55px!important;
+    text-transform:uppercase!important;
+    text-decoration:none!important;
+    white-space:nowrap!important;
+  }
+
+  .px-mobile-nav-panel .chapter-menu-item:active,
+  .px-mobile-nav-panel .chapter-menu-item:focus-visible{
+    color:rgba(242,246,252,.96)!important;
+    background:linear-gradient(180deg,rgba(62,150,196,.14),rgba(62,150,196,.035))!important;
+    outline:none!important;
+  }
 }
 </style>
-
-<script id="primex-v160-mobile-dropdown-stabilisation-script">
+<script id="primex-v164-mobile-dropdown-portal-repair-script">
 (function(){
   const nav = document.querySelector('.chapter-nav');
   if(!nav) return;
@@ -11231,59 +11210,91 @@ html{
   const drops = Array.from(nav.querySelectorAll('.chapter-drop'));
   if(!drops.length) return;
 
-  function setDropdownTop(){
+  let panel = document.querySelector('.px-mobile-nav-panel');
+  if(!panel){
+    panel = document.createElement('div');
+    panel.className = 'px-mobile-nav-panel';
+    panel.setAttribute('hidden','');
+    document.body.appendChild(panel);
+  }
+
+  let activeDrop = null;
+
+  function isMobile(){
+    return window.matchMedia('(max-width: 720px)').matches;
+  }
+
+  function closePanel(){
+    panel.setAttribute('hidden','');
+    panel.innerHTML = '';
+    activeDrop = null;
+    drops.forEach(drop => {
+      drop.classList.remove('px-mobile-open');
+      drop.removeAttribute('open');
+    });
+  }
+
+  function positionPanel(){
+    if(!activeDrop || panel.hasAttribute('hidden')) return;
     const rect = nav.getBoundingClientRect();
     const top = Math.max(0, Math.round(rect.bottom - 1));
-    document.documentElement.style.setProperty('--primex-dropdown-top', top + 'px');
+    panel.style.top = top + 'px';
+    panel.style.maxHeight = 'calc(100vh - ' + Math.min(top + 18, window.innerHeight - 80) + 'px)';
   }
 
-  function syncOpenState(){
-    const anyOpen = drops.some(drop => drop.open);
-    nav.classList.toggle('is-dropdown-open', anyOpen);
-    if(anyOpen) setDropdownTop();
-  }
+  function openPanel(drop){
+    const menu = drop.querySelector('.chapter-menu');
+    if(!menu) return;
 
-  function closeDrops(except){
-    drops.forEach(drop => {
-      if(drop !== except) drop.removeAttribute('open');
-    });
-    syncOpenState();
-  }
-
-  drops.forEach(drop => {
-    const summary = drop.querySelector('summary');
-
-    if(summary){
-      summary.addEventListener('click', function(){
-        setDropdownTop();
-        closeDrops(drop);
-      }, {capture:true});
-    }
-
-    drop.addEventListener('toggle', function(){
-      if(drop.open){
-        closeDrops(drop);
-        setDropdownTop();
+    drops.forEach(other => {
+      if(other !== drop){
+        other.classList.remove('px-mobile-open');
+        other.removeAttribute('open');
       }
-      syncOpenState();
     });
-  });
 
-  nav.querySelectorAll('.chapter-menu-item').forEach(link => {
-    link.addEventListener('click', function(){
-      closeDrops();
+    activeDrop = drop;
+    drop.classList.add('px-mobile-open');
+    drop.removeAttribute('open');
+
+    panel.innerHTML = menu.innerHTML;
+    panel.removeAttribute('hidden');
+    positionPanel();
+
+    panel.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        closePanel();
+      }, {once:true});
     });
-  });
+  }
+
+  nav.addEventListener('click', function(event){
+    const summary = event.target.closest('.chapter-drop > summary');
+    if(!summary || !isMobile()) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if(event.stopImmediatePropagation) event.stopImmediatePropagation();
+
+    const drop = summary.closest('.chapter-drop');
+    if(activeDrop === drop && !panel.hasAttribute('hidden')){
+      closePanel();
+    }else{
+      openPanel(drop);
+    }
+  }, true);
 
   document.addEventListener('click', function(event){
-    if(!event.target.closest('.chapter-drop')) closeDrops();
-  });
+    if(!isMobile()) return;
+    if(event.target.closest('.chapter-nav') || event.target.closest('.px-mobile-nav-panel')) return;
+    closePanel();
+  }, true);
 
-  window.addEventListener('scroll', setDropdownTop, {passive:true});
-  window.addEventListener('resize', setDropdownTop);
-  window.addEventListener('orientationchange', setDropdownTop);
-  window.addEventListener('load', setDropdownTop);
-  requestAnimationFrame(setDropdownTop);
+  window.addEventListener('scroll', positionPanel, {passive:true});
+  window.addEventListener('resize', function(){
+    if(!isMobile()) closePanel();
+    else positionPanel();
+  });
 })();
 </script>
 
