@@ -1,215 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PrimeX Finance HQ v20</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PrimeX Finance HQ · v21</title>
 <style>
 :root{
-  --bg:#05080d;--bg2:#080d14;--panel:#0b121c;--panel2:#0f1824;--panel3:#121f2d;
-  --line:#1e3448;--line2:#2d4a62;--text:#eef6ff;--muted:#9eb1c1;--soft:#c6d8e6;
-  --blue:#4aa7d8;--blue2:#82c7ee;--green:#4bc28a;--amber:#d6a84a;--red:#d06464;
-  --shadow:0 18px 50px rgba(0,0,0,.35);--radius:16px;--radius2:22px;
+  --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
+  --text:#eef5ff;--muted:#9caaba;--faint:#657386;--blue:#6ea8d8;--blue2:#9dccf0;
+  --amber:#d7a750;--green:#73c28b;--red:#d97777;--white:#fff;
+  --radius:14px;--radius2:10px;--shadow:0 18px 60px rgba(0,0,0,.35);
 }
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 80% -10%,rgba(74,167,216,.13),transparent 32%),radial-gradient(circle at 15% 0%,rgba(74,167,216,.08),transparent 26%),linear-gradient(180deg,#05080d,#070b11 55%,#05080d);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.35;padding-bottom:88px}button,input,select,textarea{font:inherit}.wrap{width:min(1080px,94vw);margin:auto;padding:18px 0 30px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:11px}.logo{width:36px;height:36px;border:1px solid rgba(130,199,238,.5);border-radius:10px;display:grid;place-items:center;color:var(--blue2);font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,rgba(74,167,216,.15),rgba(255,255,255,.03))}.brand small{display:block;color:var(--blue2);letter-spacing:4px;text-transform:uppercase;font-size:10px;font-weight:800}.brand h1{font-size:24px;line-height:1;margin:2px 0 0;letter-spacing:-.7px}.top-actions{display:flex;gap:8px;align-items:center}.btn{border:1px solid var(--line2);background:linear-gradient(180deg,rgba(18,31,45,.95),rgba(10,18,28,.95));color:var(--text);border-radius:12px;padding:11px 13px;font-weight:800;cursor:pointer;min-height:40px}.btn:hover{border-color:rgba(130,199,238,.7)}.btn.primary{background:linear-gradient(180deg,rgba(74,167,216,.28),rgba(34,73,101,.8));border-color:rgba(130,199,238,.65)}.btn.ghost{background:rgba(255,255,255,.03)}.btn.small{padding:8px 10px;min-height:34px;font-size:13px}.btn.danger{border-color:rgba(208,100,100,.55);color:#ffd6d6}.btn.success{border-color:rgba(75,194,138,.55);color:#dfffea}.btn.amber{border-color:rgba(214,168,74,.55);color:#ffe7ac}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(4,8,13,.94);border-top:1px solid rgba(130,199,238,.18);backdrop-filter:blur(14px);z-index:20}.navin{width:min(1080px,100vw);margin:auto;display:grid;grid-template-columns:repeat(5,1fr)}.nav button{border:0;border-right:1px solid rgba(130,199,238,.08);background:transparent;color:#c7d8e6;padding:10px 4px 12px;font-weight:850;font-size:12px;cursor:pointer}.nav button.active{color:#fff;background:rgba(74,167,216,.12);box-shadow:inset 0 2px 0 var(--blue)}.screen{display:none}.screen.active{display:block}.panel{border:1px solid rgba(130,199,238,.18);background:linear-gradient(180deg,rgba(14,24,36,.94),rgba(8,14,22,.94));border-radius:var(--radius2);padding:18px;margin:13px 0;box-shadow:var(--shadow)}.panel.tight{padding:14px}.panel h2{font-size:22px;letter-spacing:-.4px;margin:0 0 5px}.panel h3{font-size:17px;margin:0 0 8px}.muted{color:var(--muted)}.tiny{font-size:12px;color:var(--muted)}.subline{font-size:14px;color:var(--muted);margin:0 0 12px}.grid{display:grid;gap:12px}.grid.two{grid-template-columns:repeat(2,1fr)}.grid.three{grid-template-columns:repeat(3,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}.queue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.qcard{border:1px solid rgba(130,199,238,.18);background:linear-gradient(180deg,rgba(15,27,41,.95),rgba(9,16,25,.95));border-radius:16px;padding:14px;cursor:pointer;min-height:92px;position:relative;overflow:hidden}.qcard:before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:rgba(74,167,216,.65)}.qcard:hover{border-color:rgba(130,199,238,.5)}.qcard .label{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--blue2);font-weight:900;margin-bottom:8px}.qcard .num{font-size:25px;font-weight:950;letter-spacing:-.5px}.qcard .meta{font-size:13px;color:var(--muted);margin-top:4px}.qcard.amber:before{background:rgba(214,168,74,.7)}.qcard.green:before{background:rgba(75,194,138,.7)}.qcard.red:before{background:rgba(208,100,100,.7)}.qcard.value .num{filter:blur(5px);user-select:none}.qcard.value.revealed .num{filter:none}.worklist{margin-top:12px;border:1px solid rgba(130,199,238,.14);border-radius:16px;overflow:hidden}.work-head{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;background:rgba(74,167,216,.07);border-bottom:1px solid rgba(130,199,238,.12)}.order-card{padding:13px;border-bottom:1px solid rgba(130,199,238,.1);background:rgba(255,255,255,.02)}.order-card:last-child{border-bottom:0}.order-card strong{font-size:15px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue2);font-weight:900}.field input,.field select,.field textarea{width:100%;border:1px solid rgba(130,199,238,.22);background:#07101a;color:var(--text);border-radius:12px;padding:12px;min-height:43px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(130,199,238,.75);box-shadow:0 0 0 3px rgba(74,167,216,.12)}.field textarea{min-height:95px;resize:vertical}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(130,199,238,.2);background:rgba(74,167,216,.07);border-radius:999px;padding:6px 10px;font-size:12px;color:#d8eefc;font-weight:800}.pill.green{border-color:rgba(75,194,138,.35);background:rgba(75,194,138,.08)}.pill.amber{border-color:rgba(214,168,74,.35);background:rgba(214,168,74,.08)}.summary{border:1px solid rgba(130,199,238,.14);border-radius:16px;background:rgba(255,255,255,.025);overflow:hidden}.sum-row{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(130,199,238,.09)}.sum-row:last-child{border-bottom:0}.sum-row b{font-size:14px}.sum-row span{color:var(--muted);font-size:14px;text-align:right}.item-line{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid rgba(130,199,238,.14);background:rgba(255,255,255,.025);border-radius:14px;margin:8px 0}.item-line .price{font-weight:900;color:#fff}.kit-preview{border:1px solid rgba(75,194,138,.28);background:rgba(75,194,138,.055);border-radius:16px;padding:13px;margin-top:10px}.kit-preview h4{margin:0 0 8px;font-size:14px;color:#dfffea}.kit-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.kit-list div{font-size:13px;color:#cfe5d9;background:rgba(0,0,0,.16);border:1px solid rgba(75,194,138,.12);padding:8px;border-radius:10px}.materials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.materials-grid .field input{font-weight:900}.banner{border:1px solid rgba(214,168,74,.28);background:rgba(214,168,74,.07);border-radius:14px;padding:12px;color:#ffe7ac;margin:10px 0}.status{margin:10px 0;padding:10px 12px;border-radius:12px;border:1px solid rgba(130,199,238,.18);background:rgba(74,167,216,.06);color:#d9edf9}.status.good{border-color:rgba(75,194,138,.35);background:rgba(75,194,138,.08);color:#dfffea}.status.warn{border-color:rgba(214,168,74,.35);background:rgba(214,168,74,.08);color:#ffe7ac}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px;border-bottom:1px solid rgba(130,199,238,.1);text-align:left}.table th{color:var(--blue2);font-size:11px;text-transform:uppercase;letter-spacing:1.5px}.hide{display:none!important}.mini-map{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.map-card{border:1px solid rgba(130,199,238,.15);background:rgba(255,255,255,.025);border-radius:14px;padding:12px;cursor:pointer}.map-card b{display:block;margin-bottom:4px}.copybox{white-space:pre-wrap;background:#050b12;border:1px solid rgba(130,199,238,.14);border-radius:14px;padding:12px;color:#d7e9f6;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;max-height:280px;overflow:auto}.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal.on{display:flex}.modal-card{width:min(520px,94vw);background:linear-gradient(180deg,#101b29,#07101a);border:1px solid rgba(130,199,238,.24);border-radius:18px;padding:18px;box-shadow:0 30px 90px rgba(0,0,0,.55)}
-@media(max-width:760px){.wrap{width:94vw}.grid.two,.grid.three,.grid.four,.queue-grid,.materials-grid,.kit-list{grid-template-columns:1fr}.topbar{align-items:flex-start}.brand h1{font-size:21px}.top-actions{flex-direction:column;align-items:stretch}.top-actions .btn{width:100%}.panel{padding:15px}.item-line{grid-template-columns:1fr}.actions .btn{flex:1 1 auto}.nav button{font-size:11px}.mini-map{grid-template-columns:1fr}}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:radial-gradient(circle at top left,#121a25 0,#07090d 42%,#050609 100%);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);line-height:1.4;padding-bottom:84px}
+button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-width:1040px;margin:0 auto;padding:18px 14px 28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;border:1px solid #38516b;border-radius:11px;display:grid;place-items:center;color:var(--blue2);font-weight:800;letter-spacing:.02em;background:linear-gradient(145deg,#0d1420,#06080c)}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase}.brand h1{margin:0;font-size:18px;letter-spacing:.03em}.top-actions{display:flex;gap:8px;align-items:center}.pill{border:1px solid var(--line);background:#0b1017;color:var(--text);border-radius:999px;padding:9px 12px;font-size:13px}.pill.primary{background:linear-gradient(180deg,#153046,#102234);border-color:#426888;color:#eaf7ff}.pill.ghost{color:var(--muted)}
+.view{display:none}.view.active{display:block}.card{background:linear-gradient(180deg,rgba(17,23,34,.96),rgba(10,14,21,.96));border:1px solid var(--line2);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:12px 0}.card.slim{padding:12px}.section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2,.section-title h3{margin:0}.section-title h2{font-size:19px}.section-title h3{font-size:16px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}.muted{color:var(--muted)}.tiny{font-size:12px;color:var(--faint)}.grid{display:grid;gap:10px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;background:#080c12;border:1px solid #253244;border-radius:10px;color:var(--text);padding:11px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#5f93bb;box-shadow:0 0 0 3px rgba(110,168,216,.12)}.field textarea{min-height:96px;resize:vertical}.readonly{background:#0d1420!important;color:#d7e9fb!important}.btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn{border:1px solid #2c3b4f;background:#101722;color:var(--text);border-radius:10px;padding:10px 12px}.btn.primary{background:#17334a;border-color:#517897}.btn.good{background:#12301f;border-color:#386e4c}.btn.warn{background:#332510;border-color:#735b27}.btn.danger{background:#331719;border-color:#694044}.btn.subtle{background:#0a0e15;color:var(--muted)}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(5,7,11,.94);border-top:1px solid #172130;backdrop-filter:blur(16px);z-index:50}.nav-inner{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px}.nav button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 4px;font-size:12px}.nav button.active{background:#111b28;color:#d9efff;border:1px solid #2f4c65}.queue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.queue-card{background:#0b1017;border:1px solid #243247;border-radius:12px;padding:13px;text-align:left;min-height:102px;transition:.15s ease}.queue-card:hover{border-color:#507290;transform:translateY(-1px)}.queue-card .k{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}.queue-card .n{font-size:24px;font-weight:800;margin-top:8px}.queue-card .s{font-size:12px;color:var(--faint);margin-top:4px}.queue-card.active{border-color:#5e8eb4}.value-hidden{filter:blur(5px);user-select:none}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:1px solid #1d2838;border-radius:12px;padding:11px;background:#0a0f16;margin:8px 0}.line-item strong,.queue-row strong{display:block}.money{font-weight:800;color:#e9f8ff}.note{border-left:3px solid var(--blue);padding:10px 12px;background:#0b121b;border-radius:10px;color:#c7d8e9;font-size:13px}.note.warn{border-left-color:var(--amber)}.note.good{border-left-color:var(--green)}.structure-box{border:1px solid #2a4158;background:#09121c;border-radius:12px;padding:12px;margin-top:10px}.tag{display:inline-flex;align-items:center;gap:5px;border:1px solid #26374b;background:#0b111a;color:#bcd0df;border-radius:999px;padding:5px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}.tabs button{border:1px solid #27384d;background:#0b1018;color:var(--muted);border-radius:999px;padding:8px 10px;font-size:13px}.tabs button.active{color:#e8f6ff;border-color:#5f8db0;background:#102234}.hide{display:none!important}.divider{height:1px;background:#1b2635;margin:14px 0}.summary-line{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #16202d;padding:8px 0}.summary-line:last-child{border:0}.sysmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sysmap button{text-align:left;border:1px solid #243247;background:#0a1018;border-radius:12px;padding:13px;color:var(--text)}.sysmap small{display:block;color:var(--muted);margin-top:4px}.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:#0e1824;border:1px solid #38516b;color:#e9f8ff;border-radius:999px;padding:10px 14px;font-size:13px;box-shadow:var(--shadow);z-index:90;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.security{border-color:#6f4e21;background:#15110b}.admin-only{border-left:3px solid #557fa0}
+@media(max-width:760px){.wrap{padding:14px 10px 26px}.grid.two,.grid.three,.grid.four,.queue-grid,.sysmap{grid-template-columns:1fr}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:stretch}.pill{font-size:12px;padding:8px 10px}.card{padding:13px}.queue-card{min-height:auto}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:block}.line-item .btnrow,.queue-row .btnrow{margin-top:10px}.nav-inner{grid-template-columns:repeat(5,1fr)}.nav button{font-size:11px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="topbar">
-    <div class="brand"><div class="logo">PX</div><div><small>PrimeX BioLabs</small><h1>Finance HQ</h1></div></div>
-    <div class="top-actions"><button class="btn primary" id="topNewOrder">+ New Order</button><button class="btn ghost" id="topSystemMap">System Map</button></div>
+    <div class="brand">
+      <div class="mark">PX</div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ</h1></div>
+    </div>
+    <div class="top-actions">
+      <button class="pill primary" id="newOrderTop">+ New Order</button>
+      <button class="pill ghost" onclick="showView('admin');showAdminPanel('system')">System Map</button>
+    </div>
   </header>
 
-  <section id="screen-start" class="screen active">
-    <div class="panel tight">
-      <div class="section-title"><div><h2>Live order queue</h2><p class="subline">Current work lanes.</p></div><button class="btn small primary" id="startNewOrder">+ New Order</button></div>
+  <main id="view-start" class="view active">
+    <section class="card">
+      <div class="section-title"><div><h2>Live order queue</h2><p>Work that needs action.</p></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
       <div class="queue-grid" id="queueCards"></div>
-      <div class="worklist" id="queueList"></div>
-    </div>
-  </section>
+      <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"></div>
+    </section>
+    <section class="card security">
+      <div class="section-title"><div><h3>Prototype safety</h3><p>GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+    </section>
+  </main>
 
-  <section id="screen-order" class="screen">
-    <div class="panel">
-      <div class="section-title"><div><h2>Order</h2><p class="subline">Create or update an order.</p></div><span class="pill" id="currentOrderPill">New order</span></div>
+  <main id="view-order" class="view">
+    <section class="card">
+      <div class="section-title"><div><h2>Order</h2><p>Create or update an order.</p></div><span class="tag" id="activeOrderTag">New</span></div>
+      <div class="grid three">
+        <div class="field"><label>Order ref</label><input id="orderRef" class="readonly" readonly></div>
+        <div class="field"><label>Date</label><input id="orderDate" type="date"></div>
+        <div class="field"><label>Customer / ref</label><input id="customerRef" placeholder="Customer or internal ref"></div>
+      </div>
+      <div class="grid three" style="margin-top:10px">
+        <div class="field"><label>Price tier</label><select id="priceTier"><option value="standard">Planner / standard</option><option value="existing">Existing / private</option><option value="internal">Internal / close</option><option value="custom">Custom</option></select></div>
+        <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Paid</option><option>Part paid</option><option>Refunded</option></select></div>
+        <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Customer collection</option><option>Local drop-off</option></select></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><div><h2>Add to order</h2><p>Single product or pathway structure.</p></div></div>
+      <div class="tabs"><button id="modeSingle" class="active">Single product</button><button id="modeStructure">Structure / pathway</button></div>
+
+      <div id="singlePanel">
+        <div class="grid four">
+          <div class="field"><label>Product</label><select id="productSelect"></select></div>
+          <div class="field"><label>Qty</label><input id="productQty" type="number" min="1" value="1"></div>
+          <div class="field"><label>Unit price</label><input id="unitPrice" type="number" step="0.01"></div>
+          <div class="field"><label>Line total</label><input id="lineTotal" class="readonly" readonly></div>
+        </div>
+        <div id="pricingNote" class="note" style="margin-top:10px"></div>
+        <div id="kitPreview" class="structure-box"></div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="addProductBtn">Add product</button></div>
+      </div>
+
+      <div id="structurePanel" class="hide">
+        <div class="grid two">
+          <div class="field"><label>Structure / pathway</label><select id="structureSelect"></select></div>
+          <div class="field"><label>Structure price</label><input id="structurePrice" type="number" step="0.01"></div>
+        </div>
+        <div id="structureNote" class="note" style="margin-top:10px"></div>
+        <div id="structurePreview" class="structure-box"></div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="addStructureBtn">Add structure</button></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><div><h2>Items added</h2><p>Current order lines.</p></div><button class="btn subtle" id="clearItems">Clear</button></div>
+      <div id="orderLines"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><div><h2>Materials attached</h2><p>Auto-filled where rules are locked. Still editable.</p></div></div>
+      <div class="grid three">
+        <div class="field"><label>3ml BAC water</label><input id="mat3ml" type="number" min="0" value="0"></div>
+        <div class="field"><label>10ml BAC water</label><input id="mat10ml" type="number" min="0" value="0"></div>
+        <div class="field"><label>U100 10-pack</label><input id="matU100" type="number" min="0" value="0"></div>
+        <div class="field"><label>Alcohol wipes</label><input id="matWipes" type="number" min="0" value="0"></div>
+        <div class="field"><label>Magnetic boxes</label><input id="matBoxes" type="number" min="0" value="0"></div>
+        <div class="field"><label>Inserts</label><input id="matInserts" type="number" min="0" value="0"></div>
+        <div class="field"><label>Inlay cards</label><input id="matInlays" type="number" min="0" value="0"></div>
+        <div class="field"><label>Materials charge</label><input id="materialsCharge" type="number" step="0.01" value="0"></div>
+        <div class="field"><label>Postage charge</label><input id="postageCharge" type="number" step="0.01" value="0"></div>
+      </div>
+      <div id="materialsSummary" class="note good" style="margin-top:10px"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><div><h2>Delivery / Royal Mail</h2><p>Generate the postage block, then add tracking when you return.</p></div></div>
       <div class="grid two">
-        <div class="field"><label>Order ref</label><input id="orderId" /></div>
-        <div class="field"><label>Date</label><input id="orderDate" type="date" /></div>
-        <div class="field"><label>Customer / ref</label><input id="customerRef" placeholder="Name or private ref" /></div>
-        <div class="field"><label>Price tier</label><select id="priceTier"><option>Planner / standard</option><option>Existing / private</option><option>Internal / close</option><option>Custom</option></select></div>
-        <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Refunded</option></select></div>
-        <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Postage</option><option>Collection</option><option>Local drop-off</option></select></div>
-        <div class="field"><label>Postage charge</label><input id="postageCharge" type="number" min="0" step="0.01" value="0" /></div>
-        <div class="field"><label>Order status</label><select id="orderStatus"><option>New order</option><option>Awaiting payment</option><option>Paid</option><option>Packing</option><option>Ready to send / collect</option><option>Shipped / collected</option><option>Complete</option><option>Issue / hold</option><option>Cancelled</option></select></div>
+        <div class="field"><label>Recipient name</label><input id="recName"></div>
+        <div class="field"><label>Phone / WhatsApp ref</label><input id="recPhone"></div>
+        <div class="field"><label>Address line 1</label><input id="addr1"></div>
+        <div class="field"><label>Address line 2</label><input id="addr2"></div>
+        <div class="field"><label>Town / City</label><input id="town"></div>
+        <div class="field"><label>Postcode</label><input id="postcode"></div>
+        <div class="field"><label>Postage item count</label><input id="postageItems" type="number" min="0" value="0"></div>
+        <div class="field"><label>Tracking / ref</label><input id="trackingRef" placeholder="Paste after Royal Mail"></div>
       </div>
-    </div>
-
-    <div class="panel">
-      <div class="section-title"><div><h2>Products</h2><p class="subline">Add each product separately.</p></div><span class="pill" id="pricingPill">Standard pricing</span></div>
-      <div class="grid four">
-        <div class="field"><label>Product</label><select id="productSelect"></select></div>
-        <div class="field"><label>Product qty</label><input id="productQty" type="number" min="1" step="1" value="1" /></div>
-        <div class="field"><label>Unit price</label><input id="unitPrice" type="number" min="0" step="0.01" /></div>
-        <div class="field"><label>Line total</label><input id="lineTotal" readonly /></div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Postage / address block</label><textarea id="addressBlock"></textarea></div>
+        <div class="field"><label>Fulfilment update</label><textarea id="fulfilmentMsg" class="readonly" readonly></textarea></div>
       </div>
-      <div class="status" id="priceNote">Select product and tier.</div>
-      <div id="kitPreview" class="kit-preview hide"></div>
-      <div class="actions"><button class="btn primary" id="addProductBtn">Add product to order</button><button class="btn ghost" id="clearItemsBtn">Clear products</button></div>
-      <div id="orderItems" style="margin-top:12px"></div>
-    </div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genAddress">Generate address block</button><button class="btn" id="copyAddress">Copy address block</button><button class="btn" id="openRM">Open Royal Mail</button><button class="btn" id="genFulfilment">Generate fulfilment update</button></div>
+    </section>
 
-    <div class="panel">
-      <div class="section-title"><div><h2>Materials attached</h2><p class="subline">Auto-filled where rules apply. Editable before saving.</p></div><span class="pill green" id="materialsPill">0 items</span></div>
-      <div class="materials-grid">
-        <div class="field"><label>3ml BAC water</label><input id="matBac3" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>10ml BAC water</label><input id="matBac10" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>U100 10-pack</label><input id="matU100" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>Alcohol wipes</label><input id="matWipes" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>Magnetic box</label><input id="matBox" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>Insert</label><input id="matInsert" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>Inlay card</label><input id="matInlay" type="number" min="0" step="1" value="0" /></div>
-        <div class="field"><label>Materials charge</label><input id="materialsCharge" type="number" min="0" step="0.01" value="0" /></div>
-        <div class="field"><label>Postage item count</label><input id="postageItemCount" type="number" min="0" step="1" value="0" /></div>
+    <section class="card">
+      <div class="section-title"><div><h2>Final check</h2><p>Save updates queues and prototype stock.</p></div></div>
+      <div id="totalsBox"></div>
+      <div class="grid two" style="margin-top:10px">
+        <div class="field"><label>Order status</label><select id="orderStatus"><option>New</option><option>Awaiting payment</option><option>To pack / fulfil</option><option>Ready send / collect</option><option>Shipped / collected</option><option>Complete</option><option>Issue / hold</option><option>Cancelled</option></select></div>
+        <div class="field"><label>Confirmation sent?</label><select id="confirmationSent"><option>No</option><option>Yes</option></select></div>
       </div>
-      <div class="banner">Reta kit rule: 1 kit = 1 × 3ml BAC, 1 × U100 10-pack, 16 wipes, 1 box, 1 insert, 1 inlay card.</div>
-    </div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn good" id="saveOrder">Save / update order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
+    </section>
+  </main>
 
-    <div class="panel">
-      <div class="section-title"><div><h2>Delivery / collection</h2><p class="subline">Used for postage block and fulfilment updates.</p></div><span class="pill amber">Postage tools</span></div>
-      <div class="grid two">
-        <div class="field"><label>Recipient name</label><input id="recipientName" /></div>
-        <div class="field"><label>Phone / WhatsApp ref</label><input id="recipientPhone" /></div>
-        <div class="field"><label>Address line 1</label><input id="address1" /></div>
-        <div class="field"><label>Address line 2</label><input id="address2" /></div>
-        <div class="field"><label>Town / City</label><input id="town" /></div>
-        <div class="field"><label>Postcode</label><input id="postcode" /></div>
-        <div class="field"><label>Courier / service</label><select id="courierService"><option>Hold / not arranged</option><option>Royal Mail Tracked 24</option><option>Royal Mail Tracked 48</option><option>Collection</option><option>Local drop-off</option></select></div>
-        <div class="field"><label>Parcel / package type</label><input id="parcelType" placeholder="Small parcel / letter etc." /></div>
-        <div class="field"><label>Parcel weight</label><input id="parcelWeight" placeholder="e.g. 250g" /></div>
-        <div class="field"><label>Collection booked?</label><select id="collectionBooked"><option>No</option><option>Yes</option></select></div>
-        <div class="field"><label>Collection date</label><input id="collectionDate" type="date" /></div>
-        <div class="field"><label>Tracking / postage ref</label><input id="trackingRef" placeholder="Paste after Royal Mail" /></div>
-      </div>
-      <div class="actions"><button class="btn ghost" id="copyAddressBtn">Copy postage block</button><button class="btn ghost" id="printAddressBtn">Print postage block</button><button class="btn amber" id="openRoyalMailBtn">Open Royal Mail</button><button class="btn amber" id="bookCollectionBtn">Book collection</button></div>
-      <div class="copybox" id="addressBlock"></div>
-    </div>
+  <main id="view-queues" class="view">
+    <section class="card"><div class="section-title"><div><h2>Queues</h2><p>Open a lane and update orders.</p></div></div><div class="queue-grid" id="queueCards2"></div><div id="queueList2" class="card slim" style="box-shadow:none;margin-top:12px"></div></section>
+  </main>
 
-    <div class="panel">
-      <div class="section-title"><div><h2>Order actions</h2><p class="subline">Confirm, update, save.</p></div><span class="pill green" id="saveState">Not saved</span></div>
-      <div class="summary" id="orderTotals"></div>
-      <div class="actions"><button class="btn ghost" id="generateConfirmBtn">Generate confirmation</button><button class="btn ghost" id="generateFulfilBtn">Generate fulfilment update</button><button class="btn success" id="saveOrderBtn">Save / update order</button><button class="btn danger" id="deleteOrderBtn">Delete order</button></div>
-      <div class="grid two" style="margin-top:12px"><div class="field"><label>Confirmation sent?</label><select id="confirmationSent"><option>No</option><option>Yes</option></select></div><div class="field"><label>Fulfilment update sent?</label><select id="fulfilmentUpdateSent"><option>No</option><option>Yes</option></select></div></div>
-      <h3 style="margin-top:14px">Generated message</h3>
-      <div class="copybox" id="messageBox">No message generated yet.</div>
-    </div>
-  </section>
+  <main id="view-stock" class="view">
+    <section class="card"><div class="section-title"><div><h2>Stock</h2><p>Local prototype stock. Not final shared stock.</p></div></div><div id="stockList"></div></section>
+  </main>
 
-  <section id="screen-queues" class="screen"><div class="panel"><h2>Queues</h2><p class="subline">Open a lane and update orders.</p><div class="queue-grid" id="queueCards2"></div><div class="worklist" id="queueList2"></div></div></section>
-
-  <section id="screen-stock" class="screen"><div class="panel"><div class="section-title"><div><h2>Stock</h2><p class="subline">Local prototype stock only.</p></div><span class="pill amber">Prototype</span></div><div id="stockTable"></div></div></section>
-
-  <section id="screen-admin" class="screen">
-    <div class="panel"><div class="section-title"><div><h2>Admin</h2><p class="subline">Rules, system map, logs.</p></div><span class="pill">Backend nav</span></div><div class="mini-map" id="systemMap"></div></div>
-    <div class="panel"><h2>Product rules</h2><div id="productRulesTable"></div></div>
-    <div class="panel"><h2>Packaging rules</h2><div class="summary"><div class="sum-row"><b>RTA20-KIT-1V</b><span>Reta kit × qty: 3ml BAC, U100 10-pack, 16 wipes, box, insert, inlay card</span></div><div class="sum-row"><b>BAC-WATER-DRAFT</b><span>2ml–3ml per vial estimate; manual review for 3+ mixed choices</span></div></div></div>
-    <div class="panel"><h2>Back-office placeholders</h2><div class="mini-map"><div class="map-card"><b>Expenses</b><span class="tiny">Pending backend</span></div><div class="map-card"><b>BAC / Materials pricing</b><span class="tiny">Pending backend</span></div><div class="map-card"><b>Legal notes</b><span class="tiny">Pending backend</span></div><div class="map-card"><b>Archive / raw data</b><span class="tiny">Pending backend</span></div></div></div>
-  </section>
+  <main id="view-admin" class="view">
+    <section class="card">
+      <div class="section-title"><div><h2>Admin</h2><p>Rules, settings and system map.</p></div></div>
+      <div class="tabs"><button onclick="showAdminPanel('system')" id="admin-system" class="active">System map</button><button onclick="showAdminPanel('products')" id="admin-products">Product rules</button><button onclick="showAdminPanel('structures')" id="admin-structures">Structure rules</button><button onclick="showAdminPanel('security')" id="admin-security">Security</button></div>
+      <div id="adminPanel"></div>
+    </section>
+  </main>
 </div>
 
-<nav class="nav"><div class="navin"><button data-screen="start" class="active">Start</button><button data-screen="order">Order</button><button data-screen="queues">Queues</button><button data-screen="stock">Stock</button><button data-screen="admin">Admin</button></div></nav>
+<nav class="nav"><div class="nav-inner"><button class="active" data-view="start">Start</button><button data-view="order">Order</button><button data-view="queues">Queues</button><button data-view="stock">Stock</button><button data-view="admin">Admin</button></div></nav>
+<div id="toast" class="toast"></div>
 
-<div class="modal" id="modal"><div class="modal-card"><div class="section-title"><h2 id="modalTitle">Info</h2><button class="btn small ghost" id="modalClose">Close</button></div><div id="modalContent"></div></div></div>
 <script>
-(function(){
-const $=id=>document.getElementById(id);
-const fmt=n=>'£'+(Number(n)||0).toFixed(2);
-const today=()=>new Date().toISOString().slice(0,10);
-const STORE='PX_FINANCE_HQ_V20';
-const productRules=[
- {id:'RTA20',name:'Retatrutide 20mg',display:'Retatrutide 20mg kit',std:150,existing:130,close:110,closeEligible:'Temporary',active:true,notes:'Current kit default'},
- {id:'BPC40',name:'BPC-157 40mg',display:'BPC-157 40mg',std:60,existing:55,close:null,closeEligible:'Yes',active:true,notes:'Needs strength/price final check'},
- {id:'TB50010',name:'TB-500 10mg',display:'TB-500 10mg',std:70,existing:65,close:null,closeEligible:'Yes',active:true,notes:'Use 10mg not 5mg'},
- {id:'GHK50',name:'GHK-Cu 50mg',display:'GHK-Cu 50mg',std:40,existing:40,close:null,closeEligible:'Yes',active:true,notes:'Default unless requested'},
- {id:'NAD500',name:'NAD+ 500mg',display:'NAD+ 500mg',std:90,existing:85,close:null,closeEligible:'Yes',active:true,notes:'Planner strength'},
- {id:'AMINO50',name:'5-Amino-1MQ 50mg',display:'5-Amino-1MQ 50mg',std:70,existing:65,close:null,closeEligible:'Yes',active:true,notes:'Needs price final check'},
- {id:'KPV10',name:'KPV 10mg',display:'KPV 10mg',std:45,existing:45,close:null,closeEligible:'Yes',active:true,notes:'Needs price final check'},
- {id:'TA110',name:'Thymosin Alpha-1 10mg',display:'Thymosin Alpha-1 10mg',std:75,existing:70,close:null,closeEligible:'Yes',active:true,notes:'Needs price final check'},
- {id:'DSIP5',name:'DSIP 5mg',display:'DSIP 5mg',std:45,existing:45,close:null,closeEligible:'Needs check',active:true,notes:'Needs check'},
- {id:'CUSTOM',name:'Custom / added compound',display:'Custom / added compound',std:0,existing:0,close:null,closeEligible:'No',active:true,notes:'No close discount; use existing/private minimum'}
-];
-const baseStock={
- 'Retatrutide 20mg vial':10,'3ml BAC water':20,'10ml BAC water':5,'U100 syringe 10-pack':25,'Alcohol wipes':500,'MAG-BOX-170x125x38':20,'Insert':20,'Inlay card':20
+const PRODUCT_RULES={
+ RTA20:{id:'RTA20',name:'Retatrutide 20mg',internal:110,existing:130,standard:150,closeEligible:'Temporary',plannerRange:true,kit:true,lockedMaxInternalStructure:3},
+ BPC40:{id:'BPC40',name:'BPC-157 40mg',internal:40,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false,needsCheck:true},
+ TB50010:{id:'TB50010',name:'TB-500 10mg',internal:50,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
+ TA110:{id:'TA110',name:'Thymosin Alpha-1 10mg',internal:65,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
+ KPV10:{id:'KPV10',name:'KPV 10mg',internal:35,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
+ NAD500:{id:'NAD500',name:'NAD+ 500mg',internal:45,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
+ AMINO50:{id:'AMINO50',name:'5-Amino-1MQ 50mg',internal:90,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
+ CUSTOM:{id:'CUSTOM',name:'Custom / added compound',internal:null,existing:null,standard:null,closeEligible:'No',plannerRange:false,kit:false,custom:true}
 };
-let state={orders:[],stock:{...baseStock},current:null,revealValue:false,selectedQueue:'active'};
-function load(){try{const s=JSON.parse(localStorage.getItem(STORE)||'null'); if(s){state={...state,...s,stock:{...baseStock,...(s.stock||{})}}}}catch(e){}}
-function persist(){localStorage.setItem(STORE,JSON.stringify(state));}
-function resetCurrent(){state.current={id:'PX-'+String(Date.now()).slice(-6),date:today(),customer:'',tier:'Planner / standard',payment:'Awaiting payment',fulfilment:'Hold / not arranged',postage:0,status:'New order',items:[],materials:{bac3:0,bac10:0,u100:0,wipes:0,box:0,insert:0,inlay:0,charge:0,postageItems:0},delivery:{recipient:'',phone:'',a1:'',a2:'',town:'',postcode:'',service:'Hold / not arranged',parcelType:'',weight:'',collectionBooked:'No',collectionDate:'',tracking:''},confirmationSent:'No',updateSent:'No'};}
-function ruleByName(name){return productRules.find(p=>p.name===name)||productRules[0];}
-function priceFor(rule,tier){
- if(tier==='Custom') return 0;
- if(tier==='Planner / standard') return rule.std||0;
- if(tier==='Existing / private') return rule.existing||rule.std||0;
- if(tier==='Internal / close'){
-   if(rule.id==='RTA20' && rule.closeEligible==='Temporary') return rule.close;
-   if(rule.closeEligible==='Yes' && rule.close!=null) return rule.close;
-   return rule.existing||rule.std||0;
- }
- return rule.std||0;
-}
-function priceNote(rule,tier){
- if(tier==='Internal / close' && rule.id==='RTA20') return 'Temporary close price active for Reta.';
- if(tier==='Internal / close' && !(rule.closeEligible==='Yes'&&rule.close!=null)) return 'Close/internal not enabled here. Existing/private price used.';
- if(tier==='Existing / private') return 'Existing/private price applied.';
- if(tier==='Planner / standard') return 'Planner/standard price applied.';
- return 'Custom/manual price.';
-}
-function kitFor(rule,qty){qty=Number(qty)||0; if(rule.id!=='RTA20') return {bac3:0,bac10:0,u100:0,wipes:0,box:0,insert:0,inlay:0}; return {bac3:qty,bac10:0,u100:qty,wipes:16*qty,box:qty,insert:qty,inlay:qty};}
-function matTotal(m){return ['bac3','bac10','u100','wipes','box','insert','inlay'].reduce((a,k)=>a+(Number(m[k])||0),0)}
-function currentTotals(){let c=state.current;if(!c)return {products:0,postage:0,materials:0,total:0}; const products=c.items.reduce((a,i)=>a+i.total,0); const postage=Number(c.postage)||0; const materials=Number(c.materials.charge)||0; return {products,postage,materials,total:products+postage+materials};}
-function saveBefore(){
- if(!state.current)return;
- state.current.id=$('orderId').value.trim()||state.current.id; state.current.date=$('orderDate').value||today(); state.current.customer=$('customerRef').value.trim(); state.current.tier=$('priceTier').value; state.current.payment=$('paymentStatus').value; state.current.fulfilment=$('fulfilmentMethod').value; state.current.postage=Number($('postageCharge').value)||0; state.current.status=$('orderStatus').value;
- state.current.materials={bac3:+$('matBac3').value||0,bac10:+$('matBac10').value||0,u100:+$('matU100').value||0,wipes:+$('matWipes').value||0,box:+$('matBox').value||0,insert:+$('matInsert').value||0,inlay:+$('matInlay').value||0,charge:+$('materialsCharge').value||0,postageItems:+$('postageItemCount').value||0};
- state.current.delivery={recipient:$('recipientName').value,a1:$('address1').value,a2:$('address2').value,town:$('town').value,postcode:$('postcode').value,phone:$('recipientPhone').value,service:$('courierService').value,parcelType:$('parcelType').value,weight:$('parcelWeight').value,collectionBooked:$('collectionBooked').value,collectionDate:$('collectionDate').value,tracking:$('trackingRef').value};
- state.current.confirmationSent=$('confirmationSent').value; state.current.updateSent=$('fulfilmentUpdateSent').value;
-}
-function fillForm(){const c=state.current; if(!c)return; $('orderId').value=c.id; $('orderDate').value=c.date; $('customerRef').value=c.customer||''; $('priceTier').value=c.tier; $('paymentStatus').value=c.payment; $('fulfilmentMethod').value=c.fulfilment; $('postageCharge').value=c.postage||0; $('orderStatus').value=c.status; $('matBac3').value=c.materials.bac3||0; $('matBac10').value=c.materials.bac10||0; $('matU100').value=c.materials.u100||0; $('matWipes').value=c.materials.wipes||0; $('matBox').value=c.materials.box||0; $('matInsert').value=c.materials.insert||0; $('matInlay').value=c.materials.inlay||0; $('materialsCharge').value=c.materials.charge||0; $('postageItemCount').value=c.materials.postageItems||0; $('recipientName').value=c.delivery.recipient||''; $('address1').value=c.delivery.a1||''; $('address2').value=c.delivery.a2||''; $('town').value=c.delivery.town||''; $('postcode').value=c.delivery.postcode||''; $('recipientPhone').value=c.delivery.phone||''; $('courierService').value=c.delivery.service||'Hold / not arranged'; $('parcelType').value=c.delivery.parcelType||''; $('parcelWeight').value=c.delivery.weight||''; $('collectionBooked').value=c.delivery.collectionBooked||'No'; $('collectionDate').value=c.delivery.collectionDate||''; $('trackingRef').value=c.delivery.tracking||''; $('confirmationSent').value=c.confirmationSent||'No'; $('fulfilmentUpdateSent').value=c.updateSent||'No'; $('currentOrderPill').textContent=c.id; renderItems(); renderTotals(); renderAddress(); updateProductInputs(); updateMaterialsPill();}
-function renderItems(){const c=state.current; let box=$('orderItems'); if(!c.items.length){box.innerHTML='<div class="status warn">No products added yet.</div>';return;} box.innerHTML=c.items.map((i,idx)=>`<div class="item-line"><div><strong>${i.label} × ${i.qty}</strong><div class="tiny">${fmt(i.unit)} each · ${i.note}</div></div><div><div class="price">${fmt(i.total)}</div><button class="btn small ghost" data-remove="${idx}">Remove</button></div></div>`).join(''); box.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{saveBefore(); c.items.splice(+b.dataset.remove,1); recalcMaterialsFromItems(); fillForm(); renderAll();});}
-function recalcMaterialsFromItems(){const m={bac3:0,bac10:0,u100:0,wipes:0,box:0,insert:0,inlay:0,charge:state.current.materials.charge||0,postageItems:state.current.materials.postageItems||0}; state.current.items.forEach(i=>{if(i.ruleId==='RTA20'){const k=kitFor({id:'RTA20'},i.qty); Object.keys(k).forEach(x=>m[x]+=k[x]);}}); if(state.current.items.length && !m.postageItems)m.postageItems=1; state.current.materials=m;}
-function updateProductInputs(){const rule=ruleByName($('productSelect').value); const qty=+$('productQty').value||1; const unit=$('unitPrice')===document.activeElement && $('priceTier').value==='Custom' ? +$('unitPrice').value||0 : priceFor(rule,$('priceTier').value); $('unitPrice').value=unit; $('lineTotal').value=fmt(unit*qty); $('priceNote').textContent=priceNote(rule,$('priceTier').value); $('pricingPill').textContent=$('priceTier').value; const kit=kitFor(rule,qty); if(rule.id==='RTA20'){ $('kitPreview').classList.remove('hide'); $('kitPreview').innerHTML=`<h4>Reta kit preview × ${qty}</h4><div class="kit-list"><div>${qty} × Retatrutide 20mg vial</div><div>${kit.bac3} × 3ml BAC water</div><div>${kit.u100} × U100 10-pack</div><div>${kit.wipes} × alcohol wipes</div><div>${kit.box} × MAG-BOX-170x125x38</div><div>${kit.insert} × insert</div><div>${kit.inlay} × inlay card</div></div>`;} else {$('kitPreview').classList.add('hide'); $('kitPreview').innerHTML='';}}
-function addProduct(){saveBefore(); const rule=ruleByName($('productSelect').value); const qty=+$('productQty').value||1; const unit=+$('unitPrice').value||priceFor(rule,state.current.tier); const existing=state.current.items.find(i=>i.ruleId===rule.id && i.unit===unit); if(existing){existing.qty+=qty; existing.total=existing.qty*existing.unit;} else {state.current.items.push({ruleId:rule.id,label:rule.display||rule.name,qty,unit,total:qty*unit,note:priceNote(rule,state.current.tier)});} recalcMaterialsFromItems(); fillForm(); renderAll(); $('saveState').textContent='Unsaved changes'; $('saveState').className='pill amber';}
-function renderTotals(){const t=currentTotals(); $('orderTotals').innerHTML=`<div class="sum-row"><b>Product total</b><span>${fmt(t.products)}</span></div><div class="sum-row"><b>Materials charge</b><span>${fmt(t.materials)}</span></div><div class="sum-row"><b>Postage</b><span>${fmt(t.postage)}</span></div><div class="sum-row"><b>Total confirmed</b><span><strong>${fmt(t.total)}</strong></span></div>`;}
-function renderAddress(){const d=state.current.delivery; const c=state.current; const lines=[d.recipient,d.a1,d.a2,d.town,d.postcode,'',`Order ref: ${c.id}`,`Service: ${d.service||'Hold / not arranged'}`,`Items/parcels: ${c.materials.postageItems||0}`,d.parcelType?`Package: ${d.parcelType}`:'',d.weight?`Weight: ${d.weight}`:'',d.phone?`Contact: ${d.phone}`:'',d.tracking?`Tracking: ${d.tracking}`:''].filter(Boolean); $('addressBlock').textContent=lines.join('\n');}
-function generateConfirmation(){saveBefore(); const c=state.current,t=currentTotals(); const items=c.items.map(i=>`- ${i.label} × ${i.qty} — ${fmt(i.total)}`).join('\n')||'- No products added'; const m=c.materials; const mats=[m.bac3?`- 3ml BAC water × ${m.bac3}`:'',m.bac10?`- 10ml BAC water × ${m.bac10}`:'',m.u100?`- U100 10-pack × ${m.u100}`:'',m.wipes?`- Alcohol wipes × ${m.wipes}`:'',m.box?`- Magnetic box × ${m.box}`:'',m.insert?`- Insert × ${m.insert}`:'',m.inlay?`- Inlay card × ${m.inlay}`:''].filter(Boolean).join('\n')||'- None confirmed'; $('messageBox').textContent=`PrimeX BioLabs — Order Confirmation\n\nOrder Ref: ${c.id}\n\nItems confirmed:\n${items}\n\nAssociated fulfilment items:\n${mats}\n\nPostage / fulfilment: ${c.fulfilment}\nPostage charge: ${fmt(c.postage)}\n\nTotal confirmed: ${fmt(t.total)}\n\nResearch Use Only. Not for human or animal use. Not a medicine.`;}
-function generateFulfilment(){saveBefore(); const c=state.current,d=c.delivery; $('messageBox').textContent=`PrimeX BioLabs — Fulfilment Update\n\nOrder Ref: ${c.id}\nStatus: ${c.status}\nFulfilment method: ${c.fulfilment}\n${d.tracking?`Tracking / ref: ${d.tracking}\n`:''}${d.collectionBooked==='Yes'?`Collection booked: ${d.collectionDate||'Yes'}\n`:''}\nYour order status has been updated.\n\nResearch Use Only. Not for human or animal use. Not a medicine.`;}
-function saveOrder(){saveBefore(); const idx=state.orders.findIndex(o=>o.id===state.current.id); if(idx>=0)state.orders[idx]=JSON.parse(JSON.stringify(state.current)); else state.orders.push(JSON.parse(JSON.stringify(state.current))); recalcStock(); persist(); $('saveState').textContent='Saved'; $('saveState').className='pill green'; renderAll();}
-function deleteOrder(){if(!state.current)return; if(!confirm('Delete this order locally?'))return; state.orders=state.orders.filter(o=>o.id!==state.current.id); resetCurrent(); fillForm(); recalcStock(); persist(); renderAll();}
-function recalcStock(){const used={}; state.orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.items.forEach(i=>{if(i.ruleId==='RTA20')used['Retatrutide 20mg vial']=(used['Retatrutide 20mg vial']||0)+i.qty}); const m=o.materials||{}; used['3ml BAC water']=(used['3ml BAC water']||0)+(m.bac3||0); used['10ml BAC water']=(used['10ml BAC water']||0)+(m.bac10||0); used['U100 syringe 10-pack']=(used['U100 syringe 10-pack']||0)+(m.u100||0); used['Alcohol wipes']=(used['Alcohol wipes']||0)+(m.wipes||0); used['MAG-BOX-170x125x38']=(used['MAG-BOX-170x125x38']||0)+(m.box||0); used['Insert']=(used['Insert']||0)+(m.insert||0); used['Inlay card']=(used['Inlay card']||0)+(m.inlay||0);}); Object.keys(baseStock).forEach(k=>state.stock[k]=baseStock[k]-(used[k]||0));}
-function queueFilter(type){return state.orders.filter(o=>{if(type==='awaiting')return ['Awaiting payment','Part paid'].includes(o.payment)&&!['Cancelled','Complete'].includes(o.status); if(type==='pack')return o.payment==='Paid'&&!['Packing','Ready to send / collect','Shipped / collected','Complete','Cancelled','Issue / hold'].includes(o.status); if(type==='ready')return ['Packing','Ready to send / collect'].includes(o.status); if(type==='hold')return o.status==='Issue / hold'; return !['Complete','Cancelled'].includes(o.status);});}
-function queueMeta(type){const arr=queueFilter(type); const parcels=arr.reduce((a,o)=>a+(+((o.materials||{}).postageItems)||0),0); const value=arr.reduce((a,o)=>a+(o.items||[]).reduce((s,i)=>s+i.total,0)+(o.postage||0)+((o.materials||{}).charge||0),0); return {arr,parcels,value};}
-function renderQueueCards(target){const cards=[['awaiting','Awaiting payment','amber'],['pack','To pack / fulfil',''],['ready','Ready send / collect','green'],['hold','Issues / hold','red'],['active','Active orders',''],['value','Active value','value']]; target.innerHTML=cards.map(([id,label,cls])=>{const m=queueMeta(id==='value'?'active':id); if(id==='value')return `<div class="qcard value ${state.revealValue?'revealed':''}" data-q="value"><div class="label">${label}</div><div class="num">${fmt(m.value)}</div><div class="meta">tap to ${state.revealValue?'hide':'reveal'}</div></div>`; return `<div class="qcard ${cls}" data-q="${id}"><div class="label">${label}</div><div class="num">${m.arr.length} orders</div><div class="meta">${id==='pack'||id==='ready'?m.parcels+' postage/collection items':'tap to open lane'}</div></div>`;}).join(''); target.querySelectorAll('[data-q]').forEach(c=>c.onclick=()=>{const q=c.dataset.q;if(q==='value'){state.revealValue=!state.revealValue;persist();renderAll();return;} state.selectedQueue=q; renderQueueList($('queueList')); renderQueueList($('queueList2')); show('queues');});}
-function renderQueueList(el){const q=state.selectedQueue||'active'; const title={awaiting:'Awaiting payment',pack:'To pack / fulfil',ready:'Ready send / collect',hold:'Issues / hold',active:'Active orders'}[q]||'Active orders'; const arr=queueFilter(q); el.innerHTML=`<div class="work-head"><strong>${title}</strong><span class="tiny">${arr.length} orders</span></div>`+(arr.length?arr.map(o=>orderCard(o,q)).join(''):`<div class="order-card muted">No orders in this lane.</div>`); el.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{openOrder(b.dataset.open)}); el.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>queueAction(b.dataset.id,b.dataset.act));}
-function orderCard(o,q){const products=o.items.map(i=>`${i.label} × ${i.qty}`).join(', ')||'No products'; const total=o.items.reduce((a,i)=>a+i.total,0)+(o.postage||0)+((o.materials||{}).charge||0); const extra=q==='awaiting'?`<button class="btn small success" data-id="${o.id}" data-act="paid">Mark paid</button><button class="btn small ghost" data-id="${o.id}" data-act="reminder">Payment reminder</button>`:q==='pack'?`<button class="btn small success" data-id="${o.id}" data-act="packed">Mark packed</button>`:q==='ready'?`<button class="btn small amber" data-id="${o.id}" data-act="royal">Royal Mail</button><button class="btn small success" data-id="${o.id}" data-act="sent">Mark sent/collected</button>`:q==='hold'?`<button class="btn small success" data-id="${o.id}" data-act="return">Return to workflow</button>`:''; return `<div class="order-card"><strong>${o.id} · ${o.customer||'No customer ref'}</strong><div class="tiny">${products}</div><div class="tiny">${o.payment} · ${o.status} · ${fmt(total)}</div><div class="actions"><button class="btn small ghost" data-open="${o.id}">Open / edit</button>${extra}</div></div>`;}
-function queueAction(id,act){const o=state.orders.find(x=>x.id===id); if(!o)return; if(act==='paid'){o.payment='Paid';o.status='Paid'} if(act==='packed'){o.status='Ready to send / collect'} if(act==='sent'){o.status='Shipped / collected'} if(act==='return'){o.status='New order'} if(act==='royal'){window.open('https://send.royalmail.com/','_blank')} if(act==='reminder'){$('messageBox').textContent=`PrimeX BioLabs — Payment Reminder\n\nOrder Ref: ${o.id}\n\nThis order is currently awaiting payment confirmation.`; openOrder(id); show('order');} recalcStock(); persist(); renderAll();}
-function openOrder(id){const o=state.orders.find(x=>x.id===id); if(!o)return; state.current=JSON.parse(JSON.stringify(o)); fillForm(); show('order');}
-function renderStock(){const rows=Object.keys(baseStock).map(k=>`<tr><td>${k}</td><td>${baseStock[k]}</td><td>${state.stock[k]}</td></tr>`).join(''); $('stockTable').innerHTML=`<table class="table"><thead><tr><th>Item</th><th>Start</th><th>Current</th></tr></thead><tbody>${rows}</tbody></table>`;}
-function renderProductRules(){const rows=productRules.map(p=>`<tr><td>${p.display}</td><td>${fmt(p.std)}</td><td>${fmt(p.existing)}</td><td>${p.close!=null?fmt(p.close):'—'}</td><td>${p.closeEligible}</td></tr>`).join(''); $('productRulesTable').innerHTML=`<table class="table"><thead><tr><th>Product</th><th>Standard</th><th>Existing</th><th>Close</th><th>Close eligible</th></tr></thead><tbody>${rows}</tbody></table>`;}
-function renderSystemMap(){const items=[['Start','Live queue'],['Order','Create/edit'],['Queues','Work lanes'],['Stock','Local stock'],['Product Rules','Admin'],['Packaging Rules','Admin'],['BAC / Materials','Admin'],['Expenses','Admin'],['Legal Notes','Admin'],['Archive','Admin']]; $('systemMap').innerHTML=items.map(([a,b])=>`<div class="map-card"><b>${a}</b><span class="tiny">${b}</span></div>`).join('');}
-function updateMaterialsPill(){const n=matTotal(state.current.materials); $('materialsPill').textContent=n+' items';}
-function renderAll(){renderQueueCards($('queueCards'));renderQueueCards($('queueCards2'));renderQueueList($('queueList'));renderQueueList($('queueList2'));renderStock();renderProductRules();renderSystemMap();renderTotals();renderAddress();updateMaterialsPill();}
-function show(name){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $('screen-'+name).classList.add('active'); document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.screen===name)); window.scrollTo({top:0,behavior:'smooth'});}
-function initProducts(){const s=$('productSelect'); s.innerHTML=productRules.filter(p=>p.active).map(p=>`<option>${p.name}</option>`).join('');}
-function newOrder(){resetCurrent(); fillForm(); $('saveState').textContent='Not saved'; $('saveState').className='pill'; show('order');}
-function copyText(txt){navigator.clipboard&&navigator.clipboard.writeText(txt).then(()=>alert('Copied')).catch(()=>alert('Copy failed - select manually'));}
-load(); if(!state.current)resetCurrent(); initProducts(); fillForm(); renderAll();
-// events
-['priceTier','productSelect','productQty'].forEach(id=>$(id).addEventListener('input',updateProductInputs)); $('unitPrice').addEventListener('input',()=>{$('priceTier').value='Custom'; updateProductInputs();});
-['postageCharge','materialsCharge','matBac3','matBac10','matU100','matWipes','matBox','matInsert','matInlay','postageItemCount'].forEach(id=>$(id).addEventListener('input',()=>{saveBefore();renderTotals();updateMaterialsPill();renderAddress();}));
-['recipientName','address1','address2','town','postcode','recipientPhone','courierService','parcelType','parcelWeight','collectionBooked','collectionDate','trackingRef'].forEach(id=>$(id).addEventListener('input',()=>{saveBefore();renderAddress();}));
-$('addProductBtn').onclick=addProduct; $('clearItemsBtn').onclick=()=>{saveBefore();state.current.items=[];recalcMaterialsFromItems();fillForm();renderAll();}; $('saveOrderBtn').onclick=saveOrder; $('deleteOrderBtn').onclick=deleteOrder; $('generateConfirmBtn').onclick=generateConfirmation; $('generateFulfilBtn').onclick=generateFulfilment; $('copyAddressBtn').onclick=()=>copyText($('addressBlock').textContent); $('printAddressBtn').onclick=()=>{const w=window.open('','_blank');w.document.write('<pre>'+($('addressBlock').textContent||'').replace(/[<>&]/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[m]))+'</pre>');w.print();}; $('openRoyalMailBtn').onclick=()=>window.open('https://send.royalmail.com/','_blank'); $('bookCollectionBtn').onclick=()=>window.open('https://send.royalmail.com/collect/youritems','_blank');
-$('topNewOrder').onclick=newOrder; $('startNewOrder').onclick=newOrder; $('topSystemMap').onclick=()=>show('admin'); document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.screen)); $('modalClose').onclick=()=>$('modal').classList.remove('on');
-})();
+const STRUCTURE_RULES={
+ RTA20_2:{id:'RTA20_2',name:'Retatrutide 20mg · 2-vial structure',type:'Single-compound structure',contents:[['RTA20',2]],prices:{internal:220,existing:null,standard:null},closeEligible:'Temporary',maxLocked:true},
+ RTA20_3:{id:'RTA20_3',name:'Retatrutide 20mg · 3-vial structure',type:'Single-compound structure',contents:[['RTA20',3]],prices:{internal:320,existing:null,standard:null},closeEligible:'Temporary',maxLocked:true},
+ REC_ENTRY:{id:'REC_ENTRY',name:'Recovery Structure · Entry',type:'Pathway',contents:[['BPC40',2],['TB50010',1]],prices:{internal:120,existing:null,standard:null},closeEligible:'Yes',label:'2 × BPC-157 + 1 × TB-500'},
+ REC_CONT:{id:'REC_CONT',name:'Recovery Structure · Continuation',type:'Pathway',contents:[['BPC40',4],['TB50010',2]],prices:{internal:225,existing:null,standard:null},closeEligible:'Yes',label:'4 × BPC-157 + 2 × TB-500'},
+ GUT_PAIR:{id:'GUT_PAIR',name:'Gut / Inflammation Structure · Paired',type:'Pathway',contents:[['BPC40',2],['KPV10',1]],prices:{internal:100,existing:null,standard:null},closeEligible:'Yes',label:'2 × BPC-157 + 1 × KPV'}
+};
+const INITIAL_STOCK={RTA20:10,BAC3:30,BAC10:12,U100:20,WIPES:500,BOX:20,INSERT:40,INLAY:40};
+let orders=JSON.parse(localStorage.getItem('px_orders_v21')||'[]');
+let stock=JSON.parse(localStorage.getItem('px_stock_v21')||JSON.stringify(INITIAL_STOCK));
+let current={id:null,lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};
+let addMode='single';
+function £(n){return '£'+Number(n||0).toFixed(2)}
+function val(id){return document.getElementById(id).value}
+function num(id){return Number(val(id)||0)}
+function set(id,v){document.getElementById(id).value=v}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
+function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+function init(){Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
+function bind(){['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();toast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
+function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Awaiting payment');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New');set('confirmationSent','No');['recName','recPhone','addr1','addr2','town','postcode','trackingRef','addressBlock','fulfilmentMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
+function getProductPrice(pid,tier,qty=1){const p=PRODUCT_RULES[pid];let note='',review=false,price=null;if(!p)return{price:0,note:'No product rule found.',review:true};if(tier==='custom'||p.custom){return{price:0,note:'Custom price required.',review:true}}if(tier==='internal'){if(p.closeEligible==='No'){price=p.existing;note='Close price not enabled. Existing/private price should apply.';review=price==null}else if(p.closeEligible==='Temporary'){price=p.internal;note='Temporary close price active.'}else{price=p.internal;note='Internal/close price applied.'}}else{price=p[tier];note=(tier==='existing'?'Existing/private':'Planner/standard')+' price applied.'}if(price==null){price=0;review=true;note+=' Price needs confirmation / manual entry.'}if(pid==='RTA20'&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range — manual price review required. Safe unit price shown until override.';review=true}return{price,note,review};}
+function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];let price=s.prices[tier],note='',review=false;if(tier==='custom'){return{price:0,note:'Custom structure price required.',review:true}}if(tier==='internal'){if(s.closeEligible==='No'){price=s.prices.existing;note='Close price not enabled. Existing/private should apply.';review=price==null}else if(s.closeEligible==='Temporary'){note='Temporary close structure price active.'}else note='Internal/close structure price applied.'}else{note='This structure price is not locked for this tier. Manual review required unless a confirmed tier price is added.';review=true;if(price==null){price=sumStructureSinglePrices(sid,tier).total;note+=' Using available single-line total as temporary reference.'}}
+if(price==null||price===0){review=true;price=0;note+=' Price needs manual entry.'}return{price,note,review};}
+function sumStructureSinglePrices(sid,tier){const s=STRUCTURE_RULES[sid];let total=0,missing=false;s.contents.forEach(([pid,qty])=>{let r=getProductPrice(pid,tier,qty);total+=r.price*qty;if(r.review)missing=true});return{total,missing}}
+function updateSinglePreview(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier');let r=getProductPrice(pid,tier,qty);set('unitPrice',r.price);set('lineTotal',£(r.price*qty));pricingNote.className='note'+(r.review?' warn':'');pricingNote.textContent=r.note;renderKitPreview(pid,qty,'kitPreview');}
+function updateStructurePreview(){let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);set('structurePrice',r.price);structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=r.note;renderStructurePreview(sid,'structurePreview')}
+function renderKitPreview(pid,qty,target){const el=document.getElementById(target);if(pid==='RTA20'){el.innerHTML='<strong>Reta kit preview</strong><div class="tiny">Current default kit rule × '+qty+'</div>'+materialsHTML(retaMaterials(qty));}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
+function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">'+(s.label||s.type)+'</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>× '+qty+'</strong></div>'});let mats=structureMaterials(sid);if(Object.values(mats).some(v=>v>0))html+='<div class="divider"></div><strong>Attached materials</strong>'+materialsHTML(mats);else html+='<div class="divider"></div><span class="muted">No locked material rule except where Reta is included.</span>';document.getElementById(target).innerHTML=html}
+function retaMaterials(q){return{BAC3:q,BAC10:0,U100:q,WIPES:q*16,BOX:q,INSERT:q,INLAY:q}}
+function structureMaterials(sid){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};STRUCTURE_RULES[sid].contents.forEach(([pid,qty])=>{if(pid==='RTA20')addMats(mats,retaMaterials(qty))});return mats}
+function materialsHTML(m){return Object.entries({BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'Magnetic box',INSERT:'Insert',INLAY:'Inlay card'}).map(([k,l])=>m[k]?'<div class="summary-line"><span>'+l+'</span><strong>× '+m[k]+'</strong></div>':'').join('')}
+function addMats(target,source){Object.keys(target).forEach(k=>target[k]+=Number(source[k]||0))}
+function addProduct(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier'),price=num('unitPrice'),p=PRODUCT_RULES[pid];current.lines.push({kind:'product',pid,qty,price,name:p.name,review:getProductPrice(pid,tier,qty).review,note:getProductPrice(pid,tier,qty).note});if(pid==='RTA20')addMats(current.materials,retaMaterials(qty));if(num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();toast('Product added')}
+function addStructure(){let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);current.lines.push({kind:'structure',sid,qty:1,price,name:s.name,contents:s.contents,review:pr.review,note:pr.note});addMats(current.materials,structureMaterials(sid));if(num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();toast('Structure added')}
+function syncMaterialsToInputs(){set('mat3ml',current.materials.BAC3);set('mat10ml',current.materials.BAC10);set('matU100',current.materials.U100);set('matWipes',current.materials.WIPES);set('matBoxes',current.materials.BOX);set('matInserts',current.materials.INSERT);set('matInlays',current.materials.INLAY)}
+function syncInputsToMaterials(){current.materials={BAC3:num('mat3ml'),BAC10:num('mat10ml'),U100:num('matU100'),WIPES:num('matWipes'),BOX:num('matBoxes'),INSERT:num('matInserts'),INLAY:num('matInlays')}};
+function renderOrder(){orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+l.name+(l.kind==='product'?' × '+l.qty:'')+'</strong><span class="tiny">'+(l.kind==='structure'?'Structure / pathway':'Single product')+(l.review?' · Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+£(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';materialsSummary.innerHTML=materialsHTML(current.materials)||'<span class="muted">No materials attached yet.</span>';let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+£(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+£(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+£(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+£(productTotal+mat+post)+'</strong></div>'}
+function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines();renderOrder()}
+function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
+function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),total};}
+function saveOrderNow(){let o=orderPayload();let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();toast('Order saved · queues and stock updated')}
+function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{if(l.kind==='product')stock[l.pid]=(stock[l.pid]??0)-l.qty;if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
+function renderAll(){renderQueues();renderStock();renderAdmin();renderOrder()}
+function queueData(){return[{key:'pay',title:'Awaiting payment',orders:orders.filter(o=>['Awaiting payment','Part paid'].includes(o.payment)&&!['Cancelled','Complete'].includes(o.status)),sub:'payment actions'},{key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>o.payment==='Paid'&&['New','Awaiting payment','To pack / fulfil'].includes(o.status)),sub:'orders · postage items'},{key:'ready',title:'Ready send / collect',orders:orders.filter(o=>o.status==='Ready send / collect'),sub:'dispatch / collection'},{key:'hold',title:'Issues / hold',orders:orders.filter(o=>o.status==='Issue / hold'),sub:'needs review'}]}
+function renderQueues(){const cards=q=>q.map(x=>'<button class="queue-card" onclick="openQueue(\''+x.key+'\')"><div class="k">'+x.title+'</div><div class="n">'+x.orders.length+'</div><div class="s">'+(x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage items':x.sub)+'</div></button>').join('')+'<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="'+£(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'">'+£(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'</div><div class="s">tap to reveal</div></button>';queueCards.innerHTML=cards(queueData());queueCards2.innerHTML=cards(queueData());openQueue(window.lastQueue||'pay')}
+function openQueue(key){window.lastQueue=key;let q=queueData().find(x=>x.key===key),html='<div class="section-title"><div><h3>'+q.title+'</h3><p>'+q.orders.length+' matching orders</p></div></div>';html+=q.orders.length?q.orders.map(o=>'<div class="queue-row"><div><strong>'+o.id+' · '+(o.customer||'No customer ref')+'</strong><span class="tiny">'+o.payment+' · '+o.status+' · '+£(o.total)+' · '+(o.postageItems||0)+' postage items</span></div><div class="btnrow">'+queueButtons(o,key)+'</div></div>').join(''):'<div class="muted">No orders in this lane.</div>';queueList.innerHTML=html;queueList2.innerHTML=html}
+function queueButtons(o,key){let b='<button class="btn" onclick="loadOrder(\''+o.id+'\')">Open</button>';if(key==='pay')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'payment\',\'Paid\')">Mark paid</button>';if(key==='pack')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'Ready send / collect\')">Ready</button>';if(key==='ready')b+='<button class="btn" onclick="window.open(\'https://www.royalmail.com/sending/click-and-drop\',\'_blank\')">Royal Mail</button><button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'Shipped / collected\')">Sent</button>';if(key==='hold')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'To pack / fulfil\')">Return</button>';return b}
+function quickUpdate(id,field,value){let o=orders.find(x=>x.id===id);if(!o)return;o[field]=value;if(field==='payment'&&value==='Paid'&&o.status==='New')o.status='To pack / fulfil';saveLocal();renderAll();toast('Updated '+id)}
+function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation);set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageItems',o.postageItems);set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
+function toggleValue(btn){btn.querySelector('.value-hidden').classList.toggle('value-hidden')}
+function renderStock(){let labels={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',TA110:'Thymosin Alpha-1 10mg',KPV10:'KPV 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'MAG-BOX-170x125x38',INSERT:'Insert',INLAY:'Inlay card'};stockList.innerHTML=Object.keys(stock).map(k=>'<div class="stock-row"><span>'+labels[k]+'</span><strong>'+stock[k]+'</strong></div>').join('')}
+function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
+function renderAdmin(panel='system'){if(!adminPanel)return;if(panel==='system')adminPanel.innerHTML='<div class="sysmap"><button onclick="showView(\'start\')"><strong>Start</strong><small>Live queues and new order access</small></button><button onclick="showView(\'order\')"><strong>Order</strong><small>Create/edit orders</small></button><button onclick="showView(\'queues\')"><strong>Queues</strong><small>Operational lanes</small></button><button onclick="showView(\'stock\')"><strong>Stock</strong><small>Prototype stock position</small></button><button onclick="showAdminPanel(\'products\')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button><button onclick="showAdminPanel(\'structures\')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button></div>';if(panel==='products')adminPanel.innerHTML=Object.values(PRODUCT_RULES).map(p=>'<div class="rule-row"><div><strong>'+p.name+'</strong><span class="tiny">Close: '+p.closeEligible+' · Planner range: '+(p.plannerRange?'Yes':'No')+'</span></div><div class="tiny">Internal '+(p.internal??'TBC')+' · Existing '+(p.existing??'TBC')+' · Standard '+(p.standard??'TBC')+'</div></div>').join('');if(panel==='structures')adminPanel.innerHTML=Object.values(STRUCTURE_RULES).map(s=>'<div class="rule-row"><div><strong>'+s.name+'</strong><span class="tiny">'+(s.label||s.type)+' · Close '+s.closeEligible+'</span></div><div class="tiny">Internal '+(s.prices.internal??'TBC')+' · Existing '+(s.prices.existing??'TBC')+' · Standard '+(s.prices.standard??'TBC')+'</div></div>').join('')+'<div class="note warn">Above locked structure range = manual price review. No endless discount stacking.</div>';if(panel==='security')adminPanel.innerHTML='<div class="note warn">GitHub Pages is prototype hosting only. Do not store real customer data until a secured backend/auth layer exists.</div>'}
+function generateAddress(){let parts=[val('recName'),val('addr1'),val('addr2'),val('town'),val('postcode')].filter(Boolean);set('addressBlock',parts.join('\n')+'\n\nOrder ref: '+val('orderRef')+'\nItems: '+(num('postageItems')||1)+'\nPhone/ref: '+val('recPhone'));toast('Address block generated')}
+function generateFulfilment(){let msg='PrimeX BioLabs — Fulfilment Update\n\nOrder Ref: '+val('orderRef')+'\nStatus: '+val('orderStatus')+'\nFulfilment: '+val('fulfilmentMethod');if(val('trackingRef'))msg+='\nTracking / ref: '+val('trackingRef');msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg)}
+function copyText(t){navigator.clipboard?.writeText(t);toast('Copied')}
+init();
 </script>
 </body>
 </html>
