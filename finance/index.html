@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v21</title>
+<title>PrimeX Finance HQ · v23 syntax repair</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -37,7 +37,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"></div>
     </section>
     <section class="card security">
-      <div class="section-title"><div><h3>Prototype safety</h3><p>GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+      <div class="section-title"><div><h3>Prototype safety</h3><p>v23 syntax repair · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
     </section>
   </main>
 
@@ -155,6 +155,76 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 <div id="toast" class="toast"></div>
 
 <script>
+const newOrderTop=document.getElementById('newOrderTop');
+const newOrderStart=document.getElementById('newOrderStart');
+const queueCards=document.getElementById('queueCards');
+const queueList=document.getElementById('queueList');
+const activeOrderTag=document.getElementById('activeOrderTag');
+const orderRef=document.getElementById('orderRef');
+const orderDate=document.getElementById('orderDate');
+const customerRef=document.getElementById('customerRef');
+const priceTier=document.getElementById('priceTier');
+const paymentStatus=document.getElementById('paymentStatus');
+const fulfilmentMethod=document.getElementById('fulfilmentMethod');
+const modeSingle=document.getElementById('modeSingle');
+const modeStructure=document.getElementById('modeStructure');
+const singlePanel=document.getElementById('singlePanel');
+const productSelect=document.getElementById('productSelect');
+const productQty=document.getElementById('productQty');
+const unitPrice=document.getElementById('unitPrice');
+const lineTotal=document.getElementById('lineTotal');
+const pricingNote=document.getElementById('pricingNote');
+const kitPreview=document.getElementById('kitPreview');
+const addProductBtn=document.getElementById('addProductBtn');
+const structurePanel=document.getElementById('structurePanel');
+const structureSelect=document.getElementById('structureSelect');
+const structurePrice=document.getElementById('structurePrice');
+const structureNote=document.getElementById('structureNote');
+const structurePreview=document.getElementById('structurePreview');
+const addStructureBtn=document.getElementById('addStructureBtn');
+const clearItems=document.getElementById('clearItems');
+const orderLines=document.getElementById('orderLines');
+const mat3ml=document.getElementById('mat3ml');
+const mat10ml=document.getElementById('mat10ml');
+const matU100=document.getElementById('matU100');
+const matWipes=document.getElementById('matWipes');
+const matBoxes=document.getElementById('matBoxes');
+const matInserts=document.getElementById('matInserts');
+const matInlays=document.getElementById('matInlays');
+const materialsCharge=document.getElementById('materialsCharge');
+const postageCharge=document.getElementById('postageCharge');
+const materialsSummary=document.getElementById('materialsSummary');
+const recName=document.getElementById('recName');
+const recPhone=document.getElementById('recPhone');
+const addr1=document.getElementById('addr1');
+const addr2=document.getElementById('addr2');
+const town=document.getElementById('town');
+const postcode=document.getElementById('postcode');
+const postageItems=document.getElementById('postageItems');
+const trackingRef=document.getElementById('trackingRef');
+const addressBlock=document.getElementById('addressBlock');
+const fulfilmentMsg=document.getElementById('fulfilmentMsg');
+const genAddress=document.getElementById('genAddress');
+const copyAddress=document.getElementById('copyAddress');
+const openRM=document.getElementById('openRM');
+const genFulfilment=document.getElementById('genFulfilment');
+const totalsBox=document.getElementById('totalsBox');
+const orderStatus=document.getElementById('orderStatus');
+const confirmationSent=document.getElementById('confirmationSent');
+const saveOrder=document.getElementById('saveOrder');
+const archiveOrder=document.getElementById('archiveOrder');
+const queueCards2=document.getElementById('queueCards2');
+const queueList2=document.getElementById('queueList2');
+const stockList=document.getElementById('stockList');
+const adminPanel=document.getElementById('adminPanel');
+const toastEl=document.getElementById('toast');
+window.addEventListener('error', function(e){
+  const msg = 'System error: ' + (e.message || 'unknown');
+  const q = document.getElementById('queueCards');
+  if(q) q.innerHTML = '<div class="note warn"><strong>App error caught</strong><br>'+msg+'<br><span class="tiny">Tell Alex this exact message.</span></div>';
+  console.error(e.error || e.message);
+});
+
 const PRODUCT_RULES={
  RTA20:{id:'RTA20',name:'Retatrutide 20mg',internal:110,existing:130,standard:150,closeEligible:'Temporary',plannerRange:true,kit:true,lockedMaxInternalStructure:3},
  BPC40:{id:'BPC40',name:'BPC-157 40mg',internal:40,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false,needsCheck:true},
@@ -177,22 +247,22 @@ let orders=JSON.parse(localStorage.getItem('px_orders_v21')||'[]');
 let stock=JSON.parse(localStorage.getItem('px_stock_v21')||JSON.stringify(INITIAL_STOCK));
 let current={id:null,lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};
 let addMode='single';
-function £(n){return '£'+Number(n||0).toFixed(2)}
+function money(n){return '£'+Number(n||0).toFixed(2)}
 function val(id){return document.getElementById(id).value}
 function num(id){return Number(val(id)||0)}
 function set(id,v){document.getElementById(id).value=v}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
 function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 function init(){Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
-function bind(){['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();toast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
+function bind(){['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();notify('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
 function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Awaiting payment');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New');set('confirmationSent','No');['recName','recPhone','addr1','addr2','town','postcode','trackingRef','addressBlock','fulfilmentMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
 function getProductPrice(pid,tier,qty=1){const p=PRODUCT_RULES[pid];let note='',review=false,price=null;if(!p)return{price:0,note:'No product rule found.',review:true};if(tier==='custom'||p.custom){return{price:0,note:'Custom price required.',review:true}}if(tier==='internal'){if(p.closeEligible==='No'){price=p.existing;note='Close price not enabled. Existing/private price should apply.';review=price==null}else if(p.closeEligible==='Temporary'){price=p.internal;note='Temporary close price active.'}else{price=p.internal;note='Internal/close price applied.'}}else{price=p[tier];note=(tier==='existing'?'Existing/private':'Planner/standard')+' price applied.'}if(price==null){price=0;review=true;note+=' Price needs confirmation / manual entry.'}if(pid==='RTA20'&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range — manual price review required. Safe unit price shown until override.';review=true}return{price,note,review};}
 function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];let price=s.prices[tier],note='',review=false;if(tier==='custom'){return{price:0,note:'Custom structure price required.',review:true}}if(tier==='internal'){if(s.closeEligible==='No'){price=s.prices.existing;note='Close price not enabled. Existing/private should apply.';review=price==null}else if(s.closeEligible==='Temporary'){note='Temporary close structure price active.'}else note='Internal/close structure price applied.'}else{note='This structure price is not locked for this tier. Manual review required unless a confirmed tier price is added.';review=true;if(price==null){price=sumStructureSinglePrices(sid,tier).total;note+=' Using available single-line total as temporary reference.'}}
 if(price==null||price===0){review=true;price=0;note+=' Price needs manual entry.'}return{price,note,review};}
 function sumStructureSinglePrices(sid,tier){const s=STRUCTURE_RULES[sid];let total=0,missing=false;s.contents.forEach(([pid,qty])=>{let r=getProductPrice(pid,tier,qty);total+=r.price*qty;if(r.review)missing=true});return{total,missing}}
-function updateSinglePreview(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier');let r=getProductPrice(pid,tier,qty);set('unitPrice',r.price);set('lineTotal',£(r.price*qty));pricingNote.className='note'+(r.review?' warn':'');pricingNote.textContent=r.note;renderKitPreview(pid,qty,'kitPreview');}
+function updateSinglePreview(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier');let r=getProductPrice(pid,tier,qty);set('unitPrice',r.price);set('lineTotal',money(r.price*qty));pricingNote.className='note'+(r.review?' warn':'');pricingNote.textContent=r.note;renderKitPreview(pid,qty,'kitPreview');}
 function updateStructurePreview(){let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);set('structurePrice',r.price);structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=r.note;renderStructurePreview(sid,'structurePreview')}
 function renderKitPreview(pid,qty,target){const el=document.getElementById(target);if(pid==='RTA20'){el.innerHTML='<strong>Reta kit preview</strong><div class="tiny">Current default kit rule × '+qty+'</div>'+materialsHTML(retaMaterials(qty));}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
 function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">'+(s.label||s.type)+'</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>× '+qty+'</strong></div>'});let mats=structureMaterials(sid);if(Object.values(mats).some(v=>v>0))html+='<div class="divider"></div><strong>Attached materials</strong>'+materialsHTML(mats);else html+='<div class="divider"></div><span class="muted">No locked material rule except where Reta is included.</span>';document.getElementById(target).innerHTML=html}
@@ -200,31 +270,35 @@ function retaMaterials(q){return{BAC3:q,BAC10:0,U100:q,WIPES:q*16,BOX:q,INSERT:q
 function structureMaterials(sid){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};STRUCTURE_RULES[sid].contents.forEach(([pid,qty])=>{if(pid==='RTA20')addMats(mats,retaMaterials(qty))});return mats}
 function materialsHTML(m){return Object.entries({BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'Magnetic box',INSERT:'Insert',INLAY:'Inlay card'}).map(([k,l])=>m[k]?'<div class="summary-line"><span>'+l+'</span><strong>× '+m[k]+'</strong></div>':'').join('')}
 function addMats(target,source){Object.keys(target).forEach(k=>target[k]+=Number(source[k]||0))}
-function addProduct(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier'),price=num('unitPrice'),p=PRODUCT_RULES[pid];current.lines.push({kind:'product',pid,qty,price,name:p.name,review:getProductPrice(pid,tier,qty).review,note:getProductPrice(pid,tier,qty).note});if(pid==='RTA20')addMats(current.materials,retaMaterials(qty));if(num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();toast('Product added')}
-function addStructure(){let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);current.lines.push({kind:'structure',sid,qty:1,price,name:s.name,contents:s.contents,review:pr.review,note:pr.note});addMats(current.materials,structureMaterials(sid));if(num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();toast('Structure added')}
+function addProduct(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier'),price=num('unitPrice'),p=PRODUCT_RULES[pid];current.lines.push({kind:'product',pid,qty,price,name:p.name,review:getProductPrice(pid,tier,qty).review,note:getProductPrice(pid,tier,qty).note});if(pid==='RTA20')addMats(current.materials,retaMaterials(qty));if(num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();notify('Product added')}
+function addStructure(){let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);current.lines.push({kind:'structure',sid,qty:1,price,name:s.name,contents:s.contents,review:pr.review,note:pr.note});addMats(current.materials,structureMaterials(sid));if(num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();notify('Structure added')}
 function syncMaterialsToInputs(){set('mat3ml',current.materials.BAC3);set('mat10ml',current.materials.BAC10);set('matU100',current.materials.U100);set('matWipes',current.materials.WIPES);set('matBoxes',current.materials.BOX);set('matInserts',current.materials.INSERT);set('matInlays',current.materials.INLAY)}
 function syncInputsToMaterials(){current.materials={BAC3:num('mat3ml'),BAC10:num('mat10ml'),U100:num('matU100'),WIPES:num('matWipes'),BOX:num('matBoxes'),INSERT:num('matInserts'),INLAY:num('matInlays')}};
-function renderOrder(){orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+l.name+(l.kind==='product'?' × '+l.qty:'')+'</strong><span class="tiny">'+(l.kind==='structure'?'Structure / pathway':'Single product')+(l.review?' · Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+£(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';materialsSummary.innerHTML=materialsHTML(current.materials)||'<span class="muted">No materials attached yet.</span>';let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+£(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+£(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+£(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+£(productTotal+mat+post)+'</strong></div>'}
+function renderOrder(){orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+l.name+(l.kind==='product'?' × '+l.qty:'')+'</strong><span class="tiny">'+(l.kind==='structure'?'Structure / pathway':'Single product')+(l.review?' · Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';materialsSummary.innerHTML=materialsHTML(current.materials)||'<span class="muted">No materials attached yet.</span>';let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>'}
 function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines();renderOrder()}
 function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
 function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),total};}
-function saveOrderNow(){let o=orderPayload();let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();toast('Order saved · queues and stock updated')}
+function saveOrderNow(){let o=orderPayload();let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();notify('Order saved · queues and stock updated')}
 function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{if(l.kind==='product')stock[l.pid]=(stock[l.pid]??0)-l.qty;if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
 function renderAll(){renderQueues();renderStock();renderAdmin();renderOrder()}
 function queueData(){return[{key:'pay',title:'Awaiting payment',orders:orders.filter(o=>['Awaiting payment','Part paid'].includes(o.payment)&&!['Cancelled','Complete'].includes(o.status)),sub:'payment actions'},{key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>o.payment==='Paid'&&['New','Awaiting payment','To pack / fulfil'].includes(o.status)),sub:'orders · postage items'},{key:'ready',title:'Ready send / collect',orders:orders.filter(o=>o.status==='Ready send / collect'),sub:'dispatch / collection'},{key:'hold',title:'Issues / hold',orders:orders.filter(o=>o.status==='Issue / hold'),sub:'needs review'}]}
-function renderQueues(){const cards=q=>q.map(x=>'<button class="queue-card" onclick="openQueue(\''+x.key+'\')"><div class="k">'+x.title+'</div><div class="n">'+x.orders.length+'</div><div class="s">'+(x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage items':x.sub)+'</div></button>').join('')+'<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="'+£(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'">'+£(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'</div><div class="s">tap to reveal</div></button>';queueCards.innerHTML=cards(queueData());queueCards2.innerHTML=cards(queueData());openQueue(window.lastQueue||'pay')}
-function openQueue(key){window.lastQueue=key;let q=queueData().find(x=>x.key===key),html='<div class="section-title"><div><h3>'+q.title+'</h3><p>'+q.orders.length+' matching orders</p></div></div>';html+=q.orders.length?q.orders.map(o=>'<div class="queue-row"><div><strong>'+o.id+' · '+(o.customer||'No customer ref')+'</strong><span class="tiny">'+o.payment+' · '+o.status+' · '+£(o.total)+' · '+(o.postageItems||0)+' postage items</span></div><div class="btnrow">'+queueButtons(o,key)+'</div></div>').join(''):'<div class="muted">No orders in this lane.</div>';queueList.innerHTML=html;queueList2.innerHTML=html}
+function renderQueues(){const cards=q=>q.map(x=>'<button class="queue-card" onclick="openQueue(\''+x.key+'\')"><div class="k">'+x.title+'</div><div class="n">'+x.orders.length+'</div><div class="s">'+(x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage items':x.sub)+'</div></button>').join('')+'<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="'+money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'">'+money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'</div><div class="s">tap to reveal</div></button>';queueCards.innerHTML=cards(queueData());queueCards2.innerHTML=cards(queueData());openQueue(window.lastQueue||'pay')}
+function openQueue(key){window.lastQueue=key;let q=queueData().find(x=>x.key===key),html='<div class="section-title"><div><h3>'+q.title+'</h3><p>'+q.orders.length+' matching orders</p></div></div>';html+=q.orders.length?q.orders.map(o=>'<div class="queue-row"><div><strong>'+o.id+' · '+(o.customer||'No customer ref')+'</strong><span class="tiny">'+o.payment+' · '+o.status+' · '+money(o.total)+' · '+(o.postageItems||0)+' postage items</span></div><div class="btnrow">'+queueButtons(o,key)+'</div></div>').join(''):'<div class="muted">No orders in this lane.</div>';queueList.innerHTML=html;queueList2.innerHTML=html}
 function queueButtons(o,key){let b='<button class="btn" onclick="loadOrder(\''+o.id+'\')">Open</button>';if(key==='pay')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'payment\',\'Paid\')">Mark paid</button>';if(key==='pack')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'Ready send / collect\')">Ready</button>';if(key==='ready')b+='<button class="btn" onclick="window.open(\'https://www.royalmail.com/sending/click-and-drop\',\'_blank\')">Royal Mail</button><button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'Shipped / collected\')">Sent</button>';if(key==='hold')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'To pack / fulfil\')">Return</button>';return b}
-function quickUpdate(id,field,value){let o=orders.find(x=>x.id===id);if(!o)return;o[field]=value;if(field==='payment'&&value==='Paid'&&o.status==='New')o.status='To pack / fulfil';saveLocal();renderAll();toast('Updated '+id)}
+function quickUpdate(id,field,value){let o=orders.find(x=>x.id===id);if(!o)return;o[field]=value;if(field==='payment'&&value==='Paid'&&o.status==='New')o.status='To pack / fulfil';saveLocal();renderAll();notify('Updated '+id)}
 function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation);set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageItems',o.postageItems);set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
 function toggleValue(btn){btn.querySelector('.value-hidden').classList.toggle('value-hidden')}
 function renderStock(){let labels={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',TA110:'Thymosin Alpha-1 10mg',KPV10:'KPV 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'MAG-BOX-170x125x38',INSERT:'Insert',INLAY:'Inlay card'};stockList.innerHTML=Object.keys(stock).map(k=>'<div class="stock-row"><span>'+labels[k]+'</span><strong>'+stock[k]+'</strong></div>').join('')}
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
 function renderAdmin(panel='system'){if(!adminPanel)return;if(panel==='system')adminPanel.innerHTML='<div class="sysmap"><button onclick="showView(\'start\')"><strong>Start</strong><small>Live queues and new order access</small></button><button onclick="showView(\'order\')"><strong>Order</strong><small>Create/edit orders</small></button><button onclick="showView(\'queues\')"><strong>Queues</strong><small>Operational lanes</small></button><button onclick="showView(\'stock\')"><strong>Stock</strong><small>Prototype stock position</small></button><button onclick="showAdminPanel(\'products\')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button><button onclick="showAdminPanel(\'structures\')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button></div>';if(panel==='products')adminPanel.innerHTML=Object.values(PRODUCT_RULES).map(p=>'<div class="rule-row"><div><strong>'+p.name+'</strong><span class="tiny">Close: '+p.closeEligible+' · Planner range: '+(p.plannerRange?'Yes':'No')+'</span></div><div class="tiny">Internal '+(p.internal??'TBC')+' · Existing '+(p.existing??'TBC')+' · Standard '+(p.standard??'TBC')+'</div></div>').join('');if(panel==='structures')adminPanel.innerHTML=Object.values(STRUCTURE_RULES).map(s=>'<div class="rule-row"><div><strong>'+s.name+'</strong><span class="tiny">'+(s.label||s.type)+' · Close '+s.closeEligible+'</span></div><div class="tiny">Internal '+(s.prices.internal??'TBC')+' · Existing '+(s.prices.existing??'TBC')+' · Standard '+(s.prices.standard??'TBC')+'</div></div>').join('')+'<div class="note warn">Above locked structure range = manual price review. No endless discount stacking.</div>';if(panel==='security')adminPanel.innerHTML='<div class="note warn">GitHub Pages is prototype hosting only. Do not store real customer data until a secured backend/auth layer exists.</div>'}
-function generateAddress(){let parts=[val('recName'),val('addr1'),val('addr2'),val('town'),val('postcode')].filter(Boolean);set('addressBlock',parts.join('\n')+'\n\nOrder ref: '+val('orderRef')+'\nItems: '+(num('postageItems')||1)+'\nPhone/ref: '+val('recPhone'));toast('Address block generated')}
+function generateAddress(){let parts=[val('recName'),val('addr1'),val('addr2'),val('town'),val('postcode')].filter(Boolean);set('addressBlock',parts.join('\n')+'\n\nOrder ref: '+val('orderRef')+'\nItems: '+(num('postageItems')||1)+'\nPhone/ref: '+val('recPhone'));notify('Address block generated')}
 function generateFulfilment(){let msg='PrimeX BioLabs — Fulfilment Update\n\nOrder Ref: '+val('orderRef')+'\nStatus: '+val('orderStatus')+'\nFulfilment: '+val('fulfilmentMethod');if(val('trackingRef'))msg+='\nTracking / ref: '+val('trackingRef');msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg)}
-function copyText(t){navigator.clipboard?.writeText(t);toast('Copied')}
-init();
+function copyText(t){navigator.clipboard?.writeText(t);notify('Copied')}
+try { init(); } catch(e) {
+  console.error(e);
+  const q=document.getElementById('queueCards');
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>';
+}
 </script>
 </body>
 </html>
