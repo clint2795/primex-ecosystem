@@ -11548,6 +11548,449 @@ section[id],
 }
 </style>
 
+
+
+<style id="primex-v171-request-tray-card-layout-polish">
+/* PrimeX v171 — Request Tray layout polish
+   Scope: price-card/request-button layout only. No nav, sticky, dropdown, anchor, or tray logic changes.
+   Fix: restore price-card hierarchy after Add to request buttons are injected. */
+.plan-price{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:
+    "copy price"
+    "action action"!important;
+  align-items:start!important;
+  gap:10px 18px!important;
+  position:relative!important;
+  padding:18px 20px!important;
+  min-height:0!important;
+}
+.plan-price > div:first-child{
+  grid-area:copy!important;
+  min-width:0!important;
+}
+.plan-price > div:nth-child(2){
+  grid-area:price!important;
+  justify-self:end!important;
+  text-align:right!important;
+  min-width:max-content!important;
+}
+.plan-price .price-label{
+  display:block!important;
+  text-align:right!important;
+}
+.plan-price .amount{
+  text-align:right!important;
+  line-height:1!important;
+}
+.plan-price .px-request-action{
+  grid-area:action!important;
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  margin:4px 0 0!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+  z-index:1!important;
+}
+.plan-price .px-request-btn{
+  width:auto!important;
+  min-width:104px!important;
+  max-width:100%!important;
+  font-size:8px!important;
+  line-height:1.05!important;
+  padding:9px 11px!important;
+}
+#foundation .foundation-variants .plan-price{
+  padding:18px 16px!important;
+  min-height:128px!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:10px 14px!important;
+}
+#foundation .foundation-variants .plan-price > div:first-child{
+  min-width:0!important;
+}
+#foundation .foundation-variants .plan-name{
+  max-width:100%!important;
+}
+#foundation .foundation-variants .amount{
+  font-size:25px!important;
+}
+@media(max-width:900px){
+  .plan-price{
+    grid-template-columns:minmax(0,1fr) auto!important;
+  }
+}
+@media(max-width:720px){
+  .plan-price,
+  #foundation .foundation-variants .plan-price{
+    grid-template-columns:1fr!important;
+    grid-template-areas:
+      "copy"
+      "price"
+      "action"!important;
+    gap:9px!important;
+    padding:16px!important;
+    min-height:0!important;
+  }
+  .plan-price > div:nth-child(2){
+    justify-self:start!important;
+    text-align:left!important;
+    min-width:0!important;
+  }
+  .plan-price .price-label,
+  .plan-price .amount{
+    text-align:left!important;
+  }
+  .plan-price .px-request-action{
+    justify-content:stretch!important;
+    margin-top:5px!important;
+  }
+  .plan-price .px-request-btn{
+    width:100%!important;
+    min-width:0!important;
+    padding:11px 12px!important;
+    font-size:8.5px!important;
+  }
+  #foundation .foundation-variants .amount{
+    font-size:24px!important;
+  }
+}
+</style>
+
+
+
+<style id="primex-v172-request-tray-card-specificity-lock">
+/* PrimeX v172 — hard specificity lock for request-button card layout.
+   This overrides older high-specificity foundation/compound card rules without touching nav/tray logic. */
+#reta .plan-price,
+#bpc .plan-price,
+#tb .plan-price,
+#ta1 .plan-price,
+#kpv .plan-price,
+#foundation .foundation-variants .plan-price{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:
+    "copy price"
+    "action action"!important;
+  align-items:start!important;
+  gap:10px 18px!important;
+  position:relative!important;
+}
+#reta .plan-price > div:first-child,
+#bpc .plan-price > div:first-child,
+#tb .plan-price > div:first-child,
+#ta1 .plan-price > div:first-child,
+#kpv .plan-price > div:first-child,
+#foundation .foundation-variants .plan-price > div:first-child{
+  grid-area:copy!important;
+  min-width:0!important;
+  flex:none!important;
+}
+#reta .plan-price > div:nth-child(2),
+#bpc .plan-price > div:nth-child(2),
+#tb .plan-price > div:nth-child(2),
+#ta1 .plan-price > div:nth-child(2),
+#kpv .plan-price > div:nth-child(2),
+#foundation .foundation-variants .plan-price > div:nth-child(2){
+  grid-area:price!important;
+  justify-self:end!important;
+  align-self:start!important;
+  text-align:right!important;
+  min-width:max-content!important;
+  flex:none!important;
+}
+#reta .plan-price .px-request-action,
+#bpc .plan-price .px-request-action,
+#tb .plan-price .px-request-action,
+#ta1 .plan-price .px-request-action,
+#kpv .plan-price .px-request-action,
+#foundation .foundation-variants .plan-price .px-request-action{
+  grid-area:action!important;
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  margin:6px 0 0!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+}
+#reta .plan-price .px-request-btn,
+#bpc .plan-price .px-request-btn,
+#tb .plan-price .px-request-btn,
+#ta1 .plan-price .px-request-btn,
+#kpv .plan-price .px-request-btn,
+#foundation .foundation-variants .plan-price .px-request-btn{
+  width:auto!important;
+  min-width:110px!important;
+  max-width:100%!important;
+}
+#foundation .foundation-variants .plan-price{
+  min-height:0!important;
+  padding:18px 16px!important;
+}
+@media(max-width:720px){
+  #reta .plan-price,
+  #bpc .plan-price,
+  #tb .plan-price,
+  #ta1 .plan-price,
+  #kpv .plan-price,
+  #foundation .foundation-variants .plan-price{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-areas:
+      "copy"
+      "price"
+      "action"!important;
+    gap:9px!important;
+    padding:16px!important;
+    min-height:0!important;
+  }
+  #reta .plan-price > div:nth-child(2),
+  #bpc .plan-price > div:nth-child(2),
+  #tb .plan-price > div:nth-child(2),
+  #ta1 .plan-price > div:nth-child(2),
+  #kpv .plan-price > div:nth-child(2),
+  #foundation .foundation-variants .plan-price > div:nth-child(2){
+    justify-self:start!important;
+    text-align:left!important;
+    min-width:0!important;
+  }
+  #reta .plan-price .price-label,
+  #bpc .plan-price .price-label,
+  #tb .plan-price .price-label,
+  #ta1 .plan-price .price-label,
+  #kpv .plan-price .price-label,
+  #foundation .foundation-variants .price-label,
+  #reta .plan-price .amount,
+  #bpc .plan-price .amount,
+  #tb .plan-price .amount,
+  #ta1 .plan-price .amount,
+  #kpv .plan-price .amount,
+  #foundation .foundation-variants .amount{
+    text-align:left!important;
+  }
+  #reta .plan-price .px-request-action,
+  #bpc .plan-price .px-request-action,
+  #tb .plan-price .px-request-action,
+  #ta1 .plan-price .px-request-action,
+  #kpv .plan-price .px-request-action,
+  #foundation .foundation-variants .plan-price .px-request-action{
+    justify-content:stretch!important;
+    margin-top:4px!important;
+  }
+  #reta .plan-price .px-request-btn,
+  #bpc .plan-price .px-request-btn,
+  #tb .plan-price .px-request-btn,
+  #ta1 .plan-price .px-request-btn,
+  #kpv .plan-price .px-request-btn,
+  #foundation .foundation-variants .plan-price .px-request-btn{
+    width:100%!important;
+    min-width:0!important;
+    font-size:8.5px!important;
+    padding:11px 12px!important;
+  }
+}
+</style>
+
+
+
+<style id="primex-v173-all-price-card-request-layout-lock">
+/* PrimeX v173 — full planner request-button layout lock.
+   Scope: all planner price cards, including every compound and foundation card.
+   Purpose: keep Add to request in its own clean footer row so it cannot crush price/text.
+   No nav, sticky, dropdown, anchor, or tray logic changes. */
+#reta .plan-price,
+#bpc .plan-price,
+#tb .plan-price,
+#ta1 .plan-price,
+#kpv .plan-price,
+#foundation .foundation-variants .plan-price,
+.plan-grid .plan-price,
+.foundation-variants .plan-price{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:
+    "copy price"
+    "action action"!important;
+  align-items:start!important;
+  gap:14px 22px!important;
+  padding:20px!important;
+  min-height:124px!important;
+  overflow:visible!important;
+}
+#reta .plan-price > div:first-child,
+#bpc .plan-price > div:first-child,
+#tb .plan-price > div:first-child,
+#ta1 .plan-price > div:first-child,
+#kpv .plan-price > div:first-child,
+#foundation .foundation-variants .plan-price > div:first-child,
+.plan-grid .plan-price > div:first-child,
+.foundation-variants .plan-price > div:first-child{
+  grid-area:copy!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+#reta .plan-price > div:nth-child(2),
+#bpc .plan-price > div:nth-child(2),
+#tb .plan-price > div:nth-child(2),
+#ta1 .plan-price > div:nth-child(2),
+#kpv .plan-price > div:nth-child(2),
+#foundation .foundation-variants .plan-price > div:nth-child(2),
+.plan-grid .plan-price > div:nth-child(2),
+.foundation-variants .plan-price > div:nth-child(2){
+  grid-area:price!important;
+  justify-self:end!important;
+  align-self:start!important;
+  text-align:right!important;
+  min-width:max-content!important;
+  max-width:100%!important;
+}
+#reta .plan-price .plan-name,
+#bpc .plan-price .plan-name,
+#tb .plan-price .plan-name,
+#ta1 .plan-price .plan-name,
+#kpv .plan-price .plan-name,
+#foundation .foundation-variants .plan-name{
+  overflow-wrap:anywhere!important;
+}
+#reta .plan-price .px-request-action,
+#bpc .plan-price .px-request-action,
+#tb .plan-price .px-request-action,
+#ta1 .plan-price .px-request-action,
+#kpv .plan-price .px-request-action,
+#foundation .foundation-variants .plan-price .px-request-action,
+.plan-grid .plan-price .px-request-action,
+.foundation-variants .plan-price .px-request-action{
+  grid-area:action!important;
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  margin:2px 0 0!important;
+  padding-top:12px!important;
+  border-top:1px solid rgba(255,255,255,.065)!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  z-index:1!important;
+}
+#reta .plan-price .px-request-btn,
+#bpc .plan-price .px-request-btn,
+#tb .plan-price .px-request-btn,
+#ta1 .plan-price .px-request-btn,
+#kpv .plan-price .px-request-btn,
+#foundation .foundation-variants .plan-price .px-request-btn,
+.plan-grid .plan-price .px-request-btn,
+.foundation-variants .plan-price .px-request-btn{
+  width:auto!important;
+  min-width:132px!important;
+  max-width:100%!important;
+  height:auto!important;
+  white-space:nowrap!important;
+  font-size:8px!important;
+  line-height:1.1!important;
+  letter-spacing:1.55px!important;
+  padding:10px 13px!important;
+}
+#foundation .foundation-variants .plan-price{
+  min-height:148px!important;
+}
+@media(max-width:900px){
+  #reta .plan-price,
+  #bpc .plan-price,
+  #tb .plan-price,
+  #ta1 .plan-price,
+  #kpv .plan-price,
+  #foundation .foundation-variants .plan-price,
+  .plan-grid .plan-price,
+  .foundation-variants .plan-price{
+    gap:12px 16px!important;
+    padding:18px!important;
+  }
+}
+@media(max-width:720px){
+  #reta .plan-price,
+  #bpc .plan-price,
+  #tb .plan-price,
+  #ta1 .plan-price,
+  #kpv .plan-price,
+  #foundation .foundation-variants .plan-price,
+  .plan-grid .plan-price,
+  .foundation-variants .plan-price{
+    grid-template-columns:1fr!important;
+    grid-template-areas:
+      "copy"
+      "price"
+      "action"!important;
+    gap:10px!important;
+    padding:16px!important;
+    min-height:0!important;
+  }
+  #reta .plan-price > div:nth-child(2),
+  #bpc .plan-price > div:nth-child(2),
+  #tb .plan-price > div:nth-child(2),
+  #ta1 .plan-price > div:nth-child(2),
+  #kpv .plan-price > div:nth-child(2),
+  #foundation .foundation-variants .plan-price > div:nth-child(2),
+  .plan-grid .plan-price > div:nth-child(2),
+  .foundation-variants .plan-price > div:nth-child(2){
+    justify-self:start!important;
+    text-align:left!important;
+    min-width:0!important;
+  }
+  #reta .plan-price .price-label,
+  #bpc .plan-price .price-label,
+  #tb .plan-price .price-label,
+  #ta1 .plan-price .price-label,
+  #kpv .plan-price .price-label,
+  #foundation .foundation-variants .price-label,
+  .plan-grid .plan-price .price-label,
+  .foundation-variants .price-label,
+  #reta .plan-price .amount,
+  #bpc .plan-price .amount,
+  #tb .plan-price .amount,
+  #ta1 .plan-price .amount,
+  #kpv .plan-price .amount,
+  #foundation .foundation-variants .amount,
+  .plan-grid .plan-price .amount,
+  .foundation-variants .amount{
+    text-align:left!important;
+  }
+  #reta .plan-price .px-request-action,
+  #bpc .plan-price .px-request-action,
+  #tb .plan-price .px-request-action,
+  #ta1 .plan-price .px-request-action,
+  #kpv .plan-price .px-request-action,
+  #foundation .foundation-variants .plan-price .px-request-action,
+  .plan-grid .plan-price .px-request-action,
+  .foundation-variants .plan-price .px-request-action{
+    justify-content:stretch!important;
+    padding-top:11px!important;
+  }
+  #reta .plan-price .px-request-btn,
+  #bpc .plan-price .px-request-btn,
+  #tb .plan-price .px-request-btn,
+  #ta1 .plan-price .px-request-btn,
+  #kpv .plan-price .px-request-btn,
+  #foundation .foundation-variants .plan-price .px-request-btn,
+  .plan-grid .plan-price .px-request-btn,
+  .foundation-variants .plan-price .px-request-btn{
+    width:100%!important;
+    min-width:0!important;
+    white-space:normal!important;
+    font-size:8.5px!important;
+    padding:11px 12px!important;
+  }
+}
+</style>
+
 <script id="primex-v169-request-tray-safety">
 (function(){
   const KEY='primexRequestTrayV1';
