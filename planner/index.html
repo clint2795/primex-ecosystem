@@ -11492,6 +11492,62 @@ section[id],
   .px-request-item-controls{justify-content:flex-start;}
 }
 </style>
+
+
+<style id="primex-v170-request-tray-card-layout-fix">
+/* PrimeX v170 — request tray button layout fix
+   Scope: request buttons only. No nav/sticky/dropdown changes.
+   Fix: prevent Add to request buttons becoming a third flex column inside price cards.
+*/
+.plan-price{
+  position:relative!important;
+  padding-bottom:62px!important;
+}
+.plan-price .px-request-action{
+  position:absolute!important;
+  left:auto!important;
+  right:14px!important;
+  bottom:14px!important;
+  width:auto!important;
+  margin:0!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+  z-index:2!important;
+}
+.plan-price .px-request-btn{
+  width:auto!important;
+  max-width:100%!important;
+  font-size:8px!important;
+  line-height:1!important;
+  padding:9px 10px!important;
+}
+.foundation-variants .plan-price{
+  padding-bottom:58px!important;
+}
+.foundation-variants .plan-price .px-request-action{
+  right:12px!important;
+  bottom:12px!important;
+}
+@media(max-width:720px){
+  .plan-price{
+    padding-bottom:64px!important;
+  }
+  .plan-price .px-request-action{
+    left:14px!important;
+    right:14px!important;
+    bottom:13px!important;
+    width:auto!important;
+  }
+  .plan-price .px-request-btn{
+    width:100%!important;
+    padding:10px 11px!important;
+  }
+  .foundation-variants .plan-price{
+    padding-bottom:62px!important;
+  }
+}
+</style>
+
 <script id="primex-v169-request-tray-safety">
 (function(){
   const KEY='primexRequestTrayV1';
