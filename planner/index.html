@@ -11438,10 +11438,10 @@ section[id],
 
 
 
-<style id="primex-v168-request-tray">
-/* PrimeX v168 — Request Tray layer
+<style id="primex-v169-request-tray-safety">
+/* PrimeX v169 — Request Tray safety layer
    Scope: request-intake UI only.
-   Does not alter chapter nav, sticky behaviour, dropdown behaviour, anchors, pricing logic, or page layout. */
+   Does not alter chapter nav, sticky behaviour, dropdown behaviour, anchors, pricing logic, or page layout. Makes clear that the tray is not connected to backend submission yet. */
 .px-request-action{margin-top:12px;display:flex;justify-content:flex-end;width:100%;}
 .px-request-btn{appearance:none;border:1px solid rgba(98,160,196,.42);border-left:2px solid rgba(98,160,196,.72);background:linear-gradient(90deg,rgba(98,160,196,.105),rgba(255,255,255,.025));color:rgba(222,238,248,.94);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.55px;text-transform:uppercase;padding:9px 11px;cursor:pointer;transition:.18s;white-space:nowrap;}
 .px-request-btn:hover{background:linear-gradient(90deg,rgba(98,160,196,.17),rgba(255,255,255,.04));border-color:rgba(98,160,196,.62);color:rgba(245,250,252,.98);transform:translateY(-1px);}
@@ -11492,7 +11492,7 @@ section[id],
   .px-request-item-controls{justify-content:flex-start;}
 }
 </style>
-<script id="primex-v168-request-tray">
+<script id="primex-v169-request-tray-safety">
 (function(){
   const KEY='primexRequestTrayV1';
   const money = s => (s || '').replace(/\s+/g,' ').trim();
@@ -11544,7 +11544,7 @@ section[id],
     if(document.querySelector('.px-request-tray-bar')) return;
     const bar=document.createElement('div');
     bar.className='px-request-tray-bar';
-    bar.innerHTML='<div class="px-request-tray-copy"><div class="px-request-tray-label">Request Tray</div><div class="px-request-tray-count">No structures selected</div></div><div class="px-request-tray-actions"><button type="button" class="px-request-ghost" data-px-clear>Clear</button><button type="button" class="px-request-primary" data-px-review>Review</button></div>';
+    bar.innerHTML='<div class="px-request-tray-copy"><div class="px-request-tray-label">Request Tray</div><div class="px-request-tray-count">No structures selected</div></div><div class="px-request-tray-actions"><button type="button" class="px-request-ghost" data-px-clear>Clear</button><button type="button" class="px-request-primary" data-px-review>Review / copy</button></div>';
     document.body.appendChild(bar);
     bar.querySelector('[data-px-clear]').addEventListener('click', function(){ setTray([]); });
     bar.querySelector('[data-px-review]').addEventListener('click', function(){ openReview(true); });
@@ -11553,7 +11553,7 @@ section[id],
     if(document.querySelector('.px-request-modal')) return;
     const modal=document.createElement('div');
     modal.className='px-request-modal';
-    modal.innerHTML='<div class="px-request-panel" role="dialog" aria-modal="true" aria-label="Request Tray"><div class="px-request-panel-head"><div><div class="px-request-panel-title">Request Tray</div><div class="px-request-panel-sub">Build a simple request before submitting details. This is a request/review step, not checkout.</div></div><button type="button" class="px-request-close" data-px-close>Close</button></div><div class="px-request-panel-body"><div data-px-request-content></div></div></div>';
+    modal.innerHTML='<div class="px-request-panel" role="dialog" aria-modal="true" aria-label="Request Tray"><div class="px-request-panel-head"><div><div class="px-request-panel-title">Request Tray</div><div class="px-request-panel-sub">Build a request list before contacting PrimeX. This tray does not send anything yet and is not checkout.</div></div><button type="button" class="px-request-close" data-px-close>Close</button></div><div class="px-request-panel-body"><div data-px-request-content></div></div></div>';
     document.body.appendChild(modal);
     modal.addEventListener('click', function(e){ if(e.target===modal) closeReview(); });
     modal.querySelector('[data-px-close]').addEventListener('click', closeReview);
@@ -11585,7 +11585,7 @@ section[id],
     if(!tray.length){
       content.innerHTML='<div class="px-request-empty">No structures selected yet. Return to the planner and add one or more structures to build a request.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Contact PrimeX</button></div>';
     } else {
-      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected structure')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Next step:</strong> the dedicated request form/HQ intake connection will be added next. For now, this tray proves the planner selection flow without adding checkout or payment.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Contact PrimeX</button></div>';
+      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected structure')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> this tray does not submit anything yet. Copy the request summary, then contact PrimeX so the request can be reviewed and confirmed manually. The dedicated HQ intake connection will be added next.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Contact PrimeX</button></div>';
     }
     content.querySelectorAll('.px-request-item').forEach(row=>{
       const id=row.getAttribute('data-id');
@@ -11606,7 +11606,7 @@ section[id],
     const lines=['PrimeX request summary',''];
     tray.forEach((x,i)=>{ lines.push((i+1)+'. '+x.title+' — '+(x.label||x.name||'Selected structure')); if(x.name) lines.push('   Range: '+x.name); if(x.meta) lines.push('   Details: '+x.meta); if(x.price) lines.push('   Reference: '+x.price); lines.push('   Qty: '+(parseInt(x.qty,10)||1)); });
     if(notes.trim()){ lines.push('','Notes:',notes.trim()); }
-    navigator.clipboard && navigator.clipboard.writeText(lines.join('\n')).then(()=>{ alert('Request summary copied.'); }).catch(()=>{ alert(lines.join('\n')); });
+    navigator.clipboard && navigator.clipboard.writeText(lines.join('\n')).then(()=>{ alert('Request summary copied. Please send it to PrimeX using the contact section.'); }).catch(()=>{ alert(lines.join('\n')); });
   }
   function escapeHTML(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   document.addEventListener('DOMContentLoaded', function(){ addButtons(); ensureTrayBar(); ensureModal(); updateTrayUI(); syncButtons(); });
