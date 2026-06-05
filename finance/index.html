@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v32 storage guard</title>
+<title>PrimeX Finance HQ · v34 support items stable</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -22,7 +22,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v30</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v34</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="pill primary" id="newOrderTop">+ New Order</button>
@@ -32,7 +32,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
   <main id="view-start" class="view active">
     <section class="card">
-      <div class="section-title"><div><h2>Live order queue</h2><p>Work that needs action.</p></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
+      <div class="section-title"><div><h2>Live order queue</h2><p>Work that needs action.</p></div><button class="btn primary" id="newOrderStart" style="display:none">+ New Order</button></div>
       <div class="queue-grid" id="queueCards">
         <button class="queue-card"><div class="k">Awaiting payment</div><div class="n">0</div><div class="s">fallback shown before app starts</div></button>
         <button class="queue-card"><div class="k">To pack / fulfil</div><div class="n">0</div><div class="s">0 postage items</div></button>
@@ -42,7 +42,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"><span class="tiny">Boot check: HTML loaded. Waiting for app script…</span></div>
     </section>
     <section class="card security">
-      <div class="section-title"><div><h3>Prototype safety</h3><p>v32 storage guard · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+      <div class="section-title"><div><h3>Prototype safety</h3><p>v34 rebuilt from v32 · Support item charge mode · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
     </section>
   </main>
 
@@ -80,6 +80,9 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <div class="field"><label>Qty</label><input id="productQty" type="number" min="1" value="1"></div>
           <div class="field"><label>Unit price</label><input id="unitPrice" type="number" step="0.01"></div>
           <div class="field"><label>Line total</label><input id="lineTotal" class="readonly" readonly></div>
+        </div>
+        <div class="grid two hide" id="supportChargeWrap" style="margin-top:10px">
+          <div class="field"><label>Supporting item charge mode</label><select id="supportChargeMode"><option value="charged">Charged separately</option><option value="included">Included / no extra charge</option><option value="internal">Internal tracking only</option></select></div>
         </div>
         <div id="pricingNote" class="note" style="margin-top:10px"></div>
         <div id="kitPreview" class="structure-box"></div>
@@ -196,6 +199,8 @@ const productSelect=document.getElementById('productSelect');
 const productQty=document.getElementById('productQty');
 const unitPrice=document.getElementById('unitPrice');
 const lineTotal=document.getElementById('lineTotal');
+const supportChargeWrap=document.getElementById('supportChargeWrap');
+const supportChargeMode=document.getElementById('supportChargeMode');
 const pricingNote=document.getElementById('pricingNote');
 const kitPreview=document.getElementById('kitPreview');
 const addProductBtn=document.getElementById('addProductBtn');
@@ -262,6 +267,8 @@ const PRODUCT_RULES={
  KPV10:{id:'KPV10',name:'KPV 10mg',internal:35,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
  NAD500:{id:'NAD500',name:'NAD+ 500mg',internal:45,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
  AMINO50:{id:'AMINO50',name:'5-Amino-1MQ 50mg',internal:90,existing:null,standard:null,closeEligible:'Yes',plannerRange:true,kit:false},
+ BAC3_ITEM:{id:'BAC3_ITEM',name:'3ml water item',internal:0,existing:0,standard:0,closeEligible:'Yes',plannerRange:false,kit:false,supportItem:true,materialKey:'BAC3'},
+ BAC10_ITEM:{id:'BAC10_ITEM',name:'10ml water item',internal:0,existing:0,standard:0,closeEligible:'Yes',plannerRange:false,kit:false,supportItem:true,materialKey:'BAC10'},
  CUSTOM:{id:'CUSTOM',name:'Custom / added compound',internal:null,existing:null,standard:null,closeEligible:'No',plannerRange:false,kit:false,custom:true}
 };
 const STRUCTURE_RULES={
@@ -298,16 +305,71 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-function init(){document.getElementById('bootBadge').textContent='v32 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
-function bind(){['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
+function init(){document.getElementById('bootBadge').textContent='v34 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
+function bind(){['priceTier','productSelect','productQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));unitPrice.addEventListener('input',()=>{set('lineTotal',money(num('unitPrice')*Math.max(1,num('productQty'))));});['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
 function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Not paid');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
-function getProductPrice(pid,tier,qty=1){const p=PRODUCT_RULES[pid];let note='',review=false,price=null;if(!p)return{price:0,note:'No product rule found.',review:true};if(tier==='custom'||p.custom){return{price:0,note:'Custom price required.',review:true}}if(tier==='internal'){if(p.closeEligible==='No'){price=p.existing;note='Close price not enabled. Existing/private price should apply.';review=price==null}else if(p.closeEligible==='Temporary'){price=p.internal;note='Temporary close price active.'}else{price=p.internal;note='Internal/close price applied.'}}else{price=p[tier];note=(tier==='existing'?'Existing/private':'Planner/standard')+' price applied.'}if(price==null){price=0;review=true;note+=' Price needs confirmation / manual entry.'}if(pid==='RTA20'&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range — manual price review required. Safe unit price shown until override.';review=true}return{price,note,review};}
+function getProductPrice(pid,tier,qty=1){
+  const p=PRODUCT_RULES[pid];
+  let note='',review=false,price=null;
+  if(!p)return{price:0,note:'No product rule found.',review:true};
+  if(p.supportItem){
+    const mode=supportChargeMode?val('supportChargeMode'):'charged';
+    if(mode==='charged'){
+      price=num('unitPrice');
+      note='Supporting item charged separately. Stock will deduct when saved.';
+      review=price<=0;
+      if(review) note+=' Enter unit charge before adding if charging the customer.';
+    }else if(mode==='included'){
+      price=0;
+      note='Supporting item included / no extra customer charge. Stock will still deduct.';
+    }else{
+      price=0;
+      note='Supporting item tracked internally only. Stock will deduct without adding revenue.';
+    }
+    return{price,note,review};
+  }
+  if(tier==='custom'||p.custom){return{price:0,note:'Custom price required.',review:true}}
+  if(tier==='internal'){
+    if(p.closeEligible==='No'){
+      price=p.existing;
+      note='Close price not enabled. Existing/private price should apply.';
+      review=price==null;
+    }else if(p.closeEligible==='Temporary'){
+      price=p.internal;
+      note='Temporary close price active.';
+    }else{
+      price=p.internal;
+      note='Internal/close price applied.';
+    }
+  }else{
+    price=p[tier];
+    note=(tier==='existing'?'Existing/private':'Planner/standard')+' price applied.';
+  }
+  if(price==null){price=0;review=true;note+=' Price needs confirmation / manual entry.'}
+  if(pid==='RTA20'&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range — manual price review required. Safe unit price shown until override.';review=true}
+  return{price,note,review};
+}
 function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];let price=s.prices[tier],note='',review=false;if(tier==='custom'){return{price:0,note:'Custom structure price required.',review:true}}if(tier==='internal'){if(s.closeEligible==='No'){price=s.prices.existing;note='Close price not enabled. Existing/private should apply.';review=price==null}else if(s.closeEligible==='Temporary'){note='Temporary close structure price active.'}else note='Internal/close structure price applied.'}else{note='This structure price is not locked for this tier. Manual review required unless a confirmed tier price is added.';review=true;if(price==null){price=sumStructureSinglePrices(sid,tier).total;note+=' Using available single-line total as temporary reference.'}}
 if(price==null||price===0){review=true;price=0;note+=' Price needs manual entry.'}return{price,note,review};}
 function sumStructureSinglePrices(sid,tier){const s=STRUCTURE_RULES[sid];let total=0,missing=false;s.contents.forEach(([pid,qty])=>{let r=getProductPrice(pid,tier,qty);total+=r.price*qty;if(r.review)missing=true});return{total,missing}}
-function updateSinglePreview(){let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier');let r=getProductPrice(pid,tier,qty);set('unitPrice',r.price);set('lineTotal',money(r.price*qty));pricingNote.className='note'+(r.review?' warn':'');pricingNote.textContent=r.note;renderKitPreview(pid,qty,'kitPreview');}
+function updateSinglePreview(){
+  let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier');
+  const p=PRODUCT_RULES[pid];
+  const isSupport=!!(p&&p.supportItem);
+  supportChargeWrap?.classList.toggle('hide',!isSupport);
+  let r=getProductPrice(pid,tier,qty);
+  if(isSupport){
+    if(val('supportChargeMode')!=='charged') set('unitPrice',0);
+  }else{
+    set('unitPrice',r.price);
+  }
+  set('lineTotal',money(num('unitPrice')*qty));
+  pricingNote.className='note'+(r.review?' warn':'');
+  pricingNote.textContent=r.note;
+  renderKitPreview(pid,qty,'kitPreview');
+}
 function updateStructurePreview(){let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);set('structurePrice',r.price);structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=r.note;renderStructurePreview(sid,'structurePreview')}
-function renderKitPreview(pid,qty,target){const el=document.getElementById(target);if(pid==='RTA20'){el.innerHTML='<strong>Reta kit preview</strong><div class="tiny">Current default kit rule × '+qty+'</div>'+materialsHTML(retaMaterials(qty));}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
+function renderKitPreview(pid,qty,target){const el=document.getElementById(target);const p=PRODUCT_RULES[pid];if(pid==='RTA20'){el.innerHTML='<strong>Reta kit preview</strong><div class="tiny">Current default kit rule × '+qty+'</div>'+materialsHTML(retaMaterials(qty));}else if(p&&p.supportItem){let m={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};m[p.materialKey]=qty;el.innerHTML='<strong>Supporting item preview</strong><div class="tiny">Stock movement × '+qty+'</div>'+materialsHTML(m);}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
 function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">'+(s.label||s.type)+'</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>× '+qty+'</strong></div>'});let mats=structureMaterials(sid);if(Object.values(mats).some(v=>v>0))html+='<div class="divider"></div><strong>Attached materials</strong>'+materialsHTML(mats);else html+='<div class="divider"></div><span class="muted">No locked material rule except where Reta is included.</span>';document.getElementById(target).innerHTML=html}
 function retaMaterials(q){return{BAC3:q,BAC10:0,U100:q,WIPES:q*16,BOX:q,INSERT:q,INLAY:q}}
 function structureMaterials(sid){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};STRUCTURE_RULES[sid].contents.forEach(([pid,qty])=>{if(pid==='RTA20')addMats(mats,retaMaterials(qty))});return mats}
@@ -316,14 +378,16 @@ function addMats(target,source){Object.keys(target).forEach(k=>target[k]+=Number
 function addProduct(){
   let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier'),price=num('unitPrice'),p=PRODUCT_RULES[pid];
   let pr=getProductPrice(pid,tier,qty);
-  let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note);
+  const supportMode=p.supportItem?(val('supportChargeMode')||'charged'):null;
+  if(p.supportItem && supportMode!=='charged') price=0;
+  let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note&&(l.supportMode||null)===supportMode);
   if(existing){
     existing.qty+=qty;
     existing.review=existing.review||pr.review;
     existing.note=pr.note;
     showToast('Product quantity updated');
   }else{
-    current.lines.push({kind:'product',pid,qty,price,name:p.name,review:pr.review,note:pr.note});
+    current.lines.push({kind:'product',pid,qty,price,name:p.name,review:pr.review,note:pr.note,supportMode,materialKey:p.materialKey||null});
     showToast('Product added');
   }
   recalcMaterialsFromLines();
@@ -341,6 +405,11 @@ function lineTitle(l){
 }
 function lineSub(l){
   if(l.kind==='product'&&l.pid==='RTA20') return 'Default Reta kit rule attached';
+  if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){
+    if(l.supportMode==='charged') return 'Supporting item · charged separately';
+    if(l.supportMode==='included') return 'Supporting item · included / no extra charge';
+    return 'Supporting item · internal tracking only';
+  }
   if(l.kind==='structure') return 'Structure / pathway';
   return 'Single product';
 }
@@ -352,10 +421,10 @@ function renderOrder(){
   totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>'
 }
 function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines();renderOrder()}
-function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
+function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){current.materials[PRODUCT_RULES[l.pid].materialKey]+=Number(l.qty||0)}if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
 function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),total};}
 function saveOrderNow(){let o=orderPayload();if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();showToast('Order saved · queues and stock updated')}
-function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{if(l.kind==='product')stock[l.pid]=(stock[l.pid]??0)-l.qty;if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
+function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{if(l.kind==='product'&&!PRODUCT_RULES[l.pid]?.supportItem)stock[l.pid]=(stock[l.pid]??0)-l.qty;if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
 function renderAll(){renderQueues();renderStock();renderAdmin();renderOrder()}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
 function isReleaseStatus(status){return ['Sent / collected','Complete'].includes(status)}
@@ -469,7 +538,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v32 JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v34 JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
