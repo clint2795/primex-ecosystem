@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v28 audit cleanup</title>
+<title>PrimeX Finance HQ · v29 syntax repair</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -42,7 +42,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"><span class="tiny">Boot check: HTML loaded. Waiting for app script…</span></div>
     </section>
     <section class="card security">
-      <div class="section-title"><div><h3>Prototype safety</h3><p>v28 audit cleanup · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+      <div class="section-title"><div><h3>Prototype safety</h3><p>v29 syntax repair · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
     </section>
   </main>
 
@@ -315,7 +315,7 @@ function renderAll(){renderQueues();renderStock();renderAdmin();renderOrder()}
 function queueData(){return[{key:'pay',title:'Awaiting payment',orders:orders.filter(o=>['Awaiting payment','Part paid'].includes(o.payment)&&!['Cancelled','Complete'].includes(o.status)),sub:'payment actions'},{key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>o.payment==='Paid'&&['New','Awaiting payment','To pack / fulfil'].includes(o.status)),sub:'orders · postage items'},{key:'ready',title:'Ready send / collect',orders:orders.filter(o=>o.status==='Ready send / collect'),sub:'dispatch / collection'},{key:'hold',title:'Issues / hold',orders:orders.filter(o=>o.status==='Issue / hold'),sub:'needs review'}]}
 function renderQueues(){
   const active=window.lastQueue||'pay';
-  const cards=q=>q.map(x=>'<button class="queue-card '+(x.key===active?'active':'')+'" onclick="openQueue(\''+x.key+'\')"><div class="k">'+x.title+'</div><div class="n">'+x.orders.length+'</div><div class="s">'+(x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage items':x.sub)+'</div></button>').join('')+'<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="'+money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'">'+money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))+'</div><div class="s">tap to reveal</div></button>';
+  const cards=q=>q.map(x=>`<button class="queue-card ${x.key===active?'active':''}" onclick="openQueue('${x.key}')"><div class="k">${x.title}</div><div class="n">${x.orders.length}</div><div class="s">${x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage items':x.sub}</div></button>`).join('')+`<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="${money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))}">${money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0))}</div><div class="s">tap to reveal</div></button>`;
   queueCards.innerHTML=cards(queueData());
   queueCards2.innerHTML=cards(queueData());
   openQueue(active,true)
@@ -329,7 +329,7 @@ function renderStock(){let labels={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
 function renderAdmin(panel='system'){
   if(!adminPanel)return;
-  if(panel==='system')adminPanel.innerHTML='<div class="sysmap"><button onclick="showView('start')"><strong>Start</strong><small>Live queues and new order access</small></button><button onclick="showView('order')"><strong>Order</strong><small>Create/edit orders</small></button><button onclick="showView('queues')"><strong>Queues</strong><small>Operational lanes</small></button><button onclick="showView('stock')"><strong>Stock</strong><small>Prototype stock position</small></button><button onclick="showAdminPanel('products')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button><button onclick="showAdminPanel('structures')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button></div>';
+  if(panel==='system')adminPanel.innerHTML=`<div class="sysmap"><button onclick="showView('start')"><strong>Start</strong><small>Live queues and new order access</small></button><button onclick="showView('order')"><strong>Order</strong><small>Create/edit orders</small></button><button onclick="showView('queues')"><strong>Queues</strong><small>Operational lanes</small></button><button onclick="showView('stock')"><strong>Stock</strong><small>Prototype stock position</small></button><button onclick="showAdminPanel('products')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button><button onclick="showAdminPanel('structures')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button></div>`;
   if(panel==='products')adminPanel.innerHTML=Object.values(PRODUCT_RULES).map(p=>'<div class="rule-row"><div><strong>'+p.name+'</strong><span class="tiny">Close: '+p.closeEligible+' · Planner range: '+(p.plannerRange?'Yes':'No')+'</span></div><div class="tiny">Internal: '+(p.internal??'not locked')+' · Existing/private: '+(p.existing??'not locked')+' · Planner/standard: '+(p.standard??'not locked')+'</div></div>').join('');
   if(panel==='structures')adminPanel.innerHTML=Object.values(STRUCTURE_RULES).map(s=>'<div class="rule-row"><div><strong>'+s.name+'</strong><span class="tiny">'+(s.label||s.type)+' · Close: '+s.closeEligible+'</span></div><div class="tiny">Internal: '+(s.prices.internal??'not locked')+' · Existing/private: '+(s.prices.existing??'not locked')+' · Planner/standard: '+(s.prices.standard??'not locked')+'</div></div>').join('')+'<div class="note warn">Above locked structure range = manual price review. No endless discount stacking.</div>';
   if(panel==='security')adminPanel.innerHTML='<div class="note warn">GitHub Pages is prototype hosting only. Do not store real customer data until a secured backend/auth layer exists.</div>'
