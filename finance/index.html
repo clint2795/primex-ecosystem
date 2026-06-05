@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v34 support items stable</title>
+<title>PrimeX Finance HQ · v35 queue button action fix</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -22,7 +22,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v34</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v35</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="pill primary" id="newOrderTop">+ New Order</button>
@@ -42,7 +42,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"><span class="tiny">Boot check: HTML loaded. Waiting for app script…</span></div>
     </section>
     <section class="card security">
-      <div class="section-title"><div><h3>Prototype safety</h3><p>v34 rebuilt from v32 · Support item charge mode · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+      <div class="section-title"><div><h3>Prototype safety</h3><p>v35 queue button action fix · built from v34 · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
     </section>
   </main>
 
@@ -305,7 +305,7 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-function init(){document.getElementById('bootBadge').textContent='v34 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v35 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
 function bind(){['priceTier','productSelect','productQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));unitPrice.addEventListener('input',()=>{set('lineTotal',money(num('unitPrice')*Math.max(1,num('productQty'))));});['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
 function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Not paid');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
 function getProductPrice(pid,tier,qty=1){
@@ -440,9 +440,10 @@ function queueData(){return[
  {key:'hold',title:'Issues / hold',orders:orders.filter(o=>o.status==='Hold / issue'),sub:'needs review'}]
 }
 function htmlEscape(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function jsArg(v){return JSON.stringify(String(v??'')).replace(/"/g,'&quot;')}
 function queueCardHTML(x,active){
   const sub=x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage/collection items':x.sub;
-  return `<button class="queue-card ${x.key===active?'active':''}" onclick="openQueue(${JSON.stringify(x.key)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.orders.length}</div><div class="s">${htmlEscape(sub)}</div></button>`;
+  return `<button class="queue-card ${x.key===active?'active':''}" onclick="openQueue(${jsArg(x.key)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.orders.length}</div><div class="s">${htmlEscape(sub)}</div></button>`;
 }
 function activeValueCardHTML(){
   const total=money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0));
@@ -468,24 +469,24 @@ function queueRowHTML(o,key){
   return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${statusBadge(o)}</strong><span class="tiny">${htmlEscape(o.payment)} · ${htmlEscape(o.status)} · ${money(o.total)} · ${(o.postageItems||0)} postage items</span>${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
 }
 function queueButtons(o,key){
-  let b=`<button class="btn" onclick="loadOrder(${JSON.stringify(o.id)})">Open / edit</button>`;
+  let b=`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button>`;
   if(key==='pay'){
-    b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'payment','Paid')">Mark paid</button>`;
-    b+=`<button class="btn warn" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Ready to assemble')">Prep anyway</button>`;
-    b+=`<button class="btn" onclick="loadAndGenerateConfirmation(${JSON.stringify(o.id)})">Generate message</button>`;
+    b+=`<button class="btn good" onclick="quickUpdate(${jsArg(o.id)},'payment','Paid')">Mark paid</button>`;
+    b+=`<button class="btn warn" onclick="quickUpdate(${jsArg(o.id)},'status','Ready to assemble')">Prep anyway</button>`;
+    b+=`<button class="btn" onclick="loadAndGenerateConfirmation(${jsArg(o.id)})">Generate message</button>`;
   }
   if(key==='pack'){
-    b+=`<button class="btn" onclick="loadOrder(${JSON.stringify(o.id)})">View contents</button>`;
-    if(o.status==='Ready to assemble') b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Assembled')">Mark assembled</button>`;
-    b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Packed / ready to send-collect')">Mark packed</button>`;
+    b+=`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">View contents</button>`;
+    if(o.status==='Ready to assemble') b+=`<button class="btn good" onclick="quickUpdate(${jsArg(o.id)},'status','Assembled')">Mark assembled</button>`;
+    b+=`<button class="btn good" onclick="quickUpdate(${jsArg(o.id)},'status','Packed / ready to send-collect')">Mark packed</button>`;
   }
   if(key==='ready'){
     b+=`<button class="btn" onclick="window.open('https://www.royalmail.com/sending/click-and-drop','_blank')">Royal Mail</button>`;
-    b+=`<button class="btn" onclick="loadOrder(${JSON.stringify(o.id)})">Add tracking</button>`;
-    b+=`<button class="btn" onclick="loadAndGenerateFulfilment(${JSON.stringify(o.id)})">Generate update</button>`;
-    b+=`<button class="btn good" onclick="releaseOrder(${JSON.stringify(o.id)})">Sent / collected</button>`;
+    b+=`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Add tracking</button>`;
+    b+=`<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button>`;
+    b+=`<button class="btn good" onclick="releaseOrder(${jsArg(o.id)})">Sent / collected</button>`;
   }
-  if(key==='hold') b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Ready to assemble')">Return to workflow</button>`;
+  if(key==='hold') b+=`<button class="btn good" onclick="quickUpdate(${jsArg(o.id)},'status','Ready to assemble')">Return to workflow</button>`;
   return b;
 }
 function quickUpdate(id,field,value){
@@ -538,7 +539,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v34 JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v35 JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
