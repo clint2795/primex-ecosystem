@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v30 audit cleanup</title>
+<title>PrimeX Finance HQ · v32 storage guard</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -13,7 +13,7 @@
 }
 *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:radial-gradient(circle at top left,#121a25 0,#07090d 42%,#050609 100%);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);line-height:1.4;padding-bottom:84px}
 button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-width:1040px;margin:0 auto;padding:18px 14px 28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;border:1px solid #38516b;border-radius:11px;display:grid;place-items:center;color:var(--blue2);font-weight:800;letter-spacing:.02em;background:linear-gradient(145deg,#0d1420,#06080c)}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase}.brand h1{margin:0;font-size:18px;letter-spacing:.03em}.top-actions{display:flex;gap:8px;align-items:center}.pill{border:1px solid var(--line);background:#0b1017;color:var(--text);border-radius:999px;padding:9px 12px;font-size:13px}.pill.primary{background:linear-gradient(180deg,#153046,#102234);border-color:#426888;color:#eaf7ff}.pill.ghost{color:var(--muted)}
-.view{display:none}.view.active{display:block}.card{background:linear-gradient(180deg,rgba(17,23,34,.96),rgba(10,14,21,.96));border:1px solid var(--line2);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:12px 0}.card.slim{padding:12px}.section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2,.section-title h3{margin:0}.section-title h2{font-size:19px}.section-title h3{font-size:16px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}.muted{color:var(--muted)}.tiny{font-size:12px;color:var(--faint)}.grid{display:grid;gap:10px}.grid .full{grid-column:1/-1}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;background:#080c12;border:1px solid #253244;border-radius:10px;color:var(--text);padding:11px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#5f93bb;box-shadow:0 0 0 3px rgba(110,168,216,.12)}.field textarea{min-height:96px;resize:vertical}.readonly{background:#0d1420!important;color:#d7e9fb!important}.btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn{border:1px solid #2c3b4f;background:#101722;color:var(--text);border-radius:10px;padding:10px 12px}.btn.primary{background:#17334a;border-color:#517897}.btn.good{background:#12301f;border-color:#386e4c}.btn.warn{background:#332510;border-color:#735b27}.btn.danger{background:#331719;border-color:#694044}.btn.subtle{background:#0a0e15;color:var(--muted)}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(5,7,11,.94);border-top:1px solid #172130;backdrop-filter:blur(16px);z-index:50}.nav-inner{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px}.nav button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 4px;font-size:12px}.nav button.active{background:#111b28;color:#d9efff;border:1px solid #2f4c65}.queue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.queue-card{background:#0b1017;color:var(--text);border:1px solid #243247;border-radius:12px;padding:13px;text-align:left;min-height:102px;transition:.15s ease}.queue-card:hover{border-color:#507290;transform:translateY(-1px)}.queue-card .k{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}.queue-card .n{font-size:24px;font-weight:800;margin-top:8px;color:var(--text)}.queue-card .s{font-size:12px;color:var(--faint);margin-top:4px}.queue-card.active{border-color:#6ea8d8;background:#101b29;box-shadow:inset 0 0 0 1px rgba(110,168,216,.18)}.value-hidden{filter:blur(5px);user-select:none}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:1px solid #1d2838;border-radius:12px;padding:11px;background:#0a0f16;margin:8px 0}.line-item strong,.queue-row strong{display:block}.money{font-weight:800;color:#e9f8ff}.note{border-left:3px solid var(--blue);padding:10px 12px;background:#0b121b;border-radius:10px;color:#c7d8e9;font-size:13px}.note.warn{border-left-color:var(--amber)}.note.good{border-left-color:var(--green)}.structure-box{border:1px solid #2a4158;background:#09121c;border-radius:12px;padding:12px;margin-top:10px}.tag{display:inline-flex;align-items:center;gap:5px;border:1px solid #26374b;background:#0b111a;color:#bcd0df;border-radius:999px;padding:5px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}.tabs button{border:1px solid #27384d;background:#0b1018;color:var(--muted);border-radius:999px;padding:8px 10px;font-size:13px}.tabs button.active{color:#e8f6ff;border-color:#5f8db0;background:#102234}.hide{display:none!important}.divider{height:1px;background:#1b2635;margin:14px 0}.summary-line{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #16202d;padding:8px 0}.summary-line:last-child{border:0}.sysmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sysmap button{text-align:left;border:1px solid #243247;background:#0a1018;border-radius:12px;padding:13px;color:var(--text)}.sysmap small{display:block;color:var(--muted);margin-top:4px}.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:#0e1824;border:1px solid #38516b;color:#e9f8ff;border-radius:999px;padding:10px 14px;font-size:13px;box-shadow:var(--shadow);z-index:90;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.security{border-color:#6f4e21;background:#15110b}.admin-only{border-left:3px solid #557fa0}
+.view{display:none}.view.active{display:block}.card{background:linear-gradient(180deg,rgba(17,23,34,.96),rgba(10,14,21,.96));border:1px solid var(--line2);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:12px 0}.card.slim{padding:12px}.section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2,.section-title h3{margin:0}.section-title h2{font-size:19px}.section-title h3{font-size:16px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}.muted{color:var(--muted)}.tiny{font-size:12px;color:var(--faint)}.grid{display:grid;gap:10px}.grid .full{grid-column:1/-1}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;background:#080c12;border:1px solid #253244;border-radius:10px;color:var(--text);padding:11px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#5f93bb;box-shadow:0 0 0 3px rgba(110,168,216,.12)}.field textarea{min-height:96px;resize:vertical}.readonly{background:#0d1420!important;color:#d7e9fb!important}.btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn{border:1px solid #2c3b4f;background:#101722;color:var(--text);border-radius:10px;padding:10px 12px}.btn.primary{background:#17334a;border-color:#517897}.btn.good{background:#12301f;border-color:#386e4c}.btn.warn{background:#332510;border-color:#735b27}.btn.danger{background:#331719;border-color:#694044}.btn.subtle{background:#0a0e15;color:var(--muted)}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(5,7,11,.94);border-top:1px solid #172130;backdrop-filter:blur(16px);z-index:50}.nav-inner{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px}.nav button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 4px;font-size:12px}.nav button.active{background:#111b28;color:#d9efff;border:1px solid #2f4c65}.queue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.queue-card{background:#0b1017;color:var(--text);border:1px solid #243247;border-radius:12px;padding:13px;text-align:left;min-height:102px;transition:.15s ease}.queue-card:hover{border-color:#507290;transform:translateY(-1px)}.queue-card .k{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}.queue-card .n{font-size:24px;font-weight:800;margin-top:8px;color:var(--text)}.queue-card .s{font-size:12px;color:var(--faint);margin-top:4px}.queue-card.active{border-color:#6ea8d8;background:#101b29;box-shadow:inset 0 0 0 1px rgba(110,168,216,.18)}.value-hidden{filter:blur(5px);user-select:none}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:1px solid #1d2838;border-radius:12px;padding:11px;background:#0a0f16;margin:8px 0}.line-item strong,.queue-row strong{display:block}.money{font-weight:800;color:#e9f8ff}.note{border-left:3px solid var(--blue);padding:10px 12px;background:#0b121b;border-radius:10px;color:#c7d8e9;font-size:13px}.note.warn{border-left-color:var(--amber)}.note.good{border-left-color:var(--green)}.structure-box{border:1px solid #2a4158;background:#09121c;border-radius:12px;padding:12px;margin-top:10px}.tag{display:inline-flex;align-items:center;gap:5px;border:1px solid #26374b;background:#0b111a;color:#bcd0df;border-radius:999px;padding:5px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.badge-warn{display:inline-flex;border:1px solid #7a5b24;background:#25190a;color:#ffd98a;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}.badge-good{display:inline-flex;border:1px solid #315f45;background:#0f2418;color:#a7f0c0;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}.blocked{border-color:#7a5b24!important;background:#15110b!important}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}.tabs button{border:1px solid #27384d;background:#0b1018;color:var(--muted);border-radius:999px;padding:8px 10px;font-size:13px}.tabs button.active{color:#e8f6ff;border-color:#5f8db0;background:#102234}.hide{display:none!important}.divider{height:1px;background:#1b2635;margin:14px 0}.summary-line{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #16202d;padding:8px 0}.summary-line:last-child{border:0}.sysmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sysmap button{text-align:left;border:1px solid #243247;background:#0a1018;border-radius:12px;padding:13px;color:var(--text)}.sysmap small{display:block;color:var(--muted);margin-top:4px}.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:#0e1824;border:1px solid #38516b;color:#e9f8ff;border-radius:999px;padding:10px 14px;font-size:13px;box-shadow:var(--shadow);z-index:90;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.security{border-color:#6f4e21;background:#15110b}.admin-only{border-left:3px solid #557fa0}
 @media(max-width:760px){.wrap{padding:14px 10px 26px}.grid.two,.grid.three,.grid.four,.queue-grid,.sysmap{grid-template-columns:1fr}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:stretch}.pill{font-size:12px;padding:8px 10px}.card{padding:13px}.queue-card{min-height:auto}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:block}.line-item .btnrow,.queue-row .btnrow{margin-top:10px}.nav-inner{grid-template-columns:repeat(5,1fr)}.nav button{font-size:11px}}
 </style>
 </head>
@@ -42,7 +42,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"><span class="tiny">Boot check: HTML loaded. Waiting for app script…</span></div>
     </section>
     <section class="card security">
-      <div class="section-title"><div><h3>Prototype safety</h3><p>v30 audit cleanup · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+      <div class="section-title"><div><h3>Prototype safety</h3><p>v32 storage guard · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
     </section>
   </main>
 
@@ -56,12 +56,17 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       </div>
       <div class="grid three" style="margin-top:10px">
         <div class="field"><label>Price tier</label><select id="priceTier"><option value="standard">Planner / standard</option><option value="existing">Existing / private</option><option value="internal">Internal / close</option><option value="custom">Custom</option></select></div>
-        <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Paid</option><option>Part paid</option><option>Refunded</option></select></div>
+        <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Not paid</option><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Waived</option><option>Pay on collection</option><option>Approved credit</option><option>Refunded</option></select></div>
         <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Customer collection</option><option>Local drop-off</option></select></div>
       </div>
       <div class="grid two" style="margin-top:10px">
         <div class="field"><label>Order notes</label><textarea id="orderNotes" placeholder="Internal order notes if needed"></textarea></div>
         <div class="field"><label>Customer / handling note</label><textarea id="customerNote" placeholder="Anything Jade / packer should know"></textarea></div>
+      </div>
+      <div class="grid three" style="margin-top:10px">
+        <div class="field"><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"></div>
+        <div class="field"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select></div>
+        <div class="field"><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></div>
       </div>
     </section>
 
@@ -138,10 +143,12 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div class="section-title"><div><h2>Final check</h2><p>Save updates queues and prototype stock.</p></div></div>
       <div id="totalsBox"></div>
       <div class="grid two" style="margin-top:10px">
-        <div class="field"><label>Order status</label><select id="orderStatus"><option>New</option><option>Awaiting payment</option><option>To pack / fulfil</option><option>Ready send / collect</option><option>Shipped / collected</option><option>Complete</option><option>Issue / hold</option><option>Cancelled</option></select></div>
+        <div class="field"><label>Order status</label><select id="orderStatus"><option>New / awaiting payment</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
         <div class="field"><label>Confirmation sent?</label><select id="confirmationSent"><option>No</option><option>Yes</option></select></div>
+        <div class="field"><label>Fulfilment update sent?</label><select id="updateSent"><option>No</option><option>Yes</option></select></div>
+        <div class="field"><label>Order confirmation message</label><textarea id="confirmationMsg" class="readonly" readonly></textarea></div>
       </div>
-      <div class="btnrow" style="margin-top:12px"><button class="btn good" id="saveOrder">Save / update order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate order confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn good" id="saveOrder">Save / update order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
     </section>
   </main>
 
@@ -178,6 +185,9 @@ const orderNotes=document.getElementById('orderNotes');
 const customerNote=document.getElementById('customerNote');
 const priceTier=document.getElementById('priceTier');
 const paymentStatus=document.getElementById('paymentStatus');
+const paymentDueNote=document.getElementById('paymentDueNote');
+const releaseOverride=document.getElementById('releaseOverride');
+const releaseApprovedBy=document.getElementById('releaseApprovedBy');
 const fulfilmentMethod=document.getElementById('fulfilmentMethod');
 const modeSingle=document.getElementById('modeSingle');
 const modeStructure=document.getElementById('modeStructure');
@@ -223,9 +233,13 @@ const genAddress=document.getElementById('genAddress');
 const copyAddress=document.getElementById('copyAddress');
 const openRM=document.getElementById('openRM');
 const genFulfilment=document.getElementById('genFulfilment');
+const genConfirmation=document.getElementById('genConfirmation');
+const copyConfirmation=document.getElementById('copyConfirmation');
+const confirmationMsg=document.getElementById('confirmationMsg');
 const totalsBox=document.getElementById('totalsBox');
 const orderStatus=document.getElementById('orderStatus');
 const confirmationSent=document.getElementById('confirmationSent');
+const updateSent=document.getElementById('updateSent');
 const saveOrder=document.getElementById('saveOrder');
 const archiveOrder=document.getElementById('archiveOrder');
 const queueCards2=document.getElementById('queueCards2');
@@ -258,8 +272,22 @@ const STRUCTURE_RULES={
  GUT_PAIR:{id:'GUT_PAIR',name:'Gut / Inflammation Structure · Paired',type:'Pathway',contents:[['BPC40',2],['KPV10',1]],prices:{internal:100,existing:null,standard:null},closeEligible:'Yes',label:'2 × BPC-157 + 1 × KPV'}
 };
 const INITIAL_STOCK={RTA20:10,BAC3:30,BAC10:12,U100:20,WIPES:500,BOX:20,INSERT:40,INLAY:40};
-let orders=JSON.parse(localStorage.getItem('px_orders_v21')||'[]');
-let stock=JSON.parse(localStorage.getItem('px_stock_v21')||JSON.stringify(INITIAL_STOCK));
+function safeLoadJSON(key, fallback){
+  const raw = localStorage.getItem(key);
+  if(!raw) return fallback;
+  try { return JSON.parse(raw); }
+  catch(e){
+    console.warn('Resetting corrupt localStorage key', key, e);
+    localStorage.removeItem(key);
+    const warning = document.getElementById('queueList');
+    if(warning){
+      warning.innerHTML = '<div class="note warn"><strong>Local test data reset</strong><br>Old browser test data was corrupt, so this prototype cleared it and restarted clean.</div>';
+    }
+    return fallback;
+  }
+}
+let orders=safeLoadJSON('px_orders_v21',[]);
+let stock=safeLoadJSON('px_stock_v21',JSON.parse(JSON.stringify(INITIAL_STOCK)));
 let current={id:null,lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};
 let addMode='single';
 function money(n){return '£'+Number(n||0).toFixed(2)}
@@ -270,9 +298,9 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-function init(){document.getElementById('bootBadge').textContent='v30 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
-function bind(){['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
-function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Awaiting payment');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New');set('confirmationSent','No');['orderNotes','customerNote','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v32 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
+function bind(){['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
+function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Not paid');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
 function getProductPrice(pid,tier,qty=1){const p=PRODUCT_RULES[pid];let note='',review=false,price=null;if(!p)return{price:0,note:'No product rule found.',review:true};if(tier==='custom'||p.custom){return{price:0,note:'Custom price required.',review:true}}if(tier==='internal'){if(p.closeEligible==='No'){price=p.existing;note='Close price not enabled. Existing/private price should apply.';review=price==null}else if(p.closeEligible==='Temporary'){price=p.internal;note='Temporary close price active.'}else{price=p.internal;note='Internal/close price applied.'}}else{price=p[tier];note=(tier==='existing'?'Existing/private':'Planner/standard')+' price applied.'}if(price==null){price=0;review=true;note+=' Price needs confirmation / manual entry.'}if(pid==='RTA20'&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range — manual price review required. Safe unit price shown until override.';review=true}return{price,note,review};}
 function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];let price=s.prices[tier],note='',review=false;if(tier==='custom'){return{price:0,note:'Custom structure price required.',review:true}}if(tier==='internal'){if(s.closeEligible==='No'){price=s.prices.existing;note='Close price not enabled. Existing/private should apply.';review=price==null}else if(s.closeEligible==='Temporary'){note='Temporary close structure price active.'}else note='Internal/close structure price applied.'}else{note='This structure price is not locked for this tier. Manual review required unless a confirmed tier price is added.';review=true;if(price==null){price=sumStructureSinglePrices(sid,tier).total;note+=' Using available single-line total as temporary reference.'}}
 if(price==null||price===0){review=true;price=0;note+=' Price needs manual entry.'}return{price,note,review};}
@@ -325,20 +353,31 @@ function renderOrder(){
 }
 function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines();renderOrder()}
 function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
-function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),total};}
-function saveOrderNow(){let o=orderPayload();let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();showToast('Order saved · queues and stock updated')}
+function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),total};}
+function saveOrderNow(){let o=orderPayload();if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();showToast('Order saved · queues and stock updated')}
 function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{if(l.kind==='product')stock[l.pid]=(stock[l.pid]??0)-l.qty;if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
 function renderAll(){renderQueues();renderStock();renderAdmin();renderOrder()}
-function queueData(){return[{key:'pay',title:'Awaiting payment',orders:orders.filter(o=>['Awaiting payment','Part paid'].includes(o.payment)&&!['Cancelled','Complete'].includes(o.status)),sub:'payment actions'},{key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>o.payment==='Paid'&&['New','Awaiting payment','To pack / fulfil'].includes(o.status)),sub:'orders · postage items'},{key:'ready',title:'Ready send / collect',orders:orders.filter(o=>o.status==='Ready send / collect'),sub:'dispatch / collection'},{key:'hold',title:'Issues / hold',orders:orders.filter(o=>o.status==='Issue / hold'),sub:'needs review'}]}
-
+function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
+function isReleaseStatus(status){return ['Sent / collected','Complete'].includes(status)}
+function isActiveStatus(o){return !['Cancelled','Complete'].includes(o.status)}
+function statusBadge(o){
+  if(!isPaymentCleared(o)) return '<span class="badge-warn">Payment not complete</span>';
+  return '<span class="badge-good">Paid/cleared</span>';
+}
+function queueData(){return[
+ {key:'pay',title:'Awaiting payment',orders:orders.filter(o=>!isPaymentCleared(o)&&isActiveStatus(o)),sub:'payment actions'},
+ {key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>['Ready to assemble','Assembled'].includes(o.status)),sub:'orders · postage items'},
+ {key:'ready',title:'Ready send / collect',orders:orders.filter(o=>o.status==='Packed / ready to send-collect'),sub:'dispatch / collection'},
+ {key:'hold',title:'Issues / hold',orders:orders.filter(o=>o.status==='Hold / issue'),sub:'needs review'}]
+}
 function htmlEscape(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function queueCardHTML(x,active){
-  const sub=x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage items':x.sub;
-  return '<button class="queue-card '+(x.key===active?'active':'')+'" onclick="openQueue(''+x.key+'')"><div class="k">'+htmlEscape(x.title)+'</div><div class="n">'+x.orders.length+'</div><div class="s">'+htmlEscape(sub)+'</div></button>';
+  const sub=x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage/collection items':x.sub;
+  return `<button class="queue-card ${x.key===active?'active':''}" onclick="openQueue(${JSON.stringify(x.key)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.orders.length}</div><div class="s">${htmlEscape(sub)}</div></button>`;
 }
 function activeValueCardHTML(){
   const total=money(orders.reduce((a,o)=>a+(o.status!=='Cancelled'?o.total:0),0));
-  return '<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="'+htmlEscape(total)+'">'+htmlEscape(total)+'</div><div class="s">tap to reveal</div></button>';
+  return `<button class="queue-card" onclick="toggleValue(this)"><div class="k">Active value</div><div class="n value-hidden" data-value="${htmlEscape(total)}">${htmlEscape(total)}</div><div class="s">tap to reveal</div></button>`;
 }
 function renderQueues(){
   const active=window.lastQueue||'pay';
@@ -347,10 +386,59 @@ function renderQueues(){
   queueCards2.innerHTML=cards;
   openQueue(active,true);
 }
-function openQueue(key,skipCardRender=false){window.lastQueue=key;if(!skipCardRender){renderQueues();return}let q=queueData().find(x=>x.key===key),html='<div class="section-title"><div><h3>'+q.title+'</h3><p>'+q.orders.length+' matching orders</p></div></div>';html+=q.orders.length?q.orders.map(o=>'<div class="queue-row"><div><strong>'+o.id+' · '+(o.customer||'No customer ref')+'</strong><span class="tiny">'+o.payment+' · '+o.status+' · '+money(o.total)+' · '+(o.postageItems||0)+' postage items</span></div><div class="btnrow">'+queueButtons(o,key)+'</div></div>').join(''):'<div class="muted">No orders in this lane.</div>';queueList.innerHTML=html;queueList2.innerHTML=html}
-function queueButtons(o,key){let b='<button class="btn" onclick="loadOrder(\''+o.id+'\')">Open / edit</button>';if(key==='pay')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'payment\',\'Paid\')">Mark paid</button>';if(key==='pack')b+='<button class="btn" onclick="loadOrder(\''+o.id+'\')">View contents</button><button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'Ready send / collect\')">Mark packed / ready</button>';if(key==='ready')b+='<button class="btn" onclick="window.open(\'https://www.royalmail.com/sending/click-and-drop\',\'_blank\')">Royal Mail</button><button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'Shipped / collected\')">Sent</button>';if(key==='hold')b+='<button class="btn good" onclick="quickUpdate(\''+o.id+'\',\'status\',\'To pack / fulfil\')">Return</button>';return b}
-function quickUpdate(id,field,value){let o=orders.find(x=>x.id===id);if(!o)return;o[field]=value;if(field==='payment'&&value==='Paid'&&o.status==='New')o.status='To pack / fulfil';saveLocal();renderAll();showToast('Updated '+id)}
-function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation);set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageItems',o.postageItems);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
+function openQueue(key,skipCardRender=false){
+  window.lastQueue=key;
+  if(!skipCardRender){renderQueues();return}
+  let q=queueData().find(x=>x.key===key)||queueData()[0];
+  let html=`<div class="section-title"><div><h3>${htmlEscape(q.title)}</h3><p>${q.orders.length} matching orders</p></div></div>`;
+  html+=q.orders.length?q.orders.map(o=>queueRowHTML(o,key)).join(''):'<div class="muted">No orders in this lane.</div>';
+  queueList.innerHTML=html;queueList2.innerHTML=html;
+}
+function queueRowHTML(o,key){
+  const cls=!isPaymentCleared(o)&&['pack','ready'].includes(key)?'queue-row blocked':'queue-row';
+  return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${statusBadge(o)}</strong><span class="tiny">${htmlEscape(o.payment)} · ${htmlEscape(o.status)} · ${money(o.total)} · ${(o.postageItems||0)} postage items</span>${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
+}
+function queueButtons(o,key){
+  let b=`<button class="btn" onclick="loadOrder(${JSON.stringify(o.id)})">Open / edit</button>`;
+  if(key==='pay'){
+    b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'payment','Paid')">Mark paid</button>`;
+    b+=`<button class="btn warn" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Ready to assemble')">Prep anyway</button>`;
+    b+=`<button class="btn" onclick="loadAndGenerateConfirmation(${JSON.stringify(o.id)})">Generate message</button>`;
+  }
+  if(key==='pack'){
+    b+=`<button class="btn" onclick="loadOrder(${JSON.stringify(o.id)})">View contents</button>`;
+    if(o.status==='Ready to assemble') b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Assembled')">Mark assembled</button>`;
+    b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Packed / ready to send-collect')">Mark packed</button>`;
+  }
+  if(key==='ready'){
+    b+=`<button class="btn" onclick="window.open('https://www.royalmail.com/sending/click-and-drop','_blank')">Royal Mail</button>`;
+    b+=`<button class="btn" onclick="loadOrder(${JSON.stringify(o.id)})">Add tracking</button>`;
+    b+=`<button class="btn" onclick="loadAndGenerateFulfilment(${JSON.stringify(o.id)})">Generate update</button>`;
+    b+=`<button class="btn good" onclick="releaseOrder(${JSON.stringify(o.id)})">Sent / collected</button>`;
+  }
+  if(key==='hold') b+=`<button class="btn good" onclick="quickUpdate(${JSON.stringify(o.id)},'status','Ready to assemble')">Return to workflow</button>`;
+  return b;
+}
+function quickUpdate(id,field,value){
+  let o=orders.find(x=>x.id===id);if(!o)return;
+  o[field]=value;
+  if(field==='payment'&&value==='Paid'&&o.status==='New / awaiting payment')o.status='Ready to assemble';
+  saveLocal();renderAll();showToast('Updated '+id);
+}
+function releaseOrder(id){
+  let o=orders.find(x=>x.id===id);if(!o)return;
+  if(!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){
+    const ok=confirm('Payment is not marked complete. Do not release unless explicitly approved. Release anyway?');
+    if(!ok){showToast('Release blocked · payment not complete');return}
+    o.releaseOverride='Yes';
+    o.releaseApprovedBy=o.releaseApprovedBy||'Manual override';
+  }
+  o.status='Sent / collected';
+  saveLocal();renderAll();showToast('Marked sent / collected');
+}
+function loadAndGenerateConfirmation(id){loadOrder(id);generateConfirmation();showView('order')}
+function loadAndGenerateFulfilment(id){loadOrder(id);generateFulfilment();showView('order')}
+function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageItems',o.postageItems);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
 function toggleValue(btn){btn.querySelector('.value-hidden').classList.toggle('value-hidden')}
 function renderStock(){let labels={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',TA110:'Thymosin Alpha-1 10mg',KPV10:'KPV 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'MAG-BOX-170x125x38',INSERT:'Insert',INLAY:'Inlay card'};stockList.innerHTML=Object.keys(stock).map(k=>'<div class="stock-row"><span>'+labels[k]+'</span><strong>'+stock[k]+'</strong></div>').join('')}
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
@@ -374,13 +462,14 @@ function renderAdmin(panel='system'){
   }
   if(panel==='security')adminPanel.innerHTML='<div class="note warn">GitHub Pages is prototype hosting only. Do not store real customer data until a secured backend/auth layer exists.</div>';
 }
+function generateConfirmation(){let lines=current.lines.map(l=>lineTitle(l)+' — '+money(l.kind==='product'?l.price*l.qty:l.price)).join('\n');let msg='PrimeX BioLabs — Order Confirmation\n\nOrder Ref: '+val('orderRef')+'\n';if(val('customerRef'))msg+='Reference: '+val('customerRef')+'\n';msg+='\nItems confirmed:\n'+(lines||'No items added yet')+'\n\nTotal confirmed: '+totalsBox.querySelector('.money')?.textContent+'\nPayment status: '+val('paymentStatus');if(val('paymentDueNote'))msg+='\nPayment note: '+val('paymentDueNote');msg+='\nFulfilment method: '+val('fulfilmentMethod')+'\n\nFinal postage/package details are confirmed during order processing.\nResearch Use Only. Not for human or animal use. Not a medicine.';set('confirmationMsg',msg);showToast('Order confirmation generated')}
 function generateAddress(){let parts=[val('recName'),val('addr1'),val('addr2'),val('town'),val('postcode')].filter(Boolean);set('addressBlock',parts.join('\n')+'\n\nOrder ref: '+val('orderRef')+'\nItems: '+(num('postageItems')||1)+'\nPhone/ref: '+val('recPhone'));showToast('Address block generated')}
-function generateFulfilment(){let msg='PrimeX BioLabs — Fulfilment Update\n\nOrder Ref: '+val('orderRef')+'\nStatus: '+val('orderStatus')+'\nFulfilment: '+val('fulfilmentMethod');if(val('trackingRef'))msg+='\nTracking / ref: '+val('trackingRef');msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg)}
+function generateFulfilment(){let msg='PrimeX BioLabs — Fulfilment Update\n\nOrder Ref: '+val('orderRef')+'\nStatus: '+val('orderStatus')+'\nFulfilment: '+val('fulfilmentMethod');if(val('trackingRef'))msg+='\nTracking / ref: '+val('trackingRef');if(val('deliveryNotes'))msg+='\nDelivery notes: '+val('deliveryNotes');if(!['Paid','Waived','Approved credit'].includes(val('paymentStatus')))msg+='\n\nInternal warning: payment is not marked complete. Do not release unless approved.';msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg);showToast('Fulfilment update generated')}
 function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v30 JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v32 JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
