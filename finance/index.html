@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v35 queue button action fix</title>
+<title>PrimeX Finance HQ · v36 order controls + queue actions</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -149,9 +149,10 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <div class="field"><label>Order status</label><select id="orderStatus"><option>New / awaiting payment</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
         <div class="field"><label>Confirmation sent?</label><select id="confirmationSent"><option>No</option><option>Yes</option></select></div>
         <div class="field"><label>Fulfilment update sent?</label><select id="updateSent"><option>No</option><option>Yes</option></select></div>
+        <div class="field"><label>Cancel / void reason</label><textarea id="voidReason" placeholder="Reason if this order is cancelled or voided"></textarea></div>
         <div class="field"><label>Order confirmation message</label><textarea id="confirmationMsg" class="readonly" readonly></textarea></div>
       </div>
-      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate order confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn good" id="saveOrder">Save / update order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate order confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn good" id="saveOrder">Save / update order</button><button class="btn warn" id="archiveOrder">Archive complete</button><button class="btn danger" id="voidOrder">Cancel / void order</button><button class="btn danger" id="deleteOrder">Delete test order</button></div>
     </section>
   </main>
 
@@ -247,6 +248,9 @@ const confirmationSent=document.getElementById('confirmationSent');
 const updateSent=document.getElementById('updateSent');
 const saveOrder=document.getElementById('saveOrder');
 const archiveOrder=document.getElementById('archiveOrder');
+const voidOrder=document.getElementById('voidOrder');
+const deleteOrder=document.getElementById('deleteOrder');
+const voidReason=document.getElementById('voidReason');
 const queueCards2=document.getElementById('queueCards2');
 const queueList2=document.getElementById('queueList2');
 const stockList=document.getElementById('stockList');
@@ -305,9 +309,9 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-function init(){document.getElementById('bootBadge').textContent='v35 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
-function bind(){['priceTier','productSelect','productQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));unitPrice.addEventListener('input',()=>{set('lineTotal',money(num('unitPrice')*Math.max(1,num('productQty'))));});['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
-function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Not paid');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v36 JS OK';document.getElementById('bootBadge').style.color='#73c28b';Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();renderAll();}
+function bind(){['priceTier','productSelect','productQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));unitPrice.addEventListener('input',()=>{set('lineTotal',money(num('unitPrice')*Math.max(1,num('productQty'))));});['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};voidOrder.onclick=voidCurrentOrder;deleteOrder.onclick=deleteCurrentOrder;newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://www.royalmail.com/sending/click-and-drop','_blank');genFulfilment.onclick=generateFulfilment;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge','postageCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));}
+function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('priceTier','standard');set('paymentStatus','Not paid');set('fulfilmentMethod','Hold / not arranged');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','voidReason','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
 function getProductPrice(pid,tier,qty=1){
   const p=PRODUCT_RULES[pid];
   let note='',review=false,price=null;
@@ -422,8 +426,43 @@ function renderOrder(){
 }
 function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines();renderOrder()}
 function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){current.materials[PRODUCT_RULES[l.pid].materialKey]+=Number(l.qty||0)}if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
-function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),total};}
+function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),voidReason:val('voidReason'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),total};}
 function saveOrderNow(){let o=orderPayload();if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();showToast('Order saved · queues and stock updated')}
+
+function voidCurrentOrder(){
+  const id=current.id;
+  let reason=val('voidReason') || prompt('Reason for cancelling / voiding this order?') || '';
+  if(!confirm('Cancel / void order '+id+'? It will leave active queues and stop counting as a live sale.')) return;
+  set('voidReason',reason);
+  set('orderStatus','Cancelled');
+  let o=orderPayload();
+  o.voidReason=reason;
+  let idx=orders.findIndex(x=>x.id===id);
+  if(idx>=0) orders[idx]=o; else orders.push(o);
+  recalcStock();saveLocal();renderAll();showToast('Order cancelled / voided');showView('queues');
+}
+function deleteCurrentOrder(){
+  const id=current.id;
+  if(!confirm('Delete TEST order '+id+' completely from this browser? Use only for test mistakes.')) return;
+  orders=orders.filter(o=>o.id!==id);
+  recalcStock();saveLocal();newOrder();renderAll();showToast('Test order deleted');showView('queues');
+}
+function deleteOrderById(id){
+  if(!confirm('Delete TEST order '+id+' completely from this browser?')) return;
+  orders=orders.filter(o=>o.id!==id);
+  recalcStock();saveLocal();renderAll();showToast('Test order deleted');
+}
+function voidOrderById(id){
+  let o=orders.find(x=>x.id===id); if(!o) return;
+  let reason=prompt('Reason for cancelling / voiding '+id+'?') || '';
+  if(!confirm('Cancel / void order '+id+'?')) return;
+  o.status='Cancelled'; o.voidReason=reason;
+  recalcStock();saveLocal();renderAll();showToast('Order cancelled / voided');
+}
+function clearAllTestOrders(){
+  if(!confirm('Clear ALL prototype orders from this browser? Stock will reset to prototype starting stock.')) return;
+  orders=[];stock=JSON.parse(JSON.stringify(INITIAL_STOCK));saveLocal();newOrder();renderAll();showToast('All test orders cleared');
+}
 function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{if(l.kind==='product'&&!PRODUCT_RULES[l.pid]?.supportItem)stock[l.pid]=(stock[l.pid]??0)-l.qty;if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
 function renderAll(){renderQueues();renderStock();renderAdmin();renderOrder()}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
@@ -487,6 +526,8 @@ function queueButtons(o,key){
     b+=`<button class="btn good" onclick="releaseOrder(${jsArg(o.id)})">Sent / collected</button>`;
   }
   if(key==='hold') b+=`<button class="btn good" onclick="quickUpdate(${jsArg(o.id)},'status','Ready to assemble')">Return to workflow</button>`;
+  b+=`<button class="btn danger" onclick="voidOrderById(${jsArg(o.id)})">Void</button>`;
+  b+=`<button class="btn subtle" onclick="deleteOrderById(${jsArg(o.id)})">Delete test</button>`;
   return b;
 }
 function quickUpdate(id,field,value){
@@ -508,7 +549,7 @@ function releaseOrder(id){
 }
 function loadAndGenerateConfirmation(id){loadOrder(id);generateConfirmation();showView('order')}
 function loadAndGenerateFulfilment(id){loadOrder(id);generateFulfilment();showView('order')}
-function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageItems',o.postageItems);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
+function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('voidReason',o.voidReason||'');set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageItems',o.postageItems);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
 function toggleValue(btn){btn.querySelector('.value-hidden').classList.toggle('value-hidden')}
 function renderStock(){let labels={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',TA110:'Thymosin Alpha-1 10mg',KPV10:'KPV 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'MAG-BOX-170x125x38',INSERT:'Insert',INLAY:'Inlay card'};stockList.innerHTML=Object.keys(stock).map(k=>'<div class="stock-row"><span>'+labels[k]+'</span><strong>'+stock[k]+'</strong></div>').join('')}
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
@@ -522,6 +563,7 @@ function renderAdmin(panel='system'){
       <button onclick="showView('stock')"><strong>Stock</strong><small>Prototype stock position</small></button>
       <button onclick="showAdminPanel('products')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button>
       <button onclick="showAdminPanel('structures')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button>
+      <button onclick="clearAllTestOrders()"><strong>Clear test orders</strong><small>Prototype reset for this browser only</small></button>
     </div>`;
   }
   if(panel==='products'){
@@ -539,7 +581,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v35 JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v36 JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
