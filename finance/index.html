@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v40.6 mobile test-order visibility</title>
+<title>PrimeX Finance HQ · v42.2 import safety + zero-price guard</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -14,8 +14,8 @@
 *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:radial-gradient(circle at top left,#121a25 0,#07090d 42%,#050609 100%);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);line-height:1.4;padding-bottom:84px}
 button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-width:1040px;margin:0 auto;padding:18px 14px 28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;border:1px solid #38516b;border-radius:11px;display:grid;place-items:center;color:var(--blue2);font-weight:800;letter-spacing:.02em;background:linear-gradient(145deg,#0d1420,#06080c)}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.18em;text-transform:uppercase}.brand h1{margin:0;font-size:18px;letter-spacing:.03em}.top-actions{display:flex;gap:8px;align-items:center}.pill{border:1px solid var(--line);background:#0b1017;color:var(--text);border-radius:999px;padding:9px 12px;font-size:13px}.pill.primary{background:linear-gradient(180deg,#153046,#102234);border-color:#426888;color:#eaf7ff}.pill.ghost{color:var(--muted)}
 .view{display:none}.view.active{display:block}.card{background:linear-gradient(180deg,rgba(17,23,34,.96),rgba(10,14,21,.96));border:1px solid var(--line2);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:12px 0}.card.slim{padding:12px}.section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2,.section-title h3{margin:0}.section-title h2{font-size:19px}.section-title h3{font-size:16px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}.muted{color:var(--muted)}.tiny{font-size:12px;color:var(--faint)}.grid{display:grid;gap:10px}.grid .full{grid-column:1/-1}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;background:#080c12;border:1px solid #253244;border-radius:10px;color:var(--text);padding:11px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#5f93bb;box-shadow:0 0 0 3px rgba(110,168,216,.12)}.field textarea{min-height:96px;resize:vertical}.readonly{background:#0d1420!important;color:#d7e9fb!important}.btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.btn{border:1px solid #2c3b4f;background:#101722;color:var(--text);border-radius:10px;padding:10px 12px}.btn.primary{background:#17334a;border-color:#517897}.btn.good{background:#12301f;border-color:#386e4c}.btn.warn{background:#332510;border-color:#735b27}.btn.danger{background:#331719;border-color:#694044}.btn.subtle{background:#0a0e15;color:var(--muted)}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(5,7,11,.94);border-top:1px solid #172130;backdrop-filter:blur(16px);z-index:50}.nav-inner{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:8px 8px}.nav button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 4px;font-size:12px}.nav button.active{background:#111b28;color:#d9efff;border:1px solid #2f4c65}.queue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.queue-card{background:#0b1017;color:var(--text);border:1px solid #243247;border-radius:12px;padding:13px;text-align:left;min-height:102px;transition:.15s ease}.queue-card:hover{border-color:#507290;transform:translateY(-1px)}.queue-card .k{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}.queue-card .n{font-size:24px;font-weight:800;margin-top:8px;color:var(--text)}.queue-card .s{font-size:12px;color:var(--faint);margin-top:4px}.queue-card.active{border-color:#6ea8d8;background:#101b29;box-shadow:inset 0 0 0 1px rgba(110,168,216,.18)}.value-hidden{filter:blur(5px);user-select:none}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:1px solid #1d2838;border-radius:12px;padding:11px;background:#0a0f16;margin:8px 0}.line-item strong,.queue-row strong{display:block}.money{font-weight:800;color:#e9f8ff}.note{border-left:3px solid var(--blue);padding:10px 12px;background:#0b121b;border-radius:10px;color:#c7d8e9;font-size:13px}.note.warn{border-left-color:var(--amber)}.note.good{border-left-color:var(--green)}.structure-box{border:1px solid #2a4158;background:#09121c;border-radius:12px;padding:12px;margin-top:10px}.tag{display:inline-flex;align-items:center;gap:5px;border:1px solid #26374b;background:#0b111a;color:#bcd0df;border-radius:999px;padding:5px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.badge-warn{display:inline-flex;border:1px solid #7a5b24;background:#25190a;color:#ffd98a;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}.badge-good{display:inline-flex;border:1px solid #315f45;background:#0f2418;color:#a7f0c0;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}.blocked{border-color:#7a5b24!important;background:#15110b!important}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}.tabs button{border:1px solid #27384d;background:#0b1018;color:var(--muted);border-radius:999px;padding:8px 10px;font-size:13px}.tabs button.active{color:#e8f6ff;border-color:#5f8db0;background:#102234}.hide{display:none!important}.divider{height:1px;background:#1b2635;margin:14px 0}.summary-line{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #16202d;padding:8px 0}.summary-line:last-child{border:0}.sysmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sysmap button{text-align:left;border:1px solid #243247;background:#0a1018;border-radius:12px;padding:13px;color:var(--text)}.sysmap small{display:block;color:var(--muted);margin-top:4px}.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:#0e1824;border:1px solid #38516b;color:#e9f8ff;border-radius:999px;padding:10px 14px;font-size:13px;box-shadow:var(--shadow);z-index:90;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.security{border-color:#6f4e21;background:#15110b}.admin-only{border-left:3px solid #557fa0}
-@media(max-width:760px){.wrap{padding:14px 10px 26px}.grid.two,.grid.three,.grid.four,.queue-grid,.sysmap{grid-template-columns:1fr}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:stretch}.pill{font-size:12px;padding:8px 10px}.card{padding:13px}.queue-card{min-height:auto}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:block}.line-item .btnrow,.queue-row .btnrow{margin-top:10px}.nav-inner{grid-template-columns:repeat(6,1fr)}.nav button{font-size:11px}}
-.badge-info{display:inline-flex;margin-left:8px;padding:4px 8px;border-radius:999px;border:1px solid rgba(126,219,255,.45);color:#9edcff;background:rgba(126,219,255,.08);font-size:11px;text-transform:uppercase;font-weight:900}.badge-bad{display:inline-flex;margin-left:8px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,125,125,.5);color:#ff9e9e;background:rgba(255,100,100,.12);font-size:11px;text-transform:uppercase;font-weight:900}.warn-text{color:#ffd68a!important}.field textarea.tall-textarea{min-height:140px}
+@media(max-width:760px){.wrap{padding:14px 10px 26px}.grid.two,.grid.three,.grid.four,.queue-grid,.sysmap{grid-template-columns:1fr}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:stretch}.pill{font-size:12px;padding:8px 10px}.card{padding:13px}.queue-card{min-height:auto}.line-item,.material-row,.queue-row,.stock-row,.rule-row{display:block}.line-item .btnrow,.queue-row .btnrow{margin-top:10px}.nav-inner{grid-template-columns:repeat(6,1fr)}.nav button{font-size:11px}#orderNotes,#customerNote,.materials-card textarea{min-height:72px}.materials-card .grid.three{gap:6px}.materials-card .field input,.materials-card .field textarea{padding:8px}.payment-advanced{margin-top:10px}}
+.badge-info{display:inline-flex;margin-left:8px;padding:4px 8px;border-radius:999px;border:1px solid rgba(126,219,255,.45);color:#9edcff;background:rgba(126,219,255,.08);font-size:11px;text-transform:uppercase;font-weight:900}.badge-bad{display:inline-flex;margin-left:8px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,125,125,.5);color:#ff9e9e;background:rgba(255,100,100,.12);font-size:11px;text-transform:uppercase;font-weight:900}.warn-text{color:#ffd68a!important}.field textarea.tall-textarea{min-height:140px}.payment-advanced{border:1px solid #1d2838;border-radius:12px;padding:10px;background:#0a0f16}.payment-advanced summary{cursor:pointer;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.11em}
 </style>
 </head>
 <body>
@@ -23,7 +23,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v40.6</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v42.2</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="pill primary" id="newOrderTop">+ New Order</button>
@@ -46,8 +46,20 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div class="section-title"><div><h3>Daily actions</h3><p>Quick access for saved orders outside active lanes.</p></div></div>
       <div class="sysmap"><button onclick="showView('history')"><strong>Order History</strong><small>All live, past, test, complete and voided orders</small></button></div>
     </section>
+    <section class="card">
+      <div class="section-title"><div><h3>Order prompts</h3><p>Import-safe reminders for open live work.</p></div></div>
+      <div id="startActionPrompts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
+    </section>
+    <section class="card">
+      <div class="section-title"><div><h3>Stock alerts</h3><p>Items at or under reorder levels.</p></div><button class="btn" onclick="showView('stock')">Open stock</button></div>
+      <div id="startStockAlerts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
+    </section>
+    <section class="card">
+      <div class="section-title"><div><h3>Dispatch quick access</h3><p>Postage, courier, tracking and label refs for active handover work.</p></div></div>
+      <div id="dispatchQuickAccess" class="card slim" style="box-shadow:none;margin-top:12px"></div>
+    </section>
     <section class="card security">
-      <div class="section-title"><div><h3>Prototype safety</h3><p>v40.6 mobile test-order visibility · built from v40.5 · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
+      <div class="section-title"><div><h3>Prototype safety</h3><p>v42.2 import safety + zero-price guard · built from v42.1 · GitHub Pages is for testing only. Use fake customer data until a secured backend is connected.</p></div></div>
     </section>
   </main>
 
@@ -55,26 +67,32 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     <section class="card">
       <div class="section-title"><div><h2>Order</h2><p>Create or update an order.</p></div><span class="tag" id="activeOrderTag">New</span></div>
       <div class="grid four">
-        <div class="field"><label>Order type</label><select id="orderType"><option>Live order</option><option>Past order</option><option>Test order</option></select><span class="tiny">Use Test order for browser/live checks.</span></div>
+        <div class="field"><label>Order type</label><select id="orderType"><option>Live order</option><option>Past order</option><option>Test order</option></select><span class="tiny">Use Test order for browser/live checks.</span><div id="orderTypeNotice" class="note" style="margin-top:8px"></div></div>
         <div class="field"><label>Order ref</label><input id="orderRef" class="readonly" readonly></div>
         <div class="field"><label>Date</label><input id="orderDate" type="date"></div>
         <div class="field"><label>Customer / ref</label><input id="customerRef" placeholder="Customer or internal ref"></div>
       </div>
       <div class="grid three" style="margin-top:10px">
         <div class="field"><label>Price tier</label><select id="priceTier"><option value="standard">Planner / standard</option><option value="existing">Existing / private</option><option value="internal">Internal / close</option><option value="custom">Custom</option></select></div>
-        <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Not paid</option><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Waived</option><option>Pay on collection</option><option>Approved credit</option><option>Refunded</option></select></div>
-        <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Customer collection</option><option>Local drop-off</option></select></div>
+        <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Pay on collection</option><option>Approved credit</option><option>Waived</option><option>Refunded</option></select></div>
+        <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Courier collection</option><option>Customer collection</option><option>Local drop-off</option></select><span class="tiny">Royal Mail collection = Royal Mail collecting parcel from us.</span></div>
         <div class="field full"><span class="tiny">Payment status is separate from the fulfilment workflow. Pay on collection is not treated as paid/cleared.</span></div>
       </div>
+      <details class="payment-advanced">
+        <summary>Order notes</summary>
       <div class="grid two" style="margin-top:10px">
         <div class="field"><label>Order notes</label><textarea id="orderNotes" class="tall-textarea" placeholder="Internal order notes if needed"></textarea></div>
         <div class="field"><label>Customer / handling note</label><textarea id="customerNote" class="tall-textarea" placeholder="Anything Jade / packer should know"></textarea></div>
       </div>
+      </details>
+      <details class="payment-advanced">
+        <summary>Payment / release notes</summary>
       <div class="grid three" style="margin-top:10px">
         <div class="field"><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"></div>
         <div class="field"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select></div>
         <div class="field"><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></div>
       </div>
+      </details>
     </section>
 
     <section class="card">
@@ -93,10 +111,11 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         </div>
         <div id="pricingNote" class="note" style="margin-top:10px"></div>
         <div id="kitPreview" class="structure-box"></div>
-        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="addProductBtn">Add product</button></div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="addProductBtn">Add to order</button></div>
       </div>
 
       <div id="structurePanel" class="hide">
+        <div class="tiny" style="margin-bottom:8px">Choose a saved pathway structure, or use Single product for one-off items.</div>
         <div class="grid two">
           <div class="field"><label>Structure / pathway</label><select id="structureSelect"></select></div>
           <div class="field"><label>Structure price</label><input id="structurePrice" type="number" step="0.01"></div>
@@ -112,8 +131,11 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="orderLines"></div>
     </section>
 
-    <section class="card">
-      <div class="section-title"><div><h2>Materials attached</h2><p>Auto-filled where rules are locked. Still editable.</p></div></div>
+    <section class="card materials-card">
+      <div class="section-title"><div><h2>Packing contents</h2><p>Auto-filled from item rules. Edit only if this order is being packed differently.</p></div></div>
+      <div id="materialsSummary" class="note good" style="margin-top:10px"></div>
+      <details class="payment-advanced" style="margin-top:10px">
+        <summary>Edit packing contents</summary>
       <div class="grid three">
         <div class="field"><label>3ml BAC water</label><input id="mat3ml" type="number" min="0" value="0"></div>
         <div class="field"><label>10ml BAC water</label><input id="mat10ml" type="number" min="0" value="0"></div>
@@ -123,14 +145,16 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <div class="field"><label>Inserts</label><input id="matInserts" type="number" min="0" value="0"></div>
         <div class="field"><label>Inlay cards</label><input id="matInlays" type="number" min="0" value="0"></div>
         <div class="field"><label>Materials charge</label><input id="materialsCharge" type="number" step="0.01" value="0"></div>
-        <div class="field"><label>Postage charge</label><input id="postageCharge" type="number" step="0.01" value="0" title="Manual finance record only. Not pulled from Royal Mail yet."></div>
         <div class="field full"><label>Packing notes</label><textarea id="packingNotes" class="tall-textarea" placeholder="Optional notes for whoever is packing this order"></textarea></div>
       </div>
-      <div id="materialsSummary" class="note good" style="margin-top:10px"></div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn subtle" id="resetPackingAuto">Reset packing to auto rule</button></div>
+      </details>
     </section>
 
     <section class="card">
-      <div class="section-title"><div><h2>Delivery / Royal Mail</h2><p>Enter/check address, generate/copy it, open Royal Mail, create the label externally, paste tracking, generate/copy the customer update, mark sent, then save.</p></div></div>
+      <div class="section-title"><div><h2>Fulfilment / Delivery</h2><p>Use for Royal Mail, courier, collection, and local drop-off details. Postage charges are manual for now.</p></div></div>
+      <details class="payment-advanced">
+        <summary>Customer / address details</summary>
       <div class="grid two">
         <div class="field"><label>Recipient name</label><input id="recName"></div>
         <div class="field"><label>Phone / WhatsApp ref</label><input id="recPhone"></div>
@@ -139,24 +163,42 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <div class="field"><label>Town / City</label><input id="town"></div>
         <div class="field"><label>Postcode</label><input id="postcode"></div>
         <div class="field full"><label>Delivery notes</label><textarea id="deliveryNotes" class="tall-textarea" placeholder="Optional Royal Mail / collection / safe-place notes"></textarea></div>
-        <div class="field"><label>Postage service</label><select id="postageService"><option>Royal Mail Tracked 24</option><option>Royal Mail Tracked 48</option><option>Special / manual</option><option>Collection / drop-off / no postage</option></select></div>
-        <div class="field"><label>Postage item count</label><input id="postageItems" type="number" min="0" value="0"></div>
-        <div class="field"><label>Tracking / ref</label><input id="trackingRef" placeholder="Paste after Royal Mail"></div>
-        <div class="field"><label>Postage charge note</label><input class="readonly" readonly value="Manual finance record only; not pulled from Royal Mail yet."></div>
       </div>
-      <div class="grid two" style="margin-top:10px">
+      </details>
+      <details class="payment-advanced" style="margin-top:10px">
+        <summary>Delivery setup</summary>
+      <div class="grid two">
+        <div class="field"><label>Postage service</label><select id="postageService"><option>Royal Mail Tracked 24</option><option>Royal Mail Tracked 48</option><option>Special / manual</option><option>Collection / drop-off / no postage</option></select></div>
+        <div class="field"><label>Postage charge</label><input id="postageCharge" type="number" step="0.01" value="0" title="Manual finance record only. Not pulled from Royal Mail yet."></div>
+        <div class="field full"><label>Postage charge note</label><input class="readonly" readonly value="Manual finance record only; not pulled from Royal Mail yet."></div>
         <div class="field"><label>Postage / address block</label><textarea id="addressBlock" class="tall-textarea"></textarea></div>
+        <div class="field"><label>Fulfilment item count</label><input id="postageItems" type="number" min="0" value="0"></div>
+      </div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genAddress">1. Generate address block</button><button class="btn" id="copyAddress">2. Copy address block</button><button class="btn" id="openRM">3. Open Royal Mail</button></div>
+      </details>
+      <details class="payment-advanced" style="margin-top:10px">
+        <summary>Tracking / label / QR</summary>
+      <div class="grid two">
+        <div class="field"><label>Tracking / reference</label><input id="trackingRef" placeholder="Paste tracking/ref"></div>
+        <div class="field"><label>Label / QR reference</label><input id="labelQrRef" placeholder="Manual label/QR reference"></div>
+        <div class="field full"><label>Label / QR note</label><textarea id="labelQrNote" class="tall-textarea" placeholder="Manual note only. No upload/scanner yet."></textarea></div>
+      </div>
+      </details>
+      <details class="payment-advanced" style="margin-top:10px">
+        <summary>Customer message</summary>
+      <div class="grid two">
         <div class="field"><label>Customer update message</label><textarea id="fulfilmentMsg" class="readonly tall-textarea" readonly></textarea></div>
         <div class="field full"><label>Internal fulfilment warning</label><textarea id="internalFulfilmentWarning" class="readonly tall-textarea" readonly></textarea></div>
       </div>
-      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genAddress">1. Generate address block</button><button class="btn" id="copyAddress">2. Copy address block</button><button class="btn" id="openRM">3. Open Royal Mail</button><button class="btn" id="genFulfilment">4. Generate customer update</button><button class="btn" id="copyFulfilment">5. Copy customer update</button></div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genFulfilment">4. Generate customer update</button><button class="btn" id="copyFulfilment">5. Copy customer update</button></div>
+      </details>
     </section>
 
     <section class="card">
-      <div class="section-title"><div><h2>Final check</h2><p>Save updates queues and prototype stock.</p></div></div>
+      <div class="section-title"><div><h2>Final check</h2><p>Set the workflow status, confirm messages sent, then save the order.</p></div></div>
       <div id="totalsBox"></div>
       <div class="grid two" style="margin-top:10px">
-        <div class="field"><label>Order status</label><select id="orderStatus"><option>New / awaiting payment</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Dispatched / awaiting delivery confirmation</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
+        <div class="field"><label>Order status</label><select id="orderStatus"><option value="New / awaiting payment">New order</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Dispatched / awaiting delivery confirmation</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
         <div class="field"><label>Confirmation sent?</label><select id="confirmationSent"><option>No</option><option>Yes</option></select></div>
         <div class="field"><label>Customer update sent?</label><select id="updateSent"><option>No</option><option>Yes</option></select></div>
         <div class="field"><label>Cancel / void reason</label><textarea id="voidReason" class="tall-textarea" placeholder="Reason if this order is cancelled or voided"></textarea></div>
@@ -175,7 +217,29 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   </main>
 
   <main id="view-stock" class="view">
-    <section class="card"><div class="section-title"><div><h2>Stock</h2><p>Local prototype stock. Not final shared stock.</p></div></div><div id="stockList"></div></section>
+    <section class="card">
+      <div class="section-title"><div><h2>Stock</h2><p>Local prototype stock. Movements minus live order usage.</p></div></div>
+      <div class="grid three">
+        <div class="field"><label>Item</label><select id="stockReceiveItem"></select></div>
+        <div class="field"><label>Qty received</label><input id="stockReceiveQty" type="number" step="1" value="0"></div>
+        <div class="field"><label>Ref / note</label><input id="stockReceiveNote" placeholder="Supplier, batch, order ref"></div>
+      </div>
+      <div class="btnrow" style="margin-top:10px"><button class="btn good" id="addStockReceived">Add stock received</button></div>
+      <div class="divider"></div>
+      <div class="grid three">
+        <div class="field"><label>Item</label><select id="stockAdjustItem"></select></div>
+        <div class="field"><label>Qty adjustment</label><input id="stockAdjustQty" type="number" step="1" value="0"></div>
+        <div class="field"><label>Reason / note</label><input id="stockAdjustNote" placeholder="Correction, damage, count adjustment"></div>
+      </div>
+      <div class="btnrow" style="margin-top:10px"><button class="btn warn" id="saveStockAdjustment">Save adjustment</button></div>
+      <div class="divider"></div>
+      <div class="field"><label>Scan / barcode input placeholder</label><input id="stockScanInput" placeholder="Future scan input placeholder — manual entry for now."></div>
+      <div class="divider"></div>
+      <div id="stockList"></div>
+      <div class="divider"></div>
+      <div class="section-title"><div><h3>Recent stock movements</h3><p>Local movement history.</p></div></div>
+      <div id="stockMovementList"></div>
+    </section>
   </main>
 
   <main id="view-admin" class="view">
@@ -200,6 +264,7 @@ const orderRef=document.getElementById('orderRef');
 const orderDate=document.getElementById('orderDate');
 const customerRef=document.getElementById('customerRef');
 const orderType=document.getElementById('orderType');
+const orderTypeNotice=document.getElementById('orderTypeNotice');
 const orderNotes=document.getElementById('orderNotes');
 const customerNote=document.getElementById('customerNote');
 const priceTier=document.getElementById('priceTier');
@@ -238,6 +303,7 @@ const matInlays=document.getElementById('matInlays');
 const materialsCharge=document.getElementById('materialsCharge');
 const postageCharge=document.getElementById('postageCharge');
 const materialsSummary=document.getElementById('materialsSummary');
+const resetPackingAuto=document.getElementById('resetPackingAuto');
 const packingNotes=document.getElementById('packingNotes');
 const recName=document.getElementById('recName');
 const recPhone=document.getElementById('recPhone');
@@ -249,6 +315,8 @@ const deliveryNotes=document.getElementById('deliveryNotes');
 const postageService=document.getElementById('postageService');
 const postageItems=document.getElementById('postageItems');
 const trackingRef=document.getElementById('trackingRef');
+const labelQrRef=document.getElementById('labelQrRef');
+const labelQrNote=document.getElementById('labelQrNote');
 const addressBlock=document.getElementById('addressBlock');
 const fulfilmentMsg=document.getElementById('fulfilmentMsg');
 const internalFulfilmentWarning=document.getElementById('internalFulfilmentWarning');
@@ -272,7 +340,19 @@ const voidReason=document.getElementById('voidReason');
 const queueCards2=document.getElementById('queueCards2');
 const queueList2=document.getElementById('queueList2');
 const historyList=document.getElementById('historyList');
+const dispatchQuickAccess=document.getElementById('dispatchQuickAccess');
+const startStockAlerts=document.getElementById('startStockAlerts');
+const startActionPrompts=document.getElementById('startActionPrompts');
 const stockList=document.getElementById('stockList');
+const stockMovementList=document.getElementById('stockMovementList');
+const stockReceiveItem=document.getElementById('stockReceiveItem');
+const stockReceiveQty=document.getElementById('stockReceiveQty');
+const stockReceiveNote=document.getElementById('stockReceiveNote');
+const addStockReceived=document.getElementById('addStockReceived');
+const stockAdjustItem=document.getElementById('stockAdjustItem');
+const stockAdjustQty=document.getElementById('stockAdjustQty');
+const stockAdjustNote=document.getElementById('stockAdjustNote');
+const saveStockAdjustment=document.getElementById('saveStockAdjustment');
 const adminPanel=document.getElementById('adminPanel');
 const toastEl=document.getElementById('toast');
 window.addEventListener('error', function(e){
@@ -303,6 +383,8 @@ const STRUCTURE_RULES={
  GUT_PAIR:{id:'GUT_PAIR',name:'Gut / Inflammation Structure · Paired',type:'Pathway',contents:[['BPC40',2],['KPV10',1]],prices:{internal:100,existing:null,standard:null},closeEligible:'Yes',label:'2 × BPC-157 + 1 × KPV'}
 };
 const INITIAL_STOCK={RTA20:10,BAC3:30,BAC10:12,U100:20,WIPES:500,BOX:20,INSERT:40,INLAY:40};
+const STOCK_LABELS={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',TA110:'Thymosin Alpha-1 10mg',KPV10:'KPV 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'MAG-BOX-170x125x38',INSERT:'Insert',INLAY:'Inlay card'};
+const DEFAULT_THRESHOLDS={RTA20:{reorderAt:3,targetQty:10},BAC3:{reorderAt:8,targetQty:30},BAC10:{reorderAt:4,targetQty:12},U100:{reorderAt:5,targetQty:20},WIPES:{reorderAt:100,targetQty:500},BOX:{reorderAt:5,targetQty:20},INSERT:{reorderAt:10,targetQty:40},INLAY:{reorderAt:10,targetQty:40}};
 function safeLoadJSON(key, fallback){
   const raw = localStorage.getItem(key);
   if(!raw) return fallback;
@@ -319,21 +401,35 @@ function safeLoadJSON(key, fallback){
 }
 let orders=safeLoadJSON('px_orders_v21',[]);
 let stock=safeLoadJSON('px_stock_v21',JSON.parse(JSON.stringify(INITIAL_STOCK)));
+let stockMovements=safeLoadJSON('px_stock_movements_v1',null);
+let stockThresholds=safeLoadJSON('px_stock_thresholds_v1',JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS)));
+if(!Array.isArray(stockMovements))stockMovements=[];
+function seedOpeningStock(){
+  if(localStorage.getItem('px_stock_opening_migrated_v1'))return;
+  if(stockMovements.length)return;
+  stockMovements=Object.entries(INITIAL_STOCK).map(([item,qty])=>({id:'SM-'+item+'-'+Date.now(),date:new Date().toISOString(),item,qty,type:'opening',note:'Opening stock migrated from v40.8 baseline',ref:'v41 opening'}));
+  localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));
+  localStorage.setItem('px_stock_opening_migrated_v1','yes');
+}
+seedOpeningStock();
 let current={id:null,lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};
 let addMode='single';
+let packingManualOverride=false;
+let suppressPackingOverride=false;
 function money(n){return '£'+Number(n||0).toFixed(2)}
 function val(id){return document.getElementById(id).value}
 function num(id){return Number(val(id)||0)}
 function set(id,v){const el=document.getElementById(id);el.value=v;autoExpandTextarea(el)}
+function paymentValue(v){return !v||v==='Not paid'?'Awaiting payment':v}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
-function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock))}
+function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds))}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-function autoExpandTextarea(el){if(!el||el.tagName!=='TEXTAREA')return;el.style.height='auto';el.style.height=Math.max(el.scrollHeight,el.classList.contains('tall-textarea')?140:96)+'px'}
+function autoExpandTextarea(el){if(!el||el.tagName!=='TEXTAREA')return;const compact=window.matchMedia&&window.matchMedia('(max-width:760px)').matches&&['orderNotes','customerNote','packingNotes'].includes(el.id);const min=compact?72:(el.classList.contains('tall-textarea')?140:96);el.style.height='auto';el.style.height=Math.max(el.scrollHeight,min)+'px'}
 function bindAutoExpand(){document.querySelectorAll('textarea').forEach(t=>{autoExpandTextarea(t);t.addEventListener('input',()=>autoExpandTextarea(t))})}
-function init(){document.getElementById('bootBadge').textContent='v40.6 JS OK';document.getElementById('bootBadge').style.color='#73c28b';let ph=document.createElement('option');ph.value='';ph.textContent='Select product…';productSelect.appendChild(ph);Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});newOrder();bind();bindAutoExpand();renderAll();}
-function bind(){['priceTier','productSelect','productQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));unitPrice.addEventListener('input',()=>{set('lineTotal',money(num('unitPrice')*Math.max(1,num('productQty'))));});paymentStatus.addEventListener('input',()=>{syncFulfilmentPaymentWarning();markCustomerUpdateStale()});fulfilmentMethod.addEventListener('input',()=>{syncPostageDefaults();markCustomerUpdateStale()});['customerRef','postageService','trackingRef','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',markCustomerUpdateStale));releaseOverride.addEventListener('input',syncFulfilmentPaymentWarning);releaseApprovedBy.addEventListener('input',syncFulfilmentPaymentWarning);['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));orderType.addEventListener('input',renderOrder);modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};syncMaterialsToInputs();renderOrder()};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};voidOrder.onclick=voidCurrentOrder;deleteOrder.onclick=deleteCurrentOrder;newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://send.royalmail.com/','_blank');genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();renderOrder()}));postageCharge.addEventListener('input',()=>{syncInputsToMaterials();renderOrder();markCustomerUpdateStale()});}
-function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0}};set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('orderType','Live order');set('priceTier','standard');set('productSelect','');set('paymentStatus','Not paid');set('fulfilmentMethod','Hold / not arranged');set('postageService','Collection / drop-off / no postage');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','voidReason','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','addressBlock','fulfilmentMsg','internalFulfilmentWarning','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v42.2 JS OK';document.getElementById('bootBadge').style.color='#73c28b';let ph=document.createElement('option');ph.value='';ph.textContent='Select product…';productSelect.appendChild(ph);Object.values(PRODUCT_RULES).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;productSelect.appendChild(o)});Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();renderAll();}
+function bind(){['priceTier','productSelect','productQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',updateSinglePreview));unitPrice.addEventListener('input',()=>{set('lineTotal',money(num('unitPrice')*Math.max(1,num('productQty'))));});paymentStatus.addEventListener('input',()=>{syncFulfilmentPaymentWarning();markCustomerUpdateStale()});fulfilmentMethod.addEventListener('input',()=>{syncPostageDefaults();markCustomerUpdateStale()});['customerRef','postageService','trackingRef','labelQrRef','labelQrNote','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',markCustomerUpdateStale));releaseOverride.addEventListener('input',syncFulfilmentPaymentWarning);releaseApprovedBy.addEventListener('input',syncFulfilmentPaymentWarning);['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));orderType.addEventListener('input',renderOrder);modeSingle.onclick=()=>{addMode='single';modeSingle.classList.add('active');modeStructure.classList.remove('active');singlePanel.classList.remove('hide');structurePanel.classList.add('hide')};modeStructure.onclick=()=>{addMode='structure';modeStructure.classList.add('active');modeSingle.classList.remove('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview()};addProductBtn.onclick=addProduct;addStructureBtn.onclick=addStructure;clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};packingManualOverride=false;current.packingManualOverride=false;syncMaterialsToInputs();renderOrder()};resetPackingAuto.onclick=resetPackingToAutoRule;saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};voidOrder.onclick=voidCurrentOrder;deleteOrder.onclick=deleteCurrentOrder;newOrderTop.onclick=newOrderStart.onclick=()=>{newOrder();showView('order')};genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>window.open('https://send.royalmail.com/','_blank');genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>copyText(confirmationMsg.value);addStockReceived.onclick=addStockReceivedNow;saveStockAdjustment.onclick=saveStockAdjustmentNow;['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();if(!suppressPackingOverride)markPackingManualOverride();renderOrder()}));postageCharge.addEventListener('input',()=>{renderOrder();markCustomerUpdateStale()});}
+function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:false};packingManualOverride=false;set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('orderType','Live order');set('priceTier','standard');set('productSelect','');set('paymentStatus','Awaiting payment');set('fulfilmentMethod','Hold / not arranged');set('postageService','Collection / drop-off / no postage');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','voidReason','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','labelQrRef','labelQrNote','addressBlock','fulfilmentMsg','internalFulfilmentWarning','confirmationMsg'].forEach(id=>set(id,''));set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';updateSinglePreview();updateStructurePreview();renderOrder();renderAll();}
 function getProductPrice(pid,tier,qty=1){
   const p=PRODUCT_RULES[pid];
   let note='',review=false,price=null;
@@ -401,17 +497,17 @@ function updateSinglePreview(){
   }
   set('lineTotal',money(num('unitPrice')*qty));
   pricingNote.className='note'+(r.review?' warn':'');
-  pricingNote.textContent=r.note;
+  pricingNote.textContent=r.note+(r.review&&!hasPositivePrice(num('unitPrice'))?' Manual price required before adding.':'');
   renderKitPreview(pid,qty,'kitPreview');
 }
-function updateStructurePreview(){let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);set('structurePrice',r.price);structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=r.note;renderStructurePreview(sid,'structurePreview')}
+function updateStructurePreview(){let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);set('structurePrice',r.price);structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=r.note+(r.review&&!hasPositivePrice(r.price)?' Manual price required before adding.':'');renderStructurePreview(sid,'structurePreview')}
 function renderKitPreview(pid,qty,target){const el=document.getElementById(target);const p=PRODUCT_RULES[pid];if(pid==='RTA20_KIT'){el.innerHTML='<strong>Reta kit preview</strong><div class="tiny">Current default kit rule × '+qty+'</div>'+materialsHTML(retaMaterials(qty));}else if(p&&p.supportItem){let m={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};m[p.materialKey]=qty;el.innerHTML='<strong>Supporting item preview</strong><div class="tiny">Stock movement × '+qty+'</div>'+materialsHTML(m);}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
 function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">'+(s.label||s.type)+'</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>× '+qty+'</strong></div>'});let mats=structureMaterials(sid);if(Object.values(mats).some(v=>v>0))html+='<div class="divider"></div><strong>Attached materials</strong>'+materialsHTML(mats);else html+='<div class="divider"></div><span class="muted">No locked material rule except where Reta is included.</span>';document.getElementById(target).innerHTML=html}
 function retaMaterials(q){return{BAC3:q,BAC10:0,U100:q,WIPES:q*16,BOX:q,INSERT:q,INLAY:q}}
-function structureMaterials(sid){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};STRUCTURE_RULES[sid].contents.forEach(([pid,qty])=>{if(pid==='RTA20_KIT')addMats(mats,retaMaterials(qty))});return mats}
+function structureMaterials(sid){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};STRUCTURE_RULES[sid].contents.forEach(([pid,qty])=>{if(pid==='RTA20'||pid==='RTA20_KIT')addMats(mats,retaMaterials(qty))});return mats}
 function materialsHTML(m){return Object.entries({BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'Magnetic box',INSERT:'Insert',INLAY:'Inlay card'}).map(([k,l])=>m[k]?'<div class="summary-line"><span>'+l+'</span><strong>× '+m[k]+'</strong></div>':'').join('')}
 function addMats(target,source){Object.keys(target).forEach(k=>target[k]+=Number(source[k]||0))}
-function shouldDefaultPostageItem(){return ['Royal Mail postage','Royal Mail collection'].includes(val('fulfilmentMethod'))}
+function shouldDefaultPostageItem(){return ['Royal Mail postage','Royal Mail collection','Courier collection'].includes(val('fulfilmentMethod'))}
 function syncPostageDefaults(){
   if(shouldDefaultPostageItem()){
     if(num('postageItems')===0)set('postageItems',1);
@@ -421,12 +517,32 @@ function syncPostageDefaults(){
     if(val('postageService')!=='Collection / drop-off / no postage')set('postageService','Collection / drop-off / no postage');
   }
 }
+function hasPositivePrice(v){return Number.isFinite(Number(v))&&Number(v)>0}
+function blockPriceAdd(message,targetNote){
+  if(targetNote){targetNote.className='note warn';targetNote.textContent=message+' Manual price required before adding.'}
+  showToast(message);
+  return true;
+}
+function canAddProductPrice(p,pr,price,supportMode){
+  if(p.supportItem&&supportMode!=='charged'){
+    return confirm('Add this support/internal item at £0? It will affect packing/stock but not customer revenue.');
+  }
+  if(!hasPositivePrice(price))return !blockPriceAdd('Price missing — enter/confirm a unit price before adding this item.',pricingNote);
+  if(pr.review)pricingNote.textContent='Manual price confirmed before adding.';
+  return true;
+}
+function canAddStructurePrice(pr,price){
+  if(!hasPositivePrice(price))return !blockPriceAdd('Structure price missing — confirm price before adding.',structureNote);
+  if(pr.review)structureNote.textContent='Manual price confirmed before adding.';
+  return true;
+}
 function addProduct(){
   let pid=val('productSelect'),qty=Math.max(1,num('productQty')),tier=val('priceTier'),price=num('unitPrice'),p=PRODUCT_RULES[pid];
   if(!p){showToast('Select a product before adding');return}
   let pr=getProductPrice(pid,tier,qty);
   const supportMode=p.supportItem?(val('supportChargeMode')||'charged'):null;
   if(p.supportItem && supportMode!=='charged') price=0;
+  if(!canAddProductPrice(p,pr,price,supportMode))return;
   let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note&&(l.supportMode||null)===supportMode);
   if(existing){
     existing.qty+=qty;
@@ -439,12 +555,12 @@ function addProduct(){
   }
   recalcMaterialsFromLines();
   if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);
-  syncMaterialsToInputs();
   renderOrder();
 }
-function addStructure(){let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);current.lines.push({kind:'structure',sid,qty:1,price,name:s.name,contents:s.contents,review:pr.review,note:pr.note});addMats(current.materials,structureMaterials(sid));if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);syncMaterialsToInputs();renderOrder();showToast('Structure added')}
-function syncMaterialsToInputs(){set('mat3ml',current.materials.BAC3);set('mat10ml',current.materials.BAC10);set('matU100',current.materials.U100);set('matWipes',current.materials.WIPES);set('matBoxes',current.materials.BOX);set('matInserts',current.materials.INSERT);set('matInlays',current.materials.INLAY)}
-function syncInputsToMaterials(){current.materials={BAC3:num('mat3ml'),BAC10:num('mat10ml'),U100:num('matU100'),WIPES:num('matWipes'),BOX:num('matBoxes'),INSERT:num('matInserts'),INLAY:num('matInlays')}};
+function addStructure(){let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);if(!canAddStructurePrice(pr,price))return;current.lines.push({kind:'structure',sid,qty:1,price,name:s.name,contents:s.contents,review:pr.review,note:pr.note});if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);recalcMaterialsFromLines();renderOrder();showToast('Structure added')}
+function syncMaterialsToInputs(){suppressPackingOverride=true;set('mat3ml',current.materials.BAC3);set('mat10ml',current.materials.BAC10);set('matU100',current.materials.U100);set('matWipes',current.materials.WIPES);set('matBoxes',current.materials.BOX);set('matInserts',current.materials.INSERT);set('matInlays',current.materials.INLAY);suppressPackingOverride=false}
+function syncInputsToMaterials(){current.materials={BAC3:num('mat3ml'),BAC10:num('mat10ml'),U100:num('matU100'),WIPES:num('matWipes'),BOX:num('matBoxes'),INSERT:num('matInserts'),INLAY:num('matInlays')};current.packingManualOverride=packingManualOverride};
+function markPackingManualOverride(){packingManualOverride=true;current.packingManualOverride=true}
 function lineTitle(l){
   if(l.kind==='product'&&l.pid==='RTA20_KIT') return 'Retatrutide 20mg kit × '+l.qty;
   if(l.kind==='product') return l.name+' × '+l.qty;
@@ -460,17 +576,30 @@ function lineSub(l){
   if(l.kind==='structure') return 'Structure / pathway';
   return 'Single product';
 }
+function updateOrderTypeNotice(){
+  if(!orderTypeNotice)return;
+  const t=val('orderType');
+  const msg=t==='Past order'
+    ?'Past order: record only. Does not affect active queues or current stock.'
+    :t==='Test order'
+      ?'Test order: for browser/app checks only. Does not affect current stock.'
+      :'Live order: active workflow. Can affect queues and stock.';
+  orderTypeNotice.textContent=msg;
+}
 function renderOrder(){
+  updateOrderTypeNotice();
   orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+lineTitle(l)+'</strong><span class="tiny">'+lineSub(l)+(l.review?' · Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';
   let hasMats=Object.values(current.materials).some(v=>Number(v)>0);
-  materialsSummary.innerHTML=hasMats?'<strong>Kit / material contents attached.</strong><br><span class="tiny">Edit the material fields above if packing changes.</span>':'<span class="muted">No materials attached yet.</span>';
+  materialsSummary.innerHTML=(packingManualOverride?'<div class="note warn" style="margin-bottom:8px">Manual packing override active. Review before saving.</div>':'')+(hasMats?materialsHTML(current.materials):'<span class="muted">No packing contents attached yet.</span>');
   let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');
   totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>';
   deleteOrder.style.display=val('orderType')==='Test order'?'':'none';
 }
 function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines();renderOrder()}
-function recalcMaterialsFromLines(){current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20_KIT')addMats(current.materials,retaMaterials(l.qty));if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){current.materials[PRODUCT_RULES[l.pid].materialKey]+=Number(l.qty||0)}if(l.kind==='structure')addMats(current.materials,structureMaterials(l.sid))});syncMaterialsToInputs()}
-function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderType:val('orderType'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),voidReason:val('voidReason'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:val('orderStatus'),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageService:val('postageService'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),internalFulfilmentWarning:val('internalFulfilmentWarning'),total};}
+function autoMaterialsFromLines(){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20_KIT')addMats(mats,retaMaterials(l.qty));if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){mats[PRODUCT_RULES[l.pid].materialKey]+=Number(l.qty||0)}if(l.kind==='structure')addMats(mats,structureMaterials(l.sid))});return mats}
+function recalcMaterialsFromLines(){if(packingManualOverride){syncInputsToMaterials();showToast('Manual packing override active · packing kept for review');return}current.materials=autoMaterialsFromLines();syncMaterialsToInputs()}
+function resetPackingToAutoRule(){packingManualOverride=false;current.packingManualOverride=false;current.materials=autoMaterialsFromLines();syncMaterialsToInputs();renderOrder();showToast('Packing reset to auto rule')}
+function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderType:val('orderType'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),voidReason:val('voidReason'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:statusValue(val('orderStatus')),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,packingManualOverride,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageService:val('postageService'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),labelQrRef:val('labelQrRef'),labelQrNote:val('labelQrNote'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),internalFulfilmentWarning:val('internalFulfilmentWarning'),total};}
 function saveOrderNow(){let o=orderPayload();if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();showToast('Order saved · queues and stock updated')}
 
 function voidCurrentOrder(){
@@ -509,14 +638,28 @@ function clearAllTestOrders(){
   if(!confirm('Clear TEST orders only from this browser? Live and past orders will remain.')) return;
   orders=orders.filter(o=>o.orderType!=='Test order');recalcStock();saveLocal();newOrder();renderAll();showToast('Test orders cleared');
 }
-function recalcStock(){stock=JSON.parse(JSON.stringify(INITIAL_STOCK));orders.filter(o=>!['Cancelled'].includes(o.status)).forEach(o=>{o.lines.forEach(l=>{const p=PRODUCT_RULES[l.pid];if(l.kind==='product'&&!p?.supportItem){const key=p?.stockKey||l.pid;stock[key]=(stock[key]??0)-l.qty}if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
-function renderAll(){renderQueues();renderHistory(window.lastHistory||'all');renderStock();renderAdmin();renderOrder()}
+function deductibleStockKeys(){let keys=new Set(Object.keys(INITIAL_STOCK));Object.values(PRODUCT_RULES).forEach(p=>{if(p.supportItem&&p.materialKey)keys.add(p.materialKey);else keys.add(p.stockKey||p.id)});Object.values(STRUCTURE_RULES).forEach(s=>s.contents.forEach(([pid])=>keys.add(PRODUCT_RULES[pid]?.stockKey||pid)));return [...keys].filter(k=>STOCK_LABELS[k])}
+function stockKeys(){return [...new Set([...deductibleStockKeys(),...Object.keys(stock||{}),...stockMovements.map(m=>m.item)])].filter(k=>STOCK_LABELS[k])}
+function isStockAffectingOrder(o){return (o.orderType||'Live order')==='Live order'&&!['Cancelled'].includes(o.status)}
+function recalcStock(){stock={};stockKeys().forEach(k=>stock[k]=0);stockMovements.forEach(m=>{if(!stock[m.item]&&stock[m.item]!==0)stock[m.item]=0;stock[m.item]+=Number(m.qty||0)});orders.filter(isStockAffectingOrder).forEach(o=>{o.lines.forEach(l=>{const p=PRODUCT_RULES[l.pid];if(l.kind==='product'&&!p?.supportItem){const key=p?.stockKey||l.pid;stock[key]=(stock[key]??0)-l.qty}if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
+function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(window.lastHistory||'all');renderStock();renderAdmin();renderOrder()}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
 function isReleaseStatus(status){return ['Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(status)}
-function isActiveOrderType(o){return (o.orderType||'Live order')!=='Past order'}
+function isActiveOrderType(o){return (o.orderType||'Live order')==='Live order'}
 function isOpenWork(o){return isActiveOrderType(o)&&!['Cancelled','Complete'].includes(o.status)}
 function isActiveStatus(o){return isOpenWork(o)}
-function normalStatus(o){return String(o?.status||'New / awaiting payment')}
+function statusValue(status){return String(status||'New / awaiting payment')==='New order'?'New / awaiting payment':String(status||'New / awaiting payment')}
+function normalStatus(o){return statusValue(o?.status)}
+function displayStatus(o){
+  const st=normalStatus(o);
+  if(st==='New / awaiting payment')return 'New order';
+  return st;
+}
+function customerStatusText(o){
+  const st=normalStatus(o);
+  if(st==='New / awaiting payment')return isPaymentCleared(o)?'Order received / being prepared':'Order received / being prepared';
+  return displayStatus(o);
+}
 function needsPacking(o){return ['Ready to assemble','Assembled'].includes(normalStatus(o))}
 function readyToRelease(o){return normalStatus(o)==='Packed / ready to send-collect'}
 function paymentBadge(o){
@@ -535,9 +678,21 @@ function workflowBadge(o){
   if(st==='Hold / issue') return '<span class="badge-bad">Hold/issue</span>';
   return '<span class="badge-info">Awaiting prep</span>';
 }
+function orderTypeBadge(o){return o.orderType==='Test order'?'<span class="badge-bad">TEST</span>':(o.orderType==='Past order'?'<span class="badge-info">PAST</span>':'')}
+function royalMailItemCount(o){return ['Royal Mail postage','Royal Mail collection'].includes(o.fulfilment)?Number(o.postageItems||0):0}
+function courierItemCount(o){return o.fulfilment==='Courier collection'?Number(o.postageItems||0):0}
+function customerCollectionCount(o){return o.fulfilment==='Customer collection'?Number(o.postageItems||0):0}
+function localDropoffCount(o){return o.fulfilment==='Local drop-off'?Number(o.postageItems||0):0}
+function fulfilmentCountText(o){
+  if(royalMailItemCount(o))return royalMailItemCount(o)+' Royal Mail parcel'+(royalMailItemCount(o)===1?'':'s');
+  if(courierItemCount(o))return courierItemCount(o)+' Courier item'+(courierItemCount(o)===1?'':'s');
+  if(customerCollectionCount(o))return customerCollectionCount(o)+' Customer collection'+(customerCollectionCount(o)===1?'':'s');
+  if(localDropoffCount(o))return localDropoffCount(o)+' Local drop-off item'+(localDropoffCount(o)===1?'':'s');
+  return (o.postageItems||0)+' fulfilment item'+((o.postageItems||0)===1?'':'s');
+}
 function queueData(){return[
  {key:'pay',title:'Awaiting payment',orders:orders.filter(o=>!isPaymentCleared(o)&&isActiveStatus(o)),sub:'payment actions'},
- {key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>needsPacking(o)&&isActiveStatus(o)),sub:'orders · postage items'},
+ {key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>needsPacking(o)&&isActiveStatus(o)),sub:'orders · fulfilment items'},
  {key:'ready',title:'Ready send / collect',orders:orders.filter(o=>readyToRelease(o)&&isActiveStatus(o)),sub:'dispatch / collection'},
  {key:'transit',title:'In transit / follow-up',orders:orders.filter(o=>normalStatus(o)==='Dispatched / awaiting delivery confirmation'&&isActiveStatus(o)),sub:'awaiting confirmation'},
  {key:'hold',title:'Issues / hold',orders:orders.filter(o=>normalStatus(o)==='Hold / issue'&&isActiveStatus(o)),sub:'needs review'}]
@@ -545,7 +700,7 @@ function queueData(){return[
 function htmlEscape(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function jsArg(v){return JSON.stringify(String(v??'')).replace(/"/g,'&quot;')}
 function queueCardHTML(x,active){
-  const sub=x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' postage/collection items':x.sub;
+  const sub=x.key==='pack'?x.orders.reduce((a,o)=>a+(o.postageItems||0),0)+' fulfilment items':x.sub;
   return `<button class="queue-card ${x.key===active?'active':''}" onclick="openQueue(${jsArg(x.key)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.orders.length}</div><div class="s">${htmlEscape(sub)}</div></button>`;
 }
 function activeValueCardHTML(){
@@ -567,19 +722,33 @@ function openQueue(key,skipCardRender=false){
   html+=q.orders.length?q.orders.map(o=>queueRowHTML(o,key)).join(''):'<div class="muted">No orders in this lane.</div>';
   queueList.innerHTML=html;queueList2.innerHTML=html;
 }
+function dispatchQuickAccessMatches(o){
+  if(!isOpenWork(o))return false;
+  const method=String(o.fulfilment||''),st=normalStatus(o);
+  return ['Royal Mail postage','Royal Mail collection','Courier collection'].includes(method)||['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(st);
+}
+function renderDispatchQuickAccess(){
+  if(!dispatchQuickAccess)return;
+  const list=orders.filter(dispatchQuickAccessMatches).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+  dispatchQuickAccess.innerHTML=list.length?list.map(o=>{
+    const ref=o.tracking||o.labelQrRef||'';
+    const rmBtn=isRoyalMailMethod(o)?`<button class="btn" onclick="window.open('https://send.royalmail.com/','_blank')">Open Royal Mail</button>`:'';
+    return `<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">Fulfilment: ${htmlEscape(o.fulfilment||'Not arranged')} · Service: ${htmlEscape(o.postageService||'')}</div><div class="tiny">Tracking/ref: ${htmlEscape(o.tracking||'Not added')} · Label/QR ref: ${htmlEscape(o.labelQrRef||'Not added')}</div>${o.labelQrNote?`<div class="tiny">Label/QR note: ${htmlEscape(o.labelQrNote)}</div>`:''}</div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button><button class="btn" onclick="copyText(${jsArg(ref)})">Copy tracking/ref</button>${rmBtn}<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button></div></div>`;
+  }).join(''):'<div class="muted">No active dispatch or handover work.</div>';
+}
 function queueRowHTML(o,key){
   const cls=!isPaymentCleared(o)&&['pack','ready'].includes(key)?'queue-row blocked':'queue-row';
-  const paymentLine=`Payment: ${htmlEscape(o.payment||'Not paid')}`;
-  const fulfilLine=`Fulfilment: ${htmlEscape(normalStatus(o))}`;
-  const moneyLine=`Value: ${money(o.total)} · ${(o.postageItems||0)} postage/collection item${(o.postageItems||0)===1?'':'s'}`;
+  const paymentLine=`Payment: ${htmlEscape(paymentValue(o.payment))}`;
+  const fulfilLine=`Fulfilment: ${htmlEscape(displayStatus(o))}`;
+  const moneyLine=`Value: ${money(o.total)} · ${htmlEscape(fulfilmentCountText(o))}`;
   const warning=(!isPaymentCleared(o)&&['pack','ready'].includes(key))?'<div class="tiny warn-text">Payment not complete · do not release until paid or approved.</div>':'';
-  return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${paymentBadge(o)} ${workflowBadge(o)}</strong><div class="tiny">${paymentLine}</div><div class="tiny">${fulfilLine}</div><div class="tiny">${moneyLine}</div>${warning}${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
+  return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${paymentBadge(o)} ${workflowBadge(o)}</strong><div class="tiny">${paymentLine}</div><div class="tiny">${fulfilLine}</div><div class="tiny">${moneyLine}</div>${warning}${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
 }
 function queueButtons(o,key){
   let b=`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button>`;
   if(!isPaymentCleared(o)) b+=`<button class="btn good" onclick="markPaid(${jsArg(o.id)})">Mark paid</button>`;
   if(key==='pay'){
-    b+=`<button class="btn warn" onclick="prepOrder(${jsArg(o.id)})">Prep anyway</button>`;
+    b+=`<button class="btn warn" onclick="prepOrder(${jsArg(o.id)})">Move to prep — unpaid</button>`;
     b+=`<button class="btn" onclick="loadAndGenerateConfirmation(${jsArg(o.id)})">Generate confirmation</button>`;
   }
   if(key==='pack'){
@@ -629,6 +798,7 @@ function markPacked(id){
   saveLocal();renderAll();openQueue('ready');showToast('Moved to Ready send / collect');
 }
 function isRoyalMailMethod(o){return ['Royal Mail postage','Royal Mail collection'].includes(o.fulfilment)}
+function isCarrierDispatchMethod(o){return isRoyalMailMethod(o)||o.fulfilment==='Courier collection'}
 function defaultPostageService(o){return isRoyalMailMethod(o)?'Royal Mail Tracked 24':'Collection / drop-off / no postage'}
 function releaseOrder(id){
   let o=orders.find(x=>x.id===id);if(!o)return;
@@ -638,8 +808,8 @@ function releaseOrder(id){
     o.releaseOverride='Yes';
     o.releaseApprovedBy=o.releaseApprovedBy||'Manual override';
   }
-  o.status=isRoyalMailMethod(o)?'Dispatched / awaiting delivery confirmation':'Sent / collected';
-  saveLocal();renderAll();openQueue(isRoyalMailMethod(o)?'transit':'ready',true);showToast(isRoyalMailMethod(o)?'Moved to In transit / follow-up':'Marked sent / collected');
+  o.status=isCarrierDispatchMethod(o)?'Dispatched / awaiting delivery confirmation':'Sent / collected';
+  saveLocal();renderAll();openQueue(isCarrierDispatchMethod(o)?'transit':'ready',true);showToast(isCarrierDispatchMethod(o)?'Moved to In transit / follow-up':'Marked sent / collected');
 }
 function markDeliveredComplete(id){
   let o=orders.find(x=>x.id===id);if(!o)return;
@@ -653,7 +823,7 @@ function deliveryIssueHold(id){
 }
 function loadAndGenerateConfirmation(id){loadOrder(id);generateConfirmation();showView('order')}
 function loadAndGenerateFulfilment(id){loadOrder(id);generateFulfilment();showView('order')}
-function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines,materials:o.materials};set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderType',o.orderType||'Live order');set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('voidReason',o.voidReason||'');set('priceTier',o.tier);set('paymentStatus',o.payment);set('fulfilmentMethod',o.fulfilment);set('orderStatus',o.status);set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageService',o.postageService||defaultPostageService(o));set('postageItems',o.postageItems??0);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');set('internalFulfilmentWarning',o.internalFulfilmentWarning||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
+function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines||[],materials:o.materials||{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:!!o.packingManualOverride};packingManualOverride=!!o.packingManualOverride;set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderType',o.orderType||'Live order');set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('voidReason',o.voidReason||'');set('priceTier',o.tier);set('paymentStatus',paymentValue(o.payment));set('fulfilmentMethod',o.fulfilment||'Hold / not arranged');set('orderStatus',statusValue(o.status));set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageService',o.postageService||defaultPostageService(o));set('postageItems',o.postageItems??0);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('labelQrRef',o.labelQrRef||'');set('labelQrNote',o.labelQrNote||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');set('internalFulfilmentWarning',o.internalFulfilmentWarning||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();showView('order')}
 function toggleValue(btn){btn.querySelector('.value-hidden').classList.toggle('value-hidden')}
 function historyMatches(o,filter){
   if(filter==='live')return (o.orderType||'Live order')==='Live order';
@@ -668,9 +838,52 @@ function renderHistory(filter='all'){
   if(!historyList)return;
   document.querySelectorAll('#historyTabs button').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase().startsWith(filter==='cancelled'?'cancelled':filter)));
   let list=orders.filter(o=>historyMatches(o,filter)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-  historyList.innerHTML=list.length?list.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">Type: ${htmlEscape(o.orderType||'Live order')} · Date: ${htmlEscape(o.date||'')}</div><div class="tiny">Payment: ${htmlEscape(o.payment||'Not paid')} · Status: ${htmlEscape(normalStatus(o))}</div><div class="tiny">Value: ${money(o.total)}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button></div></div>`).join(''):'<div class="muted">No saved orders match this filter.</div>';
+  historyList.innerHTML=list.length?list.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)}</strong><div class="tiny">Type: ${htmlEscape(o.orderType||'Live order')} · Date: ${htmlEscape(o.date||'')}</div><div class="tiny">Payment: ${htmlEscape(paymentValue(o.payment))} · Status: ${htmlEscape(displayStatus(o))}</div><div class="tiny">Value: ${money(o.total)}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button></div></div>`).join(''):'<div class="muted">No saved orders match this filter.</div>';
 }
-function renderStock(){let labels={RTA20:'Retatrutide 20mg vial',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',TA110:'Thymosin Alpha-1 10mg',KPV10:'KPV 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'MAG-BOX-170x125x38',INSERT:'Insert',INLAY:'Inlay card'};stockList.innerHTML=Object.keys(stock).map(k=>'<div class="stock-row"><span>'+labels[k]+'</span><strong>'+stock[k]+'</strong></div>').join('')}
+function renderStockItemOptions(){const opts=stockKeys().map(k=>`<option value="${htmlEscape(k)}">${htmlEscape(STOCK_LABELS[k])}</option>`).join('');[stockReceiveItem,stockAdjustItem].forEach(s=>{if(s)s.innerHTML=opts})}
+function stockStatus(k){
+  const q=Number(stock[k]||0),t=stockThresholds[k]||{},re=Number(t.reorderAt||0),target=Number(t.targetQty||0);
+  if(re&&q<=0)return{label:'Order now',cls:'badge-bad'};
+  if(re&&q<=re)return{label:'Low stock',cls:'badge-warn'};
+  if(target&&q<=Math.max(re,target*.5))return{label:'Order soon',cls:'badge-info'};
+  return{label:'OK',cls:'badge-good'};
+}
+function stockAlerts(){return Object.keys(stock).map(k=>({k,...stockStatus(k)})).filter(x=>x.label!=='OK').sort((a,b)=>['Order now','Low stock','Order soon'].indexOf(a.label)-['Order now','Low stock','Order soon'].indexOf(b.label))}
+function addMovement(type,item,qty,note,ref=''){
+  qty=Number(qty||0);if(!item||!qty){showToast('Enter item and quantity');return}
+  stockMovements.unshift({id:'SM-'+Date.now(),date:new Date().toISOString(),item,qty,type,note:note||'',ref});
+  recalcStock();saveLocal();renderAll();showToast(type==='received'?'Stock received added':'Stock adjustment saved');
+}
+function addStockReceivedNow(){addMovement('received',val('stockReceiveItem'),Math.abs(num('stockReceiveQty')),val('stockReceiveNote'),val('stockReceiveNote'));set('stockReceiveQty',0);set('stockReceiveNote','')}
+function saveStockAdjustmentNow(){addMovement('adjustment',val('stockAdjustItem'),num('stockAdjustQty'),val('stockAdjustNote'),val('stockAdjustNote'));set('stockAdjustQty',0);set('stockAdjustNote','')}
+function saveThreshold(k){
+  stockThresholds[k]={reorderAt:Number(document.getElementById('reorder-'+k)?.value||0),targetQty:Number(document.getElementById('target-'+k)?.value||0)};
+  saveLocal();renderAll();showToast('Reorder level saved');
+}
+function renderStartStockAlerts(){
+  if(!startStockAlerts)return;
+  const alerts=stockAlerts();
+  startStockAlerts.innerHTML=alerts.length?alerts.map(a=>`<div class="summary-line"><span>${htmlEscape(STOCK_LABELS[a.k]||a.k)}</span><strong>${htmlEscape(a.label)} · ${stock[a.k]||0}</strong></div>`).join(''):'<div class="muted">No stock warnings.</div>';
+}
+function renderStartActionPrompts(){
+  if(!startActionPrompts)return;
+  const live=orders.filter(isOpenWork);
+  let prompts=[];
+  const conf=live.filter(o=>(o.confirmation||'No')!=='Yes');
+  const upd=live.filter(o=>(o.updateSent||'No')!=='Yes'&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(normalStatus(o)));
+  const miss=live.filter(o=>isCarrierDispatchMethod(o)&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(normalStatus(o))&&!o.tracking&&!o.labelQrRef);
+  if(conf.length)prompts.push(['Confirmation not sent',conf.length]);
+  if(upd.length)prompts.push(['Customer update not sent',upd.length]);
+  if(miss.length)prompts.push(['Missing tracking/label ref',miss.length]);
+  startActionPrompts.innerHTML=prompts.length?prompts.map(p=>`<div class="summary-line"><span>${htmlEscape(p[0])}</span><strong>${p[1]}</strong></div>`).join(''):'<div class="muted">No urgent order prompts.</div>';
+}
+function renderStock(){
+  if(!stockList)return;
+  renderStartActionPrompts();
+  renderStartStockAlerts();
+  stockList.innerHTML=Object.keys(stock).map(k=>{const t=stockThresholds[k]||{},s=stockStatus(k);return `<div class="stock-row"><div><strong>${htmlEscape(STOCK_LABELS[k]||k)}</strong><div class="tiny">Current qty: ${stock[k]||0}</div><span class="${s.cls}">${htmlEscape(s.label)}</span></div><div class="grid two" style="min-width:260px"><div class="field"><label>Reorder at</label><input id="reorder-${htmlEscape(k)}" type="number" value="${htmlEscape(t.reorderAt??0)}"></div><div class="field"><label>Target qty</label><input id="target-${htmlEscape(k)}" type="number" value="${htmlEscape(t.targetQty??0)}"></div><button class="btn" onclick="saveThreshold(${jsArg(k)})">Save levels</button></div></div>`}).join('');
+  if(stockMovementList)stockMovementList.innerHTML=stockMovements.slice(0,20).map(m=>`<div class="stock-row"><div><strong>${htmlEscape(STOCK_LABELS[m.item]||m.item)}</strong><div class="tiny">${htmlEscape(new Date(m.date).toLocaleString())} · ${htmlEscape(m.type)} · ${htmlEscape(m.note||m.ref||'')}</div></div><strong>${Number(m.qty)>0?'+':''}${htmlEscape(m.qty)}</strong></div>`).join('')||'<div class="muted">No stock movements yet.</div>';
+}
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
 function renderAdmin(panel='system'){
   if(!adminPanel)return;
@@ -702,6 +915,7 @@ function customerFulfilmentLine(o){
   if(st==='New / awaiting payment'||st==='Ready to assemble')return 'Your order is now being prepared. We will send another update when it is packed or ready for collection.';
   if(st==='Assembled')return 'Your order has been assembled and is moving to packing / fulfilment.';
   if(st==='Packed / ready to send-collect'){
+    if(method==='Courier collection')return 'Your order is packed and ready for courier collection.';
     if(method.includes('collection'))return 'Your order is ready for collection. Please use the agreed collection details.';
     if(method.includes('drop-off'))return 'Your order is ready for local drop-off. We will confirm once it has been completed.';
     return 'Your order is packed and ready for dispatch.';
@@ -720,6 +934,13 @@ function customerFulfilmentLine(o){
   if(st==='Cancelled')return 'This order has been cancelled. Please contact us if you need anything else.';
   return 'Your order is in progress. We will update you when the next fulfilment step is confirmed.';
 }
+function customerFulfilmentMethodText(o){
+  const method=String(o.fulfilment||'Hold / not arranged');
+  return method==='Hold / not arranged'?'to be confirmed':method;
+}
+function shouldShowCustomerPostageService(o){
+  return ['Royal Mail postage','Royal Mail collection','Courier collection'].includes(o.fulfilment);
+}
 function syncFulfilmentPaymentWarning(){
   let o=orderPayload(), warn='';
   if(!isPaymentCleared(o)){
@@ -730,13 +951,13 @@ function syncFulfilmentPaymentWarning(){
   return warn;
 }
 function markCustomerUpdateStale(){set('updateSent','No');set('fulfilmentMsg','Customer update needs regenerating after recent changes.');syncFulfilmentPaymentWarning()}
-function generateFulfilment(){set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs — Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+normalStatus(o)+'\nFulfilment method: '+o.fulfilment;if(o.postageService)msg+='\nPostage service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(o.deliveryNotes)msg+='\nDelivery notes: '+o.deliveryNotes;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';set('fulfilmentMsg',msg);syncFulfilmentPaymentWarning();showToast('Fresh customer update generated · mark sent after sending')}
+function generateFulfilment(){set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs — Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+customerStatusText(o)+'\nFulfilment: '+customerFulfilmentMethodText(o);if(shouldShowCustomerPostageService(o)&&o.postageService)msg+='\nPostage / courier service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(o.deliveryNotes)msg+='\nDelivery notes: '+o.deliveryNotes;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';set('fulfilmentMsg',msg);syncFulfilmentPaymentWarning();showToast('Fresh customer update generated · mark sent after sending')}
 function copyCustomerUpdate(){copyText(fulfilmentMsg.value);showToast('Copied. Send via customer route, then mark update sent and save.')}
 function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v40.6 JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">This means JavaScript stopped before rendering. Send this message to Alex.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v42.2 JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
