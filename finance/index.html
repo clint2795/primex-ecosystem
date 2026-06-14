@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v42.9A Daily Action Alerts + Communication Centre</title>
+<title>PrimeX Finance HQ · v42.9B Stabilisation Privacy Encoding Fix</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -88,6 +88,11 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     </div>
   </header>
 
+  <div id="prototypeDataWarning" class="card slim note warn hide">
+    <strong>Prototype mode:</strong> clear local saved data before public/shared testing.
+    <div class="btnrow" style="margin-top:10px"><button class="btn danger" id="clearLocalDataBtn" type="button">Clear test data / Reset local data</button></div>
+  </div>
+
   <div id="actionBanner" class="card slim action-alert-banner hide"></div>
 
   <main id="view-start" class="view active">
@@ -164,7 +169,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <div id="pricingNote" class="note" style="margin-top:10px"></div><label id="needsCheckWrap" class="note warn hide" style="display:none;margin-top:10px"><input id="productNeedsCheckReviewed" type="checkbox"> Internal review flag</label>
         <div class="structure-box order-action-box action-box-clean">
           <div id="kitPreview" class="inline-preview"></div>
-          <div class="btnrow"><button class="btn primary" id="addProductBtn">Add selected item</button><span id="addProductFeedback" class="tiny badge-good hide">Item added âœ“</span><span id="addProductDisabledReason" class="tiny warn-text"></span></div>
+          <div class="btnrow"><button class="btn primary" id="addProductBtn">Add selected item</button><span id="addProductFeedback" class="tiny badge-good hide">Item added ✓</span><span id="addProductDisabledReason" class="tiny warn-text"></span></div>
         </div>
       </div>
 
@@ -192,7 +197,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         </div>
         <div id="supportPricingNote" class="note" style="margin-top:10px"></div><div class="tiny" style="margin-top:6px">Customer price controls the charge only. Stock movement still records when added.</div>
         <div id="supportPreview" class="structure-box"></div>
-        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="addSupportItemBtn">Add support item</button><span id="addSupportFeedback" class="tiny badge-good hide">Support item added âœ“</span><span id="addSupportDisabledReason" class="tiny warn-text"></span></div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="addSupportItemBtn">Add support item</button><span id="addSupportFeedback" class="tiny badge-good hide">Support item added ✓</span><span id="addSupportDisabledReason" class="tiny warn-text"></span></div>
       </details>
     </section>
 
@@ -226,7 +231,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     <section class="card">
       <div class="section-title"><div><h2>Fulfilment / Delivery</h2><p>Book, record and update postage, courier, collection, or drop-off work from one place.</p></div></div>
       <div class="grid two" style="margin-bottom:10px">
-        <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Courier collection</option><option>Customer collection</option><option>Local drop-off</option></select><span class="tiny">Royal Mail collection means Royal Mail collects from us â€” not customer collection.</span></div>
+        <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Courier collection</option><option>Customer collection</option><option>Local drop-off</option></select><span class="tiny">Royal Mail collection means Royal Mail collects from us — not customer collection.</span></div>
       </div>
       <div id="fulfilmentMethodNotice" class="note" style="margin-bottom:10px"></div>
       <details id="fulfilmentAddressGroup" class="payment-advanced">
@@ -326,7 +331,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <details class="payment-advanced stock-scan-panel">
           <summary>Future scan / barcode / QR intake</summary>
           <div class="tiny" style="margin:8px 0">Placeholder only for now. Later this can select item, batch, COA, or packaging stock by scan.</div>
-          <div class="field"><label>Scan / barcode / QR input placeholder</label><input id="stockScanInput" placeholder="Future scan input â€” manual entry for now."></div>
+          <div class="field"><label>Scan / barcode / QR input placeholder</label><input id="stockScanInput" placeholder="Future scan input — manual entry for now."></div>
         </details>
       </section>
       <details class="payment-advanced" style="margin-top:10px">
@@ -356,7 +361,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <div class="field"><label>Current qty / starting qty</label><input id="stockItemQty" type="number" step="1" value="0"></div>
           <div class="field"><label>Reorder at</label><input id="stockItemReorder" type="number" step="1" value="0"></div>
           <div class="field"><label>Target qty</label><input id="stockItemTarget" type="number" step="1" value="0"></div>
-          <div class="field"><label>Currently stock this?</label><select id="stockItemActive"><option value="Yes">Yes â€” show/use this item</option><option value="No">No â€” hide from normal workflow</option></select></div>
+          <div class="field"><label>Currently stock this?</label><select id="stockItemActive"><option value="Yes">Yes — show/use this item</option><option value="No">No — hide from normal workflow</option></select></div>
           <div class="field"><label>Stock-only</label><select id="stockItemStockOnly"><option value="Yes">Yes</option><option value="No">No</option></select></div>
           <div class="field"><label>Order-entry visible</label><select id="stockItemOrderVisible"><option value="No">No</option><option value="Yes">Yes</option></select></div>
           <div class="field"><label>Replaces item ID</label><input id="stockItemReplaces"></div>
@@ -498,6 +503,8 @@ const archiveOrder=document.getElementById('archiveOrder');
 const convertQuoteBtn=document.getElementById('convertQuoteBtn');
 const actionBanner=document.getElementById('actionBanner');
 const communicationRows=document.getElementById('communicationRows');
+const prototypeDataWarning=document.getElementById('prototypeDataWarning');
+const clearLocalDataBtn=document.getElementById('clearLocalDataBtn');
 const voidOrder=document.getElementById('voidOrder');
 const deleteOrder=document.getElementById('deleteOrder');
 const voidReason=document.getElementById('voidReason');
@@ -569,11 +576,11 @@ const PRODUCT_RULES={
  CUSTOM:{id:'CUSTOM',name:'Custom / added compound',internal:null,existing:null,standard:null,closeEligible:'No',plannerRange:false,kit:false,custom:true,catalogueGroup:'custom'}
 };
 const STRUCTURE_RULES={
- RTA20_2:{id:'RTA20_2',name:'Retatrutide 20mg Â· 2-vial structure',type:'Single-compound structure',contents:[['RTA20',2]],prices:{internal:220,existing:null,standard:290},closeEligible:'Temporary',maxLocked:true},
- RTA20_3:{id:'RTA20_3',name:'Retatrutide 20mg Â· 3-vial structure',type:'Single-compound structure',contents:[['RTA20',3]],prices:{internal:320,existing:null,standard:420},closeEligible:'Temporary',maxLocked:true},
- REC_ENTRY:{id:'REC_ENTRY',name:'Recovery Structure Â· Entry',type:'Pathway',contents:[['BPC10',2],['TB50010',1]],prices:{internal:120,existing:null,standard:null},closeEligible:'Yes',label:'2 Ã— BPC-157 10mg + 1 Ã— TB-500 10mg'},
- REC_CONT:{id:'REC_CONT',name:'Recovery Structure Â· Continuation',type:'Pathway',contents:[['BPC10',4],['TB50010',2]],prices:{internal:225,existing:null,standard:null},closeEligible:'Yes',label:'4 Ã— BPC-157 10mg + 2 Ã— TB-500 10mg'},
- GUT_PAIR:{id:'GUT_PAIR',name:'Gut / Inflammation Structure Â· Paired',type:'Pathway',contents:[['BPC10',2],['KPV10',1]],prices:{internal:100,existing:null,standard:null},closeEligible:'Yes',label:'2 Ã— BPC-157 10mg + 1 Ã— KPV 10mg'}
+ RTA20_2:{id:'RTA20_2',name:'Retatrutide 20mg · 2-vial structure',type:'Single-compound structure',contents:[['RTA20',2]],prices:{internal:220,existing:null,standard:290},closeEligible:'Temporary',maxLocked:true},
+ RTA20_3:{id:'RTA20_3',name:'Retatrutide 20mg · 3-vial structure',type:'Single-compound structure',contents:[['RTA20',3]],prices:{internal:320,existing:null,standard:420},closeEligible:'Temporary',maxLocked:true},
+ REC_ENTRY:{id:'REC_ENTRY',name:'Recovery Structure · Entry',type:'Pathway',contents:[['BPC10',2],['TB50010',1]],prices:{internal:120,existing:null,standard:null},closeEligible:'Yes',label:'2 × BPC-157 10mg + 1 × TB-500 10mg'},
+ REC_CONT:{id:'REC_CONT',name:'Recovery Structure · Continuation',type:'Pathway',contents:[['BPC10',4],['TB50010',2]],prices:{internal:225,existing:null,standard:null},closeEligible:'Yes',label:'4 × BPC-157 10mg + 2 × TB-500 10mg'},
+ GUT_PAIR:{id:'GUT_PAIR',name:'Gut / Inflammation Structure · Paired',type:'Pathway',contents:[['BPC10',2],['KPV10',1]],prices:{internal:100,existing:null,standard:null},closeEligible:'Yes',label:'2 × BPC-157 10mg + 1 × KPV 10mg'}
 };
 const INITIAL_STOCK={RTA20:10,BPC10:0,BPC40:0,TB50010:0,KPV10:0,TA110:0,NAD500:0,AMINO50:0,MOTSC40:0,SS31_30:0,DSIP5:0,GHKCU50:0,NAD1000:0,CJC_DAC5:0,CJC_NODAC10:0,IPA10:0,BAC3:30,BAC10:12,U100:20,WIPES:500,BOX:20,INSERT:40,INLAY:40,VIAL_LABEL:0,BOX_QR_LABEL:0,TAMPER_SEAL:0,VINYL_STICKER_SHEET:0,MATTE_VINYL_SHEET:0,CLEAR_LAMINATE_SHEET:0,A4_CARD_STOCK:0,BLACK_CARD_STOCK:0,LABEL_SHEET:0,PAPER_BAG:0,BLACK_JIFFY:0,SHIPPING_LABEL:0,HEAT_SHRINK:0,OUTER_MAILING_LABEL:0,FRAGILE_STICKER:0,CRICUT_BLADE:0,CRICUT_MAT:0,PRINTER_INK:0,DOUBLE_SIDED_TAPE:0,MASKING_TAPE:0,SCORING_WHEEL:0};
 const STOCK_LABELS={RTA20:'Retatrutide 20mg vial',BPC10:'BPC-157 10mg',BPC40:'BPC-157 40mg',TB50010:'TB-500 10mg',KPV10:'KPV 10mg',TA110:'Thymosin Alpha-1 10mg',NAD500:'NAD+ 500mg',AMINO50:'5-Amino-1MQ 50mg',MOTSC40:'MOTS-c 40mg',SS31_30:'SS-31 30mg',DSIP5:'DSIP 5mg',GHKCU50:'GHK-Cu 50mg',NAD1000:'NAD+ 1000mg',CJC_DAC5:'CJC-1295 DAC 5mg',CJC_NODAC10:'CJC-1295 no DAC 10mg',IPA10:'Ipamorelin 10mg',BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 insulin syringe 10-pack',WIPES:'Alcohol wipes',BOX:'Magnetic box',INSERT:'Insert',INLAY:'Inlay card',VIAL_LABEL:'Vial label',BOX_QR_LABEL:'Box/QR label',TAMPER_SEAL:'Tamper seal / outer seal',VINYL_STICKER_SHEET:'Vinyl sticker sheet',MATTE_VINYL_SHEET:'Matte vinyl sheet',CLEAR_LAMINATE_SHEET:'Clear laminate sheet',A4_CARD_STOCK:'A4 card stock',BLACK_CARD_STOCK:'Black card stock',LABEL_SHEET:'Label sheet',PAPER_BAG:'Paper collection bag',BLACK_JIFFY:'Black padded jiffy bag',SHIPPING_LABEL:'Shipping label',HEAT_SHRINK:'Heat shrink wrap / shrink bag',OUTER_MAILING_LABEL:'Outer mailing label',FRAGILE_STICKER:'Fragile/handling sticker',CRICUT_BLADE:'Cricut blade',CRICUT_MAT:'Cricut mat',PRINTER_INK:'Printer ink',DOUBLE_SIDED_TAPE:'Double-sided tape',MASKING_TAPE:'Masking tape',SCORING_WHEEL:'Scoring wheel/blade'};
@@ -596,7 +603,20 @@ function safeLoadJSON(key, fallback){
     return fallback;
   }
 }
-let orders=safeLoadJSON('px_orders_v21',[]);
+const FINANCE_LOCAL_KEYS=['px_orders_v21','px_stock_v21','px_stock_movements_v1','px_stock_thresholds_v1','px_custom_stock_items_v1','px_stock_opening_migrated_v1'];
+let prototypeStoredOrdersBlocked=false;
+function isPublicPrototypeMode(){
+  return location.hostname.endsWith('github.io')&&!new URLSearchParams(location.search).has('allowLocalData');
+}
+function loadOrdersSafely(){
+  const raw=localStorage.getItem('px_orders_v21');
+  if(isPublicPrototypeMode()){
+    prototypeStoredOrdersBlocked=!!raw;
+    return [];
+  }
+  return safeLoadJSON('px_orders_v21',[]);
+}
+let orders=loadOrdersSafely();
 let stock=safeLoadJSON('px_stock_v21',JSON.parse(JSON.stringify(INITIAL_STOCK)));
 let stockMovements=safeLoadJSON('px_stock_movements_v1',null);
 let stockThresholds=safeLoadJSON('px_stock_thresholds_v1',JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS)));
@@ -616,14 +636,16 @@ let addMode='single';
 let packingManualOverride=false;
 let packingNeedsReview=false;
 let suppressPackingOverride=false;
-function money(n){return 'Â£'+Number(n||0).toFixed(2)}
+function money(n){return '£'+Number(n||0).toFixed(2)}
 function val(id){return document.getElementById(id).value}
 function num(id){return Number(val(id)||0)}
 function set(id,v){const el=document.getElementById(id);el.value=v;autoExpandTextarea(el)}
 function paymentValue(v){return !v||v==='Not paid'?'Awaiting payment':v}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
-function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds));localStorage.setItem('px_custom_stock_items_v1',JSON.stringify(customStockItems))}
-function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0)}
+function saveLocal(){if(isPublicPrototypeMode())localStorage.removeItem('px_orders_v21');else localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds));localStorage.setItem('px_custom_stock_items_v1',JSON.stringify(customStockItems))}
+function clearLocalFinanceData(){if(!confirm('Clear local Finance HQ test data in this browser?'))return;FINANCE_LOCAL_KEYS.forEach(k=>localStorage.removeItem(k));orders=[];stock=JSON.parse(JSON.stringify(INITIAL_STOCK));stockMovements=[];stockThresholds=JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=[];prototypeStoredOrdersBlocked=false;saveLocal();newOrder();recalcStock();renderAll();showToast('Local Finance HQ data cleared')}
+function renderPrototypeDataWarning(){if(!prototypeDataWarning)return;const show=isPublicPrototypeMode()||prototypeStoredOrdersBlocked;prototypeDataWarning.classList.toggle('hide',!show);if(show){prototypeDataWarning.querySelector('strong').textContent=isPublicPrototypeMode()?'Public prototype mode:':'Prototype mode:'}}
+function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));const view=document.getElementById('view-'+v);if(!view){showToast('View not available');return}view.classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0)}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 function autoExpandTextarea(el){if(!el||el.tagName!=='TEXTAREA')return;const compact=window.matchMedia&&window.matchMedia('(max-width:760px)').matches&&['orderNotes','customerNote','packingNotes'].includes(el.id);const min=compact?72:(el.classList.contains('tall-textarea')?140:96);el.style.height='auto';el.style.height=Math.max(el.scrollHeight,min)+'px'}
 function bindAutoExpand(){document.querySelectorAll('textarea').forEach(t=>{autoExpandTextarea(t);t.addEventListener('input',()=>autoExpandTextarea(t))})}
@@ -639,7 +661,7 @@ function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirm
 function markCustomerUpdateStale(){if(val('updateSent')==='Yes')set('updateSent','Customer update needs regeneration');syncFulfilmentPaymentWarning()}
 function markOrderMessagesStale(scope='all'){if(scope==='all')markConfirmationStale();markCustomerUpdateStale()}
 function clearAddFeedback(){addProductFeedback?.classList.add('hide');addSupportFeedback?.classList.add('hide')}
-function showAddFeedback(el){if(!el)return;el.textContent='Added to order summary âœ“';el.classList.remove('hide');setTimeout(()=>el.classList.add('hide'),3000)}
+function showAddFeedback(el){if(!el)return;el.textContent='Added to order summary ✓';el.classList.remove('hide');setTimeout(()=>el.classList.add('hide'),3000)}
 function isNeedsCheckApproved(p){return true}
 function validateLiveOrderBeforeSave(o){if((o.orderType||'Live order')!=='Live order')return true;if(!o.lines.length){showToast('Live order needs at least one item before saving.');return false}if(!o.id&&!o.customer){showToast('Live order needs a customer/ref or order ref before saving.');return false}const reviewed=o.lines.some(l=>l.review||PRODUCT_RULES[l.pid]?.needsCheck);if(!hasPositivePrice(o.total)&&!reviewed){showToast('Live order total must be greater than 0 unless reviewed.');return false}return true}
 function stockCategoryButton(cat){return `<button class="${cat===currentStockCategory?'active':''}" onclick="setStockCategory(${jsArg(cat)})">${htmlEscape(cat)}</button>`}
@@ -683,19 +705,19 @@ function stockCardHTML(k){
   const startNote=s.label==='Not stocked'?'<div class="note" style="margin:8px 0">Not currently tracked for reorder. Add received stock above when you start holding it, or set reorder/target levels here.</div>':'';
   const removeDisabled=q<=0?' disabled':'';
   const removeNote=q<=0?'<div class="tiny">No current stock to remove. Use stock received above when new stock arrives.</div>':'';
-  return `<details class="stock-row stock-card-detail"><summary><div class="stock-card-head"><div><strong>${htmlEscape(STOCK_LABELS[k]||k)}</strong><div class="stock-mini">${htmlEscape(cat)} Â· Current qty: ${htmlEscape(q)}</div></div><span class="${s.cls}">${htmlEscape(s.label)}</span></div></summary><div class="stock-card-controls">${startNote}<div class="stock-action-panel"><div class="stock-action-title">Reorder setup</div><div class="grid two"><div class="field"><label>Reorder at</label><input id="reorder-${htmlEscape(k)}" type="number" min="0" value="${htmlEscape(t.reorderAt??0)}"></div><div class="field"><label>Target stock</label><input id="target-${htmlEscape(k)}" type="number" min="0" value="${htmlEscape(t.targetQty??0)}"></div></div><div class="stock-card-actions" style="margin-top:10px"><button class="btn" onclick="saveThreshold(${jsArg(k)})">${htmlEscape(actionLabel)}</button><button class="btn subtle" onclick="stopStockingItem(${jsArg(k)})">${htmlEscape(clearLabel)}</button></div></div><div class="stock-action-panel danger-lite"><div class="stock-action-title">Remove / damaged stock</div>${removeNote}<div class="grid three"><div class="field"><label>Qty to remove</label><input id="remove-${htmlEscape(k)}" type="number" min="0" step="1" value="0"${removeDisabled}></div><div class="field"><label>Reason</label><select id="removeReason-${htmlEscape(k)}"${removeDisabled}><option>Damaged stock</option><option>Lost / missing</option><option>Expired / wasted</option><option>Count correction</option><option>Used internally</option></select></div><div class="field"><label>Note</label><input id="removeNote-${htmlEscape(k)}" placeholder="Optional note"${removeDisabled}></div></div><div class="stock-card-actions" style="margin-top:10px"><button class="btn danger" onclick="removeStockFromCard(${jsArg(k)})"${removeDisabled}>Remove from stock</button></div></div></div></details>`;
+  return `<details class="stock-row stock-card-detail"><summary><div class="stock-card-head"><div><strong>${htmlEscape(STOCK_LABELS[k]||k)}</strong><div class="stock-mini">${htmlEscape(cat)} · Current qty: ${htmlEscape(q)}</div></div><span class="${s.cls}">${htmlEscape(s.label)}</span></div></summary><div class="stock-card-controls">${startNote}<div class="stock-action-panel"><div class="stock-action-title">Reorder setup</div><div class="grid two"><div class="field"><label>Reorder at</label><input id="reorder-${htmlEscape(k)}" type="number" min="0" value="${htmlEscape(t.reorderAt??0)}"></div><div class="field"><label>Target stock</label><input id="target-${htmlEscape(k)}" type="number" min="0" value="${htmlEscape(t.targetQty??0)}"></div></div><div class="stock-card-actions" style="margin-top:10px"><button class="btn" onclick="saveThreshold(${jsArg(k)})">${htmlEscape(actionLabel)}</button><button class="btn subtle" onclick="stopStockingItem(${jsArg(k)})">${htmlEscape(clearLabel)}</button></div></div><div class="stock-action-panel danger-lite"><div class="stock-action-title">Remove / damaged stock</div>${removeNote}<div class="grid three"><div class="field"><label>Qty to remove</label><input id="remove-${htmlEscape(k)}" type="number" min="0" step="1" value="0"${removeDisabled}></div><div class="field"><label>Reason</label><select id="removeReason-${htmlEscape(k)}"${removeDisabled}><option>Damaged stock</option><option>Lost / missing</option><option>Expired / wasted</option><option>Count correction</option><option>Used internally</option></select></div><div class="field"><label>Note</label><input id="removeNote-${htmlEscape(k)}" placeholder="Optional note"${removeDisabled}></div></div><div class="stock-card-actions" style="margin-top:10px"><button class="btn danger" onclick="removeStockFromCard(${jsArg(k)})"${removeDisabled}>Remove from stock</button></div></div></div></details>`;
 }
 function stockSubGroupHTML(title,keys){
   const issues=keys.filter(k=>stockStatus(k).label!=='OK').length,label=issues?issues+' issue'+(issues===1?'':'s'):'OK';
   const defaultOpen=['Compounds','Support items sold / included'].includes(title)?' open':'';
-  return `<details class="stock-subgroup-detail"${defaultOpen}><summary><div class="stock-subgroup-title"><div>${htmlEscape(title)}<small>${htmlEscape(stockSubGroupNote(title))}</small></div><span class="tiny">${htmlEscape(label)} Â· ${keys.length} item${keys.length===1?'':'s'}</span></div></summary><div class="stock-card-row-wrap">${keys.map(stockCardHTML).join('')}</div></details>`;
+  return `<details class="stock-subgroup-detail"${defaultOpen}><summary><div class="stock-subgroup-title"><div>${htmlEscape(title)}<small>${htmlEscape(stockSubGroupNote(title))}</small></div><span class="tiny">${htmlEscape(label)} · ${keys.length} item${keys.length===1?'':'s'}</span></div></summary><div class="stock-card-row-wrap">${keys.map(stockCardHTML).join('')}</div></details>`;
 }
 function stockGroupHTML(group,keys){
   const issues=keys.filter(k=>stockStatus(k).label!=='OK').length,label=issues?issues+' issue'+(issues===1?'':'s'):'OK';
   const subOrder=['Compounds','Support items sold / included','Kit-build / packaging materials','Dispatch packaging','Production consumables','Admin / misc stock'];
   const sections=subOrder.map(title=>{const sectionKeys=keys.filter(k=>stockSubGroupForKey(k)===title);return sectionKeys.length?stockSubGroupHTML(title,sectionKeys):''}).join('');
   const defaultOpen=group.id==='order'?' open':'';
-  return `<details class="payment-advanced stock-view-group"${defaultOpen}><summary>${htmlEscape(group.title)} â€” ${htmlEscape(label)} Â· ${keys.length} item${keys.length===1?'':'s'}</summary><div class="group-note">${htmlEscape(group.note||'')}</div>${sections}</details>`;
+  return `<details class="payment-advanced stock-view-group"${defaultOpen}><summary>${htmlEscape(group.title)} — ${htmlEscape(label)} · ${keys.length} item${keys.length===1?'':'s'}</summary><div class="group-note">${htmlEscape(group.note||'')}</div>${sections}</details>`;
 }
 function removeStockFromCard(k){
   const qty=Math.abs(Number(document.getElementById('remove-'+k)?.value||0));
@@ -711,7 +733,7 @@ function stockItemFormValue(id){return document.getElementById(id)?.value||''}
 function clearStockItemEditor(){['stockItemId','stockItemName','stockItemQty','stockItemReorder','stockItemTarget','stockItemReplaces','stockItemNotes'].forEach(id=>set(id,id==='stockItemQty'||id==='stockItemReorder'||id==='stockItemTarget'?0:''));set('stockItemCategory','Product stock');set('stockItemUnit','vial');set('stockItemActive','Yes');set('stockItemStockOnly','Yes');set('stockItemOrderVisible','No')}
 function editStockItem(id){const i=activeCustomStockItem(id);if(!i)return;set('stockItemId',i.id);set('stockItemName',i.name||'');set('stockItemCategory',i.category||'Admin / misc');set('stockItemUnit',i.unitType||'other');set('stockItemQty',stock[i.id]??i.qty??0);set('stockItemReorder',stockThresholds[i.id]?.reorderAt??i.reorderAt??0);set('stockItemTarget',stockThresholds[i.id]?.targetQty??i.targetQty??0);set('stockItemActive',i.active===false?'No':'Yes');set('stockItemStockOnly',i.stockOnly===false?'No':'Yes');set('stockItemOrderVisible',i.orderVisible?'Yes':'No');set('stockItemReplaces',i.replaces||'');set('stockItemNotes',i.notes||'')}
 function saveStockItemNow(){let id=stockItemFormValue('stockItemId').trim().toUpperCase().replace(/[^A-Z0-9_]+/g,'_').replace(/^_+|_+$/g,'');const name=stockItemFormValue('stockItemName').trim();if(!id||!name){showToast('Stock item ID and name required');return}const category=stockItemFormValue('stockItemCategory')||'Admin / misc',qty=Number(stockItemFormValue('stockItemQty')||0),reorderAt=Number(stockItemFormValue('stockItemReorder')||0),targetQty=Number(stockItemFormValue('stockItemTarget')||0);const idx=customStockItems.findIndex(i=>i.id===id),prior=idx>=0?customStockItems[idx]:null;const item={id,name,category,unitType:stockItemFormValue('stockItemUnit')||'other',qty,active:stockItemFormValue('stockItemActive')!=='No',stockOnly:stockItemFormValue('stockItemStockOnly')!=='No'||defaultStockOnlyForCategory(category),orderVisible:stockItemFormValue('stockItemOrderVisible')==='Yes'&&!defaultStockOnlyForCategory(category),replaces:stockItemFormValue('stockItemReplaces').trim(),notes:stockItemFormValue('stockItemNotes').trim(),reorderAt,targetQty};if(idx>=0)customStockItems[idx]=item;else customStockItems.push(item);applyCustomStockItems();stockThresholds[id]={reorderAt,targetQty};if(!prior){stockMovements.unshift({id:'SM-'+id+'-'+Date.now(),date:new Date().toISOString(),item:id,qty,type:'opening',note:'Opening qty from stock item manager',ref:'v42.8J stock manager',batch:'',supplierRef:'',coaStatus:'Not applicable'})}else{const currentQty=Number(stock[id]||0),delta=qty-currentQty;if(delta)stockMovements.unshift({id:'SM-'+id+'-'+Date.now(),date:new Date().toISOString(),item:id,qty:delta,type:'adjustment',note:'Stock item manager quantity edit',ref:'v42.8J stock manager',batch:'',supplierRef:'',coaStatus:'Not applicable'})}recalcStock();saveLocal();renderStockItemOptions();renderStock();showToast('Stock item saved')}
-function renderStockItemManager(){if(!stockItemManagerList)return;stockItemManagerList.innerHTML=customStockItems.length?customStockItems.map(i=>`<div class="stock-row"><div><strong>${htmlEscape(i.name||i.id)}</strong><div class="tiny">${htmlEscape(i.id)} Â· ${htmlEscape(i.category||'Admin / misc')} Â· ${htmlEscape(i.unitType||'other')} Â· ${i.active===false?'Inactive':'Active'} Â· ${i.stockOnly===false?'Order-capable':'Stock-only'}</div><div class="tiny">Current qty: ${htmlEscape(stock[i.id]??0)} Â· Reorder: ${htmlEscape(stockThresholds[i.id]?.reorderAt??0)} Â· Target: ${htmlEscape(stockThresholds[i.id]?.targetQty??0)}</div></div><button class="btn" onclick="editStockItem(${jsArg(i.id)})">Edit</button></div>`).join(''):'<div class="muted">No custom stock items added yet.</div>'}
+function renderStockItemManager(){if(!stockItemManagerList)return;stockItemManagerList.innerHTML=customStockItems.length?customStockItems.map(i=>`<div class="stock-row"><div><strong>${htmlEscape(i.name||i.id)}</strong><div class="tiny">${htmlEscape(i.id)} · ${htmlEscape(i.category||'Admin / misc')} · ${htmlEscape(i.unitType||'other')} · ${i.active===false?'Inactive':'Active'} · ${i.stockOnly===false?'Order-capable':'Stock-only'}</div><div class="tiny">Current qty: ${htmlEscape(stock[i.id]??0)} · Reorder: ${htmlEscape(stockThresholds[i.id]?.reorderAt??0)} · Target: ${htmlEscape(stockThresholds[i.id]?.targetQty??0)}</div></div><button class="btn" onclick="editStockItem(${jsArg(i.id)})">Edit</button></div>`).join(''):'<div class="muted">No custom stock items added yet.</div>'}
 
 
 function nonRetaSupportSuggestionCount(){
@@ -743,10 +765,10 @@ function renderSupportSuggestions(){
   supportSuggestions.classList.remove('hide');
   supportSuggestions.innerHTML='<strong>Support suggestion</strong><br>'+
     'Non-Reta product count: '+count+'. Choose one BAC option only if it is part of this order.'+
-    '<div class="tiny" style="margin-top:8px">BAC option â€” choose one:</div>'+
+    '<div class="tiny" style="margin-top:8px">BAC option — choose one:</div>'+
     '<div class="btnrow" style="margin-top:6px">'+
-    '<button class="btn subtle" onclick="setSupportSuggestion(\'BAC3_ITEM\','+count+',\'charged\')">'+count+' Ã— 3ml BAC</button>'+
-    '<button class="btn subtle" onclick="setSupportSuggestion(\'BAC10_ITEM\','+tenMl+',\'charged\')">'+tenMl+' Ã— 10ml BAC</button>'+
+    '<button class="btn subtle" onclick="setSupportSuggestion(\'BAC3_ITEM\','+count+',\'charged\')">'+count+' × 3ml BAC</button>'+
+    '<button class="btn subtle" onclick="setSupportSuggestion(\'BAC10_ITEM\','+tenMl+',\'charged\')">'+tenMl+' × 10ml BAC</button>'+
     '</div><div class="tiny" style="margin-top:10px">Optional extras:</div>'+
     '<div class="btnrow" style="margin-top:6px">'+
     '<button class="btn subtle" onclick="setSupportSuggestion(\'U100_SUPPORT\',1,\'included\')">U100 10-pack</button>'+
@@ -754,7 +776,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v42.9A JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v42.9B JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -776,8 +798,8 @@ orderType.addEventListener('input',renderOrder);modeSingle.onclick=()=>showLineM
 addProductBtn.onclick=addProduct;addSupportItemBtn.onclick=addSupportItem;addStructureBtn.onclick=addStructure;
 clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};packingManualOverride=false;packingNeedsReview=false;current.packingManualOverride=false;current.packingNeedsReview=false;syncMaterialsToInputs();markOrderMessagesStale('all');renderOrder()};
 resetPackingAuto.onclick=()=>{resetPackingToAutoRule();markOrderMessagesStale('all')};saveOrder.onclick=saveOrderNow;archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};voidOrder.onclick=voidCurrentOrder;deleteOrder.onclick=deleteCurrentOrder;if(newOrderTop)newOrderTop.onclick=()=>{newOrder();showView('order')}; if(newOrderStart)newOrderStart.onclick=()=>{newOrder();showView('order')};
-genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>{if(isRoyalMailFormMethod())window.open('https://send.royalmail.com/','_blank')};genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>{copyText(confirmationMsg.value);showToast('Confirmation copied â€” send it, then mark sent')};
-addStockReceived.onclick=addStockReceivedNow;saveStockAdjustment.onclick=saveStockAdjustmentNow;saveStockItem?.addEventListener('click',saveStockItemNow);clearStockItemForm?.addEventListener('click',clearStockItemEditor);stockShowInactive?.addEventListener('input',renderStockItemOptions);stockStatusFilter?.addEventListener('input',()=>{currentStockStatus=stockStatusFilter.value;renderStock()});exportBackupBtn?.addEventListener('click',exportFinanceBackup);importBackupInput?.addEventListener('change',e=>importFinanceBackupFile(e.target.files?.[0]));
+genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>{if(isRoyalMailFormMethod())window.open('https://send.royalmail.com/','_blank')};genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>{copyText(confirmationMsg.value);showToast('Confirmation copied — send it, then mark sent')};
+addStockReceived.onclick=addStockReceivedNow;saveStockAdjustment.onclick=saveStockAdjustmentNow;saveStockItem?.addEventListener('click',saveStockItemNow);clearStockItemForm?.addEventListener('click',clearStockItemEditor);stockShowInactive?.addEventListener('input',renderStockItemOptions);stockStatusFilter?.addEventListener('input',()=>{currentStockStatus=stockStatusFilter.value;renderStock()});clearLocalDataBtn?.addEventListener('click',clearLocalFinanceData);exportBackupBtn?.addEventListener('click',exportFinanceBackup);importBackupInput?.addEventListener('change',e=>importFinanceBackupFile(e.target.files?.[0]));
 ['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();if(!suppressPackingOverride)markPackingManualOverride();markOrderMessagesStale('all');renderOrder()}));
 postageCharge.addEventListener('input',()=>{renderOrder();markOrderMessagesStale('all')});
 }
@@ -830,10 +852,10 @@ function convertCurrentQuoteToLive(){
   set('paymentStatus','Awaiting payment');
   set('confirmationSent','No');
   set('updateSent','No');
-  activeOrderTag.textContent='Converted quote Â· save to activate';
+  activeOrderTag.textContent='Converted quote · save to activate';
   updateOrderTypeNotice();
   renderOrder();
-  showToast('Quote converted â€” review then save order');
+  showToast('Quote converted — review then save order');
 }
 function convertQuoteToLive(id){
   loadOrder(id);
@@ -888,11 +910,11 @@ function repeatOrderFrom(id){
   set('postageItems',0);
   recalcMaterialsFromLines(false);
   syncMaterialsToInputs();
-  activeOrderTag.textContent='Repeat from '+id+' Â· unsaved';
+  activeOrderTag.textContent='Repeat from '+id+' · unsaved';
   updateOrderTypeNotice();
   renderOrder();
   showView('order');
-  showToast('Repeat order created â€” review then save');
+  showToast('Repeat order created — review then save');
 }
 function getProductPrice(pid,tier,qty=1){
   const p=PRODUCT_RULES[pid];
@@ -932,7 +954,7 @@ function getProductPrice(pid,tier,qty=1){
     note='';
   }
   if(price==null){price=0;review=true;note='Manual price required.'}
-  if((pid==='RTA20'||pid==='RTA20_KIT')&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range â€” manual price review required. Safe unit price shown until override.';review=true}
+  if((pid==='RTA20'||pid==='RTA20_KIT')&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range — manual price review required. Safe unit price shown until override.';review=true}
   return{price,note,review};
 }
 function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];let price=s.prices[tier],note='',review=false;if(tier==='custom')return{price:0,note:'Manual price required.',review:true};if(price!=null&&price>0){if(tier==='internal')note='Owner-approved price.';else note=''}else{let sum=sumStructureSinglePrices(sid,tier);if(!sum.missing&&hasPositivePrice(sum.total)){price=sum.total;review=true;note='Calculated from component prices. Review before adding.'}else{price=0;review=true;note='Manual price required.'}}return{price,note,review};}
@@ -1029,18 +1051,18 @@ function updateManualSupportPrice(){
 function updatePriceTierNote(){if(!priceTierNote)return;const tier=val('priceTier'),msg=tier==='internal'?'Owner-approved price.':tier==='custom'?'Manual price required.':'';priceTierNote.className='note'+(msg?' warn':' hide');priceTierNote.textContent=msg}
 function updateStructurePreview(){updatePriceTierNote();let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);if(r.review&&!hasPositivePrice(r.price))set('structurePrice','');else set('structurePrice',r.price);addStructureBtn.disabled=!hasPositivePrice(num('structurePrice'));structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=!hasPositivePrice(num('structurePrice'))?'Manual price required.':r.note;renderStructurePreview(sid,'structurePreview')}
 function supportReviewNoteHTML(){return '<div class="divider"></div><div class="note warn">Use the support item section below if this order needs BAC water or accessories.</div>'}
-function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">Product contents</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>Ã— '+qty+'</strong></div>'});let hasReta=s.contents.some(([pid])=>pid==='RTA20'||pid==='RTA20_KIT');if(hasReta)html+='<div class="tiny">Reta fulfilment details appear in Packing after adding.</div>';else html+=supportReviewNoteHTML();document.getElementById(target).innerHTML=html}
+function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">Product contents</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>× '+qty+'</strong></div>'});let hasReta=s.contents.some(([pid])=>pid==='RTA20'||pid==='RTA20_KIT');if(hasReta)html+='<div class="tiny">Reta fulfilment details appear in Packing after adding.</div>';else html+=supportReviewNoteHTML();document.getElementById(target).innerHTML=html}
 function retaMaterials(q){return{BAC3:q,BAC10:0,U100:q,WIPES:q*16,BOX:q,INSERT:q,INLAY:q}}
 function structureMaterials(sid){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};STRUCTURE_RULES[sid].contents.forEach(([pid,qty])=>{if(pid==='RTA20'||pid==='RTA20_KIT')addMats(mats,retaMaterials(qty))});return mats}
-function materialsHTML(m){return Object.entries({BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'Magnetic box',INSERT:'Insert',INLAY:'Inlay card'}).map(([k,l])=>m[k]?'<div class="summary-line"><span>'+l+'</span><strong>Ã— '+m[k]+'</strong></div>':'').join('')}
+function materialsHTML(m){return Object.entries({BAC3:'3ml BAC water',BAC10:'10ml BAC water',U100:'U100 10-pack',WIPES:'Alcohol wipes',BOX:'Magnetic box',INSERT:'Insert',INLAY:'Inlay card'}).map(([k,l])=>m[k]?'<div class="summary-line"><span>'+l+'</span><strong>× '+m[k]+'</strong></div>':'').join('')}
 function productContentsFromLines(){let out={};current.lines.forEach(l=>{if(l.kind==='product')addProductContent(out,l.pid,l.qty);if(l.kind==='structure')(l.contents||[]).forEach(([pid,qty])=>addProductContent(out,pid,qty))});return out}
 function addMats(target,source){Object.keys(target).forEach(k=>target[k]+=Number(source[k]||0))}
 function retaKitDeductions(q){let out={RTA20:q,BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};addMats(out,retaMaterials(q));return out}
-function stockDeductionHTML(m){return Object.entries(m).filter(([,qty])=>Number(qty)>0).map(([k,qty])=>'<div class="summary-line"><span>'+htmlEscape(STOCK_LABELS[k]||k)+'</span><strong>Ã— '+qty+'</strong></div>').join('')}
+function stockDeductionHTML(m){return Object.entries(m).filter(([,qty])=>Number(qty)>0).map(([k,qty])=>'<div class="summary-line"><span>'+htmlEscape(STOCK_LABELS[k]||k)+'</span><strong>× '+qty+'</strong></div>').join('')}
 function supportMaterialQty(p,qty){return Number(qty||0)*Number(p?.materialQty||1)}
-function renderKitPreview(pid,qty,target){const el=document.getElementById(target);const p=PRODUCT_RULES[pid];if(pid==='RTA20_KIT'){el.innerHTML='<strong>Selected item preview</strong><div class="summary-line"><span>Retatrutide 20mg finished kit</span><strong>Ã— '+qty+'</strong></div>'}else if(p&&p.supportItem){let m={};m[p.materialKey]=supportMaterialQty(p,qty);el.innerHTML='<strong>Support item preview</strong><div class="tiny">'+supportOutcomeText(val('supportChargeMode')||'charged')+'</div>'+stockDeductionHTML(m)}else if(pid==='RTA20'){el.innerHTML='<strong>Product contents</strong><div class="summary-line"><span>'+htmlEscape(p.name)+'</span><strong>Ã— '+qty+'</strong></div>'+supportReviewNoteHTML()}else if(isNonRetaProduct(pid)){el.innerHTML='<strong>Product contents</strong><div class="summary-line"><span>'+htmlEscape(p.name)+'</span><strong>Ã— '+qty+'</strong></div>'+supportReviewNoteHTML()}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
+function renderKitPreview(pid,qty,target){const el=document.getElementById(target);const p=PRODUCT_RULES[pid];if(pid==='RTA20_KIT'){el.innerHTML='<strong>Selected item preview</strong><div class="summary-line"><span>Retatrutide 20mg finished kit</span><strong>× '+qty+'</strong></div>'}else if(p&&p.supportItem){let m={};m[p.materialKey]=supportMaterialQty(p,qty);el.innerHTML='<strong>Support item preview</strong><div class="tiny">'+supportOutcomeText(val('supportChargeMode')||'charged')+'</div>'+stockDeductionHTML(m)}else if(pid==='RTA20'){el.innerHTML='<strong>Product contents</strong><div class="summary-line"><span>'+htmlEscape(p.name)+'</span><strong>× '+qty+'</strong></div>'+supportReviewNoteHTML()}else if(isNonRetaProduct(pid)){el.innerHTML='<strong>Product contents</strong><div class="summary-line"><span>'+htmlEscape(p.name)+'</span><strong>× '+qty+'</strong></div>'+supportReviewNoteHTML()}else{el.innerHTML='<span class="muted">No locked kit rule for this product yet.</span>'}}
 function addProductContent(target,pid,qty){const p=PRODUCT_RULES[pid];if(!p||p.supportItem)return;const key=pid==='RTA20_KIT'?'RTA20_KIT_PACK':(p.stockKey||pid);target[key]=(target[key]||0)+Number(qty||0)}
-function productContentsHTML(contents){const labels={RTA20_KIT_PACK:'Retatrutide 20mg finished kit'};const entries=Object.entries(contents).filter(([,qty])=>Number(qty)>0);return '<strong>Product contents to pack</strong>'+(entries.length?entries.map(([k,qty])=>'<div class="summary-line"><span>'+htmlEscape(labels[k]||STOCK_LABELS[k]||PRODUCT_RULES[k]?.name||k)+'</span><strong>Ã— '+qty+'</strong></div>').join(''):'<div class="muted">No product contents added yet.</div>')}
+function productContentsHTML(contents){const labels={RTA20_KIT_PACK:'Retatrutide 20mg finished kit'};const entries=Object.entries(contents).filter(([,qty])=>Number(qty)>0);return '<strong>Product contents to pack</strong>'+(entries.length?entries.map(([k,qty])=>'<div class="summary-line"><span>'+htmlEscape(labels[k]||STOCK_LABELS[k]||PRODUCT_RULES[k]?.name||k)+'</span><strong>× '+qty+'</strong></div>').join(''):'<div class="muted">No product contents added yet.</div>')}
 function kitBuildDeductionsFromLines(){let out={RTA20:0,BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20_KIT')addMats(out,retaKitDeductions(l.qty))});return out}
 function supportMaterialsHTML(m){let combined={RTA20:0,...m};addMats(combined,kitBuildDeductionsFromLines());const has=Object.values(combined).some(v=>Number(v)>0);return '<div class="divider"></div><strong>Support / kit-build stock deducted</strong>'+(has?stockDeductionHTML(combined):'<div class="muted">No support materials auto-included.</div>')}
 function shouldDefaultPostageItem(){return ['Royal Mail postage','Royal Mail collection','Courier collection'].includes(val('fulfilmentMethod'))}
@@ -1061,14 +1083,14 @@ function blockPriceAdd(message,targetNote){
 }
 function canAddProductPrice(p,pr,price,supportMode){
   if(p.supportItem&&supportMode!=='charged'){
-    return confirm('Add this support/internal item at Â£0? It will affect packing/stock but not customer revenue.');
+    return confirm('Add this support/internal item at £0? It will affect packing/stock but not customer revenue.');
   }
-  if(!hasPositivePrice(price))return !blockPriceAdd('Price missing â€” enter/confirm a unit price before adding this item.',pricingNote);
+  if(!hasPositivePrice(price))return !blockPriceAdd('Price missing — enter/confirm a unit price before adding this item.',pricingNote);
   if(pr.review)pricingNote.textContent='Manual price confirmed before adding.';
   return true;
 }
 function canAddStructurePrice(pr,price){
-  if(!hasPositivePrice(price))return !blockPriceAdd('Structure price missing â€” confirm price before adding.',structureNote);
+  if(!hasPositivePrice(price))return !blockPriceAdd('Structure price missing — confirm price before adding.',structureNote);
   if(pr.review)structureNote.textContent='Manual price confirmed before adding.';
   return true;
 }
@@ -1124,8 +1146,8 @@ function syncMaterialsToInputs(){suppressPackingOverride=true;set('mat3ml',curre
 function syncInputsToMaterials(){current.materials={BAC3:num('mat3ml'),BAC10:num('mat10ml'),U100:num('matU100'),WIPES:num('matWipes'),BOX:num('matBoxes'),INSERT:num('matInserts'),INLAY:num('matInlays')};current.packingManualOverride=packingManualOverride;current.packingNeedsReview=packingNeedsReview};
 function markPackingManualOverride(){packingManualOverride=true;current.packingManualOverride=true}
 function lineTitle(l){
-  if(l.kind==='product'&&l.pid==='RTA20_KIT') return 'Retatrutide 20mg kit Ã— '+l.qty;
-  if(l.kind==='product') return l.name+' Ã— '+l.qty;
+  if(l.kind==='product'&&l.pid==='RTA20_KIT') return 'Retatrutide 20mg kit × '+l.qty;
+  if(l.kind==='product') return l.name+' × '+l.qty;
   return l.name;
 }
 function lineSub(l){
@@ -1154,7 +1176,7 @@ function updateOrderTypeNotice(){
 function renderOrder(){
   updateOrderTypeNotice();
   if(convertQuoteBtn)convertQuoteBtn.style.display=val('orderType')==='Quote / enquiry'?'':'none';
-  orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+lineTitle(l)+'</strong><span class="tiny">'+lineSub(l)+(l.review?' Â· Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';
+  orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+lineTitle(l)+'</strong><span class="tiny">'+lineSub(l)+(l.review?' · Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';
   materialsSummary.innerHTML=productContentsHTML(productContentsFromLines())+supportMaterialsHTML(current.materials)+packingStateHTML();
   let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');
   totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>';
@@ -1179,7 +1201,7 @@ function packingStateHTML(){
 function recalcMaterialsFromLines(linesChanged=false){if(packingManualOverride){syncInputsToMaterials();if(linesChanged){packingNeedsReview=true;current.packingNeedsReview=true}showToast('Manual packing override active - packing kept for review');return}current.materials=autoMaterialsFromLines();packingNeedsReview=hasSupportReviewLines();current.packingNeedsReview=packingNeedsReview;syncMaterialsToInputs()}
 function resetPackingToAutoRule(){packingManualOverride=false;current.packingManualOverride=false;current.materials=autoMaterialsFromLines();packingNeedsReview=hasSupportReviewLines();current.packingNeedsReview=packingNeedsReview;syncMaterialsToInputs();renderOrder();showToast(packingNeedsReview?'Reset to generated packing list; review support items if needed':'Reset to generated packing list')}
 function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0)+num('materialsCharge')+num('postageCharge');return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderType:val('orderType'),orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),voidReason:val('voidReason'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:statusValue(val('orderStatus')),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:current.lines,materials:current.materials,packingManualOverride,packingNeedsReview,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageService:val('postageService'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),labelStatus:val('labelStatus'),labelQrRef:val('labelQrRef'),labelQrNote:val('labelQrNote'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),internalFulfilmentWarning:val('internalFulfilmentWarning'),total,...communicationStatusPayload()};}
-function saveOrderNow(){let o=orderPayload();if(!validateLiveOrderBeforeSave(o))return;if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();const warn=messageSaveWarning(o);showToast(warn.length?'Order saved Â· '+warn.join(' Â· '):'Order saved Â· queues and stock updated');postSaveNudge(o)}
+function saveOrderNow(){let o=orderPayload();if(!validateLiveOrderBeforeSave(o))return;if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);recalcStock();saveLocal();renderAll();const warn=messageSaveWarning(o);showToast(warn.length?'Order saved · '+warn.join(' · '):'Order saved · queues and stock updated');postSaveNudge(o)}
 
 function voidCurrentOrder(){
   const id=current.id;
@@ -1229,7 +1251,7 @@ function stockKeys(){return [...new Set([...deductibleStockKeys(),...Object.keys
 function isBinned(o){return !!o.binned}
 function isStockAffectingOrder(o){return !isBinned(o)&&(o.orderType||'Live order')==='Live order'&&!['Cancelled'].includes(o.status)}
 function recalcStock(){stock={};stockKeys().forEach(k=>stock[k]=0);stockMovements.forEach(m=>{if(!stock[m.item]&&stock[m.item]!==0)stock[m.item]=0;stock[m.item]+=Number(m.qty||0)});orders.filter(isStockAffectingOrder).forEach(o=>{o.lines.forEach(l=>{const p=PRODUCT_RULES[l.pid];if(l.kind==='product'&&!p?.supportItem){const key=p?.stockKey||l.pid;stock[key]=(stock[key]??0)-l.qty}if(l.kind==='structure')l.contents.forEach(([pid,qty])=>stock[pid]=(stock[pid]??0)-qty)});stock.BAC3-=o.materials.BAC3||0;stock.BAC10-=o.materials.BAC10||0;stock.U100-=o.materials.U100||0;stock.WIPES-=o.materials.WIPES||0;stock.BOX-=o.materials.BOX||0;stock.INSERT-=o.materials.INSERT||0;stock.INLAY-=o.materials.INLAY||0})}
-function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(window.lastHistory||'all');renderStock();renderStartCommsActions();renderAdmin();renderOrder();renderCommunicationCentre();renderActionBanner()}
+function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(window.lastHistory||'all');renderStock();renderStartCommsActions();renderAdmin();renderOrder();renderCommunicationCentre();renderActionBanner();renderPrototypeDataWarning()}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
 function isReleaseStatus(status){return ['Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(status)}
 function isActiveOrderType(o){return (o.orderType||'Live order')==='Live order'}
@@ -1258,7 +1280,7 @@ function workflowBadge(o){
   const st=normalStatus(o);
   if(st==='Ready to assemble') return '<span class="badge-info">Ready to assemble</span>';
   if(st==='Assembled') return '<span class="badge-info">Assembled</span>';
-  if(st==='Packed / ready to send-collect' && !isPaymentCleared(o)) return '<span class="badge-warn">Hold Â· payment required</span>';
+  if(st==='Packed / ready to send-collect' && !isPaymentCleared(o)) return '<span class="badge-warn">Hold · payment required</span>';
   if(st==='Packed / ready to send-collect') return '<span class="badge-good">Ready send/collect</span>';
   if(st==='Dispatched / awaiting delivery confirmation') return '<span class="badge-info">In transit</span>';
   if(st==='Sent / collected') return '<span class="badge-good">Sent/collected</span>';
@@ -1274,17 +1296,17 @@ function localDropoffCount(o){return o.fulfilment==='Local drop-off'?Number(o.po
 function productContentCountFromOrder(o){let total=0;(o.lines||[]).forEach(l=>{if(l.kind==='product'&&!PRODUCT_RULES[l.pid]?.supportItem)total+=Number(l.qty||0);if(l.kind==='structure')(l.contents||[]).forEach(([pid,qty])=>{if(!PRODUCT_RULES[pid]?.supportItem)total+=Number(qty||0)})});return total}
 function fulfilmentCountText(o){
   const productCount=productContentCountFromOrder(o),productText=productCount?productCount+' product item'+(productCount===1?'':'s')+' to pack':'';
-  if(royalMailItemCount(o))return royalMailItemCount(o)+' Royal Mail parcel'+(royalMailItemCount(o)===1?'':'s')+(productText?' Â· '+productText:'');
-  if(courierItemCount(o))return courierItemCount(o)+' Courier item'+(courierItemCount(o)===1?'':'s')+(productText?' Â· '+productText:'');
-  if(customerCollectionCount(o))return customerCollectionCount(o)+' Customer collection'+(customerCollectionCount(o)===1?'':'s')+(productText?' Â· '+productText:'');
-  if(localDropoffCount(o))return localDropoffCount(o)+' Local drop-off item'+(localDropoffCount(o)===1?'':'s')+(productText?' Â· '+productText:'');
+  if(royalMailItemCount(o))return royalMailItemCount(o)+' Royal Mail parcel'+(royalMailItemCount(o)===1?'':'s')+(productText?' · '+productText:'');
+  if(courierItemCount(o))return courierItemCount(o)+' Courier item'+(courierItemCount(o)===1?'':'s')+(productText?' · '+productText:'');
+  if(customerCollectionCount(o))return customerCollectionCount(o)+' Customer collection'+(customerCollectionCount(o)===1?'':'s')+(productText?' · '+productText:'');
+  if(localDropoffCount(o))return localDropoffCount(o)+' Local drop-off item'+(localDropoffCount(o)===1?'':'s')+(productText?' · '+productText:'');
   return productText||((o.postageItems||0)+' fulfilment item'+((o.postageItems||0)===1?'':'s'));
 }
 function contactLine(o){
   const phone=o.recipientPhone||o.recPhone||'';
   const note=o.customerNote||'';
   if(!phone&&!note)return '';
-  return '<div class="tiny">Contact: '+htmlEscape(phone||'not recorded')+(note?' Â· Note: '+htmlEscape(note):'')+'</div>';
+  return '<div class="tiny">Contact: '+htmlEscape(phone||'not recorded')+(note?' · Note: '+htmlEscape(note):'')+'</div>';
 }
 function queueData(){return[
  {key:'pay',title:'Awaiting payment',orders:orders.filter(o=>!isPaymentCleared(o)&&isActiveStatus(o)),sub:'payment actions'},
@@ -1332,22 +1354,22 @@ function renderDispatchQuickAccess(){
   dispatchQuickAccess.innerHTML=shown.length?shown.map(o=>{
     const ref=o.tracking||o.labelQrRef||'',needsRef=isCarrierDispatchMethod(o)&&!ref;
     const rmBtn=isRoyalMailMethod(o)?`<button class="btn" onclick="window.open('https://send.royalmail.com/','_blank')">Open Royal Mail</button>`:'';
-    return `<div class="queue-row"><div><strong>${htmlEscape(o.id)} Â· ${htmlEscape(o.customer||'No customer ref')} ${needsRef?'<span class="badge-warn">Tracking/label needed</span>':''}</strong><div class="tiny">Dispatch: ${htmlEscape(displayStatus(o))} Â· ${htmlEscape(o.fulfilment||'Not arranged')} Â· ${htmlEscape(fulfilmentCountText(o))}</div><div class="tiny">Service: ${htmlEscape(o.postageService||'')} Â· Booking: ${htmlEscape(o.labelStatus||'Not booked')} Â· Tracking/ref: ${htmlEscape(o.tracking||'Not added')} Â· Label/ref: ${htmlEscape(o.labelQrRef||'Not added')}</div>${contactLine(o)}${o.labelQrNote?`<div class="tiny">Label/QR note: ${htmlEscape(o.labelQrNote)}</div>`:''}</div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button><button class="btn" onclick="copyText(${jsArg(ref)})">Copy tracking/ref</button>${rmBtn}<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button></div></div>`;
+    return `<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${needsRef?'<span class="badge-warn">Tracking/label needed</span>':''}</strong><div class="tiny">Dispatch: ${htmlEscape(displayStatus(o))} · ${htmlEscape(o.fulfilment||'Not arranged')} · ${htmlEscape(fulfilmentCountText(o))}</div><div class="tiny">Service: ${htmlEscape(o.postageService||'')} · Booking: ${htmlEscape(o.labelStatus||'Not booked')} · Tracking/ref: ${htmlEscape(o.tracking||'Not added')} · Label/ref: ${htmlEscape(o.labelQrRef||'Not added')}</div>${contactLine(o)}${o.labelQrNote?`<div class="tiny">Label/QR note: ${htmlEscape(o.labelQrNote)}</div>`:''}</div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button><button class="btn" onclick="copyText(${jsArg(ref)})">Copy tracking/ref</button>${rmBtn}<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button></div></div>`;
   }).join('')+extra:'<div class="muted">No active dispatch or handover work.</div>';
 }
 function queueRowHTML(o,key){
   const cls=!isPaymentCleared(o)&&['pack','ready'].includes(key)?'queue-row blocked':'queue-row';
   const paymentLine=`Payment: ${htmlEscape(paymentValue(o.payment))}`;
   const fulfilLine=`Fulfilment: ${htmlEscape(displayStatus(o))}`;
-  const moneyLine=`Value: ${money(o.total)} Â· ${htmlEscape(fulfilmentCountText(o))}`;
-  const warning=paymentClearedNeedsPrep(o)?'<div class="tiny">Payment cleared Â· needs prep / packing.</div>':((!isPaymentCleared(o)&&['pack','ready'].includes(key))?'<div class="tiny warn-text">Payment not complete Â· do not release until paid or approved.</div>':'');
-  return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} Â· ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${paymentBadge(o)} ${workflowBadge(o)}</strong><div class="tiny">${paymentLine}</div><div class="tiny">${fulfilLine}</div><div class="tiny">${moneyLine}</div>${contactLine(o)}${warning}${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
+  const moneyLine=`Value: ${money(o.total)} · ${htmlEscape(fulfilmentCountText(o))}`;
+  const warning=paymentClearedNeedsPrep(o)?'<div class="tiny">Payment cleared · needs prep / packing.</div>':((!isPaymentCleared(o)&&['pack','ready'].includes(key))?'<div class="tiny warn-text">Payment not complete · do not release until paid or approved.</div>':'');
+  return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${paymentBadge(o)} ${workflowBadge(o)}</strong><div class="tiny">${paymentLine}</div><div class="tiny">${fulfilLine}</div><div class="tiny">${moneyLine}</div>${contactLine(o)}${warning}${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
 }
 function queueButtons(o,key){
   let b=`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button><button class="btn" onclick="repeatOrderFrom(${jsArg(o.id)})">Repeat</button>`;
   if(!isPaymentCleared(o)) b+=`<button class="btn good" onclick="markPaid(${jsArg(o.id)})">Mark paid</button>`;
   if(key==='pay'){
-    b+=`<button class="btn warn" onclick="prepOrder(${jsArg(o.id)})">Move to prep â€” unpaid</button>`;
+    b+=`<button class="btn warn" onclick="prepOrder(${jsArg(o.id)})">Move to prep — unpaid</button>`;
     b+=`<button class="btn" onclick="loadAndGenerateConfirmation(${jsArg(o.id)})">Generate confirmation</button>`;
   }
   if(key==='pack'){
@@ -1381,7 +1403,7 @@ function markPaid(id){
   let o=orders.find(x=>x.id===id);if(!o)return;
   o.payment='Paid';
   if(normalStatus(o)==='New / awaiting payment')window.lastQueue='pack';
-  saveLocal();renderAll();showToast(normalStatus(o)==='New / awaiting payment'?'Payment marked paid Â· needs prep':'Payment marked paid');
+  saveLocal();renderAll();showToast(normalStatus(o)==='New / awaiting payment'?'Payment marked paid · needs prep':'Payment marked paid');
 }
 function prepOrder(id){
   let o=orders.find(x=>x.id===id);if(!o)return;
@@ -1442,7 +1464,7 @@ function fulfilmentChecklistHTML(){
   else if(method==='Customer collection')steps=['Confirm collection agreement','Set status when customer has collected','Generate customer update if needed'];
   else if(method==='Local drop-off')steps=['Confirm drop-off address/details','Record drop-off completion','Generate customer update if needed'];
   else steps=['Confirm fulfilment details','Generate customer update when needed'];
-  const statusLine=carrier?('<br><span class="tiny">Current booking status: '+htmlEscape(st)+(val('trackingRef')?' Â· Tracking/ref added':' Â· tracking/ref not added yet')+'</span>'):'';
+  const statusLine=carrier?('<br><span class="tiny">Current booking status: '+htmlEscape(st)+(val('trackingRef')?' · Tracking/ref added':' · tracking/ref not added yet')+'</span>'):'';
   return '<strong>Fulfilment checklist</strong><br>'+steps.map((x,i)=>(i+1)+'. '+htmlEscape(x)).join('<br>')+statusLine;
 }
 function updateFulfilmentChecklist(){const el=document.getElementById('fulfilmentChecklist');if(el)el.innerHTML=fulfilmentChecklistHTML()}
@@ -1452,7 +1474,7 @@ function releaseOrder(id){
   let o=orders.find(x=>x.id===id);if(!o)return;
   if(!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){
     const ok=confirm('Payment is not marked complete. Do not release unless explicitly approved. Release anyway?');
-    if(!ok){showToast('Release blocked Â· payment not complete');return}
+    if(!ok){showToast('Release blocked · payment not complete');return}
     o.releaseOverride='Yes';
     o.releaseApprovedBy=o.releaseApprovedBy||'Manual override';
   }
@@ -1489,7 +1511,7 @@ function renderHistory(filter='all'){
   if(!historyList)return;
   document.querySelectorAll('#historyTabs button').forEach(b=>{const txt=b.textContent.toLowerCase();const key=filter==='cancelled'?'cancelled':(filter==='quote'?'quotes':filter);b.classList.toggle('active',txt.startsWith(key));});
   let list=orders.filter(o=>historyMatches(o,filter)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-  historyList.innerHTML=list.length?list.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} Â· ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${isBinned(o)?'<span class="badge-bad">BIN</span>':''}</strong><div class="tiny">Type: ${htmlEscape(o.orderType||'Live order')} Â· Date: ${htmlEscape(o.date||'')}</div><div class="tiny">Payment: ${htmlEscape(paymentValue(o.payment))} Â· Status: ${htmlEscape(displayStatus(o))}</div><div class="tiny">Value: ${money(o.total)}</div>${contactLine(o)}</div><div class="btnrow">${isBinned(o)?`<button class="btn good" onclick="restoreOrderFromBin(${jsArg(o.id)})">Restore</button>`:`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button><button class="btn good" onclick="repeatOrderFrom(${jsArg(o.id)})">Repeat order</button>${o.orderType==='Quote / enquiry'?`<button class="btn good" onclick="convertQuoteToLive(${jsArg(o.id)})">Convert to live</button>`:''}${(o.orderType==='Test order'||normalStatus(o)==='Cancelled')?`<button class="btn subtle" onclick="moveOrderToBin(${jsArg(o.id)})">Move to bin</button>`:''}`}</div></div>`).join(''):'<div class="muted">No saved orders match this filter.</div>';
+  historyList.innerHTML=list.length?list.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${isBinned(o)?'<span class="badge-bad">BIN</span>':''}</strong><div class="tiny">Type: ${htmlEscape(o.orderType||'Live order')} · Date: ${htmlEscape(o.date||'')}</div><div class="tiny">Payment: ${htmlEscape(paymentValue(o.payment))} · Status: ${htmlEscape(displayStatus(o))}</div><div class="tiny">Value: ${money(o.total)}</div>${contactLine(o)}</div><div class="btnrow">${isBinned(o)?`<button class="btn good" onclick="restoreOrderFromBin(${jsArg(o.id)})">Restore</button>`:`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button><button class="btn good" onclick="repeatOrderFrom(${jsArg(o.id)})">Repeat order</button>${o.orderType==='Quote / enquiry'?`<button class="btn good" onclick="convertQuoteToLive(${jsArg(o.id)})">Convert to live</button>`:''}${(o.orderType==='Test order'||normalStatus(o)==='Cancelled')?`<button class="btn subtle" onclick="moveOrderToBin(${jsArg(o.id)})">Move to bin</button>`:''}`}</div></div>`).join(''):'<div class="muted">No saved orders match this filter.</div>';
 }
 function renderStockItemOptions(){applyCustomStockItems();const showInactive=!!stockShowInactive?.checked;const opts=stockKeys().filter(k=>showInactive||stockItemActive(k)).map(k=>`<option value="${htmlEscape(k)}">${htmlEscape(STOCK_LABELS[k])} - ${htmlEscape(STOCK_CATEGORIES[k]||'Stock item')}</option>`).join('');[stockReceiveItem,stockAdjustItem].forEach(s=>{if(s)s.innerHTML=opts})}
 function stockReorderTracked(k){
@@ -1528,7 +1550,7 @@ function renderStartStockAlerts(){
   const alerts=stockAlerts();
   const shown=alerts.slice(0,6);
   const extra=alerts.length>shown.length?`<div class="tiny" style="margin-top:8px">${alerts.length-shown.length} more stock alert${alerts.length-shown.length===1?'':'s'} in Stock.</div>`:'';
-  startStockAlerts.innerHTML=shown.length?shown.map(a=>`<div class="summary-line"><span>${htmlEscape(STOCK_LABELS[a.k]||a.k)}</span><strong>${htmlEscape(a.label)} Â· ${stock[a.k]||0}</strong></div>`).join('')+extra:'<div class="muted">No urgent stock alerts.</div>';
+  startStockAlerts.innerHTML=shown.length?shown.map(a=>`<div class="summary-line"><span>${htmlEscape(STOCK_LABELS[a.k]||a.k)}</span><strong>${htmlEscape(a.label)} · ${stock[a.k]||0}</strong></div>`).join('')+extra:'<div class="muted">No urgent stock alerts.</div>';
 }
 function renderStartActionPrompts(){
   if(!startActionPrompts)return;
@@ -1540,7 +1562,7 @@ function renderStartActionPrompts(){
   const upd=live.filter(o=>(o.updateSent||'No')!=='Yes'&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(normalStatus(o)));
   const miss=live.filter(o=>isCarrierDispatchMethod(o)&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(normalStatus(o))&&!o.tracking&&!o.labelQrRef);
   const paidPrep=live.filter(paymentClearedNeedsPrep);
-  if(paidPrep.length)prompts.push(['Payment cleared â€” needs prep',paidPrep.length]);
+  if(paidPrep.length)prompts.push(['Payment cleared — needs prep',paidPrep.length]);
   if(conf.length)prompts.push(['Confirmation to send',conf.length]);
   if(upd.length)prompts.push(['Customer update to send',upd.length]);
   if(miss.length)prompts.push(['Missing tracking/label ref',miss.length]);
@@ -1555,7 +1577,7 @@ function renderStartCommsActions(){
   const list=commsActionOrders();
   const shown=list.slice(0,5);
   const extra=list.length>shown.length?`<div class="tiny" style="margin-top:8px">${list.length-shown.length} more message action${list.length-shown.length===1?'':'s'} in Queues / History.</div>`:'';
-  startCommsActions.innerHTML=shown.length?shown.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} Â· ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">Confirmation: ${htmlEscape(o.confirmation||'No')} Â· Customer update: ${htmlEscape(o.updateSent||'No')} Â· Status: ${htmlEscape(displayStatus(o))}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button>${(o.confirmation||'No')!=='Yes'?`<button class="btn" onclick="loadAndGenerateConfirmation(${jsArg(o.id)})">Generate confirmation</button>`:''}<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button></div></div>`).join('')+extra:'<div class="muted">No message actions pending.</div>';
+  startCommsActions.innerHTML=shown.length?shown.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">Confirmation: ${htmlEscape(o.confirmation||'No')} · Customer update: ${htmlEscape(o.updateSent||'No')} · Status: ${htmlEscape(displayStatus(o))}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button>${(o.confirmation||'No')!=='Yes'?`<button class="btn" onclick="loadAndGenerateConfirmation(${jsArg(o.id)})">Generate confirmation</button>`:''}<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button></div></div>`).join('')+extra:'<div class="muted">No message actions pending.</div>';
 }
 function renderStock(){
   if(!stockList)return;
@@ -1567,14 +1589,14 @@ function renderStock(){
     const keys=allKeys.filter(k=>stockTopGroupForKey(k)===group.id);
     return keys.length?stockGroupHTML(group,keys):'';
   }).join('')||'<div class="muted">No stock items match this filter.</div>';
-  if(stockMovementList)stockMovementList.innerHTML=stockMovements.slice(0,20).map(m=>`<div class="stock-row"><div><strong>${htmlEscape(STOCK_LABELS[m.item]||m.item)}</strong><div class="tiny">${htmlEscape(new Date(m.date).toLocaleString())} Â· ${htmlEscape(m.type)} Â· ${htmlEscape(m.note||m.ref||'')}</div></div><strong>${Number(m.qty)>0?'+':''}${htmlEscape(m.qty)}</strong></div>`).join('')||'<div class="muted">No stock movements yet.</div>';
+  if(stockMovementList)stockMovementList.innerHTML=stockMovements.slice(0,20).map(m=>`<div class="stock-row"><div><strong>${htmlEscape(STOCK_LABELS[m.item]||m.item)}</strong><div class="tiny">${htmlEscape(new Date(m.date).toLocaleString())} · ${htmlEscape(m.type)} · ${htmlEscape(m.note||m.ref||'')}</div></div><strong>${Number(m.qty)>0?'+':''}${htmlEscape(m.qty)}</strong></div>`).join('')||'<div class="muted">No stock movements yet.</div>';
   renderStockItemManager();
   renderStockTraceability();
 }
 function strengthFromLabel(label){const m=String(label||'').match(/\b\d+(?:\.\d+)?\s*(?:mg|ml)\b/i);return m?m[0]:''}
 function renderStockTraceability(){
-  if(stockMovementList)stockMovementList.innerHTML=stockMovements.slice(0,20).map(m=>`<div class="stock-row"><div><strong>${htmlEscape(STOCK_LABELS[m.item]||m.item)}</strong><div class="tiny">${htmlEscape(new Date(m.date).toLocaleString())} Â· ${htmlEscape(m.type)} Â· Batch/lot: ${htmlEscape(m.batch||'not recorded')} Â· Ref: ${htmlEscape(m.supplierRef||m.ref||'')}</div><div class="tiny">COA: ${htmlEscape(m.coaStatus||'not recorded')} ${m.note?'Â· Note: '+htmlEscape(m.note):''}</div></div><strong>${Number(m.qty)>0?'+':''}${htmlEscape(m.qty)}</strong></div>`).join('')||'<div class="muted">No stock movements yet.</div>';
-  if(stockBatchList){const received=stockMovements.filter(m=>m.type==='received');stockBatchList.innerHTML=received.length?received.map(m=>{const label=STOCK_LABELS[m.item]||m.item;return `<div class="stock-row"><div><strong>${htmlEscape(label)}</strong><div class="tiny">Strength: ${htmlEscape(strengthFromLabel(label)||'not parsed')} Â· Batch/lot: ${htmlEscape(m.batch||'not recorded')} Â· COA: ${htmlEscape(m.coaStatus||'not recorded')}</div><div class="tiny">Qty received: ${htmlEscape(m.qty)} Â· Current aggregate qty: ${htmlEscape(stock[m.item]??0)} Â· Received: ${htmlEscape(new Date(m.date).toLocaleDateString())}</div><div class="tiny">Supplier/ref: ${htmlEscape(m.supplierRef||m.ref||'')}</div></div></div>`}).join(''):'<div class="muted">No received batch records yet.</div>';}
+  if(stockMovementList)stockMovementList.innerHTML=stockMovements.slice(0,20).map(m=>`<div class="stock-row"><div><strong>${htmlEscape(STOCK_LABELS[m.item]||m.item)}</strong><div class="tiny">${htmlEscape(new Date(m.date).toLocaleString())} · ${htmlEscape(m.type)} · Batch/lot: ${htmlEscape(m.batch||'not recorded')} · Ref: ${htmlEscape(m.supplierRef||m.ref||'')}</div><div class="tiny">COA: ${htmlEscape(m.coaStatus||'not recorded')} ${m.note?'· Note: '+htmlEscape(m.note):''}</div></div><strong>${Number(m.qty)>0?'+':''}${htmlEscape(m.qty)}</strong></div>`).join('')||'<div class="muted">No stock movements yet.</div>';
+  if(stockBatchList){const received=stockMovements.filter(m=>m.type==='received');stockBatchList.innerHTML=received.length?received.map(m=>{const label=STOCK_LABELS[m.item]||m.item;return `<div class="stock-row"><div><strong>${htmlEscape(label)}</strong><div class="tiny">Strength: ${htmlEscape(strengthFromLabel(label)||'not parsed')} · Batch/lot: ${htmlEscape(m.batch||'not recorded')} · COA: ${htmlEscape(m.coaStatus||'not recorded')}</div><div class="tiny">Qty received: ${htmlEscape(m.qty)} · Current aggregate qty: ${htmlEscape(stock[m.item]??0)} · Received: ${htmlEscape(new Date(m.date).toLocaleDateString())}</div><div class="tiny">Supplier/ref: ${htmlEscape(m.supplierRef||m.ref||'')}</div></div></div>`}).join(''):'<div class="muted">No received batch records yet.</div>';}
 }
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
 function renderAdmin(panel='system'){
@@ -1592,10 +1614,10 @@ function renderAdmin(panel='system'){
     </div>`;
   }
   if(panel==='products'){
-    adminPanel.innerHTML='<div class="note warn" style="margin-bottom:10px">Existing/private is the lowest normal working price. Internal/close is owner-approved or legacy only. Planner/standard remains manual where not confirmed. BPC40 uses an existing/private working price pending full catalogue review. BAC water is a support item; charge mode controls revenue vs stock-only handling.</div>'+Object.values(PRODUCT_RULES).map(p=>'<div class="rule-row"><div><strong>'+htmlEscape(p.name)+'</strong><span class="tiny">Close: '+htmlEscape(p.closeEligible)+' Â· Planner range: '+(p.plannerRange?'Yes':'No')+(p.supportItem?' Â· Support item':'')+'</span></div><div class="tiny">Internal: '+htmlEscape(p.internal??'not locked')+' Â· Existing/private: '+htmlEscape(p.existing??'not locked')+' Â· Planner/standard: '+htmlEscape(p.standard??'not locked')+'</div></div>').join('');
+    adminPanel.innerHTML='<div class="note warn" style="margin-bottom:10px">Existing/private is the lowest normal working price. Internal/close is owner-approved or legacy only. Planner/standard remains manual where not confirmed. BPC40 uses an existing/private working price pending full catalogue review. BAC water is a support item; charge mode controls revenue vs stock-only handling.</div>'+Object.values(PRODUCT_RULES).map(p=>'<div class="rule-row"><div><strong>'+htmlEscape(p.name)+'</strong><span class="tiny">Close: '+htmlEscape(p.closeEligible)+' · Planner range: '+(p.plannerRange?'Yes':'No')+(p.supportItem?' · Support item':'')+'</span></div><div class="tiny">Internal: '+htmlEscape(p.internal??'not locked')+' · Existing/private: '+htmlEscape(p.existing??'not locked')+' · Planner/standard: '+htmlEscape(p.standard??'not locked')+'</div></div>').join('');
   }
   if(panel==='structures'){
-    adminPanel.innerHTML='<div class="note warn" style="margin-bottom:10px">Only confirmed internal prices are populated for non-Reta products. Existing/private and planner/standard prices need owner confirmation before fast entry.</div>'+Object.values(STRUCTURE_RULES).map(s=>'<div class="rule-row"><div><strong>'+htmlEscape(s.name)+'</strong><span class="tiny">'+htmlEscape(s.label||s.type)+' Â· Close: '+htmlEscape(s.closeEligible)+'</span></div><div class="tiny">Internal: '+htmlEscape(s.prices.internal??'not locked')+' Â· Existing/private: '+htmlEscape(s.prices.existing??'not locked')+' Â· Planner/standard: '+htmlEscape(s.prices.standard??'not locked')+'</div></div>').join('')+'<div class="note warn">Above locked structure range = manual price review before use.</div>';
+    adminPanel.innerHTML='<div class="note warn" style="margin-bottom:10px">Only confirmed internal prices are populated for non-Reta products. Existing/private and planner/standard prices need owner confirmation before fast entry.</div>'+Object.values(STRUCTURE_RULES).map(s=>'<div class="rule-row"><div><strong>'+htmlEscape(s.name)+'</strong><span class="tiny">'+htmlEscape(s.label||s.type)+' · Close: '+htmlEscape(s.closeEligible)+'</span></div><div class="tiny">Internal: '+htmlEscape(s.prices.internal??'not locked')+' · Existing/private: '+htmlEscape(s.prices.existing??'not locked')+' · Planner/standard: '+htmlEscape(s.prices.standard??'not locked')+'</div></div>').join('')+'<div class="note warn">Above locked structure range = manual price review before use.</div>';
   }
   if(panel==='security')adminPanel.innerHTML='<div class="note warn">Access note: keep customer information limited to what is needed until a secured shared backend is connected.</div>';
 }
@@ -1706,15 +1728,15 @@ function markConfirmationSentNow(){
   if(!String(confirmationMsg?.value||'').trim()){showToast('Generate/copy the confirmation first');return}
   set('confirmationSent','Yes');
   markCustomerUpdateStale();
-  showToast('Confirmation marked sent â€” save order');
+  showToast('Confirmation marked sent — save order');
 }
 function markCustomerUpdateSentNow(){
   if(!String(fulfilmentMsg?.value||'').trim()){showToast('Generate/copy the customer update first');return}
   set('updateSent','Yes');
-  showToast('Customer update marked sent â€” save order');
+  showToast('Customer update marked sent — save order');
 }
 
-function generateConfirmation(){renderOrder();set('confirmationSent','No');let lines=current.lines.map(l=>lineTitle(l)+' â€” '+money(l.kind==='product'?l.price*l.qty:l.price)).join('\n');let fulfilment=val('fulfilmentMethod')||'fulfilment pending';if(fulfilment==='Hold / not arranged')fulfilment='fulfilment pending';let msg='PrimeX BioLabs â€” Order Confirmation\n\nOrder Ref: '+val('orderRef')+'\n';if(val('customerRef'))msg+='Reference: '+val('customerRef')+'\n';msg+='\nItems confirmed:\n'+(lines||'No items added yet')+'\n\nTotal confirmed: '+(totalsBox.querySelector('.money')?.textContent||money(0))+'\nPayment status: '+val('paymentStatus');if(val('paymentDueNote'))msg+='\nPayment note: '+val('paymentDueNote');msg+='\nFulfilment: '+fulfilment+'\n\nFinal fulfilment contents are confirmed during order review.\nResearch Use Only. Not for human or animal use. Not a medicine.';set('confirmationMsg',msg);if(confirmationDetails)confirmationDetails.open=true;autoExpandTextarea(confirmationMsg);setTimeout(()=>confirmationDetails?.scrollIntoView({behavior:'smooth',block:'center'}),0);showToast('Order confirmation generated')}
+function generateConfirmation(){renderOrder();set('confirmationSent','No');let lines=current.lines.map(l=>lineTitle(l)+' — '+money(l.kind==='product'?l.price*l.qty:l.price)).join('\n');let fulfilment=val('fulfilmentMethod')||'fulfilment pending';if(fulfilment==='Hold / not arranged')fulfilment='fulfilment pending';let msg='PrimeX BioLabs — Order Confirmation\n\nOrder Ref: '+val('orderRef')+'\n';if(val('customerRef'))msg+='Reference: '+val('customerRef')+'\n';msg+='\nItems confirmed:\n'+(lines||'No items added yet')+'\n\nTotal confirmed: '+(totalsBox.querySelector('.money')?.textContent||money(0))+'\nPayment status: '+val('paymentStatus');if(val('paymentDueNote'))msg+='\nPayment note: '+val('paymentDueNote');msg+='\nFulfilment: '+fulfilment+'\n\nFinal fulfilment contents are confirmed during order review.\nResearch Use Only. Not for human or animal use. Not a medicine.';set('confirmationMsg',msg);if(confirmationDetails)confirmationDetails.open=true;autoExpandTextarea(confirmationMsg);setTimeout(()=>confirmationDetails?.scrollIntoView({behavior:'smooth',block:'center'}),0);showToast('Order confirmation generated')}
 function titleCaseLine(s){return String(s||'').trim().replace(/\s+/g,' ').toLowerCase().replace(/\b([a-z])/g,m=>m.toUpperCase())}
 function generateAddress(){let parts=[titleCaseLine(val('recName')),titleCaseLine(val('addr1')),titleCaseLine(val('addr2')),titleCaseLine(val('town')),String(val('postcode')||'').trim().toUpperCase().replace(/\s+/g,' ')].filter(Boolean);set('addressBlock',parts.join('\n'));autoExpandTextarea(addressBlock);showToast('Address block generated')}
 function customerFulfilmentLine(o){
@@ -1761,7 +1783,7 @@ function shouldShowCustomerPostageService(o){
 function syncFulfilmentPaymentWarning(){
   let o=orderPayload(), warn='',label='Ready to pack/release',cls='note good';
   if(!isPaymentCleared(o)){
-    label=o.releaseOverride==='Yes'&&o.releaseApprovedBy?'Manual release approval required':'Hold â€” awaiting payment';
+    label=o.releaseOverride==='Yes'&&o.releaseApprovedBy?'Manual release approval required':'Hold — awaiting payment';
     cls='note warn';
     warn='Payment is not marked complete. Do not release unless approved.';
     if(o.releaseOverride==='Yes'&&o.releaseApprovedBy)warn+=' Override approved by '+o.releaseApprovedBy+'.';
@@ -1772,8 +1794,8 @@ function syncFulfilmentPaymentWarning(){
   return warn;
 }
 function legacyMarkCustomerUpdateStale(){markCustomerUpdateStale()}
-function generateFulfilment(){set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs â€” Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+customerStatusText(o)+'\nFulfilment: '+customerFulfilmentMethodText(o);if(shouldShowCustomerPostageService(o)&&o.postageService)msg+='\nPostage / courier service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg);autoExpandTextarea(fulfilmentMsg);syncFulfilmentPaymentWarning();setTimeout(()=>fulfilmentMessageGroup?.scrollIntoView({behavior:'smooth',block:'center'}),0);showToast('Fresh customer update generated Â· mark sent after sending')}
-function copyCustomerUpdate(){copyText(fulfilmentMsg.value);showToast('Customer update copied â€” send it, then mark update sent')}
+function generateFulfilment(){set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs — Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+customerStatusText(o)+'\nFulfilment: '+customerFulfilmentMethodText(o);if(shouldShowCustomerPostageService(o)&&o.postageService)msg+='\nPostage / courier service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg);autoExpandTextarea(fulfilmentMsg);syncFulfilmentPaymentWarning();setTimeout(()=>fulfilmentMessageGroup?.scrollIntoView({behavior:'smooth',block:'center'}),0);showToast('Fresh customer update generated · mark sent after sending')}
+function copyCustomerUpdate(){copyText(fulfilmentMsg.value);showToast('Customer update copied — send it, then mark update sent')}
 function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
