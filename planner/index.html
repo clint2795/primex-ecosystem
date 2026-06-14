@@ -8078,8 +8078,8 @@ html{
 <section class="contact-section" id="contact"><div class="wrap">
 <div class="eyebrow">CONTACT</div>
 <h2>Contact.</h2>
-<p class="lead">Questions and availability are handled through direct contact only.</p>
-<div aria-label="Direct PrimeX contact channel" class="contact-pill"><span>Direct contact</span><strong>Use the contact thread this planner was sent through.</strong></div>
+<p class="lead">Requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</p>
+<a aria-label="Open PrimeX request form" class="contact-pill" href="../order-request/" style="text-decoration:none"><span>Request form</span><strong>Continue to request form</strong></a>
 <div class="ruo-note"><strong>RUO reminder:</strong> Research use only. Not for human or veterinary use. No medical claims.</div>
 </div></section>
 </main><footer class="footer"><div class="wrap">PrimeX BioLabs • Research Reference System • RUO</div></footer>
@@ -11992,8 +11992,10 @@ section[id],
 </style>
 
 <script id="primex-v169-request-tray-safety">
+/* planner-v174A_LOCAL_HANDOFF_PATH_ONLY */
 (function(){
   const KEY='primexRequestTrayV1';
+  const NOTES_KEY='primexRequestNotesV1';
   const money = s => (s || '').replace(/\s+/g,' ').trim();
   const slug = s => money(s).toLowerCase().replace(/[^a-z0-9£]+/g,'-').replace(/^-+|-+$/g,'');
   function getTray(){ try{return JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){return[]} }
@@ -12039,20 +12041,21 @@ section[id],
   function addButtons(){
     document.querySelectorAll('.plan-price').forEach(buildButton);
   }
+  function continueToRequest(){ const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(getTray()); window.location.href='../order-request/index.html'; }
   function ensureTrayBar(){
     if(document.querySelector('.px-request-tray-bar')) return;
     const bar=document.createElement('div');
     bar.className='px-request-tray-bar';
-    bar.innerHTML='<div class="px-request-tray-copy"><div class="px-request-tray-label">Request Tray</div><div class="px-request-tray-count">No structures selected</div></div><div class="px-request-tray-actions"><button type="button" class="px-request-ghost" data-px-clear>Clear</button><button type="button" class="px-request-primary" data-px-review>Review / copy</button></div>';
+    bar.innerHTML='<div class="px-request-tray-copy"><div class="px-request-tray-label">Request Tray</div><div class="px-request-tray-count">No structures selected</div></div><div class="px-request-tray-actions"><button type="button" class="px-request-ghost" data-px-clear>Clear</button><button type="button" class="px-request-primary" data-px-review>Continue request</button></div>';
     document.body.appendChild(bar);
     bar.querySelector('[data-px-clear]').addEventListener('click', function(){ setTray([]); });
-    bar.querySelector('[data-px-review]').addEventListener('click', function(){ openReview(true); });
+    bar.querySelector('[data-px-review]').addEventListener('click', continueToRequest);
   }
   function ensureModal(){
     if(document.querySelector('.px-request-modal')) return;
     const modal=document.createElement('div');
     modal.className='px-request-modal';
-    modal.innerHTML='<div class="px-request-panel" role="dialog" aria-modal="true" aria-label="Request Tray"><div class="px-request-panel-head"><div><div class="px-request-panel-title">Request Tray</div><div class="px-request-panel-sub">Build a request list before contacting PrimeX. This tray does not send anything yet and is not checkout.</div></div><button type="button" class="px-request-close" data-px-close>Close</button></div><div class="px-request-panel-body"><div data-px-request-content></div></div></div>';
+    modal.innerHTML='<div class="px-request-panel" role="dialog" aria-modal="true" aria-label="Request Tray"><div class="px-request-panel-head"><div><div class="px-request-panel-title">Request Tray</div><div class="px-request-panel-sub">Build a request list before continuing to the request form. This tray does not take payment and nothing is finalised here.</div></div><button type="button" class="px-request-close" data-px-close>Close</button></div><div class="px-request-panel-body"><div data-px-request-content></div></div></div>';
     document.body.appendChild(modal);
     modal.addEventListener('click', function(e){ if(e.target===modal) closeReview(); });
     modal.querySelector('[data-px-close]').addEventListener('click', closeReview);
@@ -12082,9 +12085,9 @@ section[id],
     const content=document.querySelector('[data-px-request-content]');
     const tray=getTray();
     if(!tray.length){
-      content.innerHTML='<div class="px-request-empty">No structures selected yet. Return to the planner and add one or more structures to build a request.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Contact PrimeX</button></div>';
+      content.innerHTML='<div class="px-request-empty">No structures selected yet. Return to the planner and add one or more structures to build a request.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Continue to request form</button></div>';
     } else {
-      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected structure')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> this tray does not submit anything yet. Copy the request summary, then contact PrimeX so the request can be reviewed and confirmed manually. The dedicated HQ intake connection will be added next.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Contact PrimeX</button></div>';
+      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected structure')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-continue>Continue to request form</button><button type="button" class="px-request-ghost" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button></div>';
     }
     content.querySelectorAll('.px-request-item').forEach(row=>{
       const id=row.getAttribute('data-id');
@@ -12094,7 +12097,8 @@ section[id],
       if(remove){ remove.addEventListener('click', function(){ setTray(getTray().filter(x=>x.id!==id)); }); }
     });
     const ret=content.querySelector('[data-px-return]'); if(ret) ret.addEventListener('click', closeReview);
-    const contact=content.querySelector('[data-px-contact]'); if(contact) contact.addEventListener('click', function(){ closeReview(); const c=document.querySelector('#contact'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'}); });
+    const contact=content.querySelector('[data-px-contact]'); if(contact) contact.addEventListener('click', continueToRequest);
+    const cont=content.querySelector('[data-px-continue]'); if(cont) cont.addEventListener('click', continueToRequest);
     const copy=content.querySelector('[data-px-copy]'); if(copy) copy.addEventListener('click', copySummary);
   }
   function openReview(force){ ensureModal(); renderReview(); if(force){document.querySelector('.px-request-modal').classList.add('is-open');} }
@@ -12105,7 +12109,7 @@ section[id],
     const lines=['PrimeX request summary',''];
     tray.forEach((x,i)=>{ lines.push((i+1)+'. '+x.title+' — '+(x.label||x.name||'Selected structure')); if(x.name) lines.push('   Range: '+x.name); if(x.meta) lines.push('   Details: '+x.meta); if(x.price) lines.push('   Reference: '+x.price); lines.push('   Qty: '+(parseInt(x.qty,10)||1)); });
     if(notes.trim()){ lines.push('','Notes:',notes.trim()); }
-    navigator.clipboard && navigator.clipboard.writeText(lines.join('\n')).then(()=>{ alert('Request summary copied. Please send it to PrimeX using the contact section.'); }).catch(()=>{ alert(lines.join('\n')); });
+    navigator.clipboard && navigator.clipboard.writeText(lines.join('\n')).then(()=>{ alert('Request summary copied. You can continue to the request form or keep this as a fallback.'); }).catch(()=>{ alert(lines.join('\n')); });
   }
   function escapeHTML(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   document.addEventListener('DOMContentLoaded', function(){ addButtons(); ensureTrayBar(); ensureModal(); updateTrayUI(); syncButtons(); });
