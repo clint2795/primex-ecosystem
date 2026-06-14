@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v42.9B Stabilisation Privacy Encoding Fix</title>
+<title>PrimeX Finance HQ · v42.9C Privacy Guard Communication Cleanup</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -68,7 +68,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .alert-row.info{border-left:4px solid #2563eb}
 .comm-row{align-items:center}
 .comm-main{min-width:0}
-.comm-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.comm-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}.comm-row .badge-neutral{white-space:nowrap;margin-left:0}.comm-row button:disabled{opacity:.48;cursor:not-allowed}
 .order-action-box{border-color:#31506b;background:#09121c}
 .order-action-box .inline-preview{border:0;background:transparent;padding:0;margin:0}.order-action-box .btnrow{border-top:1px solid #172333;margin-top:12px;padding-top:12px}
 .support-flow{display:grid;gap:10px}.support-choice-group{border:1px solid #1d2c3e;border-radius:12px;padding:10px;background:#081018}.support-choice-title{font-weight:900;color:#e9f8ff;margin-bottom:6px}.support-choice-help{font-size:12px;color:var(--muted);margin-bottom:8px}.support-step-note{font-size:12px;color:#9fb7cc;margin-top:8px}
@@ -290,15 +290,15 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <details class="field full payment-advanced"><summary>Payment / release notes</summary><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></details>
         </div>
       </section>
-      <section class="card slim" style="box-shadow:none"><div class="subhead">Message status</div>
-        <div class="note message-flow-note" style="margin-bottom:10px">Message flow: generate â†’ copy/send â†’ mark sent â†’ save.</div>
+      <section class="card slim" style="box-shadow:none"><details class="payment-advanced"><summary>Advanced message controls</summary>
+        <div class="note message-flow-note" style="margin:10px 0">Message flow: generate → copy/send → mark sent → save.</div>
         <div class="grid two" style="margin-top:10px">
           <div class="field"><label>Order confirmation</label><select id="confirmationSent"><option>No</option><option>Yes</option><option>Confirmation needs regeneration</option></select></div>
           <div class="field"><label>Customer update</label><select id="updateSent"><option>No</option><option>Yes</option><option>Customer update needs regeneration</option></select></div>
           <details id="confirmationDetails" class="field full payment-advanced"><summary>Order confirmation message</summary><textarea id="confirmationMsg" class="readonly tall-textarea" readonly></textarea></details>
         </div>
         <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn good" onclick="markConfirmationSentNow()">Mark confirmation sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark customer update sent</button></div>
-      </section>
+      </details></section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Save order</div>
         <details id="dangerousActions" class="payment-advanced" style="margin-bottom:10px"><summary>Cancel / void options</summary><label>Cancel / void reason</label><textarea id="voidReason" class="tall-textarea" placeholder="Reason if this order is cancelled or voided"></textarea><div class="btnrow" style="margin-top:10px"><button class="btn danger" id="voidOrder">Cancel / void order</button><button class="btn danger" id="deleteOrder">Move test to bin</button></div></details>
         <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn good" id="saveOrder">Save order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
@@ -605,13 +605,24 @@ function safeLoadJSON(key, fallback){
 }
 const FINANCE_LOCAL_KEYS=['px_orders_v21','px_stock_v21','px_stock_movements_v1','px_stock_thresholds_v1','px_custom_stock_items_v1','px_stock_opening_migrated_v1'];
 let prototypeStoredOrdersBlocked=false;
+function isHostedPage(){
+  return location.protocol.startsWith('http')&&!['localhost','127.0.0.1','::1'].includes(location.hostname);
+}
+function allowLocalDataOnHostedPage(){
+  const params=new URLSearchParams(location.search);
+  return params.get('allowLocalData')==='1'||params.get('allowLocalData')==='true';
+}
 function isPublicPrototypeMode(){
-  return location.hostname.endsWith('github.io')&&!new URLSearchParams(location.search).has('allowLocalData');
+  return isHostedPage()&&!allowLocalDataOnHostedPage();
+}
+function dashboardOrders(){
+  return isPublicPrototypeMode()?[]:orders;
 }
 function loadOrdersSafely(){
   const raw=localStorage.getItem('px_orders_v21');
   if(isPublicPrototypeMode()){
     prototypeStoredOrdersBlocked=!!raw;
+    localStorage.removeItem('px_orders_v21');
     return [];
   }
   return safeLoadJSON('px_orders_v21',[]);
@@ -642,7 +653,7 @@ function num(id){return Number(val(id)||0)}
 function set(id,v){const el=document.getElementById(id);el.value=v;autoExpandTextarea(el)}
 function paymentValue(v){return !v||v==='Not paid'?'Awaiting payment':v}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
-function saveLocal(){if(isPublicPrototypeMode())localStorage.removeItem('px_orders_v21');else localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds));localStorage.setItem('px_custom_stock_items_v1',JSON.stringify(customStockItems))}
+function saveLocal(){if(isPublicPrototypeMode()){localStorage.removeItem('px_orders_v21');orders=[];}else localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds));localStorage.setItem('px_custom_stock_items_v1',JSON.stringify(customStockItems))}
 function clearLocalFinanceData(){if(!confirm('Clear local Finance HQ test data in this browser?'))return;FINANCE_LOCAL_KEYS.forEach(k=>localStorage.removeItem(k));orders=[];stock=JSON.parse(JSON.stringify(INITIAL_STOCK));stockMovements=[];stockThresholds=JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=[];prototypeStoredOrdersBlocked=false;saveLocal();newOrder();recalcStock();renderAll();showToast('Local Finance HQ data cleared')}
 function renderPrototypeDataWarning(){if(!prototypeDataWarning)return;const show=isPublicPrototypeMode()||prototypeStoredOrdersBlocked;prototypeDataWarning.classList.toggle('hide',!show);if(show){prototypeDataWarning.querySelector('strong').textContent=isPublicPrototypeMode()?'Public prototype mode:':'Prototype mode:'}}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));const view=document.getElementById('view-'+v);if(!view){showToast('View not available');return}view.classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0)}
@@ -776,7 +787,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v42.9B JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v42.9C JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1309,11 +1320,11 @@ function contactLine(o){
   return '<div class="tiny">Contact: '+htmlEscape(phone||'not recorded')+(note?' · Note: '+htmlEscape(note):'')+'</div>';
 }
 function queueData(){return[
- {key:'pay',title:'Awaiting payment',orders:orders.filter(o=>!isPaymentCleared(o)&&isActiveStatus(o)),sub:'payment actions'},
- {key:'pack',title:'To pack / fulfil',orders:orders.filter(o=>needsPacking(o)&&isActiveStatus(o)),sub:'payment cleared / prep work'},
- {key:'ready',title:'Ready send / collect',orders:orders.filter(o=>readyToRelease(o)&&isActiveStatus(o)),sub:'dispatch / collection'},
- {key:'transit',title:'In transit / follow-up',orders:orders.filter(o=>normalStatus(o)==='Dispatched / awaiting delivery confirmation'&&isActiveStatus(o)),sub:'awaiting confirmation'},
- {key:'hold',title:'Issues / hold',orders:orders.filter(o=>normalStatus(o)==='Hold / issue'&&isActiveStatus(o)),sub:'needs review'}]
+ {key:'pay',title:'Awaiting payment',orders:dashboardOrders().filter(o=>!isPaymentCleared(o)&&isActiveStatus(o)),sub:'payment actions'},
+ {key:'pack',title:'To pack / fulfil',orders:dashboardOrders().filter(o=>needsPacking(o)&&isActiveStatus(o)),sub:'payment cleared / prep work'},
+ {key:'ready',title:'Ready send / collect',orders:dashboardOrders().filter(o=>readyToRelease(o)&&isActiveStatus(o)),sub:'dispatch / collection'},
+ {key:'transit',title:'In transit / follow-up',orders:dashboardOrders().filter(o=>normalStatus(o)==='Dispatched / awaiting delivery confirmation'&&isActiveStatus(o)),sub:'awaiting confirmation'},
+ {key:'hold',title:'Issues / hold',orders:dashboardOrders().filter(o=>normalStatus(o)==='Hold / issue'&&isActiveStatus(o)),sub:'needs review'}]
 }
 function htmlEscape(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function jsArg(v){return JSON.stringify(String(v??'')).replace(/"/g,'&quot;')}
@@ -1323,7 +1334,7 @@ function queueCardHTML(x,active){
 }
 function openOrderValueInclude(o){return isOpenWork(o)&&normalStatus(o)!=='Sent / collected'}
 function activeValueCardHTML(){
-  const total=money(orders.reduce((a,o)=>a+(openOrderValueInclude(o)?o.total:0),0));
+  const total=money(dashboardOrders().reduce((a,o)=>a+(openOrderValueInclude(o)?o.total:0),0));
   return `<button class="queue-card"><div class="k">Open order value</div><div class="n" data-value="${htmlEscape(total)}">${htmlEscape(total)}</div><div class="s">Live orders still needing action</div></button>`;
 }
 function renderQueues(){
@@ -1348,7 +1359,7 @@ function dispatchQuickAccessMatches(o){
 }
 function renderDispatchQuickAccess(){
   if(!dispatchQuickAccess)return;
-  const list=orders.filter(dispatchQuickAccessMatches).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+  const list=dashboardOrders().filter(dispatchQuickAccessMatches).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
   const shown=list.slice(0,6);
   const extra=list.length>shown.length?`<div class="tiny" style="margin-top:8px">${list.length-shown.length} more dispatch item${list.length-shown.length===1?'':'s'} in Queues.</div>`:'';
   dispatchQuickAccess.innerHTML=shown.length?shown.map(o=>{
@@ -1510,7 +1521,7 @@ function renderHistory(filter='all'){
   window.lastHistory=filter;
   if(!historyList)return;
   document.querySelectorAll('#historyTabs button').forEach(b=>{const txt=b.textContent.toLowerCase();const key=filter==='cancelled'?'cancelled':(filter==='quote'?'quotes':filter);b.classList.toggle('active',txt.startsWith(key));});
-  let list=orders.filter(o=>historyMatches(o,filter)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+  let list=dashboardOrders().filter(o=>historyMatches(o,filter)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
   historyList.innerHTML=list.length?list.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} · ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${isBinned(o)?'<span class="badge-bad">BIN</span>':''}</strong><div class="tiny">Type: ${htmlEscape(o.orderType||'Live order')} · Date: ${htmlEscape(o.date||'')}</div><div class="tiny">Payment: ${htmlEscape(paymentValue(o.payment))} · Status: ${htmlEscape(displayStatus(o))}</div><div class="tiny">Value: ${money(o.total)}</div>${contactLine(o)}</div><div class="btnrow">${isBinned(o)?`<button class="btn good" onclick="restoreOrderFromBin(${jsArg(o.id)})">Restore</button>`:`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open / edit</button><button class="btn good" onclick="repeatOrderFrom(${jsArg(o.id)})">Repeat order</button>${o.orderType==='Quote / enquiry'?`<button class="btn good" onclick="convertQuoteToLive(${jsArg(o.id)})">Convert to live</button>`:''}${(o.orderType==='Test order'||normalStatus(o)==='Cancelled')?`<button class="btn subtle" onclick="moveOrderToBin(${jsArg(o.id)})">Move to bin</button>`:''}`}</div></div>`).join(''):'<div class="muted">No saved orders match this filter.</div>';
 }
 function renderStockItemOptions(){applyCustomStockItems();const showInactive=!!stockShowInactive?.checked;const opts=stockKeys().filter(k=>showInactive||stockItemActive(k)).map(k=>`<option value="${htmlEscape(k)}">${htmlEscape(STOCK_LABELS[k])} - ${htmlEscape(STOCK_CATEGORIES[k]||'Stock item')}</option>`).join('');[stockReceiveItem,stockAdjustItem].forEach(s=>{if(s)s.innerHTML=opts})}
@@ -1556,7 +1567,7 @@ function renderStartActionPrompts(){
   if(!startActionPrompts)return;
   const alerts=deriveActionAlerts().slice(0,8);
   if(alerts.length){startActionPrompts.innerHTML='<div class="alert-list">'+alerts.map(alertHtml).join('')+'</div>';return}
-  const live=orders.filter(isOpenWork);
+  const live=dashboardOrders().filter(isOpenWork);
   let prompts=[];
   const conf=live.filter(o=>(o.confirmation||'No')!=='Yes');
   const upd=live.filter(o=>(o.updateSent||'No')!=='Yes'&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(normalStatus(o)));
@@ -1569,7 +1580,7 @@ function renderStartActionPrompts(){
   startActionPrompts.innerHTML=prompts.length?prompts.map(p=>`<div class="summary-line"><span>${htmlEscape(p[0])}</span><strong>${p[1]}</strong></div>`).join(''):'<div class="muted">No urgent order prompts.</div>';
 }
 function commsActionOrders(){
-  const live=orders.filter(isOpenWork);
+  const live=dashboardOrders().filter(isOpenWork);
   return live.filter(o=>(o.confirmation||'No')!=='Yes'||(o.fulfilmentMsg&&String(o.fulfilmentMsg).includes('needs regenerating'))||((o.updateSent||'No')!=='Yes'&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(normalStatus(o))));
 }
 function renderStartCommsActions(){
@@ -1657,7 +1668,7 @@ function setCommStatus(key,status){
   renderActionBanner();
   showToast(commStatusLabel(status)+' - save order');
 }
-function commButton(label,onclick,disabled=false){return '<button type="button" class="secondary" '+(disabled?'disabled ':'')+'onclick="'+onclick+'">'+htmlEscape(label)+'</button>'}
+function commButton(label,onclick,disabled=false){return '<button type="button" class="btn '+(disabled?'subtle':'')+'" '+(disabled?'disabled aria-disabled="true" ':'')+'onclick="'+onclick+'">'+htmlEscape(label)+'</button>'}
 function commRow(row){
   const actions=[];
   if(row.generate)actions.push(commButton('Generate',row.generate,row.disabled));
@@ -1691,7 +1702,7 @@ function postSaveNudge(o){
 }
 function deriveActionAlerts(){
   const alerts=[];
-  const openOrders=orders.filter(isOpenWork);
+  const openOrders=dashboardOrders().filter(isOpenWork);
   openOrders.forEach(o=>{
     const st=normalStatus(o);
     const paid=isPaymentCleared(o);

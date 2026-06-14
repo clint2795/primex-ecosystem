@@ -1,100 +1,224 @@
-# Finance HQ Build Control Log
+﻿# PrimeX Finance HQ Build Control Log
 
-## Current Local Version
-- `v42.2 import safety + zero-price guard`
-- Active live file: `finance/index.html`
+## v42.8Y
+- Version: v42.8Y
+- Purpose: Morning stabilisation audit + version metadata alignment.
+- Files changed:
+  - C:\Users\Clint\OneDrive\Documents\PrimeX Ecosystem\finance\index.html
+  - C:\Users\Clint\OneDrive\Documents\PrimeX Ecosystem\finance\FINANCE_HQ_BUILD_CONTROL_LOG.md
+- What was checked:
+  - Active file path, title, boot badge text, key quote/enquiry/repeat/backup strings.
+  - Duplicate function declarations by static scan.
+  - Malformed `syncFulfilmentPaymentWarningfunction` reference.
+  - JavaScript syntax/static parse.
+  - Presence of quote/enquiry, convert quote to live order, repeat order, backup, save/update, and stock remove/damaged flows.
+- What was not changed:
+  - Pricing logic.
+  - Stock deduction logic.
+  - Retatrutide kit logic.
+  - BAC/support charge logic.
+  - Quote/enquiry exclusion logic.
+  - Repeat order logic.
+  - UI design or workflow features.
+- Risks / manual browser tests still required:
+  - Browser/mobile testing not performed in this patch.
+  - Manual test still required for new order, quote conversion, repeat order, backup, save/update, and stock adjustment flows.
+  - Existing source still contains mojibake in the old title source before this metadata alignment; broader encoding cleanup was not part of this stabilisation scope.
 
-## Current Live GitHub Version
-- Not verified remotely from this local folder.
-- Deployment target is expected to be GitHub Pages folder `finance/`.
+## v42.8Z
+- Version: v42.8Z
+- Purpose: Manual Use Readiness Audit.
+- Files changed:
+  - C:\Users\Clint\OneDrive\Documents\PrimeX Ecosystem\finance\FINANCE_HQ_BUILD_CONTROL_LOG.md
+- Checklist added: v42.8Z manual browser test checklist for startup, live orders, Reta kit multiplier, quote/enquiry, repeat order, stock, backup, and queue/workflow checks.
 
-## Last Tested Version
-- `v42.2`
-- Test status: needs local/browser/mobile test before Jade imports.
-- Check run: JavaScript syntax parse passed after v42.2 edit.
+### v42.8Z Manual Browser Test Checklist
 
-- v42.2 adds import safety and zero-price guards: missing/manual product and structure prices must be confirmed with a positive value before adding, packing contents show actual contents, manual packing override is visible/protected, postage charge sits with Delivery setup, stock receive/adjust dropdowns cover all deductible stock keys, and Start includes compact prompts for missing confirmation/update/tracking.
-- v42.1 separates payment status wording from order workflow wording: the internal new-order status remains compatible, but visible/customer-facing text uses `New order` or `Order received / being prepared`; customer updates only show postage/courier service for Royal Mail or courier fulfilment; Hold / not arranged now says fulfilment is to be confirmed.
-- v42 adds fulfilment/import safety: Reta structures attach default Reta kit materials, Courier collection is available, Fulfilment / Delivery is grouped by workflow, Label/QR reference fields are manual text-only, Dispatch quick access appears on Start, Test orders are excluded from active value/queues, and `Prep anyway` is renamed to `Move to prep — unpaid`.
-- v41 adds stock intake, manual adjustment, reorder warnings, Start stock alerts, movement history, and scan placeholder.
-- Stock rule decision: Live orders affect stock; Test orders do not affect stock; Past orders do not affect stock by default.
-- `Not paid` removed from visible payment status; `Awaiting payment` is now the default.
-- Old saved `Not paid` values map/display as `Awaiting payment` when loaded/displayed.
-- `Add product` renamed to `Add to order`.
-- Materials summary now appears before editable fields.
-- Full material fields are behind `Edit materials`.
-- Delivery/Royal Mail is grouped by workflow step.
-- Copy customer update is still copy-only; operator must send via customer route, mark update sent, and save.
-- Postage service is selected manually; Royal Mail pricing is not pulled in.
-- Expenses, owner loan tracking, and finance summaries are not implemented yet.
+#### A. Startup
+- Open Finance HQ.
+- Confirm Start screen loads without white/blank page.
+- Confirm boot badge is visible.
+- Confirm queue cards appear immediately.
 
-## Next Planned Action
-- Verify v42.2 on local/browser/mobile before Jade imports, especially zero-price blocking, manual packing override/reset, stock dropdown coverage, postage charge entry, and Start prompts.
-- Next likely version depends on v42.2 import testing results.
+#### B. New live order
+- Click + New Order.
+- Add fake customer/contact.
+- Add Retatrutide 20mg.
+- Test internal/close, existing/private, and planner/standard tier.
+- Confirm visible unit price changes.
+- Save order.
+- Confirm queue count changes.
 
-## Parked Later Items
-- Full Structure/pathway content build-out.
-- Full materials redesign if needed.
-- Expenses entry and profit summary.
-- Barcode/QR scanning.
-- Owner loan/repayment tracker.
-- Backend/shared database.
-- Past order optional stock impact toggle.
-- Full payment due method field.
-- Email/customer contact model.
-- WhatsApp/email/SMS integrations.
-- Start screen action prompts.
-- Postage pricing automation.
-- Delivery lost/damaged/delayed workflow expansion.
-- Label PDF/image upload.
-- Real Royal Mail/send integrations.
-- Full pathway pricing table review.
-- Backup/export.
-- Bin/restore safety.
-- Full customer records/address autofill.
+#### C. Reta kit multiplier
+- Create Retatrutide 20mg qty 4.
+- Confirm fulfilment/materials show:
+  - 4 x Retatrutide 20mg vials
+  - 4 x 3ml BAC waters
+  - 4 x U100 syringe 10-packs
+  - 64 alcohol wipes
+  - 4 x magnetic boxes
+  - 4 x inserts
+  - 4 x inlay cards
 
-## Decisions
-- Active Finance HQ edits target `finance/index.html` directly.
-- Missing planner/existing prices require manual owner confirmation.
-- Packing contents are operational packing data, not just materials.
-- Postage charge belongs with the fulfilment/delivery workflow.
-- Payment status and order workflow wording are separated.
-- Existing/new internal status value `New / awaiting payment` displays as `New order` where safe.
-- Customer-facing paid new orders display as `Order received / being prepared`.
-- Reta structures now attach default materials per vial.
-- Test orders are excluded from active value and active operational queues.
-- Past/Test/Live order type notices are shown near Order type.
-- Courier collection added.
-- Fulfilment / Delivery grouped by workflow.
-- Dispatch quick access added to Start.
-- Label/QR fields added as manual text-only fields.
-- `Prep anyway` renamed to `Move to prep — unpaid`.
-- `Not paid` removed from visible payment status.
-- `Awaiting payment` is default.
-- `Paid`, `Waived`, and `Approved credit` remain payment-cleared.
-- `Pay on collection` remains not fully cleared.
-- Materials section needs compact mobile behaviour.
-- Materials summary appears before editable fields.
-- Full material fields are behind `Edit materials`.
-- Delivery/Royal Mail grouped by workflow step.
+#### D. Quote/enquiry
+- Create Quote / enquiry order.
+- Save it.
+- Confirm it does not deduct stock.
+- Confirm it does not appear as a live fulfilment job.
+- Convert quote to live order.
+- Save converted order.
+- Confirm it now behaves as a live order.
 
-## Do-Not-Touch Rules
-- Do not use abandoned v33.
-- Do not touch pricing logic unless explicitly approved.
-- Do not touch Reta vial/kit product logic unless explicitly approved.
-- Do not touch stock deduction logic unless explicitly approved.
-- Do not overwrite live versions without confirming target path and version.
+#### E. Repeat order
+- Open existing saved fake order.
+- Use Repeat order.
+- Confirm new order gets fresh ref/date/status.
+- Confirm it does not deduct stock until saved.
 
-## Current Risks
-- Some products still need owner-confirmed standard/existing prices.
-- Old orders with `£0` lines need manual review.
-- Full pathway content build-out still required.
-- Existing orders with old status labels may display using mapped wording.
-- Existing saved structure orders may need reopening/resaving if materials were saved incorrectly before v42.
-- Manual label/QR fields are text-only until upload/scanning exists.
+#### F. Stock checks
+- Confirm saved live order deducts stock.
+- Confirm test/past/quote order does not wrongly deduct stock.
+- Confirm stock remove/damaged adjustment works.
 
-## Upload / Live Status
-- Local live-folder build only.
-- Not committed.
-- Not pushed.
-- Not confirmed live on GitHub Pages.
+#### G. Backup
+- Click Backup now.
+- Confirm export/download happens.
+- Confirm app does not crash.
+
+#### H. Queue/workflow
+- Awaiting payment shows unpaid orders.
+- To pack / fulfil shows paid/ready/assembled orders.
+- Ready send / collect shows packed orders.
+- Hold/issue shows issue orders.
+- Payment warning appears where relevant.
+
+### What was not changed
+- App file/version/title/badge remained at v42.8Y because this patch only adds the manual readiness checklist to the build log.
+- Pricing logic was not changed.
+- Stock deduction logic was not changed.
+- Retatrutide kit logic was not changed.
+- BAC/support charge logic was not changed.
+- Quote/enquiry exclusion logic was not changed.
+- Repeat order logic was not changed.
+- UI was not redesigned.
+- Planner/request/website connections were not added.
+- Old/backup folders were not touched.
+
+### Manual tests still requiring user/browser confirmation
+- Full startup render on desktop and mobile.
+- New live order creation and queue count changes.
+- Reta kit qty 4 fulfilment/material display.
+- Quote save, stock exclusion, conversion, and live-order behaviour.
+- Repeat order fresh ref/date/status and stock timing.
+- Stock remove/damaged adjustment.
+- Backup export/download.
+- Queue/workflow lane behaviour and payment warnings.
+
+### Risks
+- Browser/mobile testing has not been performed.
+- Static inspection found residual mojibake in some app strings; this was not changed because v42.8Z scope is build-log checklist only.
+- Manual testing is required before relying on the app for live use.
+
+
+## v42.9A Daily Action Alerts + Communication Centre
+
+Version: v42.9A
+Purpose: Add a lightweight daily-use action layer before Clint/Jade browser testing.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What was added:
+- Sticky Action Banner scaffold for important unresolved operational alerts.
+- Start screen Action Alerts card backed by derived order/stock alerts.
+- Bottom Communication Centre scaffold with lifecycle rows for order confirmation, payment message, fulfilment update, dispatch/collection update, and tracking/sent update.
+- Safe communication status fields on saved orders with defaults for old orders.
+- Lightweight post-save and stage nudges for confirmation, payment, fulfilment, postage/label, and tracking checks.
+
+What was not changed:
+- Pricing logic.
+- Stock deduction formulas.
+- Retatrutide kit logic.
+- BAC/support charge logic.
+- Quote/enquiry exclusion logic.
+- Repeat order logic.
+- Planner, website, Request Hub, CRM, backend, WhatsApp/email/SMS/Royal Mail APIs, and real label printing.
+
+Checks performed:
+- JavaScript syntax check required after patch.
+- Duplicate function declaration scan required after patch.
+- Malformed concatenated function-name scan required after patch.
+- Protected flow string scan required after patch.
+
+Known risks / manual browser tests still required:
+- Browser/mobile rendering has not been verified in this entry.
+- Communication Centre rows are a scaffold and intentionally park unsupported payment/courier-specific message behaviours.
+- Clint/Jade should manually test Start alerts, order save nudges, confirmation generation/copy/mark-sent, fulfilment update generation/copy/mark-sent, quote conversion, repeat order, stock adjustment, and backup export.
+
+
+## v42.9B Stabilisation Privacy Encoding Fix
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What was fixed:
+- Corrected mojibake currency and separator text so pound signs and symbols render correctly.
+- Added public GitHub Pages prototype guard so saved browser orders are not loaded by default on public Pages.
+- Added visible prototype data warning and Clear test data / Reset local data action.
+- Guarded missing-view navigation to avoid null classList errors from stale/invalid view targets.
+
+What was not changed:
+- Pricing logic.
+- Stock deduction logic.
+- Retatrutide kit logic.
+- BAC/support charge logic.
+- Quote/enquiry exclusion logic.
+- Repeat order logic.
+- Planner, website, Request Hub, APIs, backend, CRM, and label printing.
+
+Privacy / data warning:
+- Real/private customer or order data should not be entered into a public/shared GitHub Pages browser session.
+- Public Pages now starts with no saved orders unless opened with an explicit allowLocalData query override.
+- Clear local saved data before Jade/shared testing.
+
+Manual browser tests needed:
+- Open GitHub Pages with a cache-busted v42.9B URL and confirm badge shows v42.9B JS OK.
+- Confirm currency shows £, not Â£.
+- Confirm no real saved customer/order appears on public Pages by default.
+- Confirm Clear test data / Reset local data clears local browser state.
+- Confirm Quote / enquiry, Convert quote to live order, Repeat order, Backup now, Action Alerts, and Communication Centre still appear.
+
+
+## v42.9C Privacy Guard Communication Cleanup
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Privacy guard fix:
+- Hardened hosted/public mode detection beyond github.io.
+- Hosted public pages now ignore and remove px_orders_v21 unless opened with allowLocalData=1.
+- Start dashboard, queue cards, Action Alerts, Messages to send, Open order value, Dispatch handover, and Order History render from a public-safe empty order list in hosted prototype mode.
+
+Communication cleanup:
+- Communication Centre remains the main visible workflow.
+- Old message status/generate/copy/mark controls are preserved behind Advanced message controls.
+- Communication Centre buttons now use PrimeX button classes and calmer disabled states.
+
+What was not changed:
+- Pricing logic.
+- Stock deduction logic.
+- Retatrutide kit logic.
+- BAC/support charge logic.
+- Quote/enquiry exclusion logic.
+- Repeat order logic.
+- Planner, website, Request Hub, APIs, backend, CRM, and label printing.
+
+Remaining manual tests needed:
+- Open public GitHub Pages without allowLocalData and confirm no saved real order appears anywhere on Start, queues, history, alerts, messages, value card, or dispatch handover.
+- Confirm Clear test data / Reset local data removes saved order storage.
+- Confirm message flow text renders with arrows correctly.
+- Confirm Communication Centre rows are readable and old message controls are hidden behind Advanced message controls.
+- Confirm protected flows still work before Jade testing.
