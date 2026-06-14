@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v42.9C Privacy Guard Communication Cleanup</title>
+<title>PrimeX Finance HQ · v42.9D Alert Colour Tone Polish</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -73,6 +73,51 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .order-action-box .inline-preview{border:0;background:transparent;padding:0;margin:0}.order-action-box .btnrow{border-top:1px solid #172333;margin-top:12px;padding-top:12px}
 .support-flow{display:grid;gap:10px}.support-choice-group{border:1px solid #1d2c3e;border-radius:12px;padding:10px;background:#081018}.support-choice-title{font-weight:900;color:#e9f8ff;margin-bottom:6px}.support-choice-help{font-size:12px;color:var(--muted);margin-bottom:8px}.support-step-note{font-size:12px;color:#9fb7cc;margin-top:8px}
 .issue-list{display:grid;gap:8px}.issue-list div{border:1px solid #1d2838;border-radius:10px;padding:9px;background:#080e15}.issue-list strong{color:#e9f8ff}.header-action{padding:9px 12px;border-radius:12px}
+
+
+
+/* v42.9D alert colour tone polish */
+.note.warn,#prototypeDataWarning{
+  border-left:3px solid rgba(196,139,53,.9);
+  border-color:rgba(142,101,47,.42);
+  background:linear-gradient(180deg,rgba(31,23,12,.88),rgba(11,12,14,.96));
+  color:#f3dfbd;
+  box-shadow:inset 0 0 0 1px rgba(214,158,72,.06);
+}
+#prototypeDataWarning strong{color:#ffe3aa}
+#clearLocalDataBtn,.btn.warn{
+  background:linear-gradient(180deg,rgba(72,48,18,.92),rgba(34,24,12,.96));
+  border-color:rgba(180,124,45,.68);
+  color:#f6e5c4;
+}
+#clearLocalDataBtn:hover,.btn.warn:hover{
+  border-color:rgba(226,166,77,.9);
+  box-shadow:0 0 0 2px rgba(202,143,58,.12);
+}
+.action-alert-banner{
+  border-left-color:rgba(204,143,55,.92);
+  border-color:rgba(120,88,45,.42);
+  background:linear-gradient(180deg,rgba(19,20,23,.96),rgba(10,12,16,.98));
+}
+.alert-row.warning,.alert-row.critical{
+  border-left-color:rgba(204,143,55,.9);
+  border-color:rgba(116,83,39,.42);
+  background:linear-gradient(180deg,rgba(19,22,27,.96),rgba(11,13,18,.98));
+}
+.alert-row.warning strong,.alert-row.critical strong{color:#f2deb9}
+.stock-card-controls .stock-action-panel.danger-lite{
+  border-color:rgba(116,83,39,.42);
+  background:linear-gradient(180deg,rgba(24,18,10,.72),rgba(11,12,14,.96));
+}
+.security{
+  border-color:rgba(116,83,39,.44);
+  background:linear-gradient(180deg,rgba(25,19,10,.74),rgba(10,13,18,.96));
+}
+.comm-row button:disabled{
+  opacity:.52;
+  filter:saturate(.7);
+  box-shadow:none;
+}
 
 </style>
 </head>
@@ -787,7 +832,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v42.9C JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v42.9D JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});

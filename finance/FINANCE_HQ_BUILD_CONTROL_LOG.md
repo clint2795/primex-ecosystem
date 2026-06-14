@@ -222,3 +222,48 @@ Remaining manual tests needed:
 - Confirm message flow text renders with arrows correctly.
 - Confirm Communication Centre rows are readable and old message controls are hidden behind Advanced message controls.
 - Confirm protected flows still work before Jade testing.
+
+
+## v42.9D Alert Colour Tone Polish
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Styling selectors changed:
+- .note.warn
+- #prototypeDataWarning
+- #clearLocalDataBtn
+- .btn.warn
+- .action-alert-banner
+- .alert-row.warning
+- .alert-row.critical
+- .stock-card-controls .stock-action-panel.danger-lite
+- .security
+- .comm-row button:disabled
+
+What changed:
+- Replaced harsh red/brown warning treatment with premium dark amber glass styling.
+- Kept warnings serious but calmer with muted amber borders, dark backgrounds, and thin amber rails.
+- Made the Clear test data / Reset local data control a subdued amber warning action.
+- Kept disabled Communication Centre buttons muted.
+
+What was not changed:
+- Pricing logic.
+- Stock deduction logic.
+- Retatrutide kit logic.
+- BAC/support charge logic.
+- Quote/enquiry logic.
+- Repeat order logic.
+- Action Alert logic.
+- Communication Centre logic.
+- Privacy guard logic.
+- localStorage keys.
+- Dashboard data rules.
+- Planner, website, or Request Hub.
+
+Manual visual check still required:
+- Confirm public/prototype warning banner feels calm and premium.
+- Confirm warning buttons are amber, not red/brown.
+- Confirm critical/alert rows remain readable and serious.
+- Confirm disabled Communication Centre buttons do not look broken.
