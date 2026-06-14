@@ -11991,6 +11991,334 @@ section[id],
 }
 </style>
 
+<style id="primex-v176-planning-card-premium-revision">
+/* PrimeX v176 - planner range card premium revision only.
+   Scope: planning range cards, request buttons, and compound mg micro-labels.
+   No pricing, nav, sticky, dropdown, pathway, copy, or tray logic changes. */
+#reta .plan-price,
+#bpc .plan-price,
+#tb .plan-price,
+#ta1 .plan-price,
+#kpv .plan-price,
+#foundation .foundation-variants .plan-price,
+.plan-grid .plan-price,
+.foundation-variants .plan-price{
+  grid-template-columns:minmax(0,1fr) minmax(82px,max-content)!important;
+  padding:24px 22px 20px!important;
+  gap:15px 24px!important;
+  border:1px solid rgba(150,177,199,.18)!important;
+  border-left:2px solid rgba(92,158,195,.54)!important;
+  background:
+    linear-gradient(180deg,rgba(17,29,43,.94) 0%,rgba(9,17,27,.98) 56%,rgba(5,10,17,.99) 100%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.052),
+    inset 0 -1px 0 rgba(0,0,0,.42),
+    0 16px 34px rgba(0,0,0,.18)!important;
+  position:relative!important;
+}
+#reta .plan-price::before,
+#bpc .plan-price::before,
+#tb .plan-price::before,
+#ta1 .plan-price::before,
+#kpv .plan-price::before,
+#foundation .foundation-variants .plan-price::before,
+.plan-grid .plan-price::before,
+.foundation-variants .plan-price::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(90deg,rgba(123,185,220,.09),transparent 38%),
+    linear-gradient(180deg,rgba(255,255,255,.032),transparent 38%)!important;
+  opacity:.72!important;
+}
+#reta .plan-price.recommended,
+#bpc .plan-price.recommended,
+#tb .plan-price.recommended,
+#ta1 .plan-price.recommended,
+#kpv .plan-price.recommended,
+#foundation .foundation-variants .plan-price.recommended,
+.plan-grid .plan-price.recommended,
+.foundation-variants .plan-price.recommended{
+  border-color:rgba(105,170,207,.30)!important;
+  border-left-color:rgba(126,190,224,.70)!important;
+  background:
+    linear-gradient(180deg,rgba(19,34,49,.96) 0%,rgba(9,19,31,.99) 58%,rgba(5,11,18,1) 100%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    inset 0 -1px 0 rgba(0,0,0,.44),
+    0 18px 38px rgba(0,0,0,.22)!important;
+}
+#reta .plan-price > div:first-child,
+#bpc .plan-price > div:first-child,
+#tb .plan-price > div:first-child,
+#ta1 .plan-price > div:first-child,
+#kpv .plan-price > div:first-child,
+#foundation .foundation-variants .plan-price > div:first-child,
+.plan-grid .plan-price > div:first-child,
+.foundation-variants .plan-price > div:first-child,
+#reta .plan-price > div:nth-child(2),
+#bpc .plan-price > div:nth-child(2),
+#tb .plan-price > div:nth-child(2),
+#ta1 .plan-price > div:nth-child(2),
+#kpv .plan-price > div:nth-child(2),
+#foundation .foundation-variants .plan-price > div:nth-child(2),
+.plan-grid .plan-price > div:nth-child(2),
+.foundation-variants .plan-price > div:nth-child(2),
+#reta .plan-price .px-request-action,
+#bpc .plan-price .px-request-action,
+#tb .plan-price .px-request-action,
+#ta1 .plan-price .px-request-action,
+#kpv .plan-price .px-request-action,
+#foundation .foundation-variants .plan-price .px-request-action,
+.plan-grid .plan-price .px-request-action,
+.foundation-variants .plan-price .px-request-action{
+  position:relative!important;
+  z-index:1!important;
+}
+#reta .plan-price > div:first-child,
+#bpc .plan-price > div:first-child,
+#tb .plan-price > div:first-child,
+#ta1 .plan-price > div:first-child,
+#kpv .plan-price > div:first-child,
+#foundation .foundation-variants .plan-price > div:first-child,
+.plan-grid .plan-price > div:first-child,
+.foundation-variants .plan-price > div:first-child{
+  padding-top:1px!important;
+}
+#reta .plan-price > div:nth-child(2),
+#bpc .plan-price > div:nth-child(2),
+#tb .plan-price > div:nth-child(2),
+#ta1 .plan-price > div:nth-child(2),
+#kpv .plan-price > div:nth-child(2),
+#foundation .foundation-variants .plan-price > div:nth-child(2),
+.plan-grid .plan-price > div:nth-child(2),
+.foundation-variants .plan-price > div:nth-child(2){
+  align-self:start!important;
+  padding-top:0!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+  align-items:flex-start!important;
+}
+#reta .plan-price .label,
+#bpc .plan-price .label,
+#tb .plan-price .label,
+#ta1 .plan-price .label,
+#kpv .plan-price .label,
+#foundation .foundation-variants .label,
+.plan-grid .plan-price .label,
+.foundation-variants .label{
+  color:rgba(184,211,228,.95)!important;
+  font-size:9px!important;
+  line-height:1.15!important;
+  letter-spacing:1.85px!important;
+  margin:0 0 8px!important;
+}
+#reta .plan-price .plan-name,
+#bpc .plan-price .plan-name,
+#tb .plan-price .plan-name,
+#ta1 .plan-price .plan-name,
+#kpv .plan-price .plan-name,
+#foundation .foundation-variants .plan-name,
+.plan-grid .plan-price .plan-name,
+.foundation-variants .plan-name{
+  color:rgba(235,243,249,.96)!important;
+  font-weight:650!important;
+  line-height:1.15!important;
+  letter-spacing:0!important;
+}
+#reta .plan-price .plan-meta,
+#bpc .plan-price .plan-meta,
+#tb .plan-price .plan-meta,
+#ta1 .plan-price .plan-meta,
+#kpv .plan-price .plan-meta,
+#foundation .foundation-variants .plan-meta,
+.plan-grid .plan-price .plan-meta,
+.foundation-variants .plan-meta{
+  margin-top:8px!important;
+  color:rgba(151,173,191,.84)!important;
+  font-size:9px!important;
+  letter-spacing:1.28px!important;
+  line-height:1.38!important;
+}
+#reta .plan-price .price-label,
+#bpc .plan-price .price-label,
+#tb .plan-price .price-label,
+#ta1 .plan-price .price-label,
+#kpv .plan-price .price-label,
+#foundation .foundation-variants .price-label,
+.plan-grid .plan-price .price-label,
+.foundation-variants .price-label{
+  display:none!important;
+}
+#reta .plan-price .amount,
+#bpc .plan-price .amount,
+#tb .plan-price .amount,
+#ta1 .plan-price .amount,
+#kpv .plan-price .amount,
+#foundation .foundation-variants .amount,
+.plan-grid .plan-price .amount,
+.foundation-variants .amount{
+  color:rgba(234,243,249,.98)!important;
+  font-size:28px!important;
+  font-weight:760!important;
+  letter-spacing:0!important;
+  line-height:1!important;
+  text-align:right!important;
+  padding-top:1px!important;
+  text-shadow:0 1px 0 rgba(0,0,0,.28)!important;
+}
+#reta .plan-price .px-request-action,
+#bpc .plan-price .px-request-action,
+#tb .plan-price .px-request-action,
+#ta1 .plan-price .px-request-action,
+#kpv .plan-price .px-request-action,
+#foundation .foundation-variants .plan-price .px-request-action,
+.plan-grid .plan-price .px-request-action,
+.foundation-variants .plan-price .px-request-action{
+  margin-top:6px!important;
+  padding-top:16px!important;
+  border-top:1px solid rgba(160,188,207,.12)!important;
+  justify-content:stretch!important;
+}
+#reta .plan-price .px-request-btn,
+#bpc .plan-price .px-request-btn,
+#tb .plan-price .px-request-btn,
+#ta1 .plan-price .px-request-btn,
+#kpv .plan-price .px-request-btn,
+#foundation .foundation-variants .plan-price .px-request-btn,
+.plan-grid .plan-price .px-request-btn,
+.foundation-variants .plan-price .px-request-btn{
+  width:100%!important;
+  min-width:0!important;
+  min-height:42px!important;
+  padding:13px 18px!important;
+  border:1px solid rgba(124,172,199,.42)!important;
+  border-left:2px solid rgba(129,185,216,.66)!important;
+  background:
+    linear-gradient(180deg,rgba(21,41,58,.96) 0%,rgba(10,22,35,.99) 100%)!important;
+  color:rgba(232,242,248,.96)!important;
+  font-family:'Share Tech Mono',monospace!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  letter-spacing:1.55px!important;
+  text-transform:uppercase!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.065),
+    inset 0 -1px 0 rgba(0,0,0,.32),
+    0 10px 22px rgba(0,0,0,.22)!important;
+  transition:border-color .16s ease, background .16s ease, color .16s ease, transform .16s ease, box-shadow .16s ease!important;
+}
+#reta .plan-price .px-request-btn:hover,
+#bpc .plan-price .px-request-btn:hover,
+#tb .plan-price .px-request-btn:hover,
+#ta1 .plan-price .px-request-btn:hover,
+#kpv .plan-price .px-request-btn:hover,
+#foundation .foundation-variants .plan-price .px-request-btn:hover,
+.plan-grid .plan-price .px-request-btn:hover,
+.foundation-variants .plan-price .px-request-btn:hover,
+#reta .plan-price .px-request-btn:focus-visible,
+#bpc .plan-price .px-request-btn:focus-visible,
+#tb .plan-price .px-request-btn:focus-visible,
+#ta1 .plan-price .px-request-btn:focus-visible,
+#kpv .plan-price .px-request-btn:focus-visible,
+#foundation .foundation-variants .plan-price .px-request-btn:focus-visible,
+.plan-grid .plan-price .px-request-btn:focus-visible,
+.foundation-variants .plan-price .px-request-btn:focus-visible{
+  border-color:rgba(148,199,226,.64)!important;
+  border-left-color:rgba(162,212,238,.82)!important;
+  background:
+    linear-gradient(180deg,rgba(27,50,69,.99) 0%,rgba(12,25,39,1) 100%)!important;
+  color:rgba(242,248,252,.98)!important;
+  transform:translateY(-1px)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.075),
+    inset 0 -1px 0 rgba(0,0,0,.34),
+    0 12px 25px rgba(0,0,0,.26)!important;
+  outline:none!important;
+}
+.mg-line,
+.inline-mg{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:25px!important;
+  padding:5px 10px 4px!important;
+  border:1px solid rgba(128,176,202,.40)!important;
+  border-radius:6px!important;
+  background:linear-gradient(180deg,rgba(12,25,38,.82),rgba(6,13,22,.88))!important;
+  color:rgba(198,225,239,.96)!important;
+  font-family:'Share Tech Mono',monospace!important;
+  font-size:10px!important;
+  line-height:1!important;
+  letter-spacing:1.75px!important;
+  text-transform:uppercase!important;
+  vertical-align:middle!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    inset 0 -1px 0 rgba(0,0,0,.28)!important;
+}
+.compound-title-row .mg-line,
+.compound-title-row .inline-mg{
+  transform:translateY(-3px)!important;
+  margin-left:4px!important;
+}
+@media(max-width:720px){
+  #reta .plan-price,
+  #bpc .plan-price,
+  #tb .plan-price,
+  #ta1 .plan-price,
+  #kpv .plan-price,
+  #foundation .foundation-variants .plan-price,
+  .plan-grid .plan-price,
+  .foundation-variants .plan-price{
+    padding:18px 16px!important;
+    gap:12px!important;
+  }
+  #reta .plan-price > div:nth-child(2),
+  #bpc .plan-price > div:nth-child(2),
+  #tb .plan-price > div:nth-child(2),
+  #ta1 .plan-price > div:nth-child(2),
+  #kpv .plan-price > div:nth-child(2),
+  #foundation .foundation-variants .plan-price > div:nth-child(2),
+  .plan-grid .plan-price > div:nth-child(2),
+  .foundation-variants .plan-price > div:nth-child(2){
+    justify-content:flex-start!important;
+  }
+  #reta .plan-price .amount,
+  #bpc .plan-price .amount,
+  #tb .plan-price .amount,
+  #ta1 .plan-price .amount,
+  #kpv .plan-price .amount,
+  #foundation .foundation-variants .amount,
+  .plan-grid .plan-price .amount,
+  .foundation-variants .amount{
+    font-size:27px!important;
+    text-align:left!important;
+  }
+  #reta .plan-price .px-request-btn,
+  #bpc .plan-price .px-request-btn,
+  #tb .plan-price .px-request-btn,
+  #ta1 .plan-price .px-request-btn,
+  #kpv .plan-price .px-request-btn,
+  #foundation .foundation-variants .plan-price .px-request-btn,
+  .plan-grid .plan-price .px-request-btn,
+  .foundation-variants .plan-price .px-request-btn{
+    width:100%!important;
+    min-width:0!important;
+    min-height:44px!important;
+    padding:14px 15px!important;
+    font-size:9px!important;
+  }
+  .compound-title-row .mg-line,
+  .compound-title-row .inline-mg{
+    transform:translateY(-2px)!important;
+    margin-left:3px!important;
+  }
+}
+</style>
+
 <script id="primex-v169-request-tray-safety">
 /* planner-v174A_LOCAL_HANDOFF_PATH_ONLY */
 (function(){
