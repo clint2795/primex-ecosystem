@@ -362,3 +362,39 @@ Manual visual check needed:
 - Confirm the reset button reads as a controlled utility/caution action.
 - Confirm backup panel no longer looks like a warning block.
 - Confirm zero-count dashboard cards feel calmer, especially Awaiting payment.
+
+## v42.9G Order Step Label Hierarchy Cleanup
+
+Version: v42.9G
+Purpose: Small order-entry label and hierarchy cleanup so product and support item steps read as equal order-building steps.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Pre-edit inspection:
+- Active file was v42.9F with title "PrimeX Finance HQ · v42.9F Empty State Warning Hierarchy Polish" and boot badge "v42.9F JS OK".
+- Found Step 1 already using "1. Product / compound".
+- Found Step 2 using "2. Add BAC / support item" and the support selector using "BAC / support item".
+- Found other BAC/support wording in generated summaries/admin notes; those were left unchanged because they can affect packing, totals, or operational output wording.
+
+Labels changed:
+- "2. Add BAC / support item" -> "2. BAC water / support item".
+- "BAC / support item" selector label -> "BAC water / support item".
+- Add order items helper text now says "BAC water / support items".
+- Support pricing helper now says "BAC water / support item".
+
+CSS selectors changed:
+- #singlePanel.flow-block .subhead
+- #structurePanel.flow-block .subhead
+- #supportItemSection.flow-block>summary
+- #supportItemSection.flow-block>summary strong
+
+What was not changed:
+- Pricing logic, stock deduction logic, Retatrutide kit logic, BAC/support charge logic, quote/enquiry logic, repeat order logic, privacy guard, localStorage keys, dashboard rules, planner/request hub/email settings, packing output, totals output, customer messaging, and stock/admin wording were not changed.
+
+Manual visual check needed:
+- Open Add order items and confirm Step 1 and Step 2 feel visually equal.
+- Confirm Step 2 no longer reads as the primary action over Step 1.
+- Confirm BAC water/support wording reads clearly without disrupting packing/totals output.
+- Browser/mobile testing not performed in this patch.
