@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v42.9H Guide Prompt Visibility Polish</title>
+<title>PrimeX Finance HQ · v42.9I Order Page Guided Flow Cleanup</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -188,7 +188,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
   <main id="view-order" class="view">
     <section class="card">
-      <div class="section-title"><div><h2>Order</h2><p>Customer, order type, and internal notes.</p></div><span class="tag" id="activeOrderTag">New</span></div>
+      <div class="section-title"><div><h2>Order details</h2><p>Customer, order type, and internal notes.</p></div><span class="tag" id="activeOrderTag">New</span></div>
       <div class="grid four">
         <div class="field"><label>Order type</label><select id="orderType"><option>Live order</option><option>Quote / enquiry</option><option>Past order</option><option>Test order</option></select><div id="orderTypeNotice" class="note" style="margin-top:8px"></div></div>
         <div class="field"><label>Order ref</label><input id="orderRef" class="readonly" readonly></div>
@@ -196,6 +196,11 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <div class="field"><label>Customer name / ref</label><input id="customerRef" placeholder="Customer, initials, or internal ref"></div>
         <div class="field"><label>Phone / WhatsApp</label><input id="recPhone" placeholder="Phone, WhatsApp, or contact ref"></div>
       </div>
+      <details class="payment-advanced request-intake-helper">
+        <summary>Request intake notes</summary>
+        <div class="note" style="margin-top:10px">Manual entry aid only. Paste or review the request elsewhere, then enter these details into the fields above and item section below.</div>
+        <div class="tiny" style="margin-top:8px">Check: Customer, contact, source, requested item, qty, price tier, support preference, internal note.</div>
+      </details>
       <details class="payment-advanced">
         <summary>Order notes</summary>
       <div class="grid two" style="margin-top:10px">
@@ -284,7 +289,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     </section>
 
     <section class="card">
-      <div class="section-title"><div><h2>Fulfilment / Delivery</h2><p>Book, record and update postage, courier, collection, or drop-off work from one place.</p></div></div>
+      <div class="section-title"><div><h2>Fulfilment / delivery</h2><p>Book, record and update postage, courier, collection, or drop-off work from one place.</p></div></div>
       <div class="grid two" style="margin-bottom:10px">
         <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Courier collection</option><option>Customer collection</option><option>Local drop-off</option></select><span class="tiny">Royal Mail collection means Royal Mail collects from us — not customer collection.</span></div>
       </div>
@@ -356,7 +361,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       </details></section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Save order</div>
         <details id="dangerousActions" class="payment-advanced" style="margin-bottom:10px"><summary>Cancel / void options</summary><label>Cancel / void reason</label><textarea id="voidReason" class="tall-textarea" placeholder="Reason if this order is cancelled or voided"></textarea><div class="btnrow" style="margin-top:10px"><button class="btn danger" id="voidOrder">Cancel / void order</button><button class="btn danger" id="deleteOrder">Move test to bin</button></div></details>
-        <div class="btnrow" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn good" id="saveOrder">Save order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
+        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn good" id="saveOrder">Save order</button><button class="btn warn" id="archiveOrder">Archive complete</button></div>
       </section>
     </section>
   </main>
@@ -842,7 +847,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v42.9H JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v42.9I JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});

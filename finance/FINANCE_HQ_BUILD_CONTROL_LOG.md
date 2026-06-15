@@ -437,3 +437,66 @@ Manual visual check needed:
 - Confirm Packing contents "Auto rule active" reads as a helpful guide, not an alert.
 - Confirm Fulfilment and Payment/Release guide prompts are visible but restrained.
 - Browser/mobile testing not performed in this patch.
+## v42.9I Order Page Guided Flow Cleanup
+
+Version: v42.9I
+Purpose: Order-page-only hierarchy polish so the main working screen reads as a guided intake and fulfilment workflow.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Pre-edit inspection:
+- Active file was v42.9H with title "PrimeX Finance HQ · v42.9H Guide Prompt Visibility Polish" and boot badge "v42.9H JS OK".
+- Order page sections were already present as Order, Add order items, Order summary, Packing contents, Fulfilment / Delivery, Communication Centre, and Final check.
+- Existing styling used shared card, section-title, note, flow-block, payment-advanced, and Communication Centre row classes. Global selectors were avoided where possible.
+
+Proposed / applied Order page hierarchy changes:
+- Scoped visual step rhythm to #view-order only using section-title numbering.
+- Scoped Order Type note warning-class override so Quote / enquiry guidance reads as a guide prompt, not an amber warning block.
+- Renamed visible section title "Order" to "Order details".
+- Normalised visible section title "Fulfilment / Delivery" to "Fulfilment / delivery".
+- Kept Add order items, Order summary, Packing contents, Communication Centre, and Final check in the workflow.
+- Added a collapsed manual-only "Request intake notes" helper under Order details.
+- Added a final-actions class around the final Save order row so Save order reads as the final action while Archive complete is quieter.
+
+Labels / wording changed:
+- Order -> Order details.
+- Fulfilment / Delivery -> Fulfilment / delivery.
+- Added static collapsed helper title "Request intake notes".
+- Added static helper text reminding the operator to manually enter Customer, contact, source, requested item, qty, price tier, support preference, and internal note.
+
+CSS selectors changed:
+- #view-order
+- #view-order>section.card
+- #view-order>section.card>.section-title
+- #view-order>section.card>.section-title h2
+- #view-order>section.card>.section-title h2::before
+- #view-order>section.card>.section-title p
+- #view-order .flow-block
+- #view-order .structure-box.flow-block
+- #view-order .payment-advanced
+- #view-order .payment-advanced summary
+- #view-order .request-intake-helper
+- #view-order #communicationCentre
+- #view-order .comm-row
+- #view-order .final-actions
+- #view-order .final-actions #saveOrder
+- #view-order .final-actions #archiveOrder
+
+Manual-entry helper added:
+- Added collapsed "Request intake notes" section as a visual/operator aid only.
+- It does not auto-import, parse, calculate, or save data.
+
+What was not changed:
+- Pricing logic, stock deduction logic, Retatrutide kit logic, BAC/support charge logic, quote/enquiry logic, repeat order logic, privacy guard logic, localStorage keys, dashboard rules, planner/request hub/email settings, product data, stock data, message generation logic, and customer message templates were not changed.
+
+Manual test checklist:
+- Open Order page and confirm sections read as a guided workflow from Order details through Final check.
+- Confirm Request intake notes is collapsed and does not store or parse anything.
+- Confirm Quote / enquiry note is visible and still says stock is not affected by quote/enquiry use.
+- Confirm Step 1 Product / compound and Step 2 BAC water / support item remain equal.
+- Confirm Communication Centre feels like a later workflow step and still renders rows.
+- Confirm Save order remains clear and Archive complete is quieter.
+- Confirm creating/saving a test order still works in browser.
+- Browser/mobile testing not performed in this patch.
