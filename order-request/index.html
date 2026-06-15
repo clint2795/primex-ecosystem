@@ -29,6 +29,23 @@ button,input,select,textarea{font:inherit}
 .eyebrow,.label,.pill{font-family:var(--mono);font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;color:rgba(78,168,214,.9)}
 h1,h2{font-family:var(--serif);font-weight:400;color:var(--ink);letter-spacing:-.025em;line-height:1.06}h1{font-size:clamp(40px,5vw,64px);margin-bottom:13px}.lead{max-width:760px;font-size:18px;line-height:1.62;color:rgba(214,223,232,.94)}
 main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.97),rgba(8,15,24,.99));border:1px solid var(--line);border-left:2px solid rgba(62,150,196,.45);position:relative;overflow:hidden;padding:28px}.card:before{content:"";position:absolute;left:0;top:0;width:100%;height:1px;background:linear-gradient(90deg,rgba(62,150,196,.34),rgba(255,255,255,.055),transparent 72%)}.pill{display:inline-flex;padding:6px 10px;border:1px solid rgba(62,150,196,.32);border-radius:99px;background:rgba(62,150,196,.06);margin-bottom:18px}h2{font-size:clamp(31px,3.2vw,42px);margin-bottom:10px}.intro{color:var(--soft);max-width:820px;margin-bottom:22px}.empty{border:1px dashed rgba(62,150,196,.34);background:rgba(62,150,196,.035);padding:16px 18px;color:rgba(172,198,216,.88);margin:15px 0 18px}.items{display:grid;gap:10px;margin:12px 0 18px}.item{display:grid;grid-template-columns:1fr 92px 94px;gap:10px;align-items:start;border:1px solid rgba(255,255,255,.085);background:rgba(5,9,15,.52);padding:14px}.item-title{font-weight:700;color:var(--ink);font-size:16px}.item-meta{font-family:var(--mono);font-size:8.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-top:5px}.item-note{grid-column:1/-1;margin-top:4px}.remove{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.025);color:var(--muted);font-family:var(--mono);font-size:8px;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;padding:10px}.remove:hover{color:#eab1b8;border-color:rgba(200,91,106,.38)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{margin-top:12px}.wide{grid-column:1/-1}label{display:block;margin-bottom:7px}.input,select,textarea{width:100%;border:1px solid rgba(255,255,255,.11);background:rgba(2,6,9,.76);color:var(--ink);padding:13px 14px;border-radius:0;outline:none}textarea{min-height:98px;resize:vertical}.input:focus,select:focus,textarea:focus{border-color:rgba(62,150,196,.60);background:rgba(62,150,196,.045)}.note{margin:18px 0 20px;padding:12px 14px;border:1px solid rgba(215,163,74,.28);border-left:2px solid rgba(215,163,74,.75);background:var(--amberSoft);color:#e6cf99;font-size:13px;line-height:1.55}.note.error{border-color:rgba(200,91,106,.38);border-left-color:rgba(200,91,106,.78);background:rgba(200,91,106,.08);color:#f0b8bf}.consent{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;color:var(--soft);font-size:13px;line-height:1.5}.consent input{width:auto;margin-top:3px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.small{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:16px}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(30px);opacity:0;pointer-events:none;background:rgba(5,9,15,.96);border:1px solid rgba(62,150,196,.35);border-left:2px solid rgba(62,150,196,.75);color:var(--ink);padding:12px 14px;font-family:var(--mono);font-size:9px;letter-spacing:1.4px;text-transform:uppercase;z-index:50;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.request-library{margin:0 0 24px;padding:18px;border:1px solid rgba(255,255,255,.085);border-left:2px solid rgba(62,150,196,.44);background:rgba(5,9,15,.42)}
+.request-library h3{font-family:var(--serif);font-weight:400;color:var(--ink);font-size:clamp(25px,2.4vw,32px);letter-spacing:-.018em;margin:0 0 7px}
+.request-library-copy{color:var(--soft);font-size:13.5px;line-height:1.58;max-width:820px;margin:0 0 14px}
+.request-library-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.request-only-card{display:grid;gap:10px;align-content:start;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(10,18,29,.78),rgba(4,8,13,.92));padding:14px;min-height:142px}
+.request-only-card strong{color:rgba(240,247,252,.96);font-size:16px;line-height:1.2}
+.request-only-card span{font-family:var(--mono);font-size:8px;letter-spacing:1.35px;text-transform:uppercase;color:rgba(142,167,188,.82);line-height:1.45}
+.request-only-card .btn{width:100%;min-height:39px;padding:10px 12px;font-size:8.5px;letter-spacing:1.35px}
+.request-only-card .btn.is-added{border-color:rgba(62,150,196,.64);background:linear-gradient(90deg,rgba(62,150,196,.18),rgba(255,255,255,.04));color:rgba(235,245,250,.98)}
+.consent{gap:13px;align-items:flex-start;padding:2px 0}
+.consent input[type="checkbox"]{appearance:none;-webkit-appearance:none;flex:0 0 24px;width:24px;height:24px;margin:1px 0 0;border:2px solid rgba(112,159,188,.78);background:rgba(2,6,9,.82);display:grid;place-content:center;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(255,255,255,.025)}
+.consent input[type="checkbox"]:checked{border-color:rgba(78,168,214,.95);background:linear-gradient(180deg,rgba(62,150,196,.48),rgba(16,37,55,.95))}
+.consent input[type="checkbox"]:checked:after{content:"";width:7px;height:12px;border:solid rgba(245,250,253,.98);border-width:0 2px 2px 0;transform:rotate(45deg) translateY(-1px)}
+.consent input[type="checkbox"]:focus-visible{outline:2px solid rgba(78,168,214,.72);outline-offset:3px}
+@media(max-width:760px){.request-library{padding:16px 14px}.request-library-grid{grid-template-columns:1fr 1fr}.request-only-card{min-height:132px}.consent{gap:12px;font-size:13.5px;line-height:1.55}.consent input[type="checkbox"]{flex-basis:26px;width:26px;height:26px}}
+@media(max-width:420px){.request-library-grid{grid-template-columns:1fr}.request-only-card{min-height:0}.consent input[type="checkbox"]{flex-basis:28px;width:28px;height:28px}}
+
 @media(max-width:760px){.wrap{width:calc(100% - 28px)}.nav{height:78px}.prime{font-size:34px}.bio{font-size:22px}.submark{font-size:7.5px;letter-spacing:2.1px}.nav-actions .btn.secondary{display:none}.hero{padding:54px 0 28px}.hero-line{margin-bottom:34px}h1{font-size:42px}.lead{font-size:16px}.card{padding:20px}.grid{grid-template-columns:1fr}.item{grid-template-columns:1fr}.item-note{grid-column:auto}.btn{width:100%;}.nav-actions .btn{width:auto;min-height:38px;padding:10px 12px;font-size:9px}.actions{display:grid}.empty{font-size:14px}.item{padding:13px}}
 @media(max-width:390px){.prime{font-size:31px}.bio{font-size:20px}.wordmark{gap:8px}h1{font-size:38px}.topbar .wrap{width:calc(100% - 20px)}}
 </style>
@@ -59,6 +76,17 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
       <p class="intro">Items added from the planner appear here. You can adjust them, add a manual item, then send one clean request.</p>
       <div id="items" class="items"></div>
       <div class="actions" style="margin-top:0;margin-bottom:20px"><button class="btn secondary" type="button" id="manual">Add manual item</button><a class="btn secondary" href="../planner/">Browse planner structures</a></div>
+      <section class="request-library" aria-label="Available on request">
+        <h3>Available on request</h3>
+        <p class="request-library-copy">For items not shown in the main planner range. Availability, reference pricing, and fulfilment details are confirmed manually before anything is finalised.</p>
+        <div class="request-library-grid" id="requestOnlyLibrary">
+          <article class="request-only-card"><strong>GHK-Cu</strong><span>Request-only reference - Manual review required</span><button class="btn secondary" type="button" data-request-code="GHKCU_REQUEST">Request</button></article>
+          <article class="request-only-card"><strong>MOTS-c</strong><span>Request-only reference - Manual review required</span><button class="btn secondary" type="button" data-request-code="MOTSC_REQUEST">Request</button></article>
+          <article class="request-only-card"><strong>DSIP</strong><span>Request-only reference - Manual review required</span><button class="btn secondary" type="button" data-request-code="DSIP_REQUEST">Request</button></article>
+          <article class="request-only-card"><strong>SS-31</strong><span>Request-only reference - Manual review required</span><button class="btn secondary" type="button" data-request-code="SS31_REQUEST">Request</button></article>
+        </div>
+      </section>
+
 
       <div class="grid">
         <div class="field"><label class="label" for="name">Name</label><input class="input" id="name" name="name" autocomplete="name" placeholder="Your name" /></div>
@@ -77,11 +105,12 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
 </main>
 <div class="toast" id="toast">Copied</div>
 <script>
-/* order-request-v08_FINANCE_HQ_INTAKE_EMAIL */
+/* order-request-v09_REQUEST_ONLY_LIBRARY */
 (function(){
   const KEY='primexRequestTrayV1';
   const NOTES_KEY='primexRequestNotesV1';
   const PRIME_EMAIL='orders@primexbiolabs.co.uk';
+  const REQUEST_LIBRARY={GHKCU_REQUEST:'GHK-Cu',MOTSC_REQUEST:'MOTS-c',DSIP_REQUEST:'DSIP',SS31_REQUEST:'SS-31'};
   const $=s=>document.querySelector(s);
   function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
   function clean(s){return String(s||'').replace(/\s+/g,' ').trim();}
@@ -90,11 +119,14 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
   function itemRange(x){return clean(x.period||x.name||x.label||'[not provided]');}
   function itemDetails(x){return clean([x.primary&&('Primary: '+x.primary),x.structureDetails&&('Structure: '+x.structureDetails),x.meta,x.note&&('Item note: '+x.note)].filter(Boolean).join(' | '))||'[not provided]';}
   function readTray(){try{return JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){return []}}
-  function saveTray(items){sessionStorage.setItem(KEY,JSON.stringify(items));renderItems();}
+  function saveTray(items){sessionStorage.setItem(KEY,JSON.stringify(items));renderItems();syncRequestOnlyButtons();}
   function itemLine(x,i){const id=x.id||('manual-'+i);return `<div class="item" data-id="${esc(id)}"><div><div class="item-title">${esc(x.title||'Manual request item')} — ${esc(x.label||x.name||'Selected item')}</div><div class="item-meta">${esc([x.name,x.meta,x.price].filter(Boolean).join(' · '))}</div></div><input class="input qty" type="number" min="1" step="1" value="${parseInt(x.qty,10)||1}" aria-label="Count"/><button class="remove" type="button">Remove</button><input class="input item-note" type="text" value="${esc(x.note||'')}" placeholder="Optional item note"/></div>`}
   function renderItems(){const tray=readTray();const root=$('#items');if(!tray.length){root.innerHTML='<div class="empty">No planner items selected yet. Browse planner structures to add them to this request, or add a manual item below.</div>';return;}root.innerHTML=tray.map(itemLine).join('');root.querySelectorAll('.item').forEach((row,idx)=>{const id=row.dataset.id;row.querySelector('.qty').addEventListener('input',()=>updateItem(id,{qty:Math.max(1,parseInt(row.querySelector('.qty').value,10)||1)}));row.querySelector('.item-note').addEventListener('input',()=>updateItem(id,{note:row.querySelector('.item-note').value}));row.querySelector('.remove').addEventListener('click',()=>saveTray(readTray().filter((x,i)=>(x.id||('manual-'+i))!==id)));});}
   function updateItem(id,patch){const t=readTray();t.forEach((x,i)=>{if((x.id||('manual-'+i))===id)Object.assign(x,patch)});sessionStorage.setItem(KEY,JSON.stringify(t));}
   function addManual(){const t=readTray();t.push({id:'manual-'+Date.now(),code:'MANUAL',sourceSection:'request-hub',sourcePage:location.href,title:'Manual request item',label:'To be reviewed',meta:'Added from request page',price:'',qty:1,note:''});saveTray(t);}
+  function requestOnlyItem(code){const title=REQUEST_LIBRARY[code]||code;return{id:'request-only-'+code.toLowerCase(),code,sourceSection:'Request Hub available on request',sourcePage:'Request Hub available on request',itemType:'request_only_reference',title,label:'Available on request',meta:'Available on request. Availability and fulfilment confirmed manually.',price:'Manual review',reference:'Manual review',period:'Manual review',name:'Manual review',qty:1,note:''};}
+  function syncRequestOnlyButtons(){const ids=new Set(readTray().map(x=>x.id));document.querySelectorAll('[data-request-code]').forEach(btn=>{const item=requestOnlyItem(btn.dataset.requestCode);const added=ids.has(item.id);btn.classList.toggle('is-added',added);btn.textContent=added?'Added to request':'Request';});}
+  function addRequestOnly(code){const item=requestOnlyItem(code),t=readTray();const found=t.find(x=>x.id===item.id);if(found){found.qty=(parseInt(found.qty,10)||1)+1;}else{t.push(item);}saveTray(t);syncRequestOnlyButtons();}
   function form(){return{name:$('#name').value.trim(),method:$('#method').value,email:$('#email').value.trim(),whatsapp:$('#whatsapp').value.trim(),delivery:$('#delivery').value,notes:$('#notes').value.trim(),consent:!!($('#reviewConsent')&&$('#reviewConsent').checked)}}
   function showError(msg){const e=$('#formError'); if(!e)return; e.textContent=msg; e.style.display=msg?'block':'none';}
   function validateRequest(){const f=form(); if(!f.name)return 'Please enter your name before sending the request.'; if(!f.email&&!f.whatsapp)return 'Please provide an email address or WhatsApp number.'; if(f.method==='Email'&&!f.email)return 'Please provide an email address for email replies.'; if(f.method==='WhatsApp'&&!f.whatsapp)return 'Please provide a WhatsApp number for WhatsApp replies.'; if(!f.consent)return 'Please tick the review acknowledgement before sending.'; return '';}
@@ -103,7 +135,7 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
   function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
   async function copy(){const err=validateRequest();if(err){showError(err);return}showError('');try{await navigator.clipboard.writeText(summary());showToast('Request copied');}catch(e){showToast('Copy failed');}}
   function mail(){const err=validateRequest();if(err){showError(err);return}showError('');const f=form();const subject='PrimeX request'+(f.name?' - '+f.name:'');const body=summary();window.location.href='mailto:'+encodeURIComponent(PRIME_EMAIL)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);}
-  document.addEventListener('DOMContentLoaded',()=>{renderItems();const carried=sessionStorage.getItem(NOTES_KEY)||'';if(carried)$('#notes').value=carried;$('#manual').addEventListener('click',addManual);$('#copy').addEventListener('click',copy);$('#send').addEventListener('click',mail);$('#topSend').addEventListener('click',mail);});
+  document.addEventListener('DOMContentLoaded',()=>{renderItems();syncRequestOnlyButtons();const carried=sessionStorage.getItem(NOTES_KEY)||'';if(carried)$('#notes').value=carried;$('#manual').addEventListener('click',addManual);document.querySelectorAll('[data-request-code]').forEach(btn=>btn.addEventListener('click',()=>addRequestOnly(btn.dataset.requestCode)));$('#copy').addEventListener('click',copy);$('#send').addEventListener('click',mail);$('#topSend').addEventListener('click',mail);});
 })();
 </script>
 </body>
