@@ -533,3 +533,44 @@ Verification notes:
 - JavaScript syntax check passed after patch.
 - Node request-logic harness confirmed test JSON normalises correctly, fixed-price mapped item is quote-ready, and audit item is held for manual review.
 - Manual browser test still required for paste/import UI, Convert to Quote UI, no stock deduction, and backup export/import.
+## v43.0A Request Inbox Import Button Fix
+
+Version: v43.0A
+Purpose: Fix Request Inbox import button wiring and visible import feedback after live manual test failure.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Root cause:
+- Request Inbox Import and Clear buttons existed in the HTML but were not wired in bind().
+- On hosted public prototype pages, saveLocal() removed requestInbox from localStorage and also cleared the in-memory requestInbox array, so imported requests could be wiped before the list/count rendered.
+- Import failures only used the short toast, so JSON/field errors were easy to miss.
+
+Fix made:
+- Wired Import request button to importRequestInboxFromText().
+- Wired Clear paste box button with defensive element checks.
+- Added visible requestImportStatus area for success and failure messages.
+- On success, normalised requests are added to requestInbox, saveLocal() runs, Request Inbox rerenders, request count updates, paste box clears, and a visible success message remains.
+- On failure, a visible error message is shown with the parse/field reason.
+- Public prototype mode still does not persist requestInbox to localStorage, but no longer wipes the current in-memory imported request before render.
+- Updated app title and boot badge to v43.0A.
+
+What was not changed:
+- Request Inbox architecture.
+- Pricing formulas and private/public pricing rules.
+- Stock deduction logic.
+- Quote conversion architecture except import-flow wiring needed for Convert to Quote access.
+- Product library data.
+- Retatrutide kit logic, BAC/support logic, repeat order logic, customer message templates.
+
+Verification:
+- JavaScript syntax check passed.
+- Function-level Node harness confirmed import path parses test JSON, pushes one request into requestInbox, calls saveLocal(), calls renderRequestInbox(), and clears the paste box after success.
+- Protected flows still present: Quote / enquiry, Convert request to quote, Convert quote to live order, Repeat order, Backup now.
+
+Manual browser tests still required:
+- Open live v43.0A, paste valid Request Hub JSON, click Import request, confirm count changes to 1 and request row appears.
+- Paste invalid JSON and confirm visible error message appears.
+- Click Clear paste box and confirm textarea clears.
+- Convert imported request to Quote / enquiry and confirm no stock deduction until converted to live order and saved.
