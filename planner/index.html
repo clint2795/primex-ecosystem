@@ -12319,13 +12319,28 @@ section[id],
 }
 </style>
 
+<style id="primex-v177-request-cta-row-polish">
+/* PrimeX v177 - request CTA and metadata handoff polish.
+   Scope: planner request CTAs and single-vial reference row request actions only. */
+#pricing .price-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(138px,max-content)!important;gap:12px 14px!important;align-items:center!important;}
+#pricing .price-row .px-request-action{grid-column:auto!important;margin:0!important;padding:0!important;border-top:0!important;justify-content:flex-end!important;width:auto!important;}
+#pricing .price-row .px-request-btn{min-height:38px!important;padding:10px 16px!important;white-space:nowrap!important;}
+@media(max-width:720px){#pricing .price-row{grid-template-columns:minmax(0,1fr) auto!important;}#pricing .price-row .px-request-action{grid-column:1 / -1!important;justify-content:stretch!important;}#pricing .price-row .px-request-btn{width:100%!important;min-height:42px!important;}}
+</style>
+
 <script id="primex-v169-request-tray-safety">
 /* planner-v174A_LOCAL_HANDOFF_PATH_ONLY */
+/* planner-v177_REQUEST_CTA_FINANCE_INTAKE_METADATA */
 (function(){
   const KEY='primexRequestTrayV1';
   const NOTES_KEY='primexRequestNotesV1';
   const money = s => (s || '').replace(/\s+/g,' ').trim();
   const slug = s => money(s).toLowerCase().replace(/[^a-z0-9£]+/g,'-').replace(/^-+|-+$/g,'');
+  const SECTION_CODES={reta:'RTA20',bpc:'BPC10',tb:'TB50010',ta1:'TA110',kpv:'KPV10',foundation:'FOUNDATION',pricing:'SINGLE'};
+  function codeFromName(name){const n=money(name).toLowerCase();if(n.includes('retatrutide')) return 'RTA20';if(n.includes('bpc-157')) return 'BPC10';if(n.includes('tb-500')) return 'TB50010';if(n.includes('thymosin alpha-1')) return 'TA110';if(n.includes('kpv')) return 'KPV10';if(n.includes('nad+')) return 'NAD500';if(n.includes('5-amino-1mq')) return 'AMINO50';return '';}
+  function sourcePage(sectionId){ return location.pathname+(sectionId?('#'+sectionId):''); }
+  function qtyFromMeta(meta){ const m=money(meta).match(/(\d+)\s+vials?/i); return m ? Math.max(1,parseInt(m[1],10)||1) : 1; }
+  function structureCode(sectionId,label,title){const base=codeFromName(title)||SECTION_CODES[sectionId]||money(sectionId).toUpperCase()||'PLANNER';const tier=slug(label||'reference').toUpperCase().replace(/-/g,'_')||'REFERENCE';return base+'_'+tier;}
   function getTray(){ try{return JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){return[]} }
   function setTray(items){ sessionStorage.setItem(KEY, JSON.stringify(items)); updateTrayUI(); syncButtons(); }
   function getSectionTitle(el){
@@ -12337,13 +12352,20 @@ section[id],
   }
   function getPlanData(card){
     const section=card.closest('section');
+    const sectionId=section && section.id ? section.id : '';
     const title=getSectionTitle(card);
+    if(card.classList.contains('price-row')){
+      const itemName=money((card.querySelector('span')||{}).textContent||'Single-vial reference');
+      const price=money((card.querySelector('strong')||{}).textContent||'');
+      const code=codeFromName(itemName)||SECTION_CODES.pricing;
+      return {id:slug(['pricing',code,itemName,price].join('|')), code, sectionId:'pricing', sourceSection:'pricing', sourcePage:sourcePage('pricing'), itemType:'single_vial_reference', title:itemName, label:'Single-vial reference', name:itemName, meta:'Single-vial reference', price, qty:1, note:''};
+    }
     const label=money((card.querySelector('.label')||{}).textContent||'');
     const name=money((card.querySelector('.plan-name')||{}).textContent||'');
     const meta=money((card.querySelector('.plan-meta')||{}).textContent||'');
     const price=money((card.querySelector('.amount')||card.querySelector('strong')||{}).textContent||'');
-    const sectionId=section && section.id ? section.id : '';
-    return {id:slug([sectionId,title,label,name,meta,price].join('|')), sectionId, title, label, name, meta, price, qty:1, note:''};
+    const code=structureCode(sectionId,label,title);
+    return {id:slug([sectionId,title,label,name,meta,price].join('|')), code, sectionId, sourceSection:sectionId, sourcePage:sourcePage(sectionId), itemType:'planning_range', title, label, name, meta, price, qty:qtyFromMeta(meta), note:''};
   }
   function buildButton(card){
     if(card.querySelector('.px-request-btn')) return;
@@ -12352,7 +12374,7 @@ section[id],
     const btn=document.createElement('button');
     btn.type='button';
     btn.className='px-request-btn';
-    btn.textContent='Add to request';
+    btn.textContent='Request this';
     btn.addEventListener('click', function(e){
       e.preventDefault(); e.stopPropagation();
       const item=getPlanData(card);
@@ -12367,14 +12389,14 @@ section[id],
     card.appendChild(wrap);
   }
   function addButtons(){
-    document.querySelectorAll('.plan-price').forEach(buildButton);
+    document.querySelectorAll('.plan-price, #pricing .price-row').forEach(buildButton);
   }
   function continueToRequest(){ const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(getTray()); window.location.href='../order-request/index.html'; }
   function ensureTrayBar(){
     if(document.querySelector('.px-request-tray-bar')) return;
     const bar=document.createElement('div');
     bar.className='px-request-tray-bar';
-    bar.innerHTML='<div class="px-request-tray-copy"><div class="px-request-tray-label">Request Tray</div><div class="px-request-tray-count">No structures selected</div></div><div class="px-request-tray-actions"><button type="button" class="px-request-ghost" data-px-clear>Clear</button><button type="button" class="px-request-primary" data-px-review>Continue request</button></div>';
+    bar.innerHTML='<div class="px-request-tray-copy"><div class="px-request-tray-label">Request Tray</div><div class="px-request-tray-count">Nothing selected for request</div></div><div class="px-request-tray-actions"><button type="button" class="px-request-ghost" data-px-clear>Clear</button><button type="button" class="px-request-primary" data-px-review>Continue request</button></div>';
     document.body.appendChild(bar);
     bar.querySelector('[data-px-clear]').addEventListener('click', function(){ setTray([]); });
     bar.querySelector('[data-px-review]').addEventListener('click', continueToRequest);
@@ -12394,18 +12416,18 @@ section[id],
     const bar=document.querySelector('.px-request-tray-bar');
     const count=tray.reduce((sum,x)=>sum+(parseInt(x.qty,10)||1),0);
     bar.classList.toggle('is-visible', count>0);
-    bar.querySelector('.px-request-tray-count').textContent=count ? (count+' selected structure'+(count===1?'':'s')) : 'No structures selected';
+    bar.querySelector('.px-request-tray-count').textContent=count ? (count+' selected for request') : 'Nothing selected for request';
     if(document.querySelector('.px-request-modal.is-open')) renderReview();
   }
   function syncButtons(){
     const ids=new Set(getTray().map(x=>x.id));
-    document.querySelectorAll('.plan-price').forEach(card=>{
+    document.querySelectorAll('.plan-price, #pricing .price-row').forEach(card=>{
       const item=getPlanData(card);
       const btn=card.querySelector('.px-request-btn');
       if(!btn) return;
       const added=ids.has(item.id);
       btn.classList.toggle('is-added', added);
-      btn.textContent=added ? 'Added — add another' : 'Add to request';
+      btn.textContent=added ? 'Added to request' : 'Request this';
     });
   }
   function renderReview(){
@@ -12413,9 +12435,9 @@ section[id],
     const content=document.querySelector('[data-px-request-content]');
     const tray=getTray();
     if(!tray.length){
-      content.innerHTML='<div class="px-request-empty">No structures selected yet. Return to the planner and add one or more structures to build a request.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Continue to request form</button></div>';
+      content.innerHTML='<div class="px-request-empty">No items selected for request yet. Return to the planner and request one or more references to build a request.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Continue to request form</button></div>';
     } else {
-      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected structure')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-continue>Continue to request form</button><button type="button" class="px-request-ghost" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button></div>';
+      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected item')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-continue>Continue to request form</button><button type="button" class="px-request-ghost" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button></div>';
     }
     content.querySelectorAll('.px-request-item').forEach(row=>{
       const id=row.getAttribute('data-id');
@@ -12435,9 +12457,10 @@ section[id],
     const tray=getTray();
     const notes=(document.querySelector('#pxRequestNotes')||{}).value||'';
     const lines=['PrimeX request summary',''];
-    tray.forEach((x,i)=>{ lines.push((i+1)+'. '+x.title+' — '+(x.label||x.name||'Selected structure')); if(x.name) lines.push('   Range: '+x.name); if(x.meta) lines.push('   Details: '+x.meta); if(x.price) lines.push('   Reference: '+x.price); lines.push('   Qty: '+(parseInt(x.qty,10)||1)); });
+    tray.forEach((x,i)=>{ lines.push((i+1)+'. '+x.title+' - '+(x.label||x.name||'Selected item')); if(x.code) lines.push('   Code: '+x.code); if(x.name) lines.push('   Range: '+x.name); if(x.meta) lines.push('   Details: '+x.meta); if(x.price) lines.push('   Reference: '+x.price); lines.push('   Qty: '+(parseInt(x.qty,10)||1)); if(x.sourcePage) lines.push('   Source page: '+x.sourcePage); });
     if(notes.trim()){ lines.push('','Notes:',notes.trim()); }
-    navigator.clipboard && navigator.clipboard.writeText(lines.join('\n')).then(()=>{ alert('Request summary copied. You can continue to the request form or keep this as a fallback.'); }).catch(()=>{ alert(lines.join('\n')); });
+    const text=lines.join('\n');
+    navigator.clipboard && navigator.clipboard.writeText(text).then(()=>{ alert('Request summary copied. You can continue to the request form or keep this as a fallback.'); }).catch(()=>{ alert(text); });
   }
   function escapeHTML(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   document.addEventListener('DOMContentLoaded', function(){ addButtons(); ensureTrayBar(); ensureModal(); updateTrayUI(); syncButtons(); });
