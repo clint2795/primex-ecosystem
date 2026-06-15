@@ -5,7 +5,8 @@
     "defaultRequestOrderType": "Quote / enquiry",
     "requestStockEffect": "No stock deduction until converted to live order",
     "publicRequestPriceDisplay": "Price confirmed before quote",
-    "privacyNote": "Public request-safe product library. Internal/private prices and fulfilment logic are not included."
+    "privacyNote": "Public request-safe product library. Internal/private prices and fulfilment logic are not included.",
+    "pricingPrivacyNote": "Public file contains standard catalogue prices only. Private/internal prices, supplier costs, margins, stock keys, and fulfilment logic are excluded."
   },
   "products": [
     {
@@ -18,13 +19,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£150",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": false,
       "notes": "Main planner active item. Existing tier structure remains in Planner and Finance HQ.",
-      "standardPrice": 150
+      "priceMode": "fixed",
+      "standardCataloguePrice": 150,
+      "standardCataloguePriceDisplay": "£150"
     },
     {
       "productCode": "BPC10",
@@ -36,13 +38,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£45",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": true,
       "notes": "Main planner active item.",
-      "standardPrice": 45
+      "priceMode": "fixed",
+      "standardCataloguePrice": 45,
+      "standardCataloguePriceDisplay": "£45"
     },
     {
       "productCode": "TB50010",
@@ -54,13 +57,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£65",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": true,
       "notes": "Main planner active item.",
-      "standardPrice": 65
+      "priceMode": "fixed",
+      "standardCataloguePrice": 65,
+      "standardCataloguePriceDisplay": "£65"
     },
     {
       "productCode": "KPV10",
@@ -72,13 +76,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£45",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": true,
       "notes": "Main planner active item.",
-      "standardPrice": 45
+      "priceMode": "fixed",
+      "standardCataloguePrice": 45,
+      "standardCataloguePriceDisplay": "£45"
     },
     {
       "productCode": "TA110",
@@ -90,13 +95,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£75",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": true,
       "notes": "Main planner active item.",
-      "standardPrice": 75
+      "priceMode": "fixed",
+      "standardCataloguePrice": 75,
+      "standardCataloguePriceDisplay": "£75"
     },
     {
       "productCode": "NAD500",
@@ -108,13 +114,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£49",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": true,
       "notes": "Main planner active foundation item.",
-      "standardPrice": 49
+      "priceMode": "fixed",
+      "standardCataloguePrice": 49,
+      "standardCataloguePriceDisplay": "£49"
     },
     {
       "productCode": "AMINO1MQ50",
@@ -128,13 +135,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "planner active",
-      "publicPriceDisplay": "£110",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Planner active reference. Availability, fulfilment details, and next steps are confirmed before anything is finalised.",
       "supportReviewRequired": true,
       "notes": "Main planner active foundation item. Alias preserves current Finance HQ code.",
-      "standardPrice": 110
+      "priceMode": "fixed",
+      "standardCataloguePrice": 110,
+      "standardCataloguePriceDisplay": "£110"
     },
     {
       "productCode": "DSIP5",
@@ -146,13 +154,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 55,
+      "standardCataloguePriceDisplay": "£55"
     },
     {
       "productCode": "GHKCU50",
@@ -164,13 +173,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 55,
+      "standardCataloguePriceDisplay": "£55"
     },
     {
       "productCode": "GHKCU100",
@@ -182,13 +192,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 75,
+      "standardCataloguePriceDisplay": "£75"
     },
     {
       "productCode": "CAGRI5",
@@ -200,13 +211,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 65,
+      "standardCataloguePriceDisplay": "£65"
     },
     {
       "productCode": "TESA10",
@@ -218,13 +230,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 95,
+      "standardCataloguePriceDisplay": "£95"
     },
     {
       "productCode": "MT2_10",
@@ -236,13 +249,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 55,
+      "standardCataloguePriceDisplay": "£55"
     },
     {
       "productCode": "EPI10",
@@ -254,13 +268,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 60,
+      "standardCataloguePriceDisplay": "£60"
     },
     {
       "productCode": "MOTSC40",
@@ -272,13 +287,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 95,
+      "standardCataloguePriceDisplay": "£95"
     },
     {
       "productCode": "SS31_30",
@@ -290,13 +306,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "locked",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "fixed",
+      "standardCataloguePrice": 95,
+      "standardCataloguePriceDisplay": "£95"
     },
     {
       "productCode": "SEMAX_AUDIT",
@@ -308,13 +325,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "audit needed",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "audit",
+      "standardCataloguePrice": null,
+      "standardCataloguePriceDisplay": "Price confirmed before quote"
     },
     {
       "productCode": "SELANK_AUDIT",
@@ -326,13 +344,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "audit needed",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "audit",
+      "standardCataloguePrice": null,
+      "standardCataloguePriceDisplay": "Price confirmed before quote"
     },
     {
       "productCode": "SERMORELIN_AUDIT",
@@ -344,13 +363,14 @@
       "requestVisible": true,
       "financeVisible": true,
       "status": "request quote visible",
-      "publicPriceDisplay": "Price confirmed before quote",
       "priceAuditStatus": "audit needed",
       "COAStatus": "unknown",
       "requestCopy": "Available on request. Price confirmed before quote.",
       "supportReviewRequired": true,
       "notes": "Available on request. Availability, price, and fulfilment confirmed manually before anything is finalised.",
-      "internalPriceAvailable": true
+      "priceMode": "audit",
+      "standardCataloguePrice": null,
+      "standardCataloguePriceDisplay": "Price confirmed before quote"
     }
   ]
 }
