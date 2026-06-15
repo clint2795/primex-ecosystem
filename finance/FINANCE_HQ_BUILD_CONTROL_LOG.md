@@ -314,3 +314,51 @@ Manual visual check needed:
 - Confirm the public prototype banner blends with the app while staying noticeable.
 - Confirm reset/clear action is dark with a restrained amber outline.
 - Confirm warning panels avoid red, orange, rusty brown, mustard, and glowing yellow.
+
+
+## v42.9F Empty State Warning Hierarchy Polish
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+CSS selectors changed:
+- .note.warn
+- #prototypeDataWarning
+- #clearLocalDataBtn
+- .btn.warn
+- #clearLocalDataBtn:hover
+- .btn.warn:hover
+- .action-alert-banner
+- .alert-row.warning
+- .alert-row.critical
+- .security
+- .queue-card.active
+
+Visual hierarchy corrected:
+- Made prototype and warning panels graphite-first with weaker amber edge treatment.
+- Reduced warning amber strength so notices feel controlled, not muddy or loud.
+- Returned the backup/safety panel to normal PrimeX dark panel styling instead of warning treatment.
+- Calmed active queue-card highlight so empty dashboard cards compete less with real work.
+- Kept the reset action dark with a restrained amber outline.
+
+What was not changed:
+- App logic.
+- Pricing.
+- Stock deduction.
+- Retatrutide kit logic.
+- BAC/support logic.
+- Quote/enquiry logic.
+- Repeat order logic.
+- Action Alert logic.
+- Communication Centre logic.
+- Privacy guard logic.
+- localStorage keys.
+- Dashboard data rules.
+- Planner, website, Request Hub, or email/contact settings.
+
+Manual visual check needed:
+- Confirm the prototype banner is visible but no longer dominant.
+- Confirm the reset button reads as a controlled utility/caution action.
+- Confirm backup panel no longer looks like a warning block.
+- Confirm zero-count dashboard cards feel calmer, especially Awaiting payment.
