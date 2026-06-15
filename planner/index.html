@@ -12328,9 +12328,18 @@ section[id],
 @media(max-width:720px){#pricing .price-row{grid-template-columns:minmax(0,1fr) auto!important;}#pricing .price-row .px-request-action{grid-column:1 / -1!important;justify-content:stretch!important;}#pricing .price-row .px-request-btn{width:100%!important;min-height:42px!important;}}
 </style>
 
+<style id="primex-v178-planning-structure-request-cta">
+/* PrimeX v178 - planning structure cards join the request tray. */
+.bridge-card-v97 .px-request-action{margin-top:14px!important;padding-top:14px!important;border-top:1px solid rgba(160,188,207,.12)!important;justify-content:stretch!important;}
+.bridge-card-v97 .px-request-btn{width:100%!important;min-height:42px!important;padding:13px 18px!important;border:1px solid rgba(124,172,199,.42)!important;border-left:2px solid rgba(129,185,216,.66)!important;background:linear-gradient(180deg,rgba(18,34,50,.98),rgba(9,19,31,1))!important;color:rgba(235,244,250,.96)!important;font-family:'Share Tech Mono',monospace!important;font-size:9px!important;letter-spacing:1.55px!important;text-transform:uppercase!important;cursor:pointer!important;}
+.bridge-card-v97 .px-request-btn:hover,.bridge-card-v97 .px-request-btn:focus-visible{border-color:rgba(148,199,226,.64)!important;background:linear-gradient(180deg,rgba(27,50,69,.99),rgba(12,25,39,1))!important;transform:translateY(-1px)!important;}
+@media(max-width:720px){.bridge-card-v97 .px-request-btn{min-height:44px!important;padding:14px 15px!important;}}
+</style>
+
 <script id="primex-v169-request-tray-safety">
 /* planner-v174A_LOCAL_HANDOFF_PATH_ONLY */
 /* planner-v177_REQUEST_CTA_FINANCE_INTAKE_METADATA */
+/* planner-v178_PLANNING_STRUCTURE_CTA_FIX */
 (function(){
   const KEY='primexRequestTrayV1';
   const NOTES_KEY='primexRequestNotesV1';
@@ -12341,6 +12350,7 @@ section[id],
   function sourcePage(sectionId){ return location.pathname+(sectionId?('#'+sectionId):''); }
   function qtyFromMeta(meta){ const m=money(meta).match(/(\d+)\s+vials?/i); return m ? Math.max(1,parseInt(m[1],10)||1) : 1; }
   function structureCode(sectionId,label,title){const base=codeFromName(title)||SECTION_CODES[sectionId]||money(sectionId).toUpperCase()||'PLANNER';const tier=slug(label||'reference').toUpperCase().replace(/-/g,'_')||'REFERENCE';return base+'_'+tier;}
+  function bridgeSpec(card,label){ const rows=[...card.querySelectorAll('.bridge-spec-v97')]; const row=rows.find(r=>money((r.querySelector('span')||{}).textContent||'').toLowerCase()===label.toLowerCase()); return money((row&&row.querySelector('strong')||{}).textContent||''); }
   function getTray(){ try{return JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){return[]} }
   function setTray(items){ sessionStorage.setItem(KEY, JSON.stringify(items)); updateTrayUI(); syncButtons(); }
   function getSectionTitle(el){
@@ -12359,6 +12369,15 @@ section[id],
       const price=money((card.querySelector('strong')||{}).textContent||'');
       const code=codeFromName(itemName)||SECTION_CODES.pricing;
       return {id:slug(['pricing',code,itemName,price].join('|')), code, sectionId:'pricing', sourceSection:'pricing', sourcePage:sourcePage('pricing'), itemType:'single_vial_reference', title:itemName, label:'Single-vial reference', name:itemName, meta:'Single-vial reference', price, qty:1, note:''};
+    }
+    if(card.classList.contains('bridge-card-v97')){
+      const structureTitle=money((card.querySelector('h3')||{}).textContent||'Planning structure');
+      const primary=bridgeSpec(card,'Primary');
+      const period=bridgeSpec(card,'Period');
+      const details=bridgeSpec(card,'Structure');
+      const price=bridgeSpec(card,'Reference');
+      const sourceId=sectionId||'windows';
+      return {id:slug([sourceId,structureTitle,primary,period,details,price].join('|')), code:'MANUAL_REVIEW', sectionId:sourceId, sourceSection:sourceId, sourcePage:sourcePage(sourceId), itemType:'planning_structure', title:structureTitle, label:'Planning structure', primary, period, structureDetails:details, name:period, meta:[primary,details].filter(Boolean).join(' | '), price, qty:1, note:''};
     }
     const label=money((card.querySelector('.label')||{}).textContent||'');
     const name=money((card.querySelector('.plan-name')||{}).textContent||'');
@@ -12389,7 +12408,7 @@ section[id],
     card.appendChild(wrap);
   }
   function addButtons(){
-    document.querySelectorAll('.plan-price, #pricing .price-row').forEach(buildButton);
+    document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97').forEach(buildButton);
   }
   function continueToRequest(){ const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(getTray()); window.location.href='../order-request/index.html'; }
   function ensureTrayBar(){
@@ -12421,7 +12440,7 @@ section[id],
   }
   function syncButtons(){
     const ids=new Set(getTray().map(x=>x.id));
-    document.querySelectorAll('.plan-price, #pricing .price-row').forEach(card=>{
+    document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97').forEach(card=>{
       const item=getPlanData(card);
       const btn=card.querySelector('.px-request-btn');
       if(!btn) return;

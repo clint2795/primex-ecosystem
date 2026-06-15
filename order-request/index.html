@@ -58,7 +58,7 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
       <h2>Selected items</h2>
       <p class="intro">Items added from the planner appear here. You can adjust them, add a manual item, then send one clean request.</p>
       <div id="items" class="items"></div>
-      <div class="actions" style="margin-top:0;margin-bottom:20px"><button class="btn secondary" type="button" id="manual">Add manual item</button><a class="btn secondary" href="../planner/">View more structures</a></div>
+      <div class="actions" style="margin-top:0;margin-bottom:20px"><button class="btn secondary" type="button" id="manual">Add manual item</button><a class="btn secondary" href="../planner/">Browse planner structures</a></div>
 
       <div class="grid">
         <div class="field"><label class="label" for="name">Name</label><input class="input" id="name" name="name" autocomplete="name" placeholder="Your name" /></div>
@@ -87,12 +87,12 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
   function clean(s){return String(s||'').replace(/\s+/g,' ').trim();}
   function itemCode(x,i){return clean(x.code||x.productCode||x.structureCode||x.id||('manual-'+(i+1)));}
   function itemReference(x){return clean(x.price||x.reference||'[not shown]');}
-  function itemRange(x){return clean(x.name||x.label||'[not provided]');}
-  function itemDetails(x){return clean([x.meta,x.note&&('Item note: '+x.note)].filter(Boolean).join(' | '))||'[not provided]';}
+  function itemRange(x){return clean(x.period||x.name||x.label||'[not provided]');}
+  function itemDetails(x){return clean([x.primary&&('Primary: '+x.primary),x.structureDetails&&('Structure: '+x.structureDetails),x.meta,x.note&&('Item note: '+x.note)].filter(Boolean).join(' | '))||'[not provided]';}
   function readTray(){try{return JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){return []}}
   function saveTray(items){sessionStorage.setItem(KEY,JSON.stringify(items));renderItems();}
   function itemLine(x,i){const id=x.id||('manual-'+i);return `<div class="item" data-id="${esc(id)}"><div><div class="item-title">${esc(x.title||'Manual request item')} — ${esc(x.label||x.name||'Selected item')}</div><div class="item-meta">${esc([x.name,x.meta,x.price].filter(Boolean).join(' · '))}</div></div><input class="input qty" type="number" min="1" step="1" value="${parseInt(x.qty,10)||1}" aria-label="Count"/><button class="remove" type="button">Remove</button><input class="input item-note" type="text" value="${esc(x.note||'')}" placeholder="Optional item note"/></div>`}
-  function renderItems(){const tray=readTray();const root=$('#items');if(!tray.length){root.innerHTML='<div class="empty">No planner items found yet. Return to the planner and add structures to the Request Tray, or add a manual item below.</div>';return;}root.innerHTML=tray.map(itemLine).join('');root.querySelectorAll('.item').forEach((row,idx)=>{const id=row.dataset.id;row.querySelector('.qty').addEventListener('input',()=>updateItem(id,{qty:Math.max(1,parseInt(row.querySelector('.qty').value,10)||1)}));row.querySelector('.item-note').addEventListener('input',()=>updateItem(id,{note:row.querySelector('.item-note').value}));row.querySelector('.remove').addEventListener('click',()=>saveTray(readTray().filter((x,i)=>(x.id||('manual-'+i))!==id)));});}
+  function renderItems(){const tray=readTray();const root=$('#items');if(!tray.length){root.innerHTML='<div class="empty">No planner items selected yet. Browse planner structures to add them to this request, or add a manual item below.</div>';return;}root.innerHTML=tray.map(itemLine).join('');root.querySelectorAll('.item').forEach((row,idx)=>{const id=row.dataset.id;row.querySelector('.qty').addEventListener('input',()=>updateItem(id,{qty:Math.max(1,parseInt(row.querySelector('.qty').value,10)||1)}));row.querySelector('.item-note').addEventListener('input',()=>updateItem(id,{note:row.querySelector('.item-note').value}));row.querySelector('.remove').addEventListener('click',()=>saveTray(readTray().filter((x,i)=>(x.id||('manual-'+i))!==id)));});}
   function updateItem(id,patch){const t=readTray();t.forEach((x,i)=>{if((x.id||('manual-'+i))===id)Object.assign(x,patch)});sessionStorage.setItem(KEY,JSON.stringify(t));}
   function addManual(){const t=readTray();t.push({id:'manual-'+Date.now(),code:'MANUAL',sourceSection:'request-hub',sourcePage:location.href,title:'Manual request item',label:'To be reviewed',meta:'Added from request page',price:'',qty:1,note:''});saveTray(t);}
   function form(){return{name:$('#name').value.trim(),method:$('#method').value,email:$('#email').value.trim(),whatsapp:$('#whatsapp').value.trim(),delivery:$('#delivery').value,notes:$('#notes').value.trim(),consent:!!($('#reviewConsent')&&$('#reviewConsent').checked)}}
