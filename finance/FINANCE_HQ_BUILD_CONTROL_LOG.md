@@ -500,3 +500,36 @@ Manual test checklist:
 - Confirm Save order remains clear and Archive complete is quieter.
 - Confirm creating/saving a test order still works in browser.
 - Browser/mobile testing not performed in this patch.
+## v43.0 Request Inbox Convert to Quote
+
+Version: v43.0
+Purpose: Add a Finance HQ Request Inbox for structured Request Hub submissions and conversion into Quote / enquiry orders.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Implemented:
+- Added Request Inbox screen and nav entry.
+- Added separate requestInbox local data layer using px_request_inbox_v1.
+- Added paste/import for structured Request Hub JSON.
+- Added Finance-only productCode mapping layer; public product library remains untouched.
+- Added Convert to Quote flow that creates an unsaved Quote / enquiry order.
+- Conversion uses numeric standardCataloguePrice for standard quote pricing when the productCode is safely mapped and fixed-price.
+- Audit, quote-mode, missing-price, and unmapped productCodes are preserved in quote notes for manual review instead of being auto-priced.
+- Preserved source request metadata in order notes.
+- Extended backup export/import to include requestInbox.
+
+Safety rules preserved:
+- Request import does not create an order and does not deduct stock.
+- Convert to Quote creates Quote / enquiry only and does not save a live order.
+- Existing stock deduction guard remains based on Live order only.
+- Public product library was not edited and no private/internal prices, supplier costs, stock keys, or fulfilment IDs were added to it.
+
+What was not changed:
+- Existing pricing formulas, stock deduction, Retatrutide kit logic, BAC/support logic, quote-to-live logic, repeat order logic, customer message templates, product data, stock data, planner, website, Request Hub backend/API, and public product library content were not changed.
+
+Verification notes:
+- JavaScript syntax check passed after patch.
+- Node request-logic harness confirmed test JSON normalises correctly, fixed-price mapped item is quote-ready, and audit item is held for manual review.
+- Manual browser test still required for paste/import UI, Convert to Quote UI, no stock deduction, and backup export/import.
