@@ -398,3 +398,42 @@ Manual visual check needed:
 - Confirm Step 2 no longer reads as the primary action over Step 1.
 - Confirm BAC water/support wording reads clearly without disrupting packing/totals output.
 - Browser/mobile testing not performed in this patch.
+## v42.9H Guide Prompt Visibility Polish
+
+Version: v42.9H
+Purpose: CSS-only visual hierarchy polish for inline guide/helper prompts so operational direction is easier to see without making prompts look like warnings.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Pre-edit inspection:
+- Active file was v42.9G with title "PrimeX Finance HQ · v42.9G Order Step Label Hierarchy Cleanup" and boot badge "v42.9G JS OK".
+- Guide/helper prompts were mostly using the shared `.note` class, including Order Type, pricing preview, structure preview, support item pricing, fulfilment method, fulfilment checklist, release status, message flow, and generated packing helper prompts.
+- `.note` is also used for `.note.warn` and `.note.good`, so the base `.note` style was not changed globally.
+
+Guide/helper selectors adjusted:
+- #orderTypeNotice.note:not(.warn):not(.good)
+- #pricingNote.note:not(.warn):not(.good)
+- #structureNote.note:not(.warn):not(.good)
+- #supportPricingNote.note:not(.warn):not(.good)
+- #fulfilmentMethodNotice.note:not(.warn):not(.good)
+- #fulfilmentChecklist.note:not(.warn):not(.good)
+- #releaseStatus.note:not(.warn):not(.good)
+- .message-flow-note.note:not(.warn):not(.good)
+- #materialsSummary .note:not(.warn):not(.good)
+
+What visual hierarchy was corrected:
+- Non-warning guide prompts now use a clearer graphite-blue panel treatment with a restrained steel-blue left rail.
+- Text contrast was increased for normal helper prompts.
+- Warning amber and success green states were deliberately excluded from the new guide styling.
+
+What was not changed:
+- No wording, layout, workflow, app logic, pricing logic, stock deduction logic, order logic, Retatrutide kit logic, BAC/support charge logic, quote/enquiry logic, repeat order logic, privacy guard, localStorage keys, dashboard rules, planner/request hub/email settings, warning styling, or success styling was changed.
+
+Manual visual check needed:
+- Confirm Order Type explanatory note is easier to see without feeling like a warning.
+- Confirm product/support/structure preview prompts are clearer.
+- Confirm Packing contents "Auto rule active" reads as a helpful guide, not an alert.
+- Confirm Fulfilment and Payment/Release guide prompts are visible but restrained.
+- Browser/mobile testing not performed in this patch.
