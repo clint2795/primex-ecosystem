@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ · v42.9D Alert Colour Tone Polish</title>
+<title>PrimeX Finance HQ · v42.9E Warning Tone Correction</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -76,47 +76,42 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
 
 
-/* v42.9D alert colour tone polish */
+/* v42.9E warning tone correction */
 .note.warn,#prototypeDataWarning{
-  border-left:3px solid rgba(196,139,53,.9);
-  border-color:rgba(142,101,47,.42);
-  background:linear-gradient(180deg,rgba(31,23,12,.88),rgba(11,12,14,.96));
-  color:#f3dfbd;
-  box-shadow:inset 0 0 0 1px rgba(214,158,72,.06);
+  border-left:3px solid rgba(190,145,70,.52);
+  border-color:rgba(190,145,70,.28);
+  background:linear-gradient(180deg,rgba(13,15,17,.96),rgba(8,10,12,.98));
+  color:#d9d6ce;
+  box-shadow:inset 0 0 0 1px rgba(190,145,70,.035);
 }
-#prototypeDataWarning strong{color:#ffe3aa}
 #clearLocalDataBtn,.btn.warn{
-  background:linear-gradient(180deg,rgba(72,48,18,.92),rgba(34,24,12,.96));
-  border-color:rgba(180,124,45,.68);
-  color:#f6e5c4;
+  background:linear-gradient(180deg,rgba(18,19,20,.96),rgba(11,12,14,.98));
+  border-color:rgba(190,145,70,.46);
+  color:#e8dfcc;
 }
 #clearLocalDataBtn:hover,.btn.warn:hover{
-  border-color:rgba(226,166,77,.9);
-  box-shadow:0 0 0 2px rgba(202,143,58,.12);
+  background:linear-gradient(180deg,rgba(22,23,24,.98),rgba(12,13,15,.98));
+  border-color:rgba(190,145,70,.68);
+  box-shadow:0 0 0 2px rgba(190,145,70,.06);
 }
 .action-alert-banner{
-  border-left-color:rgba(204,143,55,.92);
-  border-color:rgba(120,88,45,.42);
-  background:linear-gradient(180deg,rgba(19,20,23,.96),rgba(10,12,16,.98));
+  border-left-color:rgba(190,145,70,.5);
+  border-color:rgba(190,145,70,.22);
+  background:linear-gradient(180deg,rgba(13,16,20,.97),rgba(8,10,13,.99));
 }
 .alert-row.warning,.alert-row.critical{
-  border-left-color:rgba(204,143,55,.9);
-  border-color:rgba(116,83,39,.42);
-  background:linear-gradient(180deg,rgba(19,22,27,.96),rgba(11,13,18,.98));
+  border-left-color:rgba(190,145,70,.48);
+  border-color:rgba(190,145,70,.22);
+  background:linear-gradient(180deg,rgba(13,16,20,.97),rgba(8,10,13,.99));
 }
-.alert-row.warning strong,.alert-row.critical strong{color:#f2deb9}
+.alert-row.warning strong,.alert-row.critical strong{color:#e7c989}
 .stock-card-controls .stock-action-panel.danger-lite{
-  border-color:rgba(116,83,39,.42);
-  background:linear-gradient(180deg,rgba(24,18,10,.72),rgba(11,12,14,.96));
+  border-color:rgba(190,145,70,.22);
+  background:linear-gradient(180deg,rgba(13,15,17,.95),rgba(8,10,12,.98));
 }
 .security{
-  border-color:rgba(116,83,39,.44);
-  background:linear-gradient(180deg,rgba(25,19,10,.74),rgba(10,13,18,.96));
-}
-.comm-row button:disabled{
-  opacity:.52;
-  filter:saturate(.7);
-  box-shadow:none;
+  border-color:rgba(190,145,70,.22);
+  background:linear-gradient(180deg,rgba(13,15,17,.95),rgba(8,10,12,.98));
 }
 
 </style>
@@ -832,7 +827,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v42.9D JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
+function init(){document.getElementById('bootBadge').textContent='v42.9E JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});

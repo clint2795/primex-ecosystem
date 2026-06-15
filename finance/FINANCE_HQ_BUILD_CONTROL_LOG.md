@@ -1,4 +1,4 @@
-﻿# PrimeX Finance HQ Build Control Log
+# PrimeX Finance HQ Build Control Log
 
 ## v42.8Y
 - Version: v42.8Y
@@ -240,7 +240,6 @@ Styling selectors changed:
 - .alert-row.critical
 - .stock-card-controls .stock-action-panel.danger-lite
 - .security
-- .comm-row button:disabled
 
 What changed:
 - Replaced harsh red/brown warning treatment with premium dark amber glass styling.
@@ -267,3 +266,51 @@ Manual visual check still required:
 - Confirm warning buttons are amber, not red/brown.
 - Confirm critical/alert rows remain readable and serious.
 - Confirm disabled Communication Centre buttons do not look broken.
+
+
+## v42.9E Warning Tone Correction
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+CSS selectors changed:
+- .note.warn
+- #prototypeDataWarning
+- #clearLocalDataBtn
+- .btn.warn
+- #clearLocalDataBtn:hover
+- .btn.warn:hover
+- .action-alert-banner
+- .alert-row.warning
+- .alert-row.critical
+- .stock-card-controls .stock-action-panel.danger-lite
+- .security
+
+Visual tone corrected:
+- Replaced muddy amber/brown fills with graphite-first warning panels.
+- Reduced amber to subtle borders and left rails within the approved warning selectors.
+- Reset/clear button now reads as a controlled caution outline action instead of a filled warning block.
+- Alert rows remain serious but quieter and closer to the PrimeX dark engineered style.
+
+What was not changed:
+- App logic.
+- Pricing.
+- Stock deduction.
+- Kit logic.
+- BAC/support logic.
+- Quote/enquiry logic.
+- Repeat order logic.
+- Action Alert logic.
+- Communication Centre logic.
+- Privacy guard logic.
+- localStorage keys.
+- Dashboard data rules.
+- Planner, website, or Request Hub.
+
+Selector discipline note: v42.9E only edits the approved warning/prototype selectors from the request.
+
+Manual visual check needed:
+- Confirm the public prototype banner blends with the app while staying noticeable.
+- Confirm reset/clear action is dark with a restrained amber outline.
+- Confirm warning panels avoid red, orange, rusty brown, mustard, and glowing yellow.
