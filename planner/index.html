@@ -12322,9 +12322,12 @@ section[id],
 
 <style id="primex-v179-extended-catalogue-path">
 /* PrimeX v179 - small Extended catalogue request path. */
-.px-extended-hero-link{margin:18px 0 0;color:rgba(195,209,222,.82);font-size:14.5px;line-height:1.55}
-.px-extended-hero-link a{color:rgba(144,190,216,.95);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(144,190,216,.42)}
-.px-extended-hero-link a:hover,.px-extended-hero-link a:focus-visible{color:rgba(226,241,249,.98);border-bottom-color:rgba(226,241,249,.72)}
+.px-extended-hero-panel{margin:22px 0 0;max-width:720px;padding:15px 0 15px 18px;border-left:2px solid rgba(129,185,216,.58);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 18px;align-items:center;background:linear-gradient(90deg,rgba(62,150,196,.055),rgba(255,255,255,0) 72%)}
+.px-extended-hero-panel h3{margin:0 0 4px;color:rgba(144,190,216,.9);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.65px;text-transform:uppercase}
+.px-extended-hero-panel p{margin:0;color:rgba(195,209,222,.84);font-size:14.5px;line-height:1.5}
+.px-extended-hero-panel a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:10px 15px;border:1px solid rgba(124,172,199,.38);border-left:2px solid rgba(129,185,216,.65);background:rgba(8,17,27,.68);color:rgba(235,244,250,.95);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.45px;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+.px-extended-hero-panel a:hover,.px-extended-hero-panel a:focus-visible{border-color:rgba(148,199,226,.62);background:rgba(15,30,44,.82);transform:translateY(-1px)}
+@media(max-width:720px){.px-extended-hero-panel{grid-template-columns:1fr;padding:14px 0 14px 14px;gap:11px}.px-extended-hero-panel a{width:max-content;min-height:40px}}
 .px-extended-section h2{margin:0 0 8px;color:rgba(239,246,251,.96)}
 .px-extended-section p{margin:0;color:rgba(195,209,222,.86)}
 .px-extended-section{padding:76px 0;border-bottom:1px solid var(--border)}
@@ -12352,8 +12355,8 @@ section[id],
   function card(item){return '<article class="px-extended-card" data-extended-code="'+item.code+'" data-extended-title="'+item.title+'" data-extended-strength="'+item.strength+'" data-extended-price="'+item.price+'"><div><strong>'+item.title+'</strong><span>'+item.strength+'</span></div><div class="px-extended-price">'+item.price+'</div></article>';}
   document.addEventListener('DOMContentLoaded',function(){
     const hero=document.querySelector('.hero .wrap');
-    if(hero && !document.querySelector('.px-extended-hero-link')){
-      hero.insertAdjacentHTML('beforeend','<p class="px-extended-hero-link">Looking for something not shown in the main planner? <a href="#extended-catalogue">View extended catalogue →</a></p>');
+    if(hero && !document.querySelector('.px-extended-hero-panel')){
+      hero.insertAdjacentHTML('beforeend','<div class="px-extended-hero-panel"><div><h3>Extended catalogue</h3><p>Looking for something not shown in the main planner?<br>Selected compounds can be added to your request.</p></div><a href="#extended-catalogue">View catalogue</a></div>');
     }
     if(!document.querySelector('#extended-catalogue')){
       const target=document.querySelector('#pricing') || document.querySelector('main section:last-of-type') || document.querySelector('main');
