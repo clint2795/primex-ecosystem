@@ -7993,6 +7993,7 @@ html{
 </div>
 </details>
 <a class="chapter-tab" href="#windows" role="listitem">Pathways</a>
+<a class="chapter-tab" href="#extended-catalogue" role="listitem">Catalogue</a>
 <a class="chapter-tab" href="#contact" role="listitem">Contact</a>
 </div>
 </div>
@@ -12322,12 +12323,14 @@ section[id],
 
 <style id="primex-v179-extended-catalogue-path">
 /* PrimeX v179 - small Extended catalogue request path. */
-.px-extended-hero-panel{margin:22px 0 0;max-width:720px;padding:15px 0 15px 18px;border-left:2px solid rgba(129,185,216,.58);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 18px;align-items:center;background:linear-gradient(90deg,rgba(62,150,196,.055),rgba(255,255,255,0) 72%)}
-.px-extended-hero-panel h3{margin:0 0 4px;color:rgba(144,190,216,.9);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.65px;text-transform:uppercase}
-.px-extended-hero-panel p{margin:0;color:rgba(195,209,222,.84);font-size:14.5px;line-height:1.5}
-.px-extended-hero-panel a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:10px 15px;border:1px solid rgba(124,172,199,.38);border-left:2px solid rgba(129,185,216,.65);background:rgba(8,17,27,.68);color:rgba(235,244,250,.95);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.45px;text-transform:uppercase;text-decoration:none;white-space:nowrap}
-.px-extended-hero-panel a:hover,.px-extended-hero-panel a:focus-visible{border-color:rgba(148,199,226,.62);background:rgba(15,30,44,.82);transform:translateY(-1px)}
-@media(max-width:720px){.px-extended-hero-panel{grid-template-columns:1fr;padding:14px 0 14px 14px;gap:11px}.px-extended-hero-panel a{width:max-content;min-height:40px}}
+.px-hero-routes{margin:30px 0 0;max-width:900px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;border-top:1px solid rgba(124,172,199,.14);padding-top:22px}
+.px-hero-route{display:grid;grid-template-rows:auto 1fr auto;gap:10px;min-height:132px;padding:4px 8px 6px 20px;border-left:1px solid rgba(129,185,216,.46);text-decoration:none;background:transparent;align-content:start}
+.px-hero-route strong{color:rgba(232,241,248,.96);font-family:Inter,system-ui,sans-serif;font-size:23px;font-weight:650;letter-spacing:.005em;line-height:1.14}
+.px-hero-route span{color:rgba(195,211,223,.84);font-size:15.5px;line-height:1.5;max-width:34ch}
+.px-hero-route em{font-style:normal;width:max-content;color:rgba(144,190,216,.96);font-family:'Share Tech Mono',monospace;font-size:10.5px;letter-spacing:1.16px;text-transform:uppercase;border-bottom:1px solid rgba(144,190,216,.34);line-height:1.55}
+.px-hero-route:hover em,.px-hero-route:focus-visible em{color:rgba(232,243,249,.98);border-bottom-color:rgba(232,243,249,.72)}
+.px-hero-route:hover,.px-hero-route:focus-visible{border-left-color:rgba(148,199,226,.72)}
+@media(max-width:720px){.px-hero-routes{grid-template-columns:1fr;gap:18px;padding-top:18px}.px-hero-route{min-height:118px;padding:2px 0 4px 16px}.px-hero-route strong{font-size:22px}.px-hero-route span{font-size:14.5px}.px-hero-route em{font-size:9.8px;white-space:normal}}
 .px-extended-section h2{margin:0 0 8px;color:rgba(239,246,251,.96)}
 .px-extended-section p{margin:0;color:rgba(195,209,222,.86)}
 .px-extended-section{padding:76px 0;border-bottom:1px solid var(--border)}
@@ -12355,8 +12358,8 @@ section[id],
   function card(item){return '<article class="px-extended-card" data-extended-code="'+item.code+'" data-extended-title="'+item.title+'" data-extended-strength="'+item.strength+'" data-extended-price="'+item.price+'"><div><strong>'+item.title+'</strong><span>'+item.strength+'</span></div><div class="px-extended-price">'+item.price+'</div></article>';}
   document.addEventListener('DOMContentLoaded',function(){
     const hero=document.querySelector('.hero .wrap');
-    if(hero && !document.querySelector('.px-extended-hero-panel')){
-      hero.insertAdjacentHTML('beforeend','<div class="px-extended-hero-panel"><div><h3>Extended catalogue</h3><p>Looking for something not shown in the main planner?<br>Selected compounds can be added to your request.</p></div><a href="#extended-catalogue">View catalogue</a></div>');
+    if(hero && !document.querySelector('.px-hero-routes')){
+      hero.insertAdjacentHTML('beforeend','<div class="px-hero-routes" aria-label="Planner routes"><a class="px-hero-route" href="#reta"><strong>Core planner</strong><span>Browse the main compound range.</span><em>Start with Retatrutide →</em></a><a class="px-hero-route" href="#extended-catalogue"><strong>Extended catalogue</strong><span>View selected additional compounds.</span><em>Explore catalogue →</em></a></div>');
     }
     if(!document.querySelector('#extended-catalogue')){
       const target=document.querySelector('#pricing') || document.querySelector('main section:last-of-type') || document.querySelector('main');
