@@ -12319,6 +12319,50 @@ section[id],
 }
 </style>
 
+<style id="primex-v179-extended-catalogue-path">
+/* PrimeX v179 - small Extended catalogue request path. */
+.px-extended-notice{margin:28px 0 0;padding:20px 22px;border:1px solid rgba(124,172,199,.22);border-left:2px solid rgba(129,185,216,.58);background:linear-gradient(180deg,rgba(10,19,29,.88),rgba(5,10,17,.94));max-width:620px}
+.px-extended-notice h3,.px-extended-section h2{margin:0 0 8px;color:rgba(239,246,251,.96)}
+.px-extended-notice p,.px-extended-section p{margin:0;color:rgba(195,209,222,.86)}
+.px-extended-notice .px-extended-link{display:inline-flex;align-items:center;justify-content:center;margin-top:16px;min-height:38px;padding:10px 16px;border:1px solid rgba(124,172,199,.42);border-left:2px solid rgba(129,185,216,.66);background:linear-gradient(180deg,rgba(18,34,50,.98),rgba(9,19,31,1));color:rgba(235,244,250,.96);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.45px;text-transform:uppercase;text-decoration:none}
+.px-extended-notice .px-extended-link:hover,.px-extended-notice .px-extended-link:focus-visible{border-color:rgba(148,199,226,.64);background:linear-gradient(180deg,rgba(27,50,69,.99),rgba(12,25,39,1));transform:translateY(-1px)}
+.px-extended-section{padding:76px 0;border-bottom:1px solid var(--border)}
+.px-extended-head{max-width:720px;margin-bottom:24px}
+.px-extended-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.px-extended-card{display:grid;grid-template-rows:auto 1fr auto;gap:12px;min-height:178px;padding:18px;border:1px solid rgba(124,172,199,.18);background:linear-gradient(180deg,rgba(10,19,29,.84),rgba(5,10,17,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
+.px-extended-card strong{display:block;color:rgba(239,246,251,.96);font-size:18px;letter-spacing:.01em}
+.px-extended-card span{display:block;margin-top:5px;color:rgba(185,200,214,.82);font-size:13px;line-height:1.45}
+.px-extended-price{font-family:'Share Tech Mono',monospace;color:rgba(226,237,246,.94);font-size:12px;letter-spacing:1.1px;text-transform:uppercase}
+.px-extended-card .px-request-action{margin-top:0;padding-top:12px;border-top:1px solid rgba(160,188,207,.12);justify-content:stretch}
+.px-extended-card .px-request-btn{width:100%;min-height:42px;padding:13px 14px;border:1px solid rgba(124,172,199,.42);border-left:2px solid rgba(129,185,216,.66);background:linear-gradient(180deg,rgba(18,34,50,.98),rgba(9,19,31,1));color:rgba(235,244,250,.96);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.45px;text-transform:uppercase;cursor:pointer}
+.px-extended-card .px-request-btn:hover,.px-extended-card .px-request-btn:focus-visible{border-color:rgba(148,199,226,.64);background:linear-gradient(180deg,rgba(27,50,69,.99),rgba(12,25,39,1));transform:translateY(-1px)}
+@media(max-width:980px){.px-extended-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.px-extended-section{padding:56px 0}.px-extended-grid{grid-template-columns:1fr}.px-extended-card{min-height:0}.px-extended-card .px-request-btn{min-height:44px}}
+</style>
+<script id="primex-v179-extended-catalogue-path">
+(function(){
+  const items=[
+    {code:'GHKCU_REQUEST',title:'GHK-Cu',strength:'',price:'Price confirmed'},
+    {code:'MOTSC40',title:'MOTS-c',strength:'40mg',price:'£95'},
+    {code:'DSIP5',title:'DSIP',strength:'5mg',price:'£55'},
+    {code:'SS31_30',title:'SS-31',strength:'30mg',price:'£95'},
+    {code:'MT2_10',title:'Melanotan II',strength:'10mg',price:'£55'}
+  ];
+  function card(item){return '<article class="px-extended-card" data-extended-code="'+item.code+'" data-extended-title="'+item.title+'" data-extended-strength="'+item.strength+'" data-extended-price="'+item.price+'"><div><strong>'+item.title+'</strong><span>'+item.strength+'</span></div><div class="px-extended-price">'+item.price+'</div></article>';}
+  document.addEventListener('DOMContentLoaded',function(){
+    const hero=document.querySelector('.hero .wrap');
+    if(hero && !document.querySelector('.px-extended-notice')){
+      hero.insertAdjacentHTML('beforeend','<div class="px-extended-notice"><h3>Extended catalogue.</h3><p>Looking for something not shown in the main planner?<br>Selected compounds can be added to your request.</p><a class="px-extended-link" href="#extended-catalogue">View catalogue</a></div>');
+    }
+    if(!document.querySelector('#extended-catalogue')){
+      const target=document.querySelector('#pricing') || document.querySelector('main section:last-of-type') || document.querySelector('main');
+      if(target){
+        target.insertAdjacentHTML('afterend','<section id="extended-catalogue" class="px-extended-section"><div class="wrap"><div class="px-extended-head"><div class="eyebrow">Request route</div><h2>Extended catalogue.</h2><p>Selected compounds can be added to your request.</p></div><div class="px-extended-grid">'+items.map(card).join('')+'</div></div></section>');
+      }
+    }
+  });
+})();
+</script>
 <style id="primex-v177-request-cta-row-polish">
 /* PrimeX v177 - request CTA and metadata handoff polish.
    Scope: planner request CTAs and single-vial reference row request actions only. */
@@ -12340,12 +12384,13 @@ section[id],
 /* planner-v174A_LOCAL_HANDOFF_PATH_ONLY */
 /* planner-v177_REQUEST_CTA_FINANCE_INTAKE_METADATA */
 /* planner-v178_PLANNING_STRUCTURE_CTA_FIX */
+/* planner-v179_EXTENDED_CATALOGUE_PATH */
 (function(){
   const KEY='primexRequestTrayV1';
   const NOTES_KEY='primexRequestNotesV1';
   const money = s => (s || '').replace(/\s+/g,' ').trim();
   const slug = s => money(s).toLowerCase().replace(/[^a-z0-9£]+/g,'-').replace(/^-+|-+$/g,'');
-  const SECTION_CODES={reta:'RTA20',bpc:'BPC10',tb:'TB50010',ta1:'TA110',kpv:'KPV10',foundation:'FOUNDATION',pricing:'SINGLE'};
+  const SECTION_CODES={reta:'RTA20',bpc:'BPC10',tb:'TB50010',ta1:'TA110',kpv:'KPV10',foundation:'FOUNDATION',pricing:'SINGLE','extended-catalogue':'EXTENDED'};
   function codeFromName(name){const n=money(name).toLowerCase();if(n.includes('retatrutide')) return 'RTA20';if(n.includes('bpc-157')) return 'BPC10';if(n.includes('tb-500')) return 'TB50010';if(n.includes('thymosin alpha-1')) return 'TA110';if(n.includes('kpv')) return 'KPV10';if(n.includes('nad+')) return 'NAD500';if(n.includes('5-amino-1mq')) return 'AMINO50';return '';}
   function sourcePage(sectionId){ return location.pathname+(sectionId?('#'+sectionId):''); }
   function qtyFromMeta(meta){ const m=money(meta).match(/(\d+)\s+vials?/i); return m ? Math.max(1,parseInt(m[1],10)||1) : 1; }
@@ -12369,6 +12414,13 @@ section[id],
       const price=money((card.querySelector('strong')||{}).textContent||'');
       const code=codeFromName(itemName)||SECTION_CODES.pricing;
       return {id:slug(['pricing',code,itemName,price].join('|')), code, sectionId:'pricing', sourceSection:'pricing', sourcePage:sourcePage('pricing'), itemType:'single_vial_reference', title:itemName, label:'Single-vial reference', name:itemName, meta:'Single-vial reference', price, qty:1, note:''};
+    }
+    if(card.classList.contains('px-extended-card')){
+      const code=card.getAttribute('data-extended-code')||'EXTENDED_REQUEST';
+      const title=money(card.getAttribute('data-extended-title')||'Extended catalogue compound');
+      const strength=money(card.getAttribute('data-extended-strength')||'');
+      const price=money(card.getAttribute('data-extended-price')||'Price confirmed');
+      return {id:slug(['extended-catalogue',code,title,strength,price].join('|')), code, sectionId:'extended-catalogue', sourceSection:'Extended catalogue', sourcePage:sourcePage('extended-catalogue'), itemType:'extended_catalogue_compound', title, label:'Extended catalogue', name:strength||'Extended catalogue', meta:'Extended catalogue compound', price, reference:price, period:strength||'Extended catalogue', qty:1, note:''};
     }
     if(card.classList.contains('bridge-card-v97')){
       const structureTitle=money((card.querySelector('h3')||{}).textContent||'Planning structure');
@@ -12408,7 +12460,7 @@ section[id],
     card.appendChild(wrap);
   }
   function addButtons(){
-    document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97').forEach(buildButton);
+    document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97, .px-extended-card').forEach(buildButton);
   }
   function continueToRequest(){ const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(getTray()); window.location.href='../order-request/index.html'; }
   function ensureTrayBar(){
@@ -12440,7 +12492,7 @@ section[id],
   }
   function syncButtons(){
     const ids=new Set(getTray().map(x=>x.id));
-    document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97').forEach(card=>{
+    document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97, .px-extended-card').forEach(card=>{
       const item=getPlanData(card);
       const btn=card.querySelector('.px-request-btn');
       if(!btn) return;
