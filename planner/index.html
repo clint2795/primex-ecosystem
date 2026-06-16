@@ -12321,14 +12321,11 @@ section[id],
 
 <style id="primex-v179-extended-catalogue-path">
 /* PrimeX v179 - small Extended catalogue request path. */
-.px-extended-notice{margin:24px 0 0;padding:13px 0;display:flex;align-items:center;gap:14px 18px;border-top:1px solid rgba(124,172,199,.24);border-bottom:1px solid rgba(124,172,199,.14);background:transparent}
-.px-extended-notice h3{margin:0;color:rgba(144,190,216,.9);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.75px;text-transform:uppercase;white-space:nowrap}
-.px-extended-notice p{margin:0;color:rgba(195,209,222,.82);font-size:14px;line-height:1.45;flex:1 1 auto}
+.px-extended-hero-link{margin:18px 0 0;color:rgba(195,209,222,.82);font-size:14.5px;line-height:1.55}
+.px-extended-hero-link a{color:rgba(144,190,216,.95);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(144,190,216,.42)}
+.px-extended-hero-link a:hover,.px-extended-hero-link a:focus-visible{color:rgba(226,241,249,.98);border-bottom-color:rgba(226,241,249,.72)}
 .px-extended-section h2{margin:0 0 8px;color:rgba(239,246,251,.96)}
 .px-extended-section p{margin:0;color:rgba(195,209,222,.86)}
-.px-extended-notice .px-extended-link{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-height:32px;padding:8px 13px;border:1px solid rgba(124,172,199,.34);border-left:2px solid rgba(129,185,216,.58);background:rgba(8,17,27,.52);color:rgba(235,244,250,.94);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.35px;text-transform:uppercase;text-decoration:none}
-.px-extended-notice .px-extended-link:hover,.px-extended-notice .px-extended-link:focus-visible{border-color:rgba(148,199,226,.58);background:rgba(15,30,44,.72);transform:translateY(-1px)}
-@media(max-width:720px){.px-extended-notice{display:grid;grid-template-columns:1fr;gap:8px;padding:14px 0}.px-extended-notice h3{white-space:normal}.px-extended-notice .px-extended-link{width:max-content;min-height:34px}}
 .px-extended-section{padding:76px 0;border-bottom:1px solid var(--border)}
 .px-extended-head{max-width:720px;margin-bottom:24px}
 .px-extended-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
@@ -12345,17 +12342,17 @@ section[id],
 <script id="primex-v179-extended-catalogue-path">
 (function(){
   const items=[
-    {code:'GHKCU_REQUEST',title:'GHK-Cu',strength:'',price:'Price confirmed'},
-    {code:'MOTSC40',title:'MOTS-c',strength:'40mg',price:'£95'},
-    {code:'DSIP5',title:'DSIP',strength:'5mg',price:'£55'},
-    {code:'SS31_30',title:'SS-31',strength:'30mg',price:'£95'},
-    {code:'MT2_10',title:'Melanotan II',strength:'10mg',price:'£55'}
+    {code:'GHKCU50',title:'GHK-Cu',strength:'50mg vial',price:'£55'},
+    {code:'MOTSC40',title:'MOTS-c',strength:'40mg vial',price:'£95'},
+    {code:'DSIP5',title:'DSIP',strength:'5mg vial',price:'£55'},
+    {code:'SS31_30',title:'SS-31',strength:'30mg vial',price:'£95'},
+    {code:'MT2_10',title:'Melanotan II',strength:'10mg vial',price:'£55'}
   ];
   function card(item){return '<article class="px-extended-card" data-extended-code="'+item.code+'" data-extended-title="'+item.title+'" data-extended-strength="'+item.strength+'" data-extended-price="'+item.price+'"><div><strong>'+item.title+'</strong><span>'+item.strength+'</span></div><div class="px-extended-price">'+item.price+'</div></article>';}
   document.addEventListener('DOMContentLoaded',function(){
     const hero=document.querySelector('.hero .wrap');
-    if(hero && !document.querySelector('.px-extended-notice')){
-      hero.insertAdjacentHTML('beforeend','<div class="px-extended-notice"><h3>Extended catalogue.</h3><p>Looking for something not shown in the main planner?<br>Selected compounds can be added to your request.</p><a class="px-extended-link" href="#extended-catalogue">View catalogue</a></div>');
+    if(hero && !document.querySelector('.px-extended-hero-link')){
+      hero.insertAdjacentHTML('beforeend','<p class="px-extended-hero-link">Looking for something not shown in the main planner? <a href="#extended-catalogue">View extended catalogue →</a></p>');
     }
     if(!document.querySelector('#extended-catalogue')){
       const target=document.querySelector('#pricing') || document.querySelector('main section:last-of-type') || document.querySelector('main');

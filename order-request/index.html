@@ -80,11 +80,11 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
         <h3>Extended catalogue.</h3>
         <p class="request-library-copy">Add any additional compounds before sending your request.</p>
         <div class="request-library-grid" id="requestOnlyLibrary">
-          <article class="request-only-card"><strong>GHK-Cu</strong><span>Price confirmed</span><button class="btn secondary" type="button" data-request-code="GHKCU_REQUEST">Request this</button></article>
-          <article class="request-only-card"><strong>MOTS-c</strong><span>40mg - £95</span><button class="btn secondary" type="button" data-request-code="MOTSC40">Request this</button></article>
-          <article class="request-only-card"><strong>DSIP</strong><span>5mg - £55</span><button class="btn secondary" type="button" data-request-code="DSIP5">Request this</button></article>
-          <article class="request-only-card"><strong>SS-31</strong><span>30mg - £95</span><button class="btn secondary" type="button" data-request-code="SS31_30">Request this</button></article>
-          <article class="request-only-card"><strong>Melanotan II</strong><span>10mg - £55</span><button class="btn secondary" type="button" data-request-code="MT2_10">Request this</button></article>
+          <article class="request-only-card"><strong>GHK-Cu</strong><span>50mg vial - £55</span><button class="btn secondary" type="button" data-request-code="GHKCU50">Request this</button></article>
+          <article class="request-only-card"><strong>MOTS-c</strong><span>40mg vial - £95</span><button class="btn secondary" type="button" data-request-code="MOTSC40">Request this</button></article>
+          <article class="request-only-card"><strong>DSIP</strong><span>5mg vial - £55</span><button class="btn secondary" type="button" data-request-code="DSIP5">Request this</button></article>
+          <article class="request-only-card"><strong>SS-31</strong><span>30mg vial - £95</span><button class="btn secondary" type="button" data-request-code="SS31_30">Request this</button></article>
+          <article class="request-only-card"><strong>Melanotan II</strong><span>10mg vial - £55</span><button class="btn secondary" type="button" data-request-code="MT2_10">Request this</button></article>
         </div>
       </section>
 
@@ -111,7 +111,7 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
   const KEY='primexRequestTrayV1';
   const NOTES_KEY='primexRequestNotesV1';
   const PRIME_EMAIL='orders@primexbiolabs.co.uk';
-  const REQUEST_LIBRARY={GHKCU_REQUEST:{title:'GHK-Cu',strength:'',price:'Price confirmed'},MOTSC40:{title:'MOTS-c',strength:'40mg',price:'£95'},DSIP5:{title:'DSIP',strength:'5mg',price:'£55'},SS31_30:{title:'SS-31',strength:'30mg',price:'£95'},MT2_10:{title:'Melanotan II',strength:'10mg',price:'£55'}};
+  const REQUEST_LIBRARY={GHKCU50:{title:'GHK-Cu',strength:'50mg vial',price:'£55'},MOTSC40:{title:'MOTS-c',strength:'40mg vial',price:'£95'},DSIP5:{title:'DSIP',strength:'5mg vial',price:'£55'},SS31_30:{title:'SS-31',strength:'30mg vial',price:'£95'},MT2_10:{title:'Melanotan II',strength:'10mg vial',price:'£55'}};
   const $=s=>document.querySelector(s);
   function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
   function clean(s){return String(s||'').replace(/\s+/g,' ').trim();}
