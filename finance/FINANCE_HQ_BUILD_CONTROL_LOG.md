@@ -620,3 +620,47 @@ Manual browser tests still required:
 - Mark quote sent, customer replied, and parked from Open Quotes; confirm status changes persist after reload.
 - Confirm source and referredBy save/load on a manual quote.
 - Convert a ready quote to live order and confirm stock only deducts after saving as a live order.
+## v43.0C Saved Quote Follow-Up Fix
+
+Version: v43.0C
+Purpose: Fix saved Quote / enquiry visibility on hosted public prototype pages after manual browser testing showed saved quotes disappearing from Start, Open Quotes, and History.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Root cause:
+- saveOrderNow() correctly built and pushed the Quote / enquiry order into the orders array.
+- In public prototype mode, saveLocal() then removed localStorage and also cleared the in-memory orders array.
+- dashboardOrders() also returned an empty array in public prototype mode, so even if a quote existed in memory it would be filtered out of Start, Open Quotes, History, and quote follow-up displays.
+- The quote was effectively saved then hidden/wiped during the same Save order flow.
+
+Fix made:
+- dashboardOrders() now returns the current in-memory orders array.
+- saveLocal() still blocks persisted order/request storage on hosted public prototype pages by removing px_orders_v21 and px_request_inbox_v1, but no longer clears the in-memory orders array.
+- Current-session saved Quote / enquiry orders can now appear in Quote follow-up and Open Quotes on the live prototype page.
+- Updated title and boot badge to v43.0C.
+
+What was not changed:
+- Request Inbox architecture.
+- Product library.
+- Pricing formulas.
+- Stock deduction logic.
+- Quote / enquiry exclusion from live fulfilment queues.
+- Quote-to-live conversion logic.
+- Customer message templates.
+
+Verification:
+- JavaScript syntax check passed.
+- Harness confirmed a Quote / enquiry save remains in memory after saveLocal() in public prototype mode.
+- Harness confirmed quoteFollowUpData().toSend counts the saved quote.
+- Harness confirmed historyMatches(savedQuote, 'quote') returns true.
+- Harness confirmed isStockAffectingOrder(savedQuote) returns false.
+- Harness confirmed Request Inbox import still parses, pushes, saves, and rerenders.
+
+Manual browser tests still required:
+- Import Request Hub JSON, convert to Quote, click Save order, and confirm Quote follow-up shows Quotes to send = 1.
+- Confirm Open Quotes and History Quotes show the saved quote/customer.
+- Confirm live fulfilment queues remain 0.
+- Confirm stock is not deducted.
+- Refresh the hosted prototype and confirm public prototype mode does not persist private quote/order data across page reloads unless explicitly using an allowed local-data mode.
