@@ -753,3 +753,27 @@ Manual review before running SQL:
 - Confirm whether fulfilment should have narrower field-level permissions before live use.
 - Treat `drop policy if exists` and `drop trigger if exists` as fresh-setup safe only; do not run casually over a manually modified live project later.
 - If policy evaluation errors due to helper function/schema permission, pause and review exact required grants rather than broadly exposing `app_private`.
+
+## v44B Supabase Login / Connection Test
+Purpose: Add Supabase browser-client login/session/status wiring without migrating Finance HQ workflows away from localStorage.
+
+Files changed:
+- finance/index.html
+- finance/config.example.js
+- .gitignore
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated Finance HQ title/badge to v44B.
+- Added safe Supabase browser client/config loading.
+- Added `finance/config.example.js` placeholders for local config.
+- Added `.gitignore` entry for `finance/config.js` so local keys stay out of git.
+- Added Admin/System Supabase status panel with configured/not configured, login state, logged-in email, profile role, and RLS profile read test.
+- Added login/logout/refresh controls.
+- On login, v44B reads only the current authenticated user's row from `public.profiles`.
+
+What was not changed:
+- No service role key, database password, JWT secret, connection string, customer data, or Supabase write path was added.
+- No customer/order/request/stock migration was added.
+- Existing localStorage order, quote, Request Inbox, pricing, stock and message workflows remain the active app behaviour.
+- `finance/indexbackup.html`, old Desktop folders, planner files, and request hub files were not edited.
