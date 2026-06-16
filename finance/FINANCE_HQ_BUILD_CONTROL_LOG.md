@@ -574,3 +574,49 @@ Manual browser tests still required:
 - Paste invalid JSON and confirm visible error message appears.
 - Click Clear paste box and confirm textarea clears.
 - Convert imported request to Quote / enquiry and confirm no stock deduction until converted to live order and saved.
+## v43.0B Quote Follow-Up Source Tracking
+
+Version: v43.0B
+Purpose: Make Quote / enquiry work visible as active customer follow-up without putting quotes into live fulfilment queues.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Fields added:
+- Order / request source select: Request Hub / online, Existing customer, Word of mouth / referral, Direct WhatsApp, Manual entry, Repeat customer, Other.
+- Referred by free-text field for internal tracking.
+- Quote follow-up status select: New request, Quote to send, Quote sent / waiting customer, Customer replied / ready to convert, Parked, Cancelled.
+- Saved order payload now carries source, referredBy, quoteStatus, sourceRequestId, and internal sourceRequestMeta.
+
+Quote status logic added:
+- Existing saved quotes without quoteStatus safely infer Quote to send unless existing confirmation/status suggests otherwise.
+- Request Inbox conversion defaults source to Request Hub / online, quoteStatus to Quote to send, and preserves requestId/source metadata internally.
+- Added quote-only helpers for isQuoteOrder, quoteStatusValue, quoteFollowUpData, renderStartQuoteFollowup, quickQuoteUpdate, and quote-specific History rows.
+
+Start/Open Quotes changes:
+- Start now has a separate Quote follow-up section for New requests, Quotes to send, Waiting customer, Ready to convert, and Parked/cancelled.
+- Open Quotes rows show quote status, source, referredBy when present, requestId when present, and value.
+- Quote rows include actions for open/edit, mark quote sent, customer replied, park, and convert to live.
+
+What was not changed:
+- Stock deduction logic.
+- Live fulfilment queue logic: Quote / enquiry remains excluded from Awaiting payment, To pack / fulfil, Ready send / collect, and In transit / follow-up.
+- Pricing formulas.
+- Product library.
+- Request import parsing.
+- Customer message templates.
+- Reta kit logic and BAC/support logic.
+
+Verification:
+- JavaScript syntax check passed.
+- Function-level harness confirmed Request Inbox import still parses, pushes, saves, and rerenders.
+- Function-level stock guard check confirmed Quote / enquiry does not affect stock.
+- Static checks confirmed source/referral/quote status fields are in orderPayload() and loadOrder().
+
+Manual browser tests still required:
+- Import Request Hub JSON, convert to Quote / enquiry, save quote, and confirm it appears in Start Quote follow-up and Open Quotes.
+- Confirm saved Quote / enquiry does not appear in live fulfilment queues and does not add to open live order value.
+- Mark quote sent, customer replied, and parked from Open Quotes; confirm status changes persist after reload.
+- Confirm source and referredBy save/load on a manual quote.
+- Convert a ready quote to live order and confirm stock only deducts after saving as a live order.
