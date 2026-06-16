@@ -664,3 +664,92 @@ Manual browser tests still required:
 - Confirm live fulfilment queues remain 0.
 - Confirm stock is not deducted.
 - Refresh the hosted prototype and confirm public prototype mode does not persist private quote/order data across page reloads unless explicitly using an allowed local-data mode.
+## v43.0D Draft Quote Follow-Up Visibility
+
+Version: v43.0D
+Purpose: Keep Request Inbox conversions visible as active quote work before the quote is saved or sent.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Root cause:
+- Convert to Quote changed the request status to converted immediately, before any saved Quote / enquiry order existed.
+- Quote follow-up excluded converted requests and only counted saved quote orders, so the converted-but-unsaved quote draft disappeared from Start follow-up until saved.
+
+Follow-up workflow change:
+- Added Draft quotes bucket to the Start Quote follow-up section.
+- Convert to Quote now marks the request as draft quote and stores draftOrderId while the order is being prepared.
+- Saving the quote calls syncRequestAfterQuoteSave(), which moves the request from draft quote to converted and links the saved quote ref.
+- quoteFollowUpData() now reports New requests, Draft quotes, Quotes to send, Waiting customer, Ready to convert, and Parked/cancelled.
+- Save confirmation toast was made ASCII-safe.
+
+What was not changed:
+- Stock deduction logic.
+- Live fulfilment queues.
+- Pricing formulas.
+- Request Inbox import parsing.
+- Product library.
+- Customer message templates.
+- Quote-to-live logic.
+
+Verification:
+- JavaScript syntax check passed.
+- Harness confirmed draft quote is counted before save.
+- Harness confirmed saved quote moves from Draft quotes to Quotes to send.
+- Harness confirmed quote does not appear as live open work.
+- Harness confirmed quote does not affect stock.
+- Harness confirmed Request Inbox import still parses, pushes, saves, and rerenders.
+
+Manual browser tests still required:
+- Import Request Hub JSON and confirm New requests = 1.
+- Convert to Quote and return to Start before saving; confirm Draft quotes = 1.
+- Save the quote and confirm Draft quotes = 0 and Quotes to send = 1.
+- Confirm Open Quotes shows the saved quote.
+- Confirm live fulfilment queues remain 0 and stock is not deducted.
+## v44A Supabase Schema + RLS Foundation
+Purpose: Add Supabase database schema, RLS policy foundation, and setup notes for moving Finance HQ beyond localStorage/public prototype mode.
+
+Files changed:
+- finance/supabase/schema_v44A.sql
+- finance/supabase/rls_policies_v44A.sql
+- finance/supabase/RLS_SETUP_NOTES.md
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Tables created in SQL:
+- profiles
+- customers
+- quote_requests
+- quotes_orders
+- quote_order_items
+- stock_items
+- stock_movements
+- follow_ups
+- audit_events
+
+Schema considerations included:
+- customers includes email, preferred_contact, source, referred_by, last_contacted_at, and next_follow_up_at.
+- quotes_orders includes quote_status, last_contacted_at, next_follow_up_at, follow_up_note, and customer_reply_status.
+- follow_ups is included now so request/order/customer follow-up history is not lost later, but should still be reviewed before running SQL.
+
+RLS approach:
+- All private Finance HQ tables enable RLS.
+- Anonymous access is not allowed by policy.
+- Authenticated access is routed through security definer helper functions in app_private to avoid fragile recursive profiles.role policies.
+- Baseline roles are admin, finance, fulfilment, and viewer.
+- Viewer can read; finance/fulfilment/admin can write operational tables; deletes are admin-only; audit events are append/read only for staff from browser context.
+
+What was not changed:
+- finance/index.html was not changed for Supabase wiring.
+- No Supabase project URL, anon key, service role key, database password, or customer data was added.
+- Product library, pricing formulas, stock deduction formulas, Request Inbox parsing, customer messages, and UI logic were not changed.
+- No SQL was run from this workspace. v44A SQL is intended for a fresh empty Supabase staging project.
+
+Manual review before running SQL:
+- Confirm first admin bootstrap process in Supabase SQL Editor.
+- Confirm role policy behaviour using test users before wiring Finance HQ, including helper function access after `app_private` usage is revoked.
+- Confirm whether follow_ups is active in v44A or simply available for v44B/v44C.
+- Confirm delete permissions and whether soft delete is needed before live use.
+- Confirm whether fulfilment should have narrower field-level permissions before live use.
+- Treat `drop policy if exists` and `drop trigger if exists` as fresh-setup safe only; do not run casually over a manually modified live project later.
+- If policy evaluation errors due to helper function/schema permission, pause and review exact required grants rather than broadly exposing `app_private`.
