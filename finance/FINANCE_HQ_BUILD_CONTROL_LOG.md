@@ -818,3 +818,26 @@ What was not changed:
 - Login/profile read behaviour is unchanged.
 - No customer/order/request/stock Supabase writes were added.
 - No real keys, passwords, service role key, customer data, SQL, config.js, backup file, planner/request hub files, or old Desktop folders were touched.
+
+## v44C Request Inbox + Customer Database Sync
+Purpose: Add operator-triggered Request Inbox database save for customer linking and quote request intake while keeping active Finance HQ workflows local.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated visible app version to v44C.
+- Added per-request action: `Save selected request to database`.
+- Database save requires a logged-in Supabase user.
+- v44C writes only to `customers` and `quote_requests`.
+- On success, the local request remains visible and receives internal metadata: `supabaseRequestId`, `supabaseCustomerId`, and `supabaseSyncedAt`.
+- Re-saving checks existing `quote_requests` by saved Supabase id or `request_ref` to avoid blind duplicates.
+- Customer matching checks email first, then phone/contact, then exact customer name/ref. Multiple matches block automatic merge.
+
+What was not changed:
+- Saved orders and quotes remain local in `px_orders_v21`.
+- Request Inbox remains local in `px_request_inbox_v1` with optional database metadata.
+- Stock, pricing, products, Reta kit, BAC/support, fulfilment, and message templates were not changed.
+- No writes were added to `quotes_orders`, `quote_order_items`, `stock_items`, `stock_movements`, `follow_ups`, or `audit_events`.
+- No service role key, database password, hardcoded customer data, SQL, private config, backup, planner, request hub, product-info, indexbackup, or old Desktop files were touched.
