@@ -900,3 +900,28 @@ Verification:
 - Manual browser test required for Active/Bin toggle, Move to Bin, Restore from Bin, active request count, Start quote follow-up count, and backup export/import preservation.
 
 
+
+## v44D2 Schema Compatibility Only
+Purpose: Prepare Supabase `quotes_orders` for future Finance HQ quote/order sync by allowing the local order type `Quote / enquiry`.
+
+Files changed:
+- finance/supabase/schema_patch_v44D2_order_type.sql
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Added a SQL patch file that updates the `quotes_orders_order_type_check` constraint to allow `Live order`, `Quote / enquiry`, `Past order`, and `Test order`.
+- v44D2 is schema compatibility only.
+- v44D3 is the earliest order sync target.
+
+Order sync notes carried forward:
+- Quote status UI labels must be mapped to normalized DB `quote_status` values before writing orders/quotes to Supabase.
+- `quote_order_items` resync must avoid unsafe delete/reinsert assumptions under RLS.
+- Bin/archive stays soft-delete only.
+- Google Drive source-of-truth review was attempted but blocked by expired Drive auth.
+- Drive review must be repeated once Drive access is restored.
+
+What was not changed:
+- No app code was changed.
+- No SQL was run.
+- No order sync was implemented.
+- `finance/index.html`, `finance/config.js`, stock, pricing, fulfilment, product rules, customer message templates, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
