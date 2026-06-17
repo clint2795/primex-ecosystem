@@ -930,3 +930,30 @@ What was not changed:
 - No order sync was implemented.
 - `finance/index.html`, `finance/config.js`, stock, pricing, fulfilment, product rules, customer message templates, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
 
+
+## v44D2B quote_order_items line_ref Schema Prep
+Purpose: Prepare `quote_order_items` for safe idempotent item sync in v44D3.
+
+Files changed:
+- finance/supabase/schema_patch_v44D2B_quote_order_items_line_ref.sql
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Added a SQL patch file to add nullable `line_ref` to `quote_order_items`.
+- Added a partial unique index on `(quote_order_id, line_ref)` where `line_ref` is not null.
+- This is schema prep only.
+- Enables future v44D3 item upsert without delete-all-then-recreate assumptions.
+
+Completion:
+- v44D2B line_ref schema prep SQL ran successfully.
+- `quote_order_items.line_ref` is available for future v44D3 item upsert.
+- `quote_order_items_quote_order_id_line_ref_uidx` is in place for non-null line refs.
+
+What was not changed:
+- No app code was changed.
+- No additional SQL was run after the completed v44D2B line_ref patch.
+- No RLS was changed.
+- No order sync was implemented.
+- No stock, pricing, fulfilment, product rule, or message logic was changed.
+- `finance/index.html`, `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
