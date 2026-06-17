@@ -777,3 +777,44 @@ What was not changed:
 - No customer/order/request/stock migration was added.
 - Existing localStorage order, quote, Request Inbox, pricing, stock and message workflows remain the active app behaviour.
 - `finance/indexbackup.html`, old Desktop folders, planner files, and request hub files were not edited.
+
+## v44B1 Supabase Login Diagnostics
+Purpose: Harden the v44B Supabase login/status path for localhost testing without changing local Finance HQ workflows.
+
+Files changed:
+- finance/index.html
+- finance/config.example.js
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+Cause found:
+- v44B used the Supabase client and base project URL correctly and read profiles through `.from('profiles')`; it did not build a raw `/rest/v1/` fetch.
+- The login path did not catch browser/network exceptions from Supabase Auth, so localhost failures surfaced only as `Failed to fetch` with no operation-specific detail.
+- Config handling only documented `anonKey`, even though the local setup uses the newer `sb_publishable_` public key format.
+
+What changed:
+- Updated app version labels to v44B1.
+- Added config normalization for accidental `/rest/v1` or `/auth/v1` URL suffixes while still passing only the project base URL into `createClient`.
+- Added support for `publishableKey`, `anonKey`, or `supabaseKey` public browser config fields.
+- Added operation-specific error detail for `createClient`, `getSession`, `signInWithPassword`, `profiles` read, and `signOut`.
+- Updated `config.example.js` to prefer `publishableKey` while still supporting anon public keys in code.
+
+What was not changed:
+- No service role key, database password, JWT secret, connection string, customer data, SQL, or customer/order/request/stock Supabase writes were added.
+- Existing localStorage workflows and public prototype guard remain unchanged.
+
+## v44B2 Supabase Login UX + Diagnostics
+Purpose: Improve Supabase login usability and visible diagnostics without changing auth/profile behaviour or local Finance HQ workflows.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated app version labels to v44B2.
+- Added a mobile-friendly show/hide password control to the Supabase login password field.
+- Added visible diagnostics for configured Supabase base URL, Supabase JS loaded/not loaded, and public key type.
+
+What was not changed:
+- Login/profile read behaviour is unchanged.
+- No customer/order/request/stock Supabase writes were added.
+- No real keys, passwords, service role key, customer data, SQL, config.js, backup file, planner/request hub files, or old Desktop folders were touched.

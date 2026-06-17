@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44B Supabase Login / Connection Test</title>
+<title>PrimeX Finance HQ &middot; v44B2 Supabase Login / Connection Test</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -147,6 +147,8 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .supabase-status-item{border:1px solid #1d2d40;border-radius:10px;background:#080e15;padding:10px}
 .supabase-status-item small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
 .supabase-status-item strong{display:block;color:#e9f8ff;word-break:break-word}
+.password-toggle-wrap{display:flex;gap:8px;align-items:stretch}.password-toggle-wrap input{min-width:0}.password-toggle-wrap .btn{white-space:nowrap;padding-left:12px;padding-right:12px}
+@media(max-width:480px){.password-toggle-wrap{display:grid;grid-template-columns:1fr}.password-toggle-wrap .btn{width:100%}}
 @media(max-width:760px){.supabase-status-grid{grid-template-columns:1fr}}
 @media(max-width:760px){.quote-followup-grid{grid-template-columns:1fr 1fr}}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -157,7 +159,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44B</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44B2</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -905,7 +907,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44B JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44B2 JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1749,18 +1751,26 @@ function renderStockTraceability(){
   if(stockBatchList){const received=stockMovements.filter(m=>m.type==='received');stockBatchList.innerHTML=received.length?received.map(m=>{const label=STOCK_LABELS[m.item]||m.item;return `<div class="stock-row"><div><strong>${htmlEscape(label)}</strong><div class="tiny">Strength: ${htmlEscape(strengthFromLabel(label)||'not parsed')} · Batch/lot: ${htmlEscape(m.batch||'not recorded')} · COA: ${htmlEscape(m.coaStatus||'not recorded')}</div><div class="tiny">Qty received: ${htmlEscape(m.qty)} · Current aggregate qty: ${htmlEscape(stock[m.item]??0)} · Received: ${htmlEscape(new Date(m.date).toLocaleDateString())}</div><div class="tiny">Supplier/ref: ${htmlEscape(m.supplierRef||m.ref||'')}</div></div></div>`}).join(''):'<div class="muted">No received batch records yet.</div>';}
 }
 
-const supabaseAuthState={configured:false,client:null,session:null,user:null,profile:null,profileTest:'not run',error:'',checked:false};
+const supabaseAuthState={configured:false,client:null,session:null,user:null,profile:null,profileTest:'not run',error:'',detail:'',checked:false};
 function supabaseAppConfig(){return window.PRIMEX_SUPABASE_CONFIG||window.FINANCE_SUPABASE_CONFIG||null}
-function supabaseIsConfigured(){const c=supabaseAppConfig();return !!(c&&c.url&&c.anonKey&&!String(c.url).includes('YOUR_')&&!String(c.anonKey).includes('YOUR_'))}
+function normaliseSupabaseUrl(url){return String(url||'').trim().replace(/\/+$/,'').replace(/\/(rest|auth)\/v1$/,'')}
+function supabasePublicKey(c){return String(c?.publishableKey||c?.anonKey||c?.supabaseKey||'').trim()}
+function supabaseKeyLabel(){const k=supabasePublicKey(supabaseAppConfig());if(!k)return 'missing';if(k.startsWith('sb_publishable_'))return 'publishable key';if(k.startsWith('eyJ'))return 'legacy anon JWT';return 'public key'}
+function supabaseConfiguredValues(){const c=supabaseAppConfig();return {url:normaliseSupabaseUrl(c?.url),key:supabasePublicKey(c)}}
+function supabaseIsConfigured(){const v=supabaseConfiguredValues();return !!(v.url&&v.key&&!v.url.includes('YOUR_')&&!v.key.includes('YOUR_'))}
+function supabaseErrorMessage(stage,err){const msg=err?.message||String(err||'Unknown error');const online=navigator.onLine?'browser online':'browser offline';return stage+': '+msg+' ('+online+'). Check DevTools Network/Console for the blocked request, CORS, DNS, extension, or Supabase project URL issue.'}
 function getSupabaseClient(){
   if(!supabaseIsConfigured()){supabaseAuthState.configured=false;supabaseAuthState.client=null;return null}
   supabaseAuthState.configured=true;
   if(supabaseAuthState.client)return supabaseAuthState.client;
-  if(!window.supabase||!window.supabase.createClient){supabaseAuthState.error='Supabase browser client not loaded';return null}
-  const c=supabaseAppConfig();
-  supabaseAuthState.client=window.supabase.createClient(c.url,c.anonKey,{auth:{persistSession:true,autoRefreshToken:true}});
-  return supabaseAuthState.client;
+  if(!window.supabase||!window.supabase.createClient){supabaseAuthState.error='Supabase browser client not loaded';supabaseAuthState.detail='Check that the CDN script loaded before config.js and the app script.';return null}
+  const v=supabaseConfiguredValues();
+  try{supabaseAuthState.client=window.supabase.createClient(v.url,v.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});return supabaseAuthState.client}
+  catch(err){supabaseAuthState.error='Supabase client creation failed';supabaseAuthState.detail=supabaseErrorMessage('createClient',err);return null}
 }
+function supabaseJsLoadedLabel(){return window.supabase&&window.supabase.createClient?'Loaded':'Not loaded'}
+function supabaseBaseUrlLabel(){const u=supabaseConfiguredValues().url;return u||'not configured'}
+function toggleSupabasePassword(){const el=document.getElementById('supabasePassword'),btn=document.getElementById('supabasePasswordToggle');if(!el||!btn)return;const show=el.type==='password';el.type=show?'text':'password';btn.textContent=show?'Hide':'Show';btn.setAttribute('aria-pressed',show?'true':'false')}
 function supabaseStatusLabel(){
   if(!supabaseAuthState.configured)return 'Supabase not configured';
   if(supabaseAuthState.error)return 'Connection test failed';
@@ -1770,36 +1780,38 @@ function supabaseStatusLabel(){
 async function refreshSupabaseAuthStatus(showMessage=true){
   const client=getSupabaseClient();
   supabaseAuthState.checked=true;
-  supabaseAuthState.error='';
-  supabaseAuthState.profile=null;
-  supabaseAuthState.profileTest='not run';
+  supabaseAuthState.error='';supabaseAuthState.detail='';supabaseAuthState.profile=null;supabaseAuthState.profileTest='not run';
   if(!client){renderSupabasePanel();return}
-  const sessionResult=await client.auth.getSession();
-  if(sessionResult.error){supabaseAuthState.error=sessionResult.error.message;renderSupabasePanel();return}
-  supabaseAuthState.session=sessionResult.data.session;
-  supabaseAuthState.user=sessionResult.data.session?.user||null;
-  if(!supabaseAuthState.user){renderSupabasePanel();if(showMessage)showToast('Supabase: not logged in');return}
-  const profileResult=await client.from('profiles').select('id,display_name,role,active').eq('id',supabaseAuthState.user.id).single();
-  if(profileResult.error){supabaseAuthState.profileTest='failed';supabaseAuthState.error=profileResult.error.message}else{supabaseAuthState.profile=profileResult.data;supabaseAuthState.profileTest='passed'}
+  try{
+    const sessionResult=await client.auth.getSession();
+    if(sessionResult.error){supabaseAuthState.error=sessionResult.error.message;supabaseAuthState.detail=supabaseErrorMessage('getSession',sessionResult.error);renderSupabasePanel();return}
+    supabaseAuthState.session=sessionResult.data.session;
+    supabaseAuthState.user=sessionResult.data.session?.user||null;
+    if(!supabaseAuthState.user){renderSupabasePanel();if(showMessage)showToast('Supabase: not logged in');return}
+    const profileResult=await client.from('profiles').select('id,display_name,role,active').eq('id',supabaseAuthState.user.id).single();
+    if(profileResult.error){supabaseAuthState.profileTest='failed';supabaseAuthState.error=profileResult.error.message;supabaseAuthState.detail=supabaseErrorMessage('profiles read',profileResult.error)}else{supabaseAuthState.profile=profileResult.data;supabaseAuthState.profileTest='passed'}
+  }catch(err){supabaseAuthState.error='Failed to fetch';supabaseAuthState.detail=supabaseErrorMessage('session/profile request',err)}
   renderSupabasePanel();
   if(showMessage)showToast('Supabase status refreshed');
 }
 async function supabaseLogin(){
   const client=getSupabaseClient();
-  if(!client){supabaseAuthState.error=supabaseAuthState.error||'Add finance/config.js with Supabase URL and anon public key';renderSupabasePanel();return}
+  if(!client){supabaseAuthState.error=supabaseAuthState.error||'Add finance/config.js with Supabase URL and public browser key';renderSupabasePanel();return}
   const email=String(document.getElementById('supabaseEmail')?.value||'').trim();
   const password=String(document.getElementById('supabasePassword')?.value||'');
   if(!email||!password){showToast('Enter Supabase email and password');return}
-  const result=await client.auth.signInWithPassword({email,password});
-  if(result.error){supabaseAuthState.error=result.error.message;renderSupabasePanel();showToast('Supabase login failed');return}
-  if(document.getElementById('supabasePassword'))document.getElementById('supabasePassword').value='';
-  await refreshSupabaseAuthStatus(false);
-  showToast('Supabase login OK');
+  try{
+    const result=await client.auth.signInWithPassword({email,password});
+    if(result.error){supabaseAuthState.error=result.error.message;supabaseAuthState.detail=supabaseErrorMessage('signInWithPassword',result.error);renderSupabasePanel();showToast('Supabase login failed');return}
+    if(document.getElementById('supabasePassword'))document.getElementById('supabasePassword').value='';
+    await refreshSupabaseAuthStatus(false);
+    showToast(supabaseAuthState.error?'Supabase profile test failed':'Supabase login OK');
+  }catch(err){supabaseAuthState.error='Failed to fetch';supabaseAuthState.detail=supabaseErrorMessage('signInWithPassword',err);renderSupabasePanel();showToast('Supabase login failed')}
 }
 async function supabaseLogout(){
   const client=getSupabaseClient();
-  if(client)await client.auth.signOut();
-  supabaseAuthState.session=null;supabaseAuthState.user=null;supabaseAuthState.profile=null;supabaseAuthState.profileTest='not run';supabaseAuthState.error='';
+  try{if(client)await client.auth.signOut()}catch(err){supabaseAuthState.error='Logout failed';supabaseAuthState.detail=supabaseErrorMessage('signOut',err)}
+  supabaseAuthState.session=null;supabaseAuthState.user=null;supabaseAuthState.profile=null;supabaseAuthState.profileTest='not run';
   renderSupabasePanel();showToast('Supabase logged out');
 }
 function renderSupabasePanel(){
@@ -1811,7 +1823,7 @@ function renderSupabasePanel(){
   const role=profile?.role||'not available';
   const active=profile?String(profile.active):'not available';
   const rls=supabaseAuthState.profileTest==='passed'?'Passed':(supabaseAuthState.profileTest==='failed'?'Failed':'Not run');
-  panel.innerHTML=`<div class="card slim supabase-panel" style="box-shadow:none"><div class="section-title"><div><h3>Supabase status</h3><p>Auth/session test only. Finance data still uses local browser storage.</p></div><button class="btn" onclick="refreshSupabaseAuthStatus()">Refresh</button></div><div class="supabase-status-grid"><div class="supabase-status-item"><small>Configuration</small><strong>${configured?'Configured':'Supabase not configured'}</strong></div><div class="supabase-status-item"><small>Session</small><strong>${htmlEscape(supabaseStatusLabel())}</strong></div><div class="supabase-status-item"><small>Profile role</small><strong>${htmlEscape(role)}${profile?' / active '+htmlEscape(active):''}</strong></div><div class="supabase-status-item"><small>RLS profile read test</small><strong>${htmlEscape(rls)}</strong></div></div>${supabaseAuthState.error?'<div class="note warn">'+htmlEscape(supabaseAuthState.error)+'</div>':''}<div class="grid two" style="margin-top:10px"><div class="field"><label>Email</label><input id="supabaseEmail" type="email" autocomplete="username" placeholder="Admin or finance user email"></div><div class="field"><label>Password</label><input id="supabasePassword" type="password" autocomplete="current-password" placeholder="Supabase Auth password"></div></div><div class="btnrow" style="margin-top:10px"><button class="btn good" onclick="supabaseLogin()">Login</button><button class="btn subtle" onclick="supabaseLogout()">Logout</button></div><div class="tiny" style="margin-top:10px">Reads only the current authenticated user from public.profiles. No customers, orders, requests or stock are written or migrated in v44B.</div></div>`;
+  panel.innerHTML=`<div class="card slim supabase-panel" style="box-shadow:none"><div class="section-title"><div><h3>Supabase status</h3><p>Auth/session test only. Finance data still uses local browser storage.</p></div><button class="btn" onclick="refreshSupabaseAuthStatus()">Refresh</button></div><div class="supabase-status-grid"><div class="supabase-status-item"><small>Configuration</small><strong>${configured?'Configured':'Supabase not configured'}</strong></div><div class="supabase-status-item"><small>Supabase base URL</small><strong>${htmlEscape(supabaseBaseUrlLabel())}</strong></div><div class="supabase-status-item"><small>Supabase JS</small><strong>${htmlEscape(supabaseJsLoadedLabel())}</strong></div><div class="supabase-status-item"><small>Config key type</small><strong>${htmlEscape(supabaseKeyLabel())}</strong></div><div class="supabase-status-item"><small>Session</small><strong>${htmlEscape(supabaseStatusLabel())}</strong></div><div class="supabase-status-item"><small>Profile role</small><strong>${htmlEscape(role)}${profile?' / active '+htmlEscape(active):''}</strong></div><div class="supabase-status-item"><small>RLS profile read test</small><strong>${htmlEscape(rls)}</strong></div></div>${supabaseAuthState.error?'<div class="note warn">'+htmlEscape(supabaseAuthState.error)+(supabaseAuthState.detail?'<br><span class="tiny">'+htmlEscape(supabaseAuthState.detail)+'</span>':'')+'</div>':''}<div class="grid two" style="margin-top:10px"><div class="field"><label>Email</label><input id="supabaseEmail" type="email" autocomplete="username" placeholder="Admin or finance user email"></div><div class="field"><label>Password</label><div class="password-toggle-wrap"><input id="supabasePassword" type="password" autocomplete="current-password" placeholder="Supabase Auth password"><button class="btn subtle" id="supabasePasswordToggle" type="button" onclick="toggleSupabasePassword()" aria-pressed="false">Show</button></div></div></div><div class="btnrow" style="margin-top:10px"><button class="btn good" onclick="supabaseLogin()">Login</button><button class="btn subtle" onclick="supabaseLogout()">Logout</button></div><div class="tiny" style="margin-top:10px">Reads only the current authenticated user from public.profiles. No customers, orders, requests or stock are written or migrated in v44B2.</div></div>`;
 }
 function showAdminPanel(p){document.querySelectorAll('[id^="admin-"]').forEach(b=>b.classList.remove('active'));document.getElementById('admin-'+p)?.classList.add('active');renderAdmin(p)}
 function renderAdmin(panel='system'){
@@ -2018,7 +2030,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44B JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44B2 JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
