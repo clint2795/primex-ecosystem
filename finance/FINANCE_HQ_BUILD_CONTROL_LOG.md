@@ -841,3 +841,33 @@ What was not changed:
 - Stock, pricing, products, Reta kit, BAC/support, fulfilment, and message templates were not changed.
 - No writes were added to `quotes_orders`, `quote_order_items`, `stock_items`, `stock_movements`, `follow_ups`, or `audit_events`.
 - No service role key, database password, hardcoded customer data, SQL, private config, backup, planner, request hub, product-info, indexbackup, or old Desktop files were touched.
+
+## v44C1 Local Request Inbox Test Helper
+Purpose: Add a local-only Request Inbox test helper so database sync can be manually tested without real customer data.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated visible app version to v44C1.
+- Added Request Inbox action: `Create local test request`.
+- The helper creates one local Request Inbox item for `TEST REQUEST CUSTOMER`, contact `07000000000`, requested item `Retatrutide 20mg x 1`.
+- The helper saves only to local Request Inbox storage and marks the request as local/test.
+
+What was not changed:
+- The helper does not write to Supabase automatically.
+- No order, stock, pricing, fulfilment, quotes_orders, SQL, private config, backup, planner/request hub, product-info, indexbackup, or old Desktop files were touched.
+
+## v44C2 Pending — Supabase Security Cleanup
+
+Warnings observed:
+- Function search_path mutable: public.touch_updated_at
+- Public can execute SECURITY DEFINER function: public.rls_auto_enable()
+- Signed-in users can execute SECURITY DEFINER function: public.rls_auto_enable()
+- Leaked password protection disabled in Auth
+
+Priority:
+- Not blocking v44C1 request/customer database test.
+- Must be cleaned before wider live staff use.
+- Should be handled as a separate SQL/security patch, not mixed into v44C1 app testing.
