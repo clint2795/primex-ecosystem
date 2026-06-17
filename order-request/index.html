@@ -43,7 +43,7 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
 .request-add-group[open] .request-add-caret::before{content:"Hide options -"}
 .request-add-group[open] .request-add-caret{font-size:0}
 .request-add-group[open] .request-add-caret::before{font-size:11.5px}
-.request-add-rows{display:grid;gap:8px;padding:0 15px 15px}
+.request-add-rows{display:grid;gap:8px;padding:0 15px 15px}.request-add-close{justify-self:start;margin-top:4px;padding:8px 0 2px;border:0;background:transparent;color:rgba(118,202,240,.96);font-family:var(--mono);font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;line-height:1.55;cursor:pointer;border-bottom:1px solid rgba(118,202,240,.42)}.request-add-close:hover,.request-add-close:focus-visible{color:rgba(232,244,250,.98);border-bottom-color:rgba(232,244,250,.72);outline:none}
 .request-add-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
 .request-add-row strong{display:block;color:rgba(236,244,250,.96);font-size:14px;line-height:1.3}
 .request-add-row span{display:block;margin-top:5px;color:rgba(195,216,230,.96);font-family:var(--mono);font-size:11.25px;letter-spacing:.95px;text-transform:uppercase;line-height:1.6}
@@ -100,12 +100,14 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
             <div class="request-add-row"><div><strong>KPV</strong><span>KPV10 · 10mg · £45</span></div><button class="btn secondary" type="button" data-request-code="KPV10">Add</button></div>
             <div class="request-add-row"><div><strong>NAD+</strong><span>NAD500 · 500mg · £49</span></div><button class="btn secondary" type="button" data-request-code="NAD500">Add</button></div>
             <div class="request-add-row"><div><strong>5-Amino-1MQ</strong><span>AMINO50 · 50mg · £110</span></div><button class="btn secondary" type="button" data-request-code="AMINO50">Add</button></div>
+            <button class="request-add-close" type="button" data-request-close>Hide Core range -</button>
           </div></details>
           <details class="request-add-group"><summary><span><span class="request-add-title">Planning structures</span><span class="request-add-preview"><span>Metabolic regulation</span><span>Tissue repair and recovery</span><span>Inflammation / gut integrity</span><span>Immune modulation</span></span></span><span class="request-add-caret">View options +</span></summary><div class="request-add-rows">
             <div class="request-add-row"><div><strong>Metabolic regulation</strong><span>MANUAL_REVIEW · Retatrutide · 20mg · 16–22 weeks · 2× Retatrutide · £290</span></div><button class="btn secondary" type="button" data-request-code="STRUCT_METABOLIC_REGULATION">Add</button></div>
             <div class="request-add-row"><div><strong>Tissue repair and recovery</strong><span>MANUAL_REVIEW · BPC-157 · 10mg + TB-500 · 10mg · 4–14 weeks · 3× BPC / 2× TB · £260</span></div><button class="btn secondary" type="button" data-request-code="STRUCT_TISSUE_REPAIR_RECOVERY">Add</button></div>
             <div class="request-add-row"><div><strong>Inflammation / gut integrity</strong><span>MANUAL_REVIEW · BPC-157 · 10mg + KPV · 10mg · 4–12 weeks · 2× BPC / 1× KPV · £135</span></div><button class="btn secondary" type="button" data-request-code="STRUCT_INFLAMMATION_GUT_INTEGRITY">Add</button></div>
             <div class="request-add-row"><div><strong>Immune modulation</strong><span>MANUAL_REVIEW · Thymosin Alpha-1 · 10mg · 4–8 weeks · 2× TA-1 · £140</span></div><button class="btn secondary" type="button" data-request-code="STRUCT_IMMUNE_MODULATION">Add</button></div>
+            <button class="request-add-close" type="button" data-request-close>Hide Planning structures -</button>
           </div></details>
           <details class="request-add-group"><summary><span><span class="request-add-title">Extended catalogue</span><span class="request-add-preview"><span>GHK-Cu</span><span>MOTS-c</span><span>DSIP</span><span>SS-31</span><span>Melanotan II</span></span></span><span class="request-add-caret">View options +</span></summary><div class="request-add-rows">
             <div class="request-add-row"><div><strong>GHK-Cu</strong><span>GHKCU50 · 50mg vial · £55</span></div><button class="btn secondary" type="button" data-request-code="GHKCU50">Add</button></div>
@@ -113,6 +115,7 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
             <div class="request-add-row"><div><strong>DSIP</strong><span>DSIP5 · 5mg vial · £55</span></div><button class="btn secondary" type="button" data-request-code="DSIP5">Add</button></div>
             <div class="request-add-row"><div><strong>SS-31</strong><span>SS31_30 · 30mg vial · £95</span></div><button class="btn secondary" type="button" data-request-code="SS31_30">Add</button></div>
             <div class="request-add-row"><div><strong>Melanotan II</strong><span>MT2_10 · 10mg vial · £55</span></div><button class="btn secondary" type="button" data-request-code="MT2_10">Add</button></div>
+            <button class="request-add-close" type="button" data-request-close>Hide Extended catalogue -</button>
           </div></details>
           <div class="request-add-group request-add-static"><div class="request-add-static-head"><span class="request-add-title">Support materials</span><span class="request-add-preview"><span>Bacteriostatic water</span><span>Support materials</span></span></div><p class="request-add-helper">Use the support / fulfilment preference or notes below to ask about bacteriostatic water or other support materials.</p></div>
         </div>
@@ -166,7 +169,7 @@ main{padding:38px 0 72px}.card{background:linear-gradient(180deg,rgba(12,23,37,.
   function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
   async function copy(){const err=validateRequest();if(err){showError(err);return}showError('');try{await navigator.clipboard.writeText(summary());showToast('Request copied');}catch(e){showToast('Copy failed');}}
   function mail(){const err=validateRequest();if(err){showError(err);return}showError('');const f=form();const subject='PrimeX request'+(f.name?' - '+f.name:'');const body=summary();window.location.href='mailto:'+encodeURIComponent(PRIME_EMAIL)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);}
-  document.addEventListener('DOMContentLoaded',()=>{renderItems();syncRequestOnlyButtons();const carried=sessionStorage.getItem(NOTES_KEY)||'';if(carried)$('#notes').value=carried;$('#manual').addEventListener('click',addManual);document.querySelectorAll('[data-request-code]').forEach(btn=>btn.addEventListener('click',()=>addRequestOnly(btn.dataset.requestCode)));$('#copy').addEventListener('click',copy);$('#send').addEventListener('click',mail);$('#topSend').addEventListener('click',mail);});
+  document.addEventListener('DOMContentLoaded',()=>{renderItems();syncRequestOnlyButtons();const carried=sessionStorage.getItem(NOTES_KEY)||'';if(carried)$('#notes').value=carried;$('#manual').addEventListener('click',addManual);document.querySelectorAll('[data-request-code]').forEach(btn=>btn.addEventListener('click',()=>addRequestOnly(btn.dataset.requestCode)));document.querySelectorAll('[data-request-close]').forEach(btn=>btn.addEventListener('click',()=>{const group=btn.closest('details');if(group)group.open=false;}));$('#copy').addEventListener('click',copy);$('#send').addEventListener('click',mail);$('#topSend').addEventListener('click',mail);});
 })();
 </script>
 </body>
