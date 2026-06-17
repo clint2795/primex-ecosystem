@@ -957,3 +957,52 @@ What was not changed:
 - No stock, pricing, fulfilment, product rule, or message logic was changed.
 - `finance/index.html`, `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
 
+
+## v44D3 Manual Quote/Order Database Sync
+Purpose: Add an explicit operator action to save the currently open saved local quote/order to Supabase without changing normal local workflows.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated visible app version to v44D3.
+- Added manual order action: `Save current quote/order to database`.
+- Database sync requires a logged-in authenticated Supabase user.
+- Normal local `Save order` remains primary and separate.
+- Parent sync writes to `quotes_orders` using `order_ref = local order.id`.
+- Existing database parent rows are updated by `order_ref`; missing parent rows are inserted.
+- Line items write to `quote_order_items` using stable `line_ref` values from v44D2B.
+- Line items are selected then updated/inserted; no delete/recreate flow and no delete permission is required.
+- Full local order payload is stored in `quotes_orders.payload`.
+- Full local line payload is stored in `quote_order_items.payload`.
+- On success, local order metadata is stored: `supabaseOrderId`, `supabaseSyncedAt`, and `supabaseItemSyncStatus`.
+- If parent sync succeeds but item sync fails, the app shows a partial sync warning and keeps the local order intact.
+- Quote status UI labels are mapped to normalized DB `quote_status` values.
+
+Supabase tables touched:
+- Writes: `quotes_orders`, `quote_order_items`.
+- Reads/links: `quote_requests` where a source request reference exists.
+
+What was not changed:
+- No writes were added to `stock_items`, `stock_movements`, `follow_ups`, or `audit_events`.
+- No customer writes were added in v44D3.
+- No stock deduction, pricing, fulfilment, Reta/BAC/support, product rule, or customer message template logic was changed.
+- No automatic migration was added.
+- `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
+## v44D3A Currency Display Encoding Fix
+Purpose: Fix pound sign rendering in Finance HQ currency display, including Open Order Value, without changing calculation logic.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated the shared `money()` display formatter to render the pound sign using a stable Unicode escape (`\u00a3`).
+- Open Order Value and other values that use `money()` now render `£` correctly instead of mojibake such as `Â£` / `A£`.
+- Inspected Backup / Export warning wording; it remains valid until orders and stock are fully cloud-backed.
+
+What was not changed:
+- No pricing, totals, stock, Supabase sync, order sync, fulfilment, product rule, or customer message template logic was changed.
+- `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
