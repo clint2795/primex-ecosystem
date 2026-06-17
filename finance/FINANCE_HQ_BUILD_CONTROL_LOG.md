@@ -920,8 +920,13 @@ Order sync notes carried forward:
 - Google Drive source-of-truth review was attempted but blocked by expired Drive auth.
 - Drive review must be repeated once Drive access is restored.
 
+Completion:
+- v44D2 schema compatibility SQL ran successfully.
+- `quotes_orders_order_type_check` now allows `Quote / enquiry` for future quote/order sync compatibility.
+
 What was not changed:
 - No app code was changed.
-- No SQL was run.
+- No additional SQL was run after the completed v44D2 compatibility patch.
 - No order sync was implemented.
 - `finance/index.html`, `finance/config.js`, stock, pricing, fulfilment, product rules, customer message templates, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
