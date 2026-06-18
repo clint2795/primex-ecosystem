@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2B Start Priority</title>
+<title>PrimeX Finance HQ &middot; v44E2C Live Operational Mode</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -159,19 +159,13 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2B</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2C</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
     </div>
   </header>
-
-  <div id="prototypeDataWarning" class="card slim note warn hide">
-    <strong>Prototype mode:</strong> clear local saved data before public/shared testing.
-    <div class="btnrow" style="margin-top:10px"><button class="btn danger" id="clearLocalDataBtn" type="button">Clear test data / Reset local data</button></div>
-  </div>
-
-  <div id="actionBanner" class="card slim action-alert-banner hide"></div>
+<div id="actionBanner" class="card slim action-alert-banner hide"></div>
 
   <main id="view-start" class="view active">
     <section class="card">
@@ -735,22 +729,16 @@ function allowLocalDataOnHostedPage(){
   return params.get('allowLocalData')==='1'||params.get('allowLocalData')==='true';
 }
 function isPublicPrototypeMode(){
-  return isHostedPage()&&!allowLocalDataOnHostedPage();
+  return false;
 }
 function dashboardOrders(){
   return orders;
 }
 function loadOrdersSafely(){
-  const raw=localStorage.getItem('px_orders_v21');
-  if(isPublicPrototypeMode()){
-    prototypeStoredOrdersBlocked=!!raw;
-    localStorage.removeItem('px_orders_v21');
-    return [];
-  }
   return safeLoadJSON('px_orders_v21',[]);
 }
 let orders=loadOrdersSafely();
-let requestInbox=isPublicPrototypeMode()?[]:safeLoadJSON('px_request_inbox_v1',[]);
+let requestInbox=safeLoadJSON('px_request_inbox_v1',[]);
 if(!Array.isArray(requestInbox))requestInbox=[];
 let requestInboxView='active';
 let stock=safeLoadJSON('px_stock_v21',JSON.parse(JSON.stringify(INITIAL_STOCK)));
@@ -793,9 +781,9 @@ function num(id){return Number(val(id)||0)}
 function set(id,v){const el=document.getElementById(id);el.value=v;autoExpandTextarea(el)}
 function paymentValue(v){return !v||v==='Not paid'?'Awaiting payment':v}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
-function saveLocal(){if(isPublicPrototypeMode()){localStorage.removeItem('px_orders_v21');localStorage.removeItem('px_request_inbox_v1');}else{localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_request_inbox_v1',JSON.stringify(requestInbox));}localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds));localStorage.setItem('px_custom_stock_items_v1',JSON.stringify(customStockItems))}
+function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders));localStorage.setItem('px_request_inbox_v1',JSON.stringify(requestInbox));localStorage.setItem('px_stock_v21',JSON.stringify(stock));localStorage.setItem('px_stock_movements_v1',JSON.stringify(stockMovements));localStorage.setItem('px_stock_thresholds_v1',JSON.stringify(stockThresholds));localStorage.setItem('px_custom_stock_items_v1',JSON.stringify(customStockItems))}
 function clearLocalFinanceData(){if(!confirm('Clear local Finance HQ test data in this browser?'))return;FINANCE_LOCAL_KEYS.forEach(k=>localStorage.removeItem(k));orders=[];stock=JSON.parse(JSON.stringify(INITIAL_STOCK));stockMovements=[];stockThresholds=JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=[];requestInbox=[];prototypeStoredOrdersBlocked=false;saveLocal();newOrder();recalcStock();renderAll();showToast('Local Finance HQ data cleared')}
-function renderPrototypeDataWarning(){if(!prototypeDataWarning)return;const show=isPublicPrototypeMode()||prototypeStoredOrdersBlocked;prototypeDataWarning.classList.toggle('hide',!show);if(show){prototypeDataWarning.querySelector('strong').textContent=isPublicPrototypeMode()?'Public prototype mode:':'Prototype mode:'}}
+function renderPrototypeDataWarning(){}
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));const view=document.getElementById('view-'+v);if(!view){showToast('View not available');return}view.classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0)}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 function autoExpandTextarea(el){if(!el||el.tagName!=='TEXTAREA')return;const compact=window.matchMedia&&window.matchMedia('(max-width:760px)').matches&&['orderNotes','customerNote','packingNotes'].includes(el.id);const min=compact?72:(el.classList.contains('tall-textarea')?140:96);el.style.height='auto';el.style.height=Math.max(el.scrollHeight,min)+'px'}
@@ -805,7 +793,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2B',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2C',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -927,7 +915,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2B JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2C JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1457,7 +1445,7 @@ function renderRequestInbox(){if(!requestInboxList)return;const active=activeReq
 function markRequestStatus(id,status){const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.status=status;saveLocal();renderRequestInbox();showToast('Request '+status)}
 function requestQuoteNotes(req,skipped){const lines=['Request Hub source: '+(req.source||'Request Hub'),'Request ID: '+req.requestId,'Received: '+(req.receivedAt||''),'Contact: '+(req.customer?.contact||'not supplied')];if(req.requestNotes)lines.push('Request notes: '+req.requestNotes);if(skipped.length){lines.push('Manual review needed:');skipped.forEach(s=>lines.push('- '+s))}lines.push('Request metadata preserved from Request Inbox. Quote/enquiry only; no stock deduction until converted to live order and saved.');return lines.join('\n')}
 function convertRequestToQuote(id){const req=requestInbox.find(x=>x.requestId===id);if(!req){showToast('Request not found');return}newQuote();set('customerRef',req.customer?.nameOrRef||req.requestId);set('recPhone',req.customer?.contact||'');set('orderSource','Request Hub / online');set('quoteStatus','Quote to send');current.sourceRequestId=req.requestId;current.sourceRequestMeta={requestId:req.requestId,source:req.source||'Request Hub',receivedAt:req.receivedAt||'',preferredContact:req.customer?.preferredContact||'',itemCount:(req.items||[]).length};set('priceTier','standard');let skipped=[];(req.items||[]).forEach(item=>{const status=requestItemStatus(item);if(!status.ok){skipped.push((item.productCode||item.requestedName||'Unknown item')+': '+status.label);return}const p=PRODUCT_RULES[status.pid],qty=Math.max(1,Math.floor(Number(item.qty||1))),price=Number(item.standardCataloguePrice);current.lines.push({kind:'product',pid:status.pid,qty,price,name:cleanDisplayText(p.name),review:!!p.needsCheck,note:cleanDisplayText('Request Hub standard catalogue price from '+item.productCode),sourceProductCode:item.productCode,requestId:req.requestId,supportMode:null,materialKey:null})});set('orderNotes',requestQuoteNotes(req,skipped));if(req.requestNotes)set('customerNote',req.requestNotes);req.status='draft quote';req.draftOrderId=current.id;req.convertedOrderId='';recalcMaterialsFromLines(true);markOrderMessagesStale('all');saveLocal();renderOrder();renderRequestInbox();showView('order');showToast('Draft quote created - save when ready')}
-function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderStartQuoteFollowup();renderStartCommsActions();renderAdmin();renderOrder();renderCommunicationCentre();renderActionBanner();renderPrototypeDataWarning()}
+function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderStartQuoteFollowup();renderStartCommsActions();renderAdmin();renderOrder();renderCommunicationCentre();renderActionBanner()}
 function isQuoteOrder(o){return (o.orderType||'Live order')==='Quote / enquiry'}
 function quoteStatusValue(o={}){if(!isQuoteOrder(o))return o.quoteStatus||'Quote to send';const st=String(o.quoteStatus||'').trim();if(st)return st;if(o.status==='Cancelled')return 'Cancelled';if((o.confirmation||'No')==='Yes')return 'Quote sent / waiting customer';return 'Quote to send'}
 function quoteFollowUpData(){const savedQuoteIds=new Set(dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)).map(o=>o.id));const activeRequests=activeRequestInboxItems();const draftQuotes=activeRequests.filter(r=>String(r.status||'').toLowerCase()==='draft quote'&&!savedQuoteIds.has(r.convertedOrderId||r.draftOrderId));const requests=activeRequests.filter(r=>!['converted','draft quote','parked','cancelled'].includes(String(r.status||'new').toLowerCase()));const quotes=dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o));return {requests,draftQuotes,toSend:quotes.filter(o=>quoteStatusValue(o)==='Quote to send'),waiting:quotes.filter(o=>quoteStatusValue(o)==='Quote sent / waiting customer'),ready:quotes.filter(o=>quoteStatusValue(o)==='Customer replied / ready to convert'),parked:quotes.filter(o=>['Parked','Cancelled'].includes(quoteStatusValue(o)))}}
@@ -1899,6 +1887,7 @@ function renderAdmin(panel='system'){
       <button onclick="showAdminPanel('products')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button>
       <button onclick="showAdminPanel('structures')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button>
       <button onclick="showAdminPanel('supabase')"><strong>Supabase</strong><small>Login, session and RLS profile test</small></button>
+      <button onclick="clearLocalFinanceData()"><strong>Clear test data / Reset local data</strong><small>Admin-only browser reset tool</small></button>
       <button onclick="clearAllTestOrders()"><strong>Move test orders to bin</strong><small>Soft-delete test orders only</small></button>
     </div>`;
   }
@@ -2121,11 +2110,13 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44C1 JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2C JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
 </html>
+
+
 
 
 

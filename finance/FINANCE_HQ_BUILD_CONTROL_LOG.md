@@ -1122,3 +1122,16 @@ What was not changed:
 - Kept Quote follow-up logic, cards, counts, quote status logic, quickQuoteUpdate(), Request Inbox, Supabase sync, stock, pricing, fulfilment, and styling unchanged.
 - Updated visible version markers to v44E2B.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
+## v44E2C Live Operational Mode Cleanup
+- Date: 2026-06-18
+- Scope: Hosted/mobile local persistence for live operational use.
+- Removed the Start/top public prototype warning banner.
+- Disabled public prototype mode so hosted Finance HQ loads and saves local orders, request inbox, stock, stock movements, thresholds, and custom stock normally.
+- Simplified loadOrdersSafely() and saveLocal() so hosted pages no longer remove orders/request inbox.
+- Request Inbox now loads from px_request_inbox_v1 on hosted pages.
+- Kept Clear test data / Reset local data available from Admin/System Map using existing clearLocalFinanceData().
+- Removed renderPrototypeDataWarning() from the normal renderAll() path.
+- Did not change isStockAffectingOrder(), recalcStock(), Past order stock behaviour, Live order stock behaviour, pricing, fulfilment, quote lifecycle, Request Hub parser, or Supabase schema.
+- Updated visible version markers to v44E2C.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
