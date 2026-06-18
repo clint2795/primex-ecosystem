@@ -1073,3 +1073,26 @@ What changed:
 What was not changed:
 - No Supabase sync control flow, table targets, lookup/upsert logic, RLS, SQL, pricing logic, totals logic, stock calculation, fulfilment logic, courier/postage logic, or Retatrutide fulfilment rules were changed.
 - finance/config.js, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
+
+## v44E1 Auto Sync After Local Quote/Order Save
+Purpose: After a successful local Save quote/order, attempt the existing quote/order database sync automatically when a Supabase user is logged in.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated visible build markers to v44E1.
+- Kept local Save quote/order as the primary operational save.
+- Added automatic post-save quote/order database sync using the existing quotes_orders and quote_order_items sync path.
+- Kept the manual Save current quote/order to database button as retry/manual sync.
+- Added visible order database sync states: Local only, Database synced, Sync failed / retry needed, and Partial item sync.
+- Logged-out or unconfigured Supabase state no longer blocks local save; it records/shows local-only status.
+
+What was not changed:
+- No request sync behavior was changed.
+- No stock_items, stock_movements, follow_ups, or audit_events writes were added.
+- No SQL was run.
+- No pricing, totals, stock calculation, fulfilment, message template, courier/postage, Reta/BAC/support, or product rule logic was changed.
+- finance/config.js, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
