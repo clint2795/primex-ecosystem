@@ -1031,3 +1031,27 @@ What was not changed:
 - No RLS policy logic was changed.
 - No stock, pricing, fulfilment, product rule, or customer message logic was changed.
 - `finance/index.html`, `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
+
+## v44D4A UX Encoding Quote Workflow Patch
+Purpose: First safe UX patch after the v44D3 workflow audit.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated visible build markers to v44D4A.
+- Reduced visible mojibake in rendered UI strings, including broken quantity markers, separators, arrows, dashes, checkmarks, and loading text.
+- Kept currency display on the stable \\u00a3 formatter path so pound signs continue to render as the GBP pound symbol.
+- Changed the local save area wording to `Save quote/order` and added helper text explaining that Quote / enquiry records appear in Quote follow-up after local save.
+- Added Quote / enquiry-specific customer message generation titled `Quote / Availability Check`.
+- Kept live order customer confirmation titled `Order Confirmation`.
+- Changed Quote / enquiry packing wording to estimated/preview language while leaving live order packing wording intact.
+
+What was not changed:
+- No pricing, totals, stock calculation, Supabase sync, order sync, courier/postage, fulfilment, product rule, or database logic was changed.
+- No auto-sync was added.
+- No SQL was run.
+- `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
