@@ -1055,3 +1055,21 @@ What was not changed:
 - No SQL was run.
 - `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
 
+
+
+## v44D4B Source Data Encoding Cleanup
+Purpose: Clean known mojibake at the source-string/title layer before UI rendering, local save payloads, generated messages, and manual quote/order database sync item titles.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Added cleanDisplayText() for known broken display sequences: broken multiplication marks, separators, dashes, arrows, checkmarks, ellipsis, and pound symbols.
+- Added cleanOrderLine() / cleanOrderLines() so locally saved order lines keep cleaned display names and notes without changing product keys, quantities, prices, totals, or stock counts.
+- Routed product, support, structure, Request Inbox quote conversion, line titles, packing labels, generated quote/order message item names, and quote_order_items title/payload text through the cleanup path.
+- Updated visible build markers to v44D4B.
+
+What was not changed:
+- No Supabase sync control flow, table targets, lookup/upsert logic, RLS, SQL, pricing logic, totals logic, stock calculation, fulfilment logic, courier/postage logic, or Retatrutide fulfilment rules were changed.
+- finance/config.js, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
