@@ -1006,3 +1006,28 @@ What changed:
 What was not changed:
 - No pricing, totals, stock, Supabase sync, order sync, fulfilment, product rule, or customer message template logic was changed.
 - `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
+## v44D3B Order Sync Table Grants SQL Patch
+Purpose: Fix v44D3 manual quote/order database sync permission failure: `Order lookup failed: permission denied for table quotes_orders`.
+
+Cause:
+- RLS policies exist for `quotes_orders` and `quote_order_items`, but the authenticated role is missing base table grants.
+
+Files changed:
+- finance/supabase/schema_patch_v44D3B_order_sync_grants.sql
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Added a SQL permissions patch granting `select`, `insert`, and `update` on `quotes_orders` to `authenticated`.
+- Added a SQL permissions patch granting `select`, `insert`, and `update` on `quote_order_items` to `authenticated`.
+- v44D3B is SQL permissions only.
+- Enables authenticated staff to reach `quotes_orders` and `quote_order_items` for v44D3 manual sync.
+- RLS still controls actual access via `app_private.can_read_finance()` and `app_private.is_staff()`.
+- No delete grant is included.
+
+What was not changed:
+- No app code was changed.
+- No SQL has been run yet for v44D3B.
+- No RLS policy logic was changed.
+- No stock, pricing, fulfilment, product rule, or customer message logic was changed.
+- `finance/index.html`, `finance/config.js`, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
