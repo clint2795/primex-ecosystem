@@ -1096,3 +1096,29 @@ What was not changed:
 - No SQL was run.
 - No pricing, totals, stock calculation, fulfilment, message template, courier/postage, Reta/BAC/support, or product rule logic was changed.
 - finance/config.js, planner, order-request, product-info, indexbackup, and old Desktop folders were not touched.
+
+
+## v44E2 Quote Lifecycle Polish
+Purpose: Improve saved quote lifecycle status handling without changing Request Inbox, pricing, stock, fulfilment, schema, or sync architecture.
+
+Files changed:
+- finance/index.html
+- finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
+
+What changed:
+- Updated visible build markers to v44E2.
+- Added saved quote quick actions: Move back to Quote to send and Cancel quote.
+- Kept existing saved quote actions: Mark quote sent, Customer replied, Park, and Convert to live.
+- Updated quickQuoteUpdate() to keep local save primary and then trigger existing autoSyncSavedQuoteOrder(id) when available.
+- Updated Communication Centre first row label to Quote message for Quote / enquiry records only. Live order wording remains Order confirmation.
+
+What was not changed:
+- Request Hub JSON, Request Inbox parser, Convert Request to Quote wiring, pricing/catalogue, stock deduction, fulfilment rules, Supabase schema, courier/payment integration, visual redesign, and finance/indexbackup.html were not touched.
+
+## v44E2B Start Screen Quote Follow-up Priority
+- Date: 2026-06-18
+- Scope: Start screen layout priority adjustment only.
+- Moved existing Quote follow-up section directly after the main Today queue section and before Quick actions.
+- Kept Quote follow-up logic, cards, counts, quote status logic, quickQuoteUpdate(), Request Inbox, Supabase sync, stock, pricing, fulfilment, and styling unchanged.
+- Updated visible version markers to v44E2B.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
