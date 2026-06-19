@@ -1135,3 +1135,13 @@ What was not changed:
 - Did not change isStockAffectingOrder(), recalcStock(), Past order stock behaviour, Live order stock behaviour, pricing, fulfilment, quote lifecycle, Request Hub parser, or Supabase schema.
 - Updated visible version markers to v44E2C.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
+## v44E2D Kit Display Double-count Fix
+- Date: 2026-06-19
+- Scope: Support / kit-build stock display only.
+- Updated supportMaterialsHTML(m) so it no longer adds the full kitBuildDeductionsFromLines() result on top of current.materials.
+- current.materials remains the source for BAC/U100/wipes/box/insert/inlay quantities.
+- Retatrutide vial count is still shown by adding only RTA20 vial count from RTA20_KIT product lines.
+- Did not change retaMaterials(), autoMaterialsFromLines(), productContentsFromLines(), actual stock deduction, pricing, fulfilment, quote lifecycle, Request Hub parser, Supabase schema, or page layout.
+- Updated visible version markers to v44E2D.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
