@@ -1145,3 +1145,14 @@ What was not changed:
 - Did not change retaMaterials(), autoMaterialsFromLines(), productContentsFromLines(), actual stock deduction, pricing, fulfilment, quote lifecycle, Request Hub parser, Supabase schema, or page layout.
 - Updated visible version markers to v44E2D.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
+## v44E2E Past Order Entry Cleanup
+- Date: 2026-06-19
+- Scope: Small past-order/live-entry UX cleanup only.
+- Updated supportMaterialsHTML(m) to use a display-only support material copy that hides BOX, INSERT, and INLAY from the customer-facing Support / kit-build display.
+- Did not change current.materials, retaMaterials(), autoMaterialsFromLines(), recalcStock(), or backend/internal stock deduction behaviour.
+- Updated the paymentStatus listener to re-render the Communication Centre when payment status changes, so Paid/Awaiting payment messaging refreshes immediately.
+- Added a quoteStatusField wrapper and hide/show handling so Quote follow-up is visible only for Quote / enquiry orders and hidden for Past order, Live order, and Test order.
+- Updated visible version markers to v44E2E.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction rules, fulfilment rules, Request Hub parser, Supabase schema, quote conversion, or visual redesign changes.
