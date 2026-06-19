@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2F Order Page Flow Cleanup</title>
+<title>PrimeX Finance HQ &middot; v44E2G Guided Past Order Entry</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -159,7 +159,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2F</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2G</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -209,7 +209,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
   <main id="view-order" class="view">
     <section class="card">
-      <div class="section-title"><div><h2>Order details</h2><p>Customer, order type, and internal notes.</p></div><span class="tag" id="activeOrderTag">New</span></div>
+      <div class="section-title"><div><h2>Step 1 Customer</h2><p>Customer, date, order type, and source.</p></div><span class="tag" id="activeOrderTag">New</span></div>
       <div class="grid four">
         <div class="field"><label>Order type</label><select id="orderType"><option>Live order</option><option>Quote / enquiry</option><option>Past order</option><option>Test order</option></select><div id="orderTypeNotice" class="note" style="margin-top:8px"></div></div>
         <div class="field"><label>Order ref</label><input id="orderRef" class="readonly" readonly></div>
@@ -235,7 +235,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     </section>
 
     <section class="card">
-      <div class="section-title"><div><h2>Add order items</h2><p>Choose the product/pathway first, then add BAC water / support items if included on this order.</p></div></div>
+      <div class="section-title"><div><h2>Step 2 Items</h2><p>Choose products/pathways, then add support items only when needed.</p></div></div>
       <div class="grid two" style="margin-bottom:10px">
         <div class="field"><label>Price tier</label><select id="priceTier"><option value="standard">Planner / standard - full price</option><option value="existing">Existing / private - relationship price</option><option value="custom">Custom</option><option value="internal">Internal / close - owner-approved only</option></select></div>
         <div class="field full"><div id="priceTierNote" class="note"></div></div>
@@ -286,12 +286,12 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     </section>
 
     <section class="card">
-      <div class="section-title"><div><h2>Order summary</h2><p>Current items on this order.</p></div><button class="btn subtle" id="clearItems">Clear items</button></div>
+      <div class="section-title"><div><h2>Order summary</h2><p>Review the current items before payment/save.</p></div><button class="btn subtle" id="clearItems">Clear items</button></div>
       <div id="orderLines"></div>
     </section>
 
-    <section class="card materials-card">
-      <div class="section-title"><div><h2>Packing contents</h2><p>Generated from the items added above.</p></div></div>
+    <section class="card materials-card" id="packingSection">
+      <div class="section-title"><div><h2>Step 4 Optional details</h2><p>Packing preview and manual packing changes when needed.</p></div></div>
       <div id="materialsSummary" class="note good" style="margin-top:10px"></div>
       <details class="payment-advanced" style="margin-top:10px">
         <summary>Change packing list manually</summary>
@@ -314,7 +314,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
 
     <section class="card">
-      <div class="section-title"><div><h2>Final check</h2><p>Confirm totals, payment, messages, then save.</p></div></div>
+      <div class="section-title"><div><h2>Step 3 Payment / Save</h2><p>Confirm totals, payment/status, then save locally first.</p></div></div>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Totals</div><div id="totalsBox"></div></section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Payment & release</div>
         <div class="grid two" style="margin-top:10px">
@@ -323,14 +323,14 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <details class="field full payment-advanced"><summary>Payment / release notes</summary><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></details>
         </div>
       </section>
-      <section class="card slim" style="box-shadow:none"><details class="payment-advanced"><summary>Advanced message controls</summary>
+      <section class="card slim" id="advancedMessageControls" style="box-shadow:none"><details class="payment-advanced"><summary>Step 4 Optional details - advanced message controls</summary>
         <div class="note message-flow-note" style="margin:10px 0">Message flow: generate -> copy/send -> mark sent -> save.</div>
         <div class="grid two" style="margin-top:10px">
           <div class="field"><label>Order confirmation</label><select id="confirmationSent"><option>No</option><option>Yes</option><option>Confirmation needs regeneration</option></select></div>
           <div class="field"><label>Customer update</label><select id="updateSent"><option>No</option><option>Yes</option><option>Customer update needs regeneration</option></select></div>
           <details id="confirmationDetails" class="field full payment-advanced"><summary>Order confirmation message</summary><textarea id="confirmationMsg" class="readonly tall-textarea" readonly></textarea></details>
         </div>
-        <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn good" onclick="markConfirmationSentNow()">Mark confirmation sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark customer update sent</button></div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn hide" id="openConfirmationWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markConfirmationSentNow()">Mark confirmation sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark customer update sent</button></div>
       </details></section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Save quote/order</div><div class="tiny" style="margin-bottom:10px">Local save first. Quote / enquiry records appear in Quote follow-up after saving.</div>
         <details id="dangerousActions" class="payment-advanced" style="margin-bottom:10px"><summary>Cancel / void options</summary><label>Cancel / void reason</label><textarea id="voidReason" class="tall-textarea" placeholder="Reason if this order is cancelled or voided"></textarea><div class="btnrow" style="margin-top:10px"><button class="btn danger" id="voidOrder">Cancel / void order</button><button class="btn danger" id="deleteOrder">Move test to bin</button></div></details>
@@ -338,7 +338,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       </section>
     </section>
     <section class="card" id="fulfilmentSection">
-      <div class="section-title"><div><h2>Fulfilment / delivery</h2><p>Book, record and update postage, courier, collection, or drop-off work from one place.</p></div></div>
+      <div class="section-title"><div><h2>Step 4 Optional details</h2><p>Fulfilment, delivery, postage, courier, collection, or drop-off work.</p></div></div>
       <div class="grid two" style="margin-bottom:10px">
         <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Courier collection</option><option>Customer collection</option><option>Local drop-off</option></select><span class="tiny">Royal Mail collection means Royal Mail collects from us - not customer collection.</span></div>
       </div>
@@ -380,12 +380,12 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="releaseStatus" class="note" style="margin-bottom:10px"></div>
       <input id="internalFulfilmentWarning" type="hidden">
       <div class="field"><textarea id="fulfilmentMsg" class="readonly tall-textarea" readonly></textarea></div>
-      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genFulfilment">Generate customer update</button><button class="btn" id="copyFulfilment">Copy customer update</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark update sent</button></div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genFulfilment">Generate customer update</button><button class="btn" id="copyFulfilment">Copy customer update</button><button class="btn hide" id="openFulfilmentWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark update sent</button></div>
       </details>
     </section>
 
     <section class="card" id="communicationCentre">
-      <div class="section-title"><div><h2>Communication Centre</h2><p>Lifecycle messages for this order.</p></div><span class="tag">Scaffold</span></div>
+      <div class="section-title"><div><h2>Step 4 Optional details</h2><p>Communication Centre for quotes and live order messages.</p></div><span class="tag">Scaffold</span></div>
       <div id="communicationRows" class="comm-list"></div>
     </section>
 
@@ -592,8 +592,10 @@ const addressBlockField=document.getElementById('addressBlockField');
 const internalWarningWrap=document.getElementById('internalWarningWrap');
 const genFulfilment=document.getElementById('genFulfilment');
 const copyFulfilment=document.getElementById('copyFulfilment');
+const openFulfilmentWhatsApp=document.getElementById('openFulfilmentWhatsApp');
 const genConfirmation=document.getElementById('genConfirmation');
 const copyConfirmation=document.getElementById('copyConfirmation');
+const openConfirmationWhatsApp=document.getElementById('openConfirmationWhatsApp');
 const confirmationDetails=document.getElementById('confirmationDetails');
 const confirmationMsg=document.getElementById('confirmationMsg');
 const totalsBox=document.getElementById('totalsBox');
@@ -794,7 +796,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2F',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2G',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -916,7 +918,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2F JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2G JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -926,7 +928,7 @@ productNeedsCheckReviewed?.addEventListener('input',updateSinglePreview);
 supportUnitPrice.addEventListener('input',()=>{updateManualSupportPrice();markOrderMessagesStale('all')});
 paymentStatus.addEventListener('input',()=>{syncFulfilmentPaymentWarning();markCustomerUpdateStale();renderCommunicationCentre();if(val('paymentStatus')==='Paid')stageNudge('Payment marked paid. Check fulfilment stage and customer update.','info')});
 fulfilmentMethod.addEventListener('input',()=>{syncPostageDefaults();updateFulfilmentVisibility();markCustomerUpdateStale()});
-['customerRef','recPhone','postageService','labelStatus','trackingRef','labelQrRef','labelQrNote','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',markCustomerUpdateStale));
+['customerRef','recPhone','postageService','labelStatus','trackingRef','labelQrRef','labelQrNote','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{markCustomerUpdateStale();refreshWhatsAppButtons()}));
 labelStatus.addEventListener('change',()=>stageNudge('Postage or label status changed. Check customer update before release.','info'));
 trackingRef.addEventListener('change',()=>{if(val('trackingRef'))stageNudge('Tracking/reference added. Tracking update may need sending.','info')});
 customerRef.addEventListener('input',markConfirmationStale);
@@ -938,7 +940,7 @@ orderType.addEventListener('input',renderOrder);modeSingle.onclick=()=>showLineM
 addProductBtn.onclick=addProduct;addSupportItemBtn.onclick=addSupportItem;addStructureBtn.onclick=addStructure;
 clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};packingManualOverride=false;packingNeedsReview=false;current.packingManualOverride=false;current.packingNeedsReview=false;syncMaterialsToInputs();markOrderMessagesStale('all');renderOrder()};
 resetPackingAuto.onclick=()=>{resetPackingToAutoRule();markOrderMessagesStale('all')};saveOrder.onclick=saveOrderNow;saveOrderToDatabase?.addEventListener('click',saveCurrentQuoteOrderToDatabase);archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order archived as complete')};voidOrder.onclick=voidCurrentOrder;deleteOrder.onclick=deleteCurrentOrder;if(newOrderTop)newOrderTop.onclick=()=>{newOrder();showView('order')}; if(newOrderStart)newOrderStart.onclick=()=>{newOrder();showView('order')};
-genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>{if(isRoyalMailFormMethod())window.open('https://send.royalmail.com/','_blank')};genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>{copyText(confirmationMsg.value);showToast('Confirmation copied - send it, then mark sent')};
+genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>{if(isRoyalMailFormMethod())window.open('https://send.royalmail.com/','_blank')};genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;openFulfilmentWhatsApp?.addEventListener('click',()=>openWhatsAppMessage(fulfilmentMsg));genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>{copyText(confirmationMsg.value);showToast('Confirmation copied - send it, then mark sent')};openConfirmationWhatsApp?.addEventListener('click',()=>openWhatsAppMessage(confirmationMsg));
 addStockReceived.onclick=addStockReceivedNow;saveStockAdjustment.onclick=saveStockAdjustmentNow;saveStockItem?.addEventListener('click',saveStockItemNow);clearStockItemForm?.addEventListener('click',clearStockItemEditor);stockShowInactive?.addEventListener('input',renderStockItemOptions);stockStatusFilter?.addEventListener('input',()=>{currentStockStatus=stockStatusFilter.value;renderStock()});clearLocalDataBtn?.addEventListener('click',clearLocalFinanceData);exportBackupBtn?.addEventListener('click',exportFinanceBackup);importBackupInput?.addEventListener('change',e=>importFinanceBackupFile(e.target.files?.[0]));importRequestBtn?.addEventListener('click',importRequestInboxFromText);createLocalTestRequestBtn?.addEventListener('click',createLocalTestRequest);clearRequestImportBtn?.addEventListener('click',()=>{if(requestImportText)requestImportText.value='';setRequestImportStatus('',null);showToast('Request paste box cleared')});
 ['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{syncInputsToMaterials();if(!suppressPackingOverride)markPackingManualOverride();markOrderMessagesStale('all');renderOrder()}));
 postageCharge.addEventListener('input',()=>{renderOrder();markOrderMessagesStale('all')});
@@ -1309,7 +1311,7 @@ function updateOrderTypeNotice(){
   const msg=t==='Quote / enquiry'
     ?'Quote / enquiry: pricing or availability check only. Convert to a live order when the customer confirms.'
     :t==='Past order'
-      ?'Past order: record only. Does not affect current queues or stock.'
+      ?'Past order: record only. Does not affect current queues, fulfilment, or stock.'
       :t==='Test order'
         ?'Test order: practice/check only. Does not affect stock.'
         :'Live order: active order. Affects queues, fulfilment, and stock.';
@@ -1322,14 +1324,21 @@ function updateOrderTypeNotice(){
 }
 function renderOrder(){
   updateOrderTypeNotice();
+  const isPastOrder=val('orderType')==='Past order';
   if(convertQuoteBtn)convertQuoteBtn.style.display=val('orderType')==='Quote / enquiry'?'':'none';
   orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+lineTitle(l)+'</strong><span class="tiny">'+lineSub(l)+(l.review?' - Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(l.kind==='product'?l.price*l.qty:l.price)+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';
   materialsSummary.innerHTML=productContentsHTML(productContentsFromLines())+supportMaterialsHTML(current.materials)+packingStateHTML();
   let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');
   totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>';
   deleteOrder.style.display=val('orderType')==='Test order'?'':'none';
+  setVisible(document.getElementById('packingSection'),!isPastOrder);
+  setVisible(document.getElementById('communicationCentre'),!isPastOrder);
+  setVisible(document.getElementById('advancedMessageControls'),!isPastOrder);
+  setVisible(dangerousActions,!isPastOrder);
+  setVisible(archiveOrder,!isPastOrder);
   updateFulfilmentVisibility();
   renderSupportSuggestions();
+  refreshWhatsAppButtons();
 }
 function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines(true);markOrderMessagesStale('all');renderOrder()}
 function autoMaterialsFromLines(){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20_KIT')addMats(mats,retaMaterials(l.qty));if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){const p=PRODUCT_RULES[l.pid];mats[p.materialKey]+=supportMaterialQty(p,l.qty)}if(l.kind==='structure')addMats(mats,structureMaterials(l.sid))});return mats}
@@ -2024,6 +2033,26 @@ function markCustomerUpdateSentNow(){
   showToast('Customer update marked sent - save order');
 }
 
+function cleanWhatsAppPhone(raw){
+  let phone=String(raw||'').trim().replace(/[^\d+]/g,'');
+  if(phone.startsWith('+'))phone=phone.slice(1);
+  if(phone.startsWith('00'))phone=phone.slice(2);
+  if(phone.startsWith('0'))phone='44'+phone.slice(1);
+  return phone.replace(/\D/g,'');
+}
+function canOpenWhatsApp(messageEl){return !!(cleanWhatsAppPhone(val('recPhone'))&&String(messageEl?.value||'').trim())}
+function refreshWhatsAppButtons(){
+  openConfirmationWhatsApp?.classList.toggle('hide',!canOpenWhatsApp(confirmationMsg));
+  openFulfilmentWhatsApp?.classList.toggle('hide',!canOpenWhatsApp(fulfilmentMsg));
+}
+function openWhatsAppMessage(messageEl){
+  const phone=cleanWhatsAppPhone(val('recPhone'));
+  const message=String(messageEl?.value||'').trim();
+  if(!phone){showToast('Add customer phone / WhatsApp number first');refreshWhatsAppButtons();return}
+  if(!message){showToast('Generate the message first');refreshWhatsAppButtons();return}
+  window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(message),'_blank','noopener');
+  showToast('WhatsApp opened - review before sending');
+}
 function generateConfirmation(){
   renderOrder();
   set('confirmationSent','No');
@@ -2039,6 +2068,7 @@ function generateConfirmation(){
     if(confirmationDetails)confirmationDetails.open=true;
     autoExpandTextarea(confirmationMsg);
     setTimeout(()=>confirmationDetails?.scrollIntoView({behavior:'smooth',block:'center'}),0);
+    refreshWhatsAppButtons();
     showToast('Quote message generated');
     return;
   }
@@ -2053,6 +2083,7 @@ function generateConfirmation(){
   if(confirmationDetails)confirmationDetails.open=true;
   autoExpandTextarea(confirmationMsg);
   setTimeout(()=>confirmationDetails?.scrollIntoView({behavior:'smooth',block:'center'}),0);
+  refreshWhatsAppButtons();
   showToast('Order confirmation generated')
 }
 function titleCaseLine(s){return String(s||'').trim().replace(/\s+/g,' ').toLowerCase().replace(/\b([a-z])/g,m=>m.toUpperCase())}
@@ -2112,17 +2143,19 @@ function syncFulfilmentPaymentWarning(){
   return warn;
 }
 function legacyMarkCustomerUpdateStale(){markCustomerUpdateStale()}
-function generateFulfilment(){set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs - Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+customerStatusText(o)+'\nFulfilment: '+customerFulfilmentMethodText(o);if(shouldShowCustomerPostageService(o)&&o.postageService)msg+='\nPostage / courier service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg);autoExpandTextarea(fulfilmentMsg);syncFulfilmentPaymentWarning();setTimeout(()=>fulfilmentMessageGroup?.scrollIntoView({behavior:'smooth',block:'center'}),0);showToast('Fresh customer update generated - mark sent after sending')}
-function copyCustomerUpdate(){copyText(fulfilmentMsg.value);showToast('Customer update copied - send it, then mark update sent')}
+function generateFulfilment(){set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs - Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+customerStatusText(o)+'\nFulfilment: '+customerFulfilmentMethodText(o);if(shouldShowCustomerPostageService(o)&&o.postageService)msg+='\nPostage / courier service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg);autoExpandTextarea(fulfilmentMsg);syncFulfilmentPaymentWarning();setTimeout(()=>fulfilmentMessageGroup?.scrollIntoView({behavior:'smooth',block:'center'}),0);refreshWhatsAppButtons();showToast('Fresh customer update generated - mark sent after sending')}
+function copyCustomerUpdate(){copyText(fulfilmentMsg.value);refreshWhatsAppButtons();showToast('Customer update copied - send it, then mark update sent')}
 function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2F JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2G JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
 </html>
+
+
 
 
 

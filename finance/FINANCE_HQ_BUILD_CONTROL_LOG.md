@@ -1170,3 +1170,16 @@ What was not changed:
 - Updated visible version markers to v44E2F.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction, fulfilment data/rules, Request Hub parser, Supabase schema, quote conversion logic, payment/message templates, product logic, or localStorage keys changed.
+
+## v44E2G Guided Past Order Entry + WhatsApp Helper
+- Date: 2026-06-19
+- Scope: Mobile Past Order guided entry and manual WhatsApp open-link helper.
+- Reframed Order page headings toward Step 1 Customer, Step 2 Items, Step 3 Payment / Save, and Step 4 Optional details while preserving existing inputs, IDs, and listeners.
+- Past order now keeps the normal entry flow focused on customer/date/source/order type, items, order summary, totals/payment/status, save, and sync status.
+- Past order hides the packing section, fulfilment section, Communication Centre, advanced message controls, dangerous/cancel controls, and archive button from the main flow without changing saved data or stock behaviour.
+- Added UK-style cleanWhatsAppPhone(), refreshWhatsAppButtons(), and openWhatsAppMessage() helpers.
+- Added manual Open WhatsApp buttons beside confirmation and fulfilment/customer update message controls; buttons only appear when a customer phone and generated message text exist, and they open WhatsApp without auto-sending.
+- Did not change Supabase/database sync logic; local save remains first.
+- Updated visible version markers to v44E2G.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, fulfilment rules/data, Request Hub parser, Supabase schema, quote conversion, product logic, or localStorage keys changed.
