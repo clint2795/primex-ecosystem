@@ -1204,3 +1204,26 @@ What was not changed:
 - Updated visible version markers to v44E2I.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or message template wording changed.
+
+## v44E2J Optional Details Collapse + Compact Polish
+- Date: 2026-06-19
+- Scope: Scoped UX polish for the v44E2I Optional Details area.
+- Added inner optionalDetailsToggle details element inside optionalDetailsSection; Optional Details is closed by default for new Live/Test orders and remains hidden for Past order via existing visibility logic.
+- Added optionalDetailsHasSavedData(), setOptionalDetailsOpen(), and openOptionalDetails() helpers.
+- Auto-opens Optional Details when generating confirmation/update messages, changing fulfilment away from hold, editing manual packing/material inputs, or loading a saved order with meaningful optional data.
+- Made Optional Details, Packing preview, materials summary, and Communication Centre rows visually quieter/compact without changing calculations or message logic.
+- Updated visible version markers to v44E2J.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or message template wording changed.
+
+## v44E2K Communication Centre Task Polish
+- Date: 2026-06-19
+- Scope: Scoped UX/operator-flow polish for Communication Centre rows, Start screen message actions, and Optional Details visual density.
+- Updated commRow() so action-ready rows show task-first actions: Generate message, Open WhatsApp when a customer phone and generated message exist, and Mark sent.
+- Moved Copy, Mark already sent, and Skip for now into a low-weight per-row Advanced message controls details area instead of the main action row.
+- Kept not-ready, not-needed, sent, already-sent, and skipped Communication Centre rows status-only.
+- Updated Start screen message task labels to Send confirmation, Send customer update, and Send tracking update, with only ready message actions rendered.
+- Added scoped CSS so Packing preview, Fulfilment / delivery, and Communication Centre inside Optional Details render flatter and more toolbox-like while preserving v44E2J collapsed-by-default behaviour.
+- Updated visible version markers to v44E2K.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or message template wording changed.
