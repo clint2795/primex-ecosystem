@@ -1156,3 +1156,17 @@ What was not changed:
 - Updated visible version markers to v44E2E.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction rules, fulfilment rules, Request Hub parser, Supabase schema, quote conversion, or visual redesign changes.
+
+## v44E2F Order Page Flow Cleanup
+- Date: 2026-06-19
+- Scope: Small Order page visibility/order cleanup for mobile and historical entry.
+- Moved the existing Final check / Payment & release / Save quote/order block before Fulfilment / delivery and Communication Centre so the page now follows customer/order, items, summary, packing, payment/save, fulfilment, communication.
+- Added fulfilmentSection and requestIntakeHelper visibility handling without deleting or changing stored fulfilment/request fields.
+- Past order and Quote / enquiry now hide the Fulfilment / delivery section from the normal entry flow; Live order and Test order keep fulfilment available.
+- Request intake notes now show only for Quote / enquiry or records linked to a source request.
+- Stopped updateFulfilmentVisibility() from opening the customer update message by default.
+- Added mobile CSS so Communication Centre rows stack cleanly and final action buttons become easier to tap, with Save quote/order prioritized.
+- Made the manual database sync button visually secondary while keeping its id and listener intact.
+- Updated visible version markers to v44E2F.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, fulfilment data/rules, Request Hub parser, Supabase schema, quote conversion logic, payment/message templates, product logic, or localStorage keys changed.
