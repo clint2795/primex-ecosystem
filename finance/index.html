@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2G Guided Past Order Entry</title>
+<title>PrimeX Finance HQ &middot; v44E2H Operator Wayfinding</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -150,7 +150,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .password-toggle-wrap{display:flex;gap:8px;align-items:stretch}.password-toggle-wrap input{min-width:0}.password-toggle-wrap .btn{white-space:nowrap;padding-left:12px;padding-right:12px}
 @media(max-width:480px){.password-toggle-wrap{display:grid;grid-template-columns:1fr}.password-toggle-wrap .btn{width:100%}}
 @media(max-width:760px){.supabase-status-grid{grid-template-columns:1fr}}
-@media(max-width:760px){.quote-followup-grid{grid-template-columns:1fr 1fr}}</style>
+#view-order>section.card:nth-of-type(1),#view-order>section.card:nth-of-type(2),#view-order>section.card:nth-of-type(3),#view-order>section.card:nth-of-type(5){border-left:3px solid #466f90}#view-order>section.card:nth-of-type(1) .section-title h2,#view-order>section.card:nth-of-type(2) .section-title h2,#view-order>section.card:nth-of-type(3) .section-title h2,#view-order>section.card:nth-of-type(5) .section-title h2{color:#f3f9ff}#packingSection,#fulfilmentSection,#communicationCentre{border-left:3px solid #253244;background:linear-gradient(180deg,rgba(14,20,30,.94),rgba(8,12,18,.94))}#packingSection .section-title h2,#fulfilmentSection .section-title h2,#communicationCentre .section-title h2{color:#cbd8e5}.comm-row.status-only{background:#0a1018;border-color:#1b2635;opacity:.82}.comm-row.status-only .comm-main p{color:var(--faint)}.comm-row.action-ready{background:#0d1722;border-color:#3b5d79;box-shadow:inset 0 0 0 1px rgba(110,168,216,.08)}.comm-row.action-ready .comm-main strong{color:#f2fbff}.final-actions #saveOrder{box-shadow:0 0 0 1px rgba(115,194,139,.2)}@media(max-width:760px){.quote-followup-grid{grid-template-columns:1fr 1fr}#view-order>section.card:nth-of-type(1),#view-order>section.card:nth-of-type(2),#view-order>section.card:nth-of-type(3),#view-order>section.card:nth-of-type(5){border-left-width:4px}#packingSection,#fulfilmentSection,#communicationCentre{opacity:.94}.comm-row.status-only{padding:9px}.comm-row.action-ready{padding:12px}.comm-row.action-ready .comm-actions .btn{width:100%}.final-actions #saveOrder{font-size:15px;padding:13px 12px}}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 </head>
@@ -159,7 +159,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2G</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2H</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -796,7 +796,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2G',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2H',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -918,7 +918,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2G JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2H JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1785,16 +1785,26 @@ function renderStartActionPrompts(){
   if(miss.length)prompts.push(['Missing tracking/label ref',miss.length]);
   startActionPrompts.innerHTML=prompts.length?prompts.map(p=>`<div class="summary-line"><span>${htmlEscape(p[0])}</span><strong>${p[1]}</strong></div>`).join(''):'<div class="muted">No urgent order prompts.</div>';
 }
+function messageActionsForOrder(o){
+  const actions=[];
+  const status=normalStatus(o);
+  const confirmationNeeded=(o.confirmation||'No')!=='Yes';
+  const updateReady=['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(status);
+  const trackingReady=!!String(o.tracking||o.trackingRef||'').trim();
+  const updateNeeded=(o.updateSent||'No')!=='Yes';
+  if(confirmationNeeded)actions.push({type:'confirmation needed',label:'Generate confirmation',onclick:`loadAndGenerateConfirmation(${jsArg(o.id)})`});
+  if(updateNeeded&&(updateReady||trackingReady))actions.push({type:trackingReady?'tracking update ready':'customer update ready',label:trackingReady?'Generate tracking update':'Generate update',onclick:`loadAndGenerateFulfilment(${jsArg(o.id)})`});
+  return actions;
+}
 function commsActionOrders(){
-  const live=dashboardOrders().filter(isOpenWork);
-  return live.filter(o=>(o.confirmation||'No')!=='Yes'||(o.fulfilmentMsg&&String(o.fulfilmentMsg).includes('needs regenerating'))||((o.updateSent||'No')!=='Yes'&&['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(normalStatus(o))));
+  return dashboardOrders().filter(isOpenWork).filter(o=>messageActionsForOrder(o).length);
 }
 function renderStartCommsActions(){
   if(!startCommsActions)return;
   const list=commsActionOrders();
   const shown=list.slice(0,5);
-  const extra=list.length>shown.length?`<div class="tiny" style="margin-top:8px">${list.length-shown.length} more message action${list.length-shown.length===1?'':'s'} in Queues / History.</div>`:'';
-  startCommsActions.innerHTML=shown.length?shown.map(o=>`<div class="queue-row"><div><strong>${htmlEscape(o.id)} - ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">Confirmation: ${htmlEscape(o.confirmation||'No')} - Customer update: ${htmlEscape(o.updateSent||'No')} - Status: ${htmlEscape(displayStatus(o))}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button>${(o.confirmation||'No')!=='Yes'?`<button class="btn" onclick="loadAndGenerateConfirmation(${jsArg(o.id)})">Generate confirmation</button>`:''}<button class="btn" onclick="loadAndGenerateFulfilment(${jsArg(o.id)})">Generate update</button></div></div>`).join('')+extra:'<div class="muted">No message actions pending.</div>';
+  const extra=list.length>shown.length?`<div class="tiny" style="margin-top:8px">${list.length-shown.length} more ready message action${list.length-shown.length===1?'':'s'} in Queues / History.</div>`:'';
+  startCommsActions.innerHTML=shown.length?shown.map(o=>{const actions=messageActionsForOrder(o);return `<div class="queue-row"><div><strong>${htmlEscape(o.id)} - ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">${htmlEscape(actions.map(a=>a.type).join(' + '))} - Status: ${htmlEscape(displayStatus(o))}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button>${actions.map(a=>`<button class="btn" onclick="${a.onclick}">${htmlEscape(a.label)}</button>`).join('')}</div></div>`}).join('')+extra:'<div class="muted">No ready message actions pending.</div>';
 }
 function renderStock(){
   if(!stockList)return;
@@ -1954,14 +1964,20 @@ function setCommStatus(key,status){
   showToast(commStatusLabel(status)+' - save order');
 }
 function commButton(label,onclick,disabled=false){return '<button type="button" class="btn '+(disabled?'subtle':'')+'" '+(disabled?'disabled aria-disabled="true" ':'')+'onclick="'+onclick+'">'+htmlEscape(label)+'</button>'}
+function commRowActionable(row){
+  return !row.disabled&&!['notReady','notNeeded','sent','alreadySent','skipped'].includes(row.status);
+}
 function commRow(row){
+  const actionable=commRowActionable(row);
   const actions=[];
-  if(row.generate)actions.push(commButton('Generate',row.generate,row.disabled));
-  if(row.copy)actions.push(commButton('Copy',row.copy,row.disabled));
-  if(row.markSent)actions.push(commButton('Mark sent',row.markSent,row.disabled));
-  actions.push(commButton('Mark already sent',"setCommStatus('"+row.key+"','alreadySent')",false));
-  actions.push(commButton('Skip for now',"setCommStatus('"+row.key+"','skipped')",false));
-  return '<div class="comm-row"><div class="comm-main"><strong>'+htmlEscape(row.title)+'</strong><p>'+htmlEscape(row.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(commStatusLabel(row.status))+'</span><div class="comm-actions">'+actions.join('')+'</div></div>';
+  if(actionable){
+    if(row.generate)actions.push(commButton('Generate',row.generate,false));
+    if(row.copy)actions.push(commButton('Copy',row.copy,false));
+    if(row.markSent)actions.push(commButton('Mark sent',row.markSent,false));
+    actions.push(commButton('Mark already sent',"setCommStatus('"+row.key+"','alreadySent')",false));
+    actions.push(commButton('Skip for now',"setCommStatus('"+row.key+"','skipped')",false));
+  }
+  return '<div class="comm-row '+(actionable?'action-ready':'status-only')+'"><div class="comm-main"><strong>'+htmlEscape(row.title)+'</strong><p>'+htmlEscape(row.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(commStatusLabel(row.status))+'</span>'+(actionable?'<div class="comm-actions">'+actions.join('')+'</div>':'')+'</div>';
 }
 function renderCommunicationCentre(){
   if(!communicationRows)return;
@@ -2149,7 +2165,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2G JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2H JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

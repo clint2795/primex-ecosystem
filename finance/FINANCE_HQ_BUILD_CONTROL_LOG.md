@@ -1183,3 +1183,13 @@ What was not changed:
 - Updated visible version markers to v44E2G.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction, fulfilment rules/data, Request Hub parser, Supabase schema, quote conversion, product logic, or localStorage keys changed.
+
+## v44E2H Communication Centre Cleanup + Operator Wayfinding
+- Date: 2026-06-19
+- Scope: Scoped UX/workflow polish for Communication Centre rows, Start screen message actions, and mobile order-page wayfinding.
+- Added commRowActionable() so disabled, not-ready, not-needed, sent, already-sent, and skipped communication rows render as status-only rows without action button stacks.
+- Start screen Messages to send now shows only ready/usable actions: confirmation needed, customer update ready, and tracking update ready.
+- Added small CSS hierarchy improvements for order step cards, optional/scaffold sections, status-only communication rows, action-ready communication rows, and mobile save emphasis.
+- Updated visible version markers to v44E2H.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or payment/message template wording changed.
