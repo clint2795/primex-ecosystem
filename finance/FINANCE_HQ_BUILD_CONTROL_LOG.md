@@ -1193,3 +1193,14 @@ What was not changed:
 - Updated visible version markers to v44E2H.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or payment/message template wording changed.
+
+## v44E2I Single Optional Details Flow
+- Date: 2026-06-19
+- Scope: Scoped Order page layout cleanup for one clear optional details flow.
+- Reordered Order page flow to Step 1 Customer, Step 2 Items, Order summary, Step 3 Payment / Save, and one Step 4 Optional Details wrapper.
+- Moved/grouped Packing preview, Advanced message controls, Fulfilment / delivery, Communication Centre, and Cancel / archive options under the single Optional Details wrapper while preserving existing IDs/listeners.
+- Payment message row is now disabled/status-only so parked/manual payment wording does not show Mark already sent or Skip for now.
+- Past order still hides non-essential optional operational sections; Quote / enquiry still hides fulfilment through existing visibility rules; Live order keeps fulfilment available.
+- Updated visible version markers to v44E2I.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or message template wording changed.

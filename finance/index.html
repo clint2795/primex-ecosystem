@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2H Operator Wayfinding</title>
+<title>PrimeX Finance HQ &middot; v44E2I Single Optional Details Flow</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -150,7 +150,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .password-toggle-wrap{display:flex;gap:8px;align-items:stretch}.password-toggle-wrap input{min-width:0}.password-toggle-wrap .btn{white-space:nowrap;padding-left:12px;padding-right:12px}
 @media(max-width:480px){.password-toggle-wrap{display:grid;grid-template-columns:1fr}.password-toggle-wrap .btn{width:100%}}
 @media(max-width:760px){.supabase-status-grid{grid-template-columns:1fr}}
-#view-order>section.card:nth-of-type(1),#view-order>section.card:nth-of-type(2),#view-order>section.card:nth-of-type(3),#view-order>section.card:nth-of-type(5){border-left:3px solid #466f90}#view-order>section.card:nth-of-type(1) .section-title h2,#view-order>section.card:nth-of-type(2) .section-title h2,#view-order>section.card:nth-of-type(3) .section-title h2,#view-order>section.card:nth-of-type(5) .section-title h2{color:#f3f9ff}#packingSection,#fulfilmentSection,#communicationCentre{border-left:3px solid #253244;background:linear-gradient(180deg,rgba(14,20,30,.94),rgba(8,12,18,.94))}#packingSection .section-title h2,#fulfilmentSection .section-title h2,#communicationCentre .section-title h2{color:#cbd8e5}.comm-row.status-only{background:#0a1018;border-color:#1b2635;opacity:.82}.comm-row.status-only .comm-main p{color:var(--faint)}.comm-row.action-ready{background:#0d1722;border-color:#3b5d79;box-shadow:inset 0 0 0 1px rgba(110,168,216,.08)}.comm-row.action-ready .comm-main strong{color:#f2fbff}.final-actions #saveOrder{box-shadow:0 0 0 1px rgba(115,194,139,.2)}@media(max-width:760px){.quote-followup-grid{grid-template-columns:1fr 1fr}#view-order>section.card:nth-of-type(1),#view-order>section.card:nth-of-type(2),#view-order>section.card:nth-of-type(3),#view-order>section.card:nth-of-type(5){border-left-width:4px}#packingSection,#fulfilmentSection,#communicationCentre{opacity:.94}.comm-row.status-only{padding:9px}.comm-row.action-ready{padding:12px}.comm-row.action-ready .comm-actions .btn{width:100%}.final-actions #saveOrder{font-size:15px;padding:13px 12px}}</style>
+#view-order>section.card:nth-of-type(1),#view-order>section.card:nth-of-type(2),#view-order>section.card:nth-of-type(3),#view-order>section.card:nth-of-type(4){border-left:3px solid #466f90}#view-order>section.card:nth-of-type(1) .section-title h2,#view-order>section.card:nth-of-type(2) .section-title h2,#view-order>section.card:nth-of-type(3) .section-title h2,#view-order>section.card:nth-of-type(4) .section-title h2{color:#f3f9ff}#optionalDetailsSection{border-left:3px solid #253244;background:linear-gradient(180deg,rgba(13,18,27,.94),rgba(7,11,17,.94))}#optionalDetailsSection .section-title h2{color:#cbd8e5}#optionalDetailsSection>.card.slim{background:#080d14;border-color:#172333;box-shadow:none}#optionalDetailsSection .subhead{color:#b2c5d6}.comm-row.status-only{background:#0a1018;border-color:#1b2635;opacity:.82}.comm-row.status-only .comm-main p{color:var(--faint)}.comm-row.action-ready{background:#0d1722;border-color:#3b5d79;box-shadow:inset 0 0 0 1px rgba(110,168,216,.08)}.comm-row.action-ready .comm-main strong{color:#f2fbff}.final-actions #saveOrder{box-shadow:0 0 0 1px rgba(115,194,139,.2)}@media(max-width:760px){.quote-followup-grid{grid-template-columns:1fr 1fr}#view-order>section.card:nth-of-type(1),#view-order>section.card:nth-of-type(2),#view-order>section.card:nth-of-type(3),#view-order>section.card:nth-of-type(4){border-left-width:4px}#optionalDetailsSection{opacity:.94}.comm-row.status-only{padding:9px}.comm-row.action-ready{padding:12px}.comm-row.action-ready .comm-actions .btn{width:100%}.final-actions #saveOrder{font-size:15px;padding:13px 12px}}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 </head>
@@ -159,7 +159,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2H</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2I</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -290,29 +290,6 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="orderLines"></div>
     </section>
 
-    <section class="card materials-card" id="packingSection">
-      <div class="section-title"><div><h2>Step 4 Optional details</h2><p>Packing preview and manual packing changes when needed.</p></div></div>
-      <div id="materialsSummary" class="note good" style="margin-top:10px"></div>
-      <details class="payment-advanced" style="margin-top:10px">
-        <summary>Change packing list manually</summary>
-        <div class="tiny" style="margin-bottom:10px">Use only if the real pack is different from the generated list.</div>
-      <div class="grid three">
-        <div class="field"><label>3ml BAC water</label><input id="mat3ml" type="number" min="0" value="0"></div>
-        <div class="field"><label>10ml BAC water</label><input id="mat10ml" type="number" min="0" value="0"></div>
-        <div class="field"><label>U100 10-pack</label><input id="matU100" type="number" min="0" value="0"></div>
-        <div class="field"><label>Alcohol wipes</label><input id="matWipes" type="number" min="0" value="0"></div>
-        <div class="field"><label>Magnetic boxes</label><input id="matBoxes" type="number" min="0" value="0"></div>
-        <div class="field"><label>Inserts</label><input id="matInserts" type="number" min="0" value="0"></div>
-        <div class="field"><label>Inlay cards</label><input id="matInlays" type="number" min="0" value="0"></div>
-        <div class="field"><label>Materials surcharge</label><input id="materialsCharge" type="number" step="0.01" value="0"></div>
-        <details class="field full payment-advanced"><summary>Add / edit packing note</summary><label>Packing notes</label><textarea id="packingNotes" class="tall-textarea" placeholder="Optional notes for whoever is packing this order"></textarea></details>
-      </div>
-      <div class="tiny" style="margin-top:10px">Restores the generated packing list.</div>
-      <div class="btnrow" style="margin-top:12px"><button class="btn subtle" id="resetPackingAuto">Reset to generated packing list</button></div>
-      </details>
-    </section>
-
-
     <section class="card">
       <div class="section-title"><div><h2>Step 3 Payment / Save</h2><p>Confirm totals, payment/status, then save locally first.</p></div></div>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Totals</div><div id="totalsBox"></div></section>
@@ -323,7 +300,36 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <details class="field full payment-advanced"><summary>Payment / release notes</summary><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></details>
         </div>
       </section>
-      <section class="card slim" id="advancedMessageControls" style="box-shadow:none"><details class="payment-advanced"><summary>Step 4 Optional details - advanced message controls</summary>
+      <section class="card slim" style="box-shadow:none"><div class="subhead">Save quote/order</div><div class="tiny" style="margin-bottom:10px">Local save first. Quote / enquiry records appear in Quote follow-up after saving.</div>
+        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn good" id="saveOrder">Save quote/order</button><button class="btn subtle" id="saveOrderToDatabase">Save current quote/order to database</button></div><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
+      </section>
+    </section>
+
+    <section class="card" id="optionalDetailsSection">
+      <div class="section-title"><div><h2>Step 4 Optional Details</h2><p>Packing, fulfilment, messages, and exception controls when needed.</p></div><span class="tag">Optional</span></div>
+      <section class="card slim materials-card" id="packingSection">
+        <div class="subhead">Packing preview</div>
+        <div id="materialsSummary" class="note good" style="margin-top:10px"></div>
+        <details class="payment-advanced" style="margin-top:10px">
+          <summary>Change packing list manually</summary>
+          <div class="tiny" style="margin-bottom:10px">Use only if the real pack is different from the generated list.</div>
+        <div class="grid three">
+          <div class="field"><label>3ml BAC water</label><input id="mat3ml" type="number" min="0" value="0"></div>
+          <div class="field"><label>10ml BAC water</label><input id="mat10ml" type="number" min="0" value="0"></div>
+          <div class="field"><label>U100 10-pack</label><input id="matU100" type="number" min="0" value="0"></div>
+          <div class="field"><label>Alcohol wipes</label><input id="matWipes" type="number" min="0" value="0"></div>
+          <div class="field"><label>Magnetic boxes</label><input id="matBoxes" type="number" min="0" value="0"></div>
+          <div class="field"><label>Inserts</label><input id="matInserts" type="number" min="0" value="0"></div>
+          <div class="field"><label>Inlay cards</label><input id="matInlays" type="number" min="0" value="0"></div>
+          <div class="field"><label>Materials surcharge</label><input id="materialsCharge" type="number" step="0.01" value="0"></div>
+          <details class="field full payment-advanced"><summary>Add / edit packing note</summary><label>Packing notes</label><textarea id="packingNotes" class="tall-textarea" placeholder="Optional notes for whoever is packing this order"></textarea></details>
+        </div>
+        <div class="tiny" style="margin-top:10px">Restores the generated packing list.</div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn subtle" id="resetPackingAuto">Reset to generated packing list</button></div>
+        </details>
+      </section>
+
+      <section class="card slim" id="advancedMessageControls" style="box-shadow:none"><details class="payment-advanced"><summary>Advanced message controls</summary>
         <div class="note message-flow-note" style="margin:10px 0">Message flow: generate -> copy/send -> mark sent -> save.</div>
         <div class="grid two" style="margin-top:10px">
           <div class="field"><label>Order confirmation</label><select id="confirmationSent"><option>No</option><option>Yes</option><option>Confirmation needs regeneration</option></select></div>
@@ -332,13 +338,9 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         </div>
         <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn hide" id="openConfirmationWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markConfirmationSentNow()">Mark confirmation sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark customer update sent</button></div>
       </details></section>
-      <section class="card slim" style="box-shadow:none"><div class="subhead">Save quote/order</div><div class="tiny" style="margin-bottom:10px">Local save first. Quote / enquiry records appear in Quote follow-up after saving.</div>
-        <details id="dangerousActions" class="payment-advanced" style="margin-bottom:10px"><summary>Cancel / void options</summary><label>Cancel / void reason</label><textarea id="voidReason" class="tall-textarea" placeholder="Reason if this order is cancelled or voided"></textarea><div class="btnrow" style="margin-top:10px"><button class="btn danger" id="voidOrder">Cancel / void order</button><button class="btn danger" id="deleteOrder">Move test to bin</button></div></details>
-        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn good" id="saveOrder">Save quote/order</button><button class="btn subtle" id="saveOrderToDatabase">Save current quote/order to database</button><button class="btn warn" id="archiveOrder">Archive complete</button></div><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
-      </section>
-    </section>
-    <section class="card" id="fulfilmentSection">
-      <div class="section-title"><div><h2>Step 4 Optional details</h2><p>Fulfilment, delivery, postage, courier, collection, or drop-off work.</p></div></div>
+
+      <section class="card slim" id="fulfilmentSection">
+        <div class="subhead">Fulfilment / delivery</div>
       <div class="grid two" style="margin-bottom:10px">
         <div class="field"><label>Fulfilment method</label><select id="fulfilmentMethod"><option>Hold / not arranged</option><option>Royal Mail postage</option><option>Royal Mail collection</option><option>Courier collection</option><option>Customer collection</option><option>Local drop-off</option></select><span class="tiny">Royal Mail collection means Royal Mail collects from us - not customer collection.</span></div>
       </div>
@@ -382,11 +384,15 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div class="field"><textarea id="fulfilmentMsg" class="readonly tall-textarea" readonly></textarea></div>
       <div class="btnrow" style="margin-top:12px"><button class="btn" id="genFulfilment">Generate customer update</button><button class="btn" id="copyFulfilment">Copy customer update</button><button class="btn hide" id="openFulfilmentWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark update sent</button></div>
       </details>
-    </section>
+      </section>
 
-    <section class="card" id="communicationCentre">
-      <div class="section-title"><div><h2>Step 4 Optional details</h2><p>Communication Centre for quotes and live order messages.</p></div><span class="tag">Scaffold</span></div>
-      <div id="communicationRows" class="comm-list"></div>
+      <section class="card slim" id="communicationCentre">
+        <div class="subhead">Communication Centre</div>
+        <div class="tiny" style="margin-bottom:10px">Quotes and live order messages only when an action is ready.</div>
+        <div id="communicationRows" class="comm-list"></div>
+      </section>
+
+      <section class="card slim" style="box-shadow:none"><details id="dangerousActions" class="payment-advanced" style="margin-bottom:10px"><summary>Cancel / archive options</summary><label>Cancel / void reason</label><textarea id="voidReason" class="tall-textarea" placeholder="Reason if this order is cancelled or voided"></textarea><div class="btnrow" style="margin-top:10px"><button class="btn danger" id="voidOrder">Cancel / void order</button><button class="btn danger" id="deleteOrder">Move test to bin</button><button class="btn warn" id="archiveOrder">Archive complete</button></div></details></section>
     </section>
 
   </main>
@@ -796,7 +802,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2H',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2I',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -918,7 +924,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2H JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2I JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1331,6 +1337,7 @@ function renderOrder(){
   let productTotal=current.lines.reduce((a,l)=>a+(l.kind==='product'?l.price*l.qty:l.price),0),mat=num('materialsCharge'),post=num('postageCharge');
   totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>';
   deleteOrder.style.display=val('orderType')==='Test order'?'':'none';
+  setVisible(document.getElementById('optionalDetailsSection'),!isPastOrder);
   setVisible(document.getElementById('packingSection'),!isPastOrder);
   setVisible(document.getElementById('communicationCentre'),!isPastOrder);
   setVisible(document.getElementById('advancedMessageControls'),!isPastOrder);
@@ -1989,7 +1996,7 @@ function renderCommunicationCentre(){
   const isQuoteMode=val('orderType')==='Quote / enquiry';
   const rows=[
     {key:'orderConfirmationStatus',title:isQuoteMode?'Quote message':'Order confirmation',message:isQuoteMode?'Generate the quote message, then mark sent when handled.':'Generate from the existing confirmation template, then mark sent when handled.',status:comm.orderConfirmationStatus,generate:'generateConfirmation();setCommStatus(\'orderConfirmationStatus\',\'generated\')',copy:'copyConfirmation.onclick()',markSent:'markConfirmationSentNow();setCommStatus(\'orderConfirmationStatus\',\'sent\')'},
-    {key:'paymentMessageStatus',title:'Payment message',message:paid?'Payment is already marked cleared.':'Payment wording is parked for manual handling in this scaffold.',status:paid?'notNeeded':(comm.paymentMessageStatus==='notReady'?'notSent':comm.paymentMessageStatus)},
+    {key:'paymentMessageStatus',title:'Payment message',message:paid?'Payment is already marked cleared.':'Payment wording is parked for manual handling in this scaffold.',status:paid?'notNeeded':(comm.paymentMessageStatus==='notReady'?'notSent':comm.paymentMessageStatus),disabled:true},
     {key:'fulfilmentUpdateStatus',title:'Fulfilment / packing update',message:'Uses the existing customer update template when the order is being prepared.',status:comm.fulfilmentUpdateStatus,generate:'generateFulfilment();setCommStatus(\'fulfilmentUpdateStatus\',\'generated\')',copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'fulfilmentUpdateStatus\',\'sent\')',disabled:!paid},
     {key:'dispatchMessageStatus',title:'Collection / dispatch message',message:packed?'Use the existing customer update after postage or collection details are ready.':'Not ready until the order is packed or ready to send/collect.',status:packed?comm.dispatchMessageStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'dispatchMessageStatus\',\'generated\')',copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'dispatchMessageStatus\',\'sent\')',disabled:!packed},
     {key:'trackingUpdateStatus',title:'Tracking / sent update',message:hasTracking?'Tracking/reference is present; customer update may be needed.':'Not ready until tracking or dispatch reference is added.',status:hasTracking?comm.trackingUpdateStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'trackingUpdateStatus\',\'generated\')',copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'trackingUpdateStatus\',\'sent\')',disabled:!hasTracking}
@@ -2165,7 +2172,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2H JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2I JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
