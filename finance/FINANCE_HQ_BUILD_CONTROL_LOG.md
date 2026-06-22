@@ -1239,3 +1239,13 @@ What was not changed:
 - Updated visible version markers to v44E2L.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, localStorage keys, message wording, or quote conversion logic changed beyond the ready-to-convert action.
+
+## v44E3 Request Intake Cloud Bridge Stage 1
+- Date: 2026-06-22
+- Scope: Supabase preparation only for Request Hub cloud intake.
+- Added schema_patch_v44E3_request_intake_bridge.sql to add quote_requests.payload and a duplicate-safe unique partial index on request_ref.
+- Added Supabase Edge Function source for submit-request, using SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY server-side only.
+- Edge Function accepts Request Hub finance JSON payloads, validates contact/items/body size, stores the full request payload, and returns created/duplicate status.
+- No deployment was run from this workspace.
+- Files changed: finance/supabase/schema_patch_v44E3_request_intake_bridge.sql, supabase/functions/submit-request/index.ts, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No planner, Request Hub, Finance UI, pricing, stock deduction, quote conversion, product logic, or customer message wording changed.
