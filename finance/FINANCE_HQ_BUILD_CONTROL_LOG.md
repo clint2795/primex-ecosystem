@@ -1227,3 +1227,15 @@ What was not changed:
 - Updated visible version markers to v44E2K.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, order conversion, localStorage keys, or message template wording changed.
+
+## v44E2L Quote Lifecycle Sync
+- Date: 2026-06-22
+- Scope: Small Quote / enquiry lifecycle sync blocker fix.
+- Updated markConfirmationSentNow() so marking a generated quote confirmation as sent now moves blank or Quote to send quotes to Quote sent / waiting customer.
+- Preserved existing quote statuses such as Customer replied / ready to convert, Parked, and Cancelled when marking confirmation sent.
+- Added markCurrentQuoteAccepted() for Quote / enquiry records to set Customer replied / ready to convert and remind the operator to save the quote.
+- Added a quote-only Order page button labelled Customer accepted / ready to convert near the quote conversion and save controls.
+- Kept conversion manual and kept the existing save requirement after lifecycle changes.
+- Updated visible version markers to v44E2L.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock deduction, kit rules, product logic, Request Hub parser, Supabase schema, localStorage keys, message wording, or quote conversion logic changed beyond the ready-to-convert action.
