@@ -1249,3 +1249,13 @@ What was not changed:
 - No deployment was run from this workspace.
 - Files changed: finance/supabase/schema_patch_v44E3_request_intake_bridge.sql, supabase/functions/submit-request/index.ts, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No planner, Request Hub, Finance UI, pricing, stock deduction, quote conversion, product logic, or customer message wording changed.
+
+## v44E3 Request Intake Cloud Bridge Stage 2
+- Date: 2026-06-22
+- Scope: Request Hub submit wiring only.
+- Added public REQUEST_INTAKE_ENDPOINT for the submit-request Edge Function.
+- Added cloud-first sendRequest() flow that validates, reuses one financeJsonPayload() per send attempt, posts to the Edge Function, then opens the existing email fallback.
+- Added send-button guarding/disable behaviour to reduce duplicate taps while preserving the manual Copy request and Copy finance JSON fallbacks.
+- Kept financeJsonPayload() shape and existing email subject/body wording unchanged.
+- Files changed: order-request/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No Planner, Finance app flow, pricing, stock deduction, quote conversion, product logic, or customer message wording changed beyond small submit status text.
