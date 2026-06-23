@@ -1275,3 +1275,13 @@ What was not changed:
 - Added explicit global apikey and Authorization headers using the same server-side service role key for Supabase REST calls from the Edge Function.
 - Files changed: supabase/functions/submit-request/index.ts, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No Request Hub payload shape, Finance app flow, pricing, stock deduction, quote conversion, product logic, or message wording changed.
+
+## v44E3 Request Hub Cloud Submit Customer Flow
+- Date: 2026-06-23
+- Scope: Customer-facing Request Hub submit UI only.
+- Renamed the primary Request Hub button to Send request.
+- Updated successful cloud submit so it keeps the customer on the page and shows Request sent to PrimeX for review instead of opening mailto automatically.
+- Added Send by email fallback as a manual secondary action and kept Copy request as a fallback.
+- Removed customer-facing Copy finance JSON, Contact section, and Product & fulfilment info buttons from the Request Hub action row.
+- Files changed: order-request/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No Planner, Finance HQ, payload shape, pricing, stock deduction, quote conversion, product logic, or customer message template wording changed.
