@@ -97,6 +97,12 @@ Deno.serve(async (request) => {
     if (items.length > MAX_ITEMS) return json(request, 400, { ok: false, error: `Maximum ${MAX_ITEMS} items allowed` });
 
     const supabase = createClient(url, serviceRoleKey, {
+      global: {
+        headers: {
+          apikey: serviceRoleKey,
+          Authorization: `Bearer ${serviceRoleKey}`,
+        },
+      },
       auth: { persistSession: false, autoRefreshToken: false },
     });
 

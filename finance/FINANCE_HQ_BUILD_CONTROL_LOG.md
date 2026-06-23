@@ -1267,3 +1267,11 @@ What was not changed:
 - Updated Edge Function comments to match the new secret names.
 - Files changed: supabase/functions/submit-request/index.ts, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No function behaviour, Request Hub payload shape, Finance flow, pricing, stock deduction, quote conversion, product logic, or message wording changed.
+
+## v44E3 Request Intake Cloud Bridge Edge Auth Header Hardening
+- Date: 2026-06-23
+- Scope: Edge Function Supabase client authentication hardening only.
+- Kept PRIME_SUPABASE_URL and PRIME_SUPABASE_SERVICE_ROLE_KEY secret names and continued passing the service role key as the createClient second argument.
+- Added explicit global apikey and Authorization headers using the same server-side service role key for Supabase REST calls from the Edge Function.
+- Files changed: supabase/functions/submit-request/index.ts, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No Request Hub payload shape, Finance app flow, pricing, stock deduction, quote conversion, product logic, or message wording changed.
