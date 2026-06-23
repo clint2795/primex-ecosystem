@@ -1,8 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Required Edge Function secrets:
-// - SUPABASE_URL
-// - SUPABASE_SERVICE_ROLE_KEY
+// - PRIME_SUPABASE_URL
+// - PRIME_SUPABASE_SERVICE_ROLE_KEY
 // Optional:
 // - REQUEST_INTAKE_ALLOWED_ORIGINS: comma-separated origins, defaults to *
 
@@ -77,8 +77,8 @@ Deno.serve(async (request) => {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(request) });
   if (request.method !== "POST") return json(request, 405, { ok: false, error: "POST required" });
 
-  const url = cleanText(Deno.env.get("SUPABASE_URL"));
-  const serviceRoleKey = cleanText(Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"));
+  const url = cleanText(Deno.env.get("PRIME_SUPABASE_URL"));
+  const serviceRoleKey = cleanText(Deno.env.get("PRIME_SUPABASE_SERVICE_ROLE_KEY"));
   if (!url || !serviceRoleKey) return json(request, 500, { ok: false, error: "Request intake is not configured" });
 
   try {

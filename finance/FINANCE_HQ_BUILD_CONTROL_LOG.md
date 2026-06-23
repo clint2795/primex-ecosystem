@@ -1259,3 +1259,11 @@ What was not changed:
 - Kept financeJsonPayload() shape and existing email subject/body wording unchanged.
 - Files changed: order-request/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No Planner, Finance app flow, pricing, stock deduction, quote conversion, product logic, or customer message wording changed beyond small submit status text.
+
+## v44E3 Request Intake Cloud Bridge Edge Secret Rename
+- Date: 2026-06-23
+- Scope: Edge Function deployment compatibility patch only.
+- Renamed submit-request Edge Function secret reads from SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to PRIME_SUPABASE_URL and PRIME_SUPABASE_SERVICE_ROLE_KEY because Supabase CLI rejects custom secret names beginning with SUPABASE_.
+- Updated Edge Function comments to match the new secret names.
+- Files changed: supabase/functions/submit-request/index.ts, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No function behaviour, Request Hub payload shape, Finance flow, pricing, stock deduction, quote conversion, product logic, or message wording changed.
