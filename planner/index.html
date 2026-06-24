@@ -12477,7 +12477,7 @@ section[id],
   function addButtons(){
     document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97, .px-extended-card').forEach(buildButton);
   }
-  function continueToRequest(){ const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(getTray()); window.location.href='../order-request/index.html'; }
+  function continueToRequest(){ const tray=getTray(); if(!tray.length){ alert('Select at least one item before continuing to the request form.'); openReview(true); return; } const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(tray); window.location.href='../order-request/index.html'; }
   function ensureTrayBar(){
     if(document.querySelector('.px-request-tray-bar')) return;
     const bar=document.createElement('div');
@@ -12521,7 +12521,7 @@ section[id],
     const content=document.querySelector('[data-px-request-content]');
     const tray=getTray();
     if(!tray.length){
-      content.innerHTML='<div class="px-request-empty">No items selected for request yet. Return to the planner and request one or more references to build a request.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button><button type="button" class="px-request-ghost" data-px-contact>Continue to request form</button></div>';
+      content.innerHTML='<div class="px-request-empty">No items selected for request yet. Select at least one item before continuing to the request form.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button></div>';
     } else {
       content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected item')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-continue>Continue to request form</button><button type="button" class="px-request-ghost" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button></div>';
     }

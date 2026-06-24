@@ -1,5 +1,17 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2O Request Confidence Hotfix
+- Date: 2026-06-24
+- Scope: Customer/operator confidence fixes only.
+- Request Hub dropdown options now use stronger scoped option states for browser/native select readability.
+- Request Hub top Send request validation now scrolls/focuses the visible validation message when blocked.
+- Request Hub now shows visible status after adding or removing request items.
+- Planner request tray now blocks Continue to request form when no items are selected and shows: `Select at least one item before continuing to the request form.`
+- Finance cloud refresh copy now states that cloud refresh can re-import existing Supabase requests and that local wipe does not delete cloud rows.
+- Finance cloud refresh now reports preserved rows as existing requests already converted/binned.
+- Files changed: order-request/index.html, planner/index.html, finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No staff notification, pricing, stock calculations, quote/order lifecycle, Supabase schema, product rules, or Request Hub payload shape were changed.
+
 ## v44E2N Request Capture Reliability
 - Date: 2026-06-24
 - Scope: Request capture reliability only.
