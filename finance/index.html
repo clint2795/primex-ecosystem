@@ -311,7 +311,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Pay on collection</option><option>Approved credit</option><option>Waived</option><option>Refunded</option></select><span class="tiny">Pay on collection is not treated as paid/cleared.</span></div>
           <div class="field"><label>Order status</label><select id="orderStatus"><option value="New / awaiting payment">New order</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Dispatched / awaiting delivery confirmation</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
           <details class="field full payment-advanced"><summary>Payment / release notes</summary><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></details>
-        </div>
+        </div><div id="paymentStatusNotice" class="note warn" style="margin-top:10px">Payment still awaiting. Do not pack/release yet.</div>
       </section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Save quote/order</div><div class="tiny" style="margin-bottom:10px">Local save first. Quote / enquiry records appear in Quote follow-up after saving.</div>
         <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn neutral" id="markQuoteAcceptedBtn" onclick="markCurrentQuoteAccepted()">Customer accepted / ready to convert</button><button class="btn good" id="saveOrder">Save quote/order</button><button class="btn subtle" id="saveOrderToDatabase">Save current quote/order to database</button></div><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
@@ -542,6 +542,7 @@ const customerNote=document.getElementById('customerNote');
 const priceTier=document.getElementById('priceTier');
 const priceTierNote=document.getElementById('priceTierNote');
 const paymentStatus=document.getElementById('paymentStatus');
+const paymentStatusNotice=document.getElementById('paymentStatusNotice');
 const paymentDueNote=document.getElementById('paymentDueNote');
 const releaseOverride=document.getElementById('releaseOverride');
 const releaseApprovedBy=document.getElementById('releaseApprovedBy');
@@ -832,6 +833,12 @@ function importFinanceBackupFile(file){if(!file)return;const reader=new FileRead
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
 function markCustomerUpdateStale(){if(val('updateSent')==='Yes')set('updateSent','Customer update needs regeneration');syncFulfilmentPaymentWarning()}
 function markOrderMessagesStale(scope='all'){if(scope==='all')markConfirmationStale();markCustomerUpdateStale()}
+function updatePaymentStatusNotice(){
+  if(!paymentStatusNotice)return;
+  const paid=val('paymentStatus')==='Paid';
+  paymentStatusNotice.className=paid?'note good':'note warn';
+  paymentStatusNotice.textContent=paid?'Payment status set to PAID. This order can enter fulfilment.':'Payment still awaiting. Do not pack/release yet.';
+}
 function clearAddFeedback(){addProductFeedback?.classList.add('hide');addSupportFeedback?.classList.add('hide')}
 function showAddFeedback(el){if(!el)return;el.textContent='Added to order summary Done';el.classList.remove('hide');setTimeout(()=>el.classList.add('hide'),3000)}
 function isNeedsCheckApproved(p){return true}
@@ -956,7 +963,7 @@ unitPrice.addEventListener('input',()=>{updateManualProductPrice();markOrderMess
 productNeedsCheckReviewed?.addEventListener('input',updateSinglePreview);
 ['supportItemSelect','supportQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSupportPreview()}));
 supportUnitPrice.addEventListener('input',()=>{updateManualSupportPrice();markOrderMessagesStale('all')});
-paymentStatus.addEventListener('input',()=>{syncFulfilmentPaymentWarning();markCustomerUpdateStale();renderCommunicationCentre();if(val('paymentStatus')==='Paid')stageNudge('Payment marked paid. Check fulfilment stage and customer update.','info')});
+paymentStatus.addEventListener('input',()=>{updatePaymentStatusNotice();syncFulfilmentPaymentWarning();markCustomerUpdateStale();renderCommunicationCentre();if(val('paymentStatus')==='Paid')stageNudge('Payment marked paid. Check fulfilment stage and customer update.','info')});
 fulfilmentMethod.addEventListener('input',()=>{if(val('fulfilmentMethod')!=='Hold / not arranged')openOptionalDetails();syncPostageDefaults();updateFulfilmentVisibility();markCustomerUpdateStale()});
 ['customerRef','recPhone','postageService','labelStatus','trackingRef','labelQrRef','labelQrNote','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{markCustomerUpdateStale();refreshWhatsAppButtons();renderCommunicationCentre()}));
 labelStatus.addEventListener('change',()=>stageNudge('Postage or label status changed. Check customer update before release.','info'));
@@ -1025,6 +1032,7 @@ function convertCurrentQuoteToLive(){
   set('orderType','Live order');
   set('orderStatus','New / awaiting payment');
   set('paymentStatus','Awaiting payment');
+  updatePaymentStatusNotice();
   set('confirmationSent','No');
   set('updateSent','No');
   activeOrderTag.textContent='Converted quote - save to activate';
@@ -2210,6 +2218,7 @@ function syncFulfilmentPaymentWarning(){
   }
   set('internalFulfilmentWarning',warn);
   if(releaseStatus){releaseStatus.className=cls;releaseStatus.textContent='Release status: '+label}
+  updatePaymentStatusNotice();
   updateFulfilmentVisibility();
   return warn;
 }
