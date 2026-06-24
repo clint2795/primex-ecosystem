@@ -1,5 +1,19 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2M Operator Clarity & Workspace Safety
+- Date: 2026-06-24
+- Scope: Phase 1 operator workflow clarity and local workspace wipe safety only.
+- Updated visible version markers to v44E2M.
+- Renamed the primary save action dynamically: Save quote, Save live order, or Save order.
+- Moved manual database save/sync behind Advanced save / database sync controls while keeping local save as the primary action.
+- Standardised quote/customer communication labels to Mark sent and Customer accepted in the visible workflow.
+- Renamed Convert to live to Convert to live order, Mark delivered / complete to Mark complete, Archive complete to Mark complete, and Reset local test workspace to ⚠️ Wipe Local Finance Workspace.
+- Replaced the local workspace wipe confirmation with a two-step warning plus exact phrase entry: WIPE LOCAL WORKSPACE.
+- Removed the parked Payment message row from the main Communication Centre and moved the unpaid prep shortcut behind Advanced payment controls.
+- De-emphasised quote lifecycle shortcuts in History by moving Move back to Quote to send, Park, and Cancel quote behind Advanced quote controls.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock calculations, Supabase sync logic, Request Hub, Planner, product rules, message templates, or localStorage keys were changed.
+
 ## v44E2L Admin Local Test Workspace Reset
 - Version: v44E2L local admin cleanup patch
 - Purpose: Add a safe Admin reset for local browser test clutter before real customer use.
