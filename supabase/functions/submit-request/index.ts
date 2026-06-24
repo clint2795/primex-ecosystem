@@ -93,7 +93,7 @@ Deno.serve(async (request) => {
 
     if (!requestRef) return json(request, 400, { ok: false, error: "requestId is required" });
     if (!contactPresent(intake)) return json(request, 400, { ok: false, error: "Email or WhatsApp/contact is required" });
-    if (!items) return json(request, 400, { ok: false, error: "items array is required" });
+    if (!items || !items.length) return json(request, 400, { ok: false, error: "No request items supplied" });
     if (items.length > MAX_ITEMS) return json(request, 400, { ok: false, error: `Maximum ${MAX_ITEMS} items allowed` });
 
     const supabase = createClient(url, serviceRoleKey, {

@@ -1,5 +1,25 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2N Request Capture Reliability
+- Date: 2026-06-24
+- Scope: Request capture reliability only.
+- Updated Finance title/comment markers to v44E2N Request Capture Reliability.
+- Request Hub now blocks submit/copy/email fallback validation when no items are selected and shows: `Please select at least one item before sending your request.`
+- Request Hub now treats Edge Function duplicates as a specific already-received state instead of normal sent success.
+- Edge Function now rejects empty item arrays with `{ ok:false, error:"No request items supplied" }` before inserting into `quote_requests`.
+- Finance cloud refresh now reports skipped cloud rows with request ref, created time, and validation reason in the visible refresh status.
+- Files changed: order-request/index.html, supabase/functions/submit-request/index.ts, finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock calculations, quote/order lifecycle, Planner, product rules, message templates beyond the requested validation/duplicate messages, or localStorage keys were changed.
+
+## v44E2N Final Destructive-Action Confirmation
+- Date: 2026-06-24
+- Scope: Wipe Local Finance Workspace safety only.
+- Updated visible version markers to v44E2N.
+- Added a final destructive-action confirmation after the exact `WIPE LOCAL WORKSPACE` phrase is entered.
+- The wipe still clears local Finance HQ browser workspace data only and still does not delete Supabase cloud requests.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing, stock calculations, Supabase sync logic, Request Hub, Planner, product rules, message templates, or localStorage keys were changed.
+
 ## v44E2M Operator Clarity & Workspace Safety
 - Date: 2026-06-24
 - Scope: Phase 1 operator workflow clarity and local workspace wipe safety only.
