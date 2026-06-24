@@ -1,5 +1,22 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2L Admin Local Test Workspace Reset
+- Version: v44E2L local admin cleanup patch
+- Purpose: Add a safe Admin reset for local browser test clutter before real customer use.
+- Files changed:
+  - C:\Users\Clint\OneDrive\Documents\PrimeX Ecosystem\finance\index.html
+  - C:\Users\Clint\OneDrive\Documents\PrimeX Ecosystem\finance\FINANCE_HQ_BUILD_CONTROL_LOG.md
+- Changes:
+  - Added Admin action `Reset local test workspace`.
+  - Reset confirmation now states: `This clears local Finance test data only. It does not delete Supabase cloud requests.`
+  - Reset clears local Finance workspace keys only and does not touch Supabase config, auth/session storage, or cloud rows.
+  - Added Admin shortcut `Refresh cloud requests` for pulling Supabase requests back into the local Request Inbox when ready.
+- Verification:
+  - JavaScript syntax check passed after patch.
+- Risks:
+  - Reset also clears local stock/custom stock workspace keys because they are part of the existing Finance local workspace reset key list.
+  - Supabase cloud requests remain available and can be re-imported with the refresh action after login.
+
 ## v42.8Y
 - Version: v42.8Y
 - Purpose: Morning stabilisation audit + version metadata alignment.
