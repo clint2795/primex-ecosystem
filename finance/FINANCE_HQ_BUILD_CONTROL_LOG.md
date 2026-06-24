@@ -1,5 +1,15 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2P Planner Request Mapping Guard
+- Date: 2026-06-24
+- Scope: Planner-origin Retatrutide Observation request mapping only.
+- Added the Finance request alias `RTA20_OBSERVATION -> RTA20` so Retatrutide Observation imports can create a quote line from Request Inbox.
+- Added a zero-line guard in `convertRequestToQuote()` so Finance does not silently create a £0 quote when no request items map into quote lines.
+- The guard shows: `No quote items were imported. Review request mapping before creating quote.` and keeps the request active.
+- Existing £0 test quote records were not cleaned or changed.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No pricing logic, stock logic, Supabase logic, Request Hub, Planner, payment/fulfilment gate, notification system, or button labels were changed.
+
 ## v44E2O Request Confidence Hotfix
 - Date: 2026-06-24
 - Scope: Customer/operator confidence fixes only.
