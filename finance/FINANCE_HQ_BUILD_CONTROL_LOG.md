@@ -1,5 +1,15 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2R Visible Send Quote Workflow
+- Date: 2026-06-25
+- Scope: Visible saved-quote send workflow only.
+- Updated Finance visible/version markers to v44E2R.
+- Added a `Send quote` action near the Save area for saved Quote / enquiry records with `Quote to send` status.
+- The action reuses `generateConfirmation()`, opens Optional Details / Communication Centre, scrolls/focuses the generated quote message area, and marks the communication row as generated.
+- The action does not mark the quote as sent automatically; existing `Mark sent` behaviour still moves the quote to `Quote sent / waiting customer`.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No stock, fulfilment, Request Hub, Planner, pricing, Supabase, quote-to-order conversion, or Customer accepted logic was changed.
+
 ## v44E2Q Request Inbox State Guard
 - Date: 2026-06-25
 - Scope: Request Inbox state guard only.
