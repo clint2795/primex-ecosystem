@@ -1,5 +1,16 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2Q Request Inbox State Guard
+- Date: 2026-06-25
+- Scope: Request Inbox state guard only.
+- Updated Finance visible/version markers to v44E2Q.
+- Added guards in `convertRequestToQuote()` so requests with an existing `convertedOrderId` open the linked quote instead of creating another quote.
+- Added draft-state handling so requests with `draftOrderId` or `draft quote` state resume a recoverable draft or warn instead of creating a duplicate draft.
+- Made Request Inbox actions status-aware: new/reviewed requests show `Create quote`, draft requests show `Resume quote`, converted requests show `Open quote`, and parked requests show `Unpark` / `Move to Bin`.
+- Added lifecycle text for draft, converted, and parked request cards.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No quote send workflow, Communication Centre, pricing, stock, Supabase, Planner, Request Hub, fulfilment logic, payment/fulfilment gate, dashboard count logic, or existing data cleanup was changed.
+
 ## v44E2P Planner Request Mapping Guard
 - Date: 2026-06-24
 - Scope: Planner-origin Retatrutide Observation request mapping only.
@@ -49,7 +60,7 @@
 - Renamed the primary save action dynamically: Save quote, Save live order, or Save order.
 - Moved manual database save/sync behind Advanced save / database sync controls while keeping local save as the primary action.
 - Standardised quote/customer communication labels to Mark sent and Customer accepted in the visible workflow.
-- Renamed Convert to live to Convert to live order, Mark delivered / complete to Mark complete, Archive complete to Mark complete, and Reset local test workspace to ⚠️ Wipe Local Finance Workspace.
+- Renamed Convert to live to Convert to live order, Mark delivered / complete to Mark complete, Archive complete to Mark complete, and Reset local test workspace to ?? Wipe Local Finance Workspace.
 - Replaced the local workspace wipe confirmation with a two-step warning plus exact phrase entry: WIPE LOCAL WORKSPACE.
 - Removed the parked Payment message row from the main Communication Centre and moved the unpaid prep shortcut behind Advanced payment controls.
 - De-emphasised quote lifecycle shortcuts in History by moving Move back to Quote to send, Park, and Cancel quote behind Advanced quote controls.
