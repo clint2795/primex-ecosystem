@@ -1,5 +1,16 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2T Customer-Safe Quote Messages
+- Date: 2026-06-26
+- Scope: Quote customer message generation only.
+- Updated Finance visible/version markers to v44E2T.
+- Added `customerLineTitle(l)` for customer-facing quote message wording without changing `lineTitle()` or internal order summaries.
+- Quote / enquiry messages now use `customerLineTitle(l)`, so `RTA20_OBSERVATION` displays as `Retatrutide Observation / 1 vial allocated`.
+- Removed customer-facing `Quote status` and `Customer note` lines from Quote / enquiry messages.
+- Kept RUO wording unchanged.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No live order confirmation, fulfilment/update messages, pricing, stock, Request Hub, Planner, Supabase, or quote workflow logic was changed.
+
 ## v44E2S Stage-Aware Quote Cards
 - Date: 2026-06-26
 - Scope: History > Quotes card actions only.
