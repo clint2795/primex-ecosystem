@@ -1,5 +1,15 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2S Stage-Aware Quote Cards
+- Date: 2026-06-26
+- Scope: History > Quotes card actions only.
+- Updated Finance visible/version markers to v44E2S.
+- Added `sendQuoteFromHistory(id)` to load a quote and reuse the existing `startSendQuoteWorkflow()` without marking the quote sent automatically.
+- Updated `quoteHistoryRow()` so quote cards show stage-aware actions: `Send quote` for Quote to send, `Customer accepted` for waiting customer, `Convert to live order` for ready to convert, and Open / edit only for parked/cancelled statuses.
+- Existing advanced quote controls remain available.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No History renaming, nav labels, function/view IDs, stock, pricing, Request Hub, Planner, Supabase, fulfilment logic, or send/Mark sent behaviour was changed.
+
 ## v44E2R Visible Send Quote Workflow
 - Date: 2026-06-25
 - Scope: Visible saved-quote send workflow only.
