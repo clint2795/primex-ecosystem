@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2T Customer-Safe Quote Messages</title>
+<title>PrimeX Finance HQ &middot; v44E2U Persistent Quote Send Instruction</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -172,7 +172,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2T</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2U</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -350,6 +350,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
           <div class="field"><label>Order confirmation</label><select id="confirmationSent"><option>No</option><option>Yes</option><option>Confirmation needs regeneration</option></select></div>
           <div class="field"><label>Customer update</label><select id="updateSent"><option>No</option><option>Yes</option><option>Customer update needs regeneration</option></select></div>
           <details id="confirmationDetails" class="field full payment-advanced"><summary>Order confirmation message</summary><textarea id="confirmationMsg" class="readonly tall-textarea" readonly></textarea></details>
+          <div id="quoteSendInlineStatus" class="note good hide full" role="status" aria-live="polite"></div>
         </div>
         <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn hide" id="openConfirmationWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markConfirmationSentNow()">Mark sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark customer update sent</button></div>
       </details></section>
@@ -626,6 +627,7 @@ const copyConfirmation=document.getElementById('copyConfirmation');
 const openConfirmationWhatsApp=document.getElementById('openConfirmationWhatsApp');
 const confirmationDetails=document.getElementById('confirmationDetails');
 const confirmationMsg=document.getElementById('confirmationMsg');
+const quoteSendInlineStatus=document.getElementById('quoteSendInlineStatus');
 const totalsBox=document.getElementById('totalsBox');
 const orderStatus=document.getElementById('orderStatus');
 const confirmationSent=document.getElementById('confirmationSent');
@@ -829,7 +831,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2T',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2U',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -957,7 +959,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2T JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2U JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1387,6 +1389,7 @@ function updatePrimarySaveLabel(){
   saveOrder.textContent=convertedUnsaved?'Save live order':'Save order';
 }
 function renderOrder(){
+  setQuoteSendInlineStatus('',null);
   updateOrderTypeNotice();
   updatePrimarySaveLabel();
   const isPastOrder=val('orderType')==='Past order';
@@ -1541,6 +1544,7 @@ function quoteRequestDbPayload(req,customer,user){return {customer_id:customer?.
 async function findExistingQuoteRequest(client,req){if(req.supabaseRequestId){const byId=await client.from('quote_requests').select('id').eq('id',req.supabaseRequestId).limit(2);if(byId.error)throw new Error('Request lookup failed: '+byId.error.message);if((byId.data||[]).length===1)return byId.data[0];if((byId.data||[]).length>1)throw new Error('Multiple database requests matched saved link.')}const byRef=await client.from('quote_requests').select('id').eq('request_ref',req.requestId).limit(3);if(byRef.error)throw new Error('Request lookup failed: '+byRef.error.message);if((byRef.data||[]).length>1)throw new Error('Multiple database requests already use this request ref. No duplicate was created.');return (byRef.data||[])[0]||null}
 async function saveRequestToDatabase(id){const req=requestInbox.find(x=>x.requestId===id);if(!req){showToast('Request not found');return}try{const {client,user}=await requireSupabaseWriteUser('saving a request to the database');const customer=await findOrCreateRequestCustomer(client,user,req);const payload=quoteRequestDbPayload(req,customer,user);const existing=await findExistingQuoteRequest(client,req);let saved;if(existing){const updated=await client.from('quote_requests').update(payload).eq('id',existing.id).select('id,customer_id').single();if(updated.error)throw new Error('Request update failed: '+updated.error.message);saved=updated.data}else{const inserted=await client.from('quote_requests').insert(payload).select('id,customer_id').single();if(inserted.error)throw new Error('Request save failed: '+inserted.error.message);saved=inserted.data}req.supabaseRequestId=saved.id;req.supabaseCustomerId=customer?.id||saved.customer_id||'';req.supabaseSyncedAt=new Date().toISOString();saveLocal();renderRequestInbox();renderStartQuoteFollowup();showToast(existing?'Database request updated':'Request saved to database')}catch(err){console.error(err);showToast(err.message||'Database save failed');setRequestImportStatus(err.message||'Database save failed','warn')}}
 function setOrderDbSyncStatus(msg,type='good'){if(!orderDbSyncStatus)return;orderDbSyncStatus.textContent=msg||'';orderDbSyncStatus.classList.toggle('hide',!msg);orderDbSyncStatus.classList.toggle('good',type==='good');orderDbSyncStatus.classList.toggle('warn',type==='warn')}
+function setQuoteSendInlineStatus(msg,type='good'){if(!quoteSendInlineStatus)return;quoteSendInlineStatus.textContent=msg||'';quoteSendInlineStatus.classList.toggle('hide',!msg);quoteSendInlineStatus.classList.toggle('good',type==='good');quoteSendInlineStatus.classList.toggle('warn',type==='warn')}
 function savedOrderById(id){return orders.find(x=>x.id===id)||null}
 function savedCurrentOrder(){return savedOrderById(current.id)}
 function orderDbSyncState(o){const s=String(o?.supabaseItemSyncStatus||'');if(s==='synced'&&o?.supabaseSyncedAt)return {msg:'Database synced '+new Date(o.supabaseSyncedAt).toLocaleString(),type:'good'};if(s.startsWith('partial'))return {msg:'Partial item sync - retry needed. '+s.replace(/^partial:\s*/,''),type:'warn'};if(s.startsWith('failed'))return {msg:'Sync failed / retry needed. '+s.replace(/^failed:\s*/,''),type:'warn'};return {msg:'Local only - database sync not completed for this save.',type:'warn'}}
@@ -2194,7 +2198,7 @@ function startSendQuoteWorkflow(){
   openOptionalDetails();
   renderCommunicationCentre();
   setTimeout(()=>{(confirmationDetails||document.getElementById('communicationCentre'))?.scrollIntoView({behavior:'smooth',block:'center'});confirmationMsg?.focus?.()},0);
-  showToast('Quote message ready - send manually, then Mark sent');
+  setQuoteSendInlineStatus('Quote message ready. Send via WhatsApp or copy, then press Mark sent.','good');
 }
 function markCurrentQuoteAccepted(){
   if(val('orderType')!=='Quote / enquiry'){showToast('Open a quote/enquiry first');return}
@@ -2326,7 +2330,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2T JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2U JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

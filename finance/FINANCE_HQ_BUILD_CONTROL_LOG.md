@@ -1,5 +1,16 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2U Persistent Quote Send Instruction
+- Date: 2026-06-26
+- Scope: Quote Send workflow instruction only.
+- Updated Finance visible/version markers to v44E2U.
+- Added `#quoteSendInlineStatus` near the generated confirmation/quote message area.
+- Added `setQuoteSendInlineStatus(msg,type)` using the existing inline note status pattern.
+- Updated `startSendQuoteWorkflow()` so the final operator instruction is persistent inline text instead of the bottom floating toast.
+- Kept validation/error toasts in `startSendQuoteWorkflow()` unchanged.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No global toast behaviour, `generateConfirmation()` wording, `setCommStatus()` behaviour, quote status logic, pricing, stock, Request Hub, Planner, Supabase, or fulfilment logic was changed.
+
 ## v44E2T Customer-Safe Quote Messages
 - Date: 2026-06-26
 - Scope: Quote customer message generation only.
