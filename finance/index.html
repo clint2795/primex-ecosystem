@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2V Quote WhatsApp Flow Polish</title>
+<title>PrimeX Finance HQ &middot; v44E2W Quote Mark Sent Persistence</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -172,7 +172,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2V</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2W</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -831,7 +831,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2V',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2W',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -959,7 +959,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2V JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2W JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1582,7 +1582,7 @@ function isQuoteOrder(o){return (o.orderType||'Live order')==='Quote / enquiry'}
 function quoteStatusValue(o={}){if(!isQuoteOrder(o))return o.quoteStatus||'Quote to send';const st=String(o.quoteStatus||'').trim();if(st)return st;if(o.status==='Cancelled')return 'Cancelled';if((o.confirmation||'No')==='Yes')return 'Quote sent / waiting customer';return 'Quote to send'}
 function quoteFollowUpData(){const savedQuoteIds=new Set(dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)).map(o=>o.id));const activeRequests=activeRequestInboxItems();const draftQuotes=activeRequests.filter(r=>String(r.status||'').toLowerCase()==='draft quote'&&!savedQuoteIds.has(r.convertedOrderId||r.draftOrderId));const requests=activeRequests.filter(r=>!['converted','draft quote','parked','cancelled'].includes(String(r.status||'new').toLowerCase()));const quotes=dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o));return {requests,draftQuotes,toSend:quotes.filter(o=>quoteStatusValue(o)==='Quote to send'),waiting:quotes.filter(o=>quoteStatusValue(o)==='Quote sent / waiting customer'),ready:quotes.filter(o=>quoteStatusValue(o)==='Customer replied / ready to convert'),parked:quotes.filter(o=>['Parked','Cancelled'].includes(quoteStatusValue(o)))}}
 function renderStartQuoteFollowup(){if(!quoteFollowupStart)return;const q=quoteFollowUpData();const cards=[['New requests',q.requests.length,'Request Inbox','request'],['Draft quotes',q.draftQuotes.length,'Quote being prepared','request'],['Quotes to send',q.toSend.length,'Needs customer quote sent','quote'],['Waiting customer',q.waiting.length,'Quote sent follow-up','quote'],['Ready to convert',q.ready.length,'Customer accepted','quote'],['Parked/cancelled',q.parked.length,'Paused quote work','quote']];quoteFollowupStart.innerHTML=cards.map(c=>'<button class="quote-followup-card" onclick="showView('+jsArg(c[3]==='request'?'request':'history')+');'+(c[3]==='quote'?"renderHistory(\'quote\')":'')+'"><div class="k">'+htmlEscape(c[0])+'</div><div class="n">'+c[1]+'</div><div class="s">'+htmlEscape(c[2])+'</div></button>').join('')}
-function quickQuoteUpdate(id,field,value){const o=orders.find(x=>x.id===id);if(!o||!isQuoteOrder(o))return;o[field]=value;if(field==='quoteStatus'&&value==='Quote sent / waiting customer')o.confirmation=o.confirmation||'Yes';saveLocal();renderAll();showToast('Quote updated locally');if(typeof autoSyncSavedQuoteOrder==='function')autoSyncSavedQuoteOrder(id)}
+function quickQuoteUpdate(id,field,value){const o=orders.find(x=>x.id===id);if(!o||!isQuoteOrder(o))return;o[field]=value;if(field==='quoteStatus'&&value==='Quote sent / waiting customer')o.confirmation='Yes';saveLocal();renderAll();showToast('Quote updated locally');if(typeof autoSyncSavedQuoteOrder==='function')autoSyncSavedQuoteOrder(id)}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
 function isReleaseStatus(status){return ['Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(status)}
 function isActiveOrderType(o){return (o.orderType||'Live order')==='Live order'}
@@ -2135,7 +2135,7 @@ function renderCommunicationCentre(){
   const hasTracking=!!val('trackingRef');
   const isQuoteMode=val('orderType')==='Quote / enquiry';
   const rows=[
-    {key:'orderConfirmationStatus',title:isQuoteMode?'Quote message':'Order confirmation',message:isQuoteMode?'Generate the quote message, then mark sent when handled.':'Generate from the existing confirmation template, then mark sent when handled.',status:comm.orderConfirmationStatus,generate:'generateConfirmation();setCommStatus(\'orderConfirmationStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(confirmationMsg)',canOpenWhatsApp:canOpenWhatsApp(confirmationMsg),copy:'copyConfirmation.onclick()',markSent:'markConfirmationSentNow();setCommStatus(\'orderConfirmationStatus\',\'sent\')'},
+    {key:'orderConfirmationStatus',title:isQuoteMode?'Quote message':'Order confirmation',message:isQuoteMode?'Generate the quote message, then mark sent when handled.':'Generate from the existing confirmation template, then mark sent when handled.',status:comm.orderConfirmationStatus,generate:'generateConfirmation();setCommStatus(\'orderConfirmationStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(confirmationMsg)',canOpenWhatsApp:canOpenWhatsApp(confirmationMsg),copy:'copyConfirmation.onclick()',markSent:'markConfirmationSentNow()'},
     {key:'fulfilmentUpdateStatus',title:'Fulfilment / packing update',message:'Uses the existing customer update template when the order is being prepared.',status:comm.fulfilmentUpdateStatus,generate:'generateFulfilment();setCommStatus(\'fulfilmentUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'fulfilmentUpdateStatus\',\'sent\')',disabled:!paid},
     {key:'dispatchMessageStatus',title:'Collection / dispatch message',message:packed?'Use the existing customer update after postage or collection details are ready.':'Not ready until the order is packed or ready to send/collect.',status:packed?comm.dispatchMessageStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'dispatchMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'dispatchMessageStatus\',\'sent\')',disabled:!packed},
     {key:'trackingUpdateStatus',title:'Tracking / sent update',message:hasTracking?'Tracking/reference is present; customer update may be needed.':'Not ready until tracking or dispatch reference is added.',status:hasTracking?comm.trackingUpdateStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'trackingUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'trackingUpdateStatus\',\'sent\')',disabled:!hasTracking}
@@ -2185,9 +2185,14 @@ function messageSaveWarning(o){
 }
 function markConfirmationSentNow(){
   if(!String(confirmationMsg?.value||'').trim()){showToast('Generate/copy the confirmation first');return}
+  const isQuote=val('orderType')==='Quote / enquiry';
   set('confirmationSent','Yes');
-  if(val('orderType')==='Quote / enquiry'&&(!val('quoteStatus')||val('quoteStatus')==='Quote to send'))set('quoteStatus','Quote sent / waiting customer');
+  if(isQuote&&(!val('quoteStatus')||val('quoteStatus')==='Quote to send'))set('quoteStatus','Quote sent / waiting customer');
+  current.commStatus={...communicationStatusDefaults(),...(current.commStatus||{}),orderConfirmationStatus:'sent'};
   markCustomerUpdateStale();
+  if(isQuote){saveOrderNow();return}
+  renderCommunicationCentre();
+  renderActionBanner();
   showToast('Confirmation marked sent - save order');
 }
 function startSendQuoteWorkflow(){
@@ -2342,7 +2347,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2V JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2W JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

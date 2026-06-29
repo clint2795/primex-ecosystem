@@ -1,5 +1,16 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2W Quote Mark Sent Persistence
+- Date: 2026-06-29
+- Scope: Quote Mark Sent persistence only.
+- Updated Finance visible/version markers to v44E2W.
+- Updated `markConfirmationSentNow()` so Quote / enquiry Mark sent sets confirmation and waiting-customer state, centralises the Communication Centre sent state, and immediately persists through the existing `saveOrderNow()` path.
+- Removed the duplicate chained `setCommStatus('orderConfirmationStatus','sent')` call from the Communication Centre Mark sent action.
+- Kept live order confirmation on the existing manual-save workflow while retaining its Communication Centre sent-state refresh.
+- Fixed `quickQuoteUpdate()` so moving a quote to Quote sent / waiting customer explicitly sets confirmation to `Yes`.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No Request Inbox lifecycle badges, quote message wording, WhatsApp opening, stock rules, pricing, Planner, Request Hub import, Supabase schema, fulfilment, layout, or Step 2 UI was changed.
+
 ## v44E2V Quote WhatsApp Flow Polish
 - Date: 2026-06-27
 - Scope: Quote send workflow polish only.
