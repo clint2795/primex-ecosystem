@@ -1,5 +1,17 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2V Quote WhatsApp Flow Polish
+- Date: 2026-06-27
+- Scope: Quote send workflow polish only.
+- Updated Finance visible/version markers to v44E2V.
+- Updated `startSendQuoteWorkflow()` to open the existing WhatsApp URL automatically when the generated quote message and a valid phone number are available, without marking the quote sent.
+- Added a persistent no-phone instruction that keeps the generated message available for copy/manual sending or adding a WhatsApp number.
+- Polished only the Quote / enquiry branch of `generateConfirmation()` with warmer customer-ready wording and guarded greetings for blank/internal/test references.
+- Kept `customerLineTitle(l)`, including the `RTA20_OBSERVATION` customer wording, and continued omitting Quote status and Customer note from quote messages.
+- Updated `quoteHistoryRow(o)` so quote cards keep Payment and Quote status but no longer display the inherited ordinary order status; live order history rows are unchanged.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No stock, pricing, Request Hub, Planner, Supabase, fulfilment/update messages, live order confirmation messages, Step 2 layout/alignment, quote status transitions, or Mark sent behaviour was changed.
+
 ## v44E2U Persistent Quote Send Instruction
 - Date: 2026-06-26
 - Scope: Quote Send workflow instruction only.
