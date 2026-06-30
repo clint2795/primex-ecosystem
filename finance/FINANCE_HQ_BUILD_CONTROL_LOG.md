@@ -1,5 +1,15 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2Y Start-Only Action Dashboard
+- Date: 2026-06-30
+- Scope: Finance HQ UX/layout refinement only.
+- Updated Finance visible/version markers to v44E2Y.
+- Moved the existing global `#actionBanner` into `#view-start` so Action Needed operational awareness appears only on Start.
+- Order, Queues, History, Requests, Stock, and Admin now remain focused on their module workflows while existing inline/module-specific warnings remain unchanged.
+- Kept `deriveActionAlerts()`, `renderActionBanner()`, action routing, module warnings, and all operational data logic unchanged.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No stock, pricing, quote/request/order lifecycle, messaging, Supabase, fulfilment, or workflow behaviour was changed.
+
 ## v44E2X Request Inbox Lifecycle Cleanup
 - Date: 2026-06-30
 - Scope: Request Inbox presentation/lifecycle badges and header counts only.
