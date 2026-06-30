@@ -1,5 +1,15 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2X Request Inbox Lifecycle Cleanup
+- Date: 2026-06-30
+- Scope: Request Inbox presentation/lifecycle badges and header counts only.
+- Updated Finance visible/version markers to v44E2X.
+- Added `requestInboxLifecycleBadge(req,blocked)` so linked saved quotes show Quote created, Waiting customer, Customer accepted, Quote parked, Quote cancelled, or Linked quote missing before falling back to draft/request/item-readiness states.
+- Updated `renderRequestInbox()` to keep every linked record visible, preserve Open quote actions, and show separate active-intake and linked-record header counts.
+- Kept `requestItemStatus()` and `activeRequestInboxItems()` unchanged.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No quote send, Mark sent, dashboard quote counters, quote history, live order conversion, stock, pricing, Request Hub import, Supabase schema, Step 2 layout/alignment, or message wording was changed.
+
 ## v44E2W Quote Mark Sent Persistence
 - Date: 2026-06-29
 - Scope: Quote Mark Sent persistence only.
