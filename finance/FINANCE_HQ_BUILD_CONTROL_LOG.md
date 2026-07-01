@@ -1,5 +1,17 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E2Z Next-Action Routing
+- Date: 2026-07-01
+- Scope: Finance HQ next-action routing and presentation only.
+- Updated Finance visible/version markers to v44E2Z.
+- Added `openOrderTask(orderId,task)` and `orderTaskTarget(task)` so Start action alerts open the saved order, reveal Optional Details when required, scroll to the relevant control/Communication Centre row, and apply a temporary focus highlight.
+- Added stable `data-comm-key` targets to Communication Centre rows and `.next-action-focus` styling.
+- Routed payment, confirmation, customer-update, tracking/label, dispatch and hold alerts to their relevant Order-page targets without generating, sending or marking messages.
+- Made normal New-order unpaid presentation read Awaiting payment, retained stronger unpaid warnings for advanced stages, and aligned Paid, Waived and Approved credit presentation with `isPaymentCleared()`.
+- Added derived converted-quote presentation: source quotes and linked Request Inbox records show Converted to live order, and the Start quote bucket is now Closed / converted.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No confirmation packing blocker, stock deduction rule, totals, quote conversion data, message generation/sending, Request Hub, Planner, Supabase schema, or Step 2 layout was changed.
+
 ## v44E2Y Start-Only Action Dashboard
 - Date: 2026-06-30
 - Scope: Finance HQ UX/layout refinement only.

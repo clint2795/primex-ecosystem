@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2Y Start-Only Action Dashboard</title>
+<title>PrimeX Finance HQ &middot; v44E2Z Next-Action Routing</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -61,6 +61,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
 .action-alert-banner{border-left:4px solid #d97706;margin-bottom:14px}
 .action-alert-banner.hide{display:none}
+.next-action-focus{outline:2px solid rgba(110,168,216,.9);outline-offset:3px;box-shadow:0 0 0 6px rgba(110,168,216,.14),var(--shadow)!important;transition:outline-color .2s ease,box-shadow .2s ease}
 .alert-list,.comm-list{display:grid;gap:10px}
 .alert-row,.comm-row{border:1px solid var(--line);border-radius:8px;padding:10px;background:#0f1722;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .alert-row.critical{border-left:4px solid #dc2626}
@@ -172,7 +173,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2Y</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2Z</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -830,7 +831,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2Y',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2Z',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -838,9 +839,9 @@ function markCustomerUpdateStale(){if(val('updateSent')==='Yes')set('updateSent'
 function markOrderMessagesStale(scope='all'){if(scope==='all')markConfirmationStale();markCustomerUpdateStale()}
 function updatePaymentStatusNotice(){
   if(!paymentStatusNotice)return;
-  const paid=val('paymentStatus')==='Paid';
-  paymentStatusNotice.className=paid?'note good':'note warn';
-  paymentStatusNotice.textContent=paid?'Payment status set to PAID. This order can enter fulfilment.':'Payment still awaiting. Do not pack/release yet.';
+  const payment=val('paymentStatus'),cleared=isPaymentCleared({payment});
+  paymentStatusNotice.className=cleared?'note good':'note warn';
+  paymentStatusNotice.textContent=cleared?'Payment cleared. This order can enter fulfilment.':(payment==='Awaiting payment'?'Awaiting payment. Do not release until payment is cleared or approved.':'Payment not complete. Do not release until payment is cleared or approved.');
 }
 function clearAddFeedback(){addProductFeedback?.classList.add('hide');addSupportFeedback?.classList.add('hide')}
 function showAddFeedback(el){if(!el)return;el.textContent='Added to order summary Done';el.classList.remove('hide');setTimeout(()=>el.classList.add('hide'),3000)}
@@ -958,7 +959,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2Y JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E2Z JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -966,7 +967,7 @@ unitPrice.addEventListener('input',()=>{updateManualProductPrice();markOrderMess
 productNeedsCheckReviewed?.addEventListener('input',updateSinglePreview);
 ['supportItemSelect','supportQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSupportPreview()}));
 supportUnitPrice.addEventListener('input',()=>{updateManualSupportPrice();markOrderMessagesStale('all')});
-paymentStatus.addEventListener('input',()=>{updatePaymentStatusNotice();syncFulfilmentPaymentWarning();markCustomerUpdateStale();renderCommunicationCentre();if(val('paymentStatus')==='Paid')stageNudge('Payment marked paid. Check fulfilment stage and customer update.','info')});
+paymentStatus.addEventListener('input',()=>{updatePaymentStatusNotice();syncFulfilmentPaymentWarning();markCustomerUpdateStale();renderCommunicationCentre();if(isPaymentCleared({payment:val('paymentStatus')}))stageNudge('Payment cleared. Check fulfilment stage and customer update.','info')});
 fulfilmentMethod.addEventListener('input',()=>{if(val('fulfilmentMethod')!=='Hold / not arranged')openOptionalDetails();syncPostageDefaults();updateFulfilmentVisibility();markCustomerUpdateStale()});
 ['customerRef','recPhone','postageService','labelStatus','trackingRef','labelQrRef','labelQrNote','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{markCustomerUpdateStale();refreshWhatsAppButtons();renderCommunicationCentre()}));
 labelStatus.addEventListener('change',()=>stageNudge('Postage or label status changed. Check customer update before release.','info'));
@@ -1576,6 +1577,7 @@ function requestInboxLifecycleBadge(req,blocked){
   if(req.convertedOrderId){
     const linked=requestLinkedQuote(req.convertedOrderId);
     if(!linked)return '<span class="badge-warn">Linked quote missing</span>';
+    if(linked.linkedLiveOrderId||linked.convertedOrderId)return '<span class="badge-good">Converted to live order</span>';
     const stage=quoteStatusValue(linked);
     if(stage==='Quote to send')return '<span class="badge-info">Quote created</span>';
     if(stage==='Quote sent / waiting customer')return '<span class="badge-info">Waiting customer</span>';
@@ -1597,8 +1599,10 @@ function convertRequestToQuote(id){const req=requestInbox.find(x=>x.requestId===
 function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderStartQuoteFollowup();renderStartCommsActions();renderAdmin();renderOrder();renderCommunicationCentre();renderActionBanner()}
 function isQuoteOrder(o){return (o.orderType||'Live order')==='Quote / enquiry'}
 function quoteStatusValue(o={}){if(!isQuoteOrder(o))return o.quoteStatus||'Quote to send';const st=String(o.quoteStatus||'').trim();if(st)return st;if(o.status==='Cancelled')return 'Cancelled';if((o.confirmation||'No')==='Yes')return 'Quote sent / waiting customer';return 'Quote to send'}
-function quoteFollowUpData(){const savedQuoteIds=new Set(dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)).map(o=>o.id));const activeRequests=activeRequestInboxItems();const draftQuotes=activeRequests.filter(r=>String(r.status||'').toLowerCase()==='draft quote'&&!savedQuoteIds.has(r.convertedOrderId||r.draftOrderId));const requests=activeRequests.filter(r=>!['converted','draft quote','parked','cancelled'].includes(String(r.status||'new').toLowerCase()));const quotes=dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o));return {requests,draftQuotes,toSend:quotes.filter(o=>quoteStatusValue(o)==='Quote to send'),waiting:quotes.filter(o=>quoteStatusValue(o)==='Quote sent / waiting customer'),ready:quotes.filter(o=>quoteStatusValue(o)==='Customer replied / ready to convert'),parked:quotes.filter(o=>['Parked','Cancelled'].includes(quoteStatusValue(o)))}}
-function renderStartQuoteFollowup(){if(!quoteFollowupStart)return;const q=quoteFollowUpData();const cards=[['New requests',q.requests.length,'Request Inbox','request'],['Draft quotes',q.draftQuotes.length,'Quote being prepared','request'],['Quotes to send',q.toSend.length,'Needs customer quote sent','quote'],['Waiting customer',q.waiting.length,'Quote sent follow-up','quote'],['Ready to convert',q.ready.length,'Customer accepted','quote'],['Parked/cancelled',q.parked.length,'Paused quote work','quote']];quoteFollowupStart.innerHTML=cards.map(c=>'<button class="quote-followup-card" onclick="showView('+jsArg(c[3]==='request'?'request':'history')+');'+(c[3]==='quote'?"renderHistory(\'quote\')":'')+'"><div class="k">'+htmlEscape(c[0])+'</div><div class="n">'+c[1]+'</div><div class="s">'+htmlEscape(c[2])+'</div></button>').join('')}
+function isConvertedQuote(o){return isQuoteOrder(o)&&!!(o.linkedLiveOrderId||o.convertedOrderId)}
+function quoteDisplayStatus(o){return isConvertedQuote(o)?'Converted to live order':quoteStatusValue(o)}
+function quoteFollowUpData(){const savedQuoteIds=new Set(dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)).map(o=>o.id));const activeRequests=activeRequestInboxItems();const draftQuotes=activeRequests.filter(r=>String(r.status||'').toLowerCase()==='draft quote'&&!savedQuoteIds.has(r.convertedOrderId||r.draftOrderId));const requests=activeRequests.filter(r=>!['converted','draft quote','parked','cancelled'].includes(String(r.status||'new').toLowerCase()));const quotes=dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)),openQuotes=quotes.filter(o=>!isConvertedQuote(o));return {requests,draftQuotes,toSend:openQuotes.filter(o=>quoteStatusValue(o)==='Quote to send'),waiting:openQuotes.filter(o=>quoteStatusValue(o)==='Quote sent / waiting customer'),ready:openQuotes.filter(o=>quoteStatusValue(o)==='Customer replied / ready to convert'),closed:quotes.filter(o=>isConvertedQuote(o)||['Parked','Cancelled'].includes(quoteStatusValue(o)))}}
+function renderStartQuoteFollowup(){if(!quoteFollowupStart)return;const q=quoteFollowUpData();const cards=[['New requests',q.requests.length,'Request Inbox','request'],['Draft quotes',q.draftQuotes.length,'Quote being prepared','request'],['Quotes to send',q.toSend.length,'Needs customer quote sent','quote'],['Waiting customer',q.waiting.length,'Quote sent follow-up','quote'],['Ready to convert',q.ready.length,'Customer accepted','quote'],['Closed / converted',q.closed.length,'Converted, parked or cancelled','quote']];quoteFollowupStart.innerHTML=cards.map(c=>'<button class="quote-followup-card" onclick="showView('+jsArg(c[3]==='request'?'request':'history')+');'+(c[3]==='quote'?"renderHistory(\'quote\')":'')+'"><div class="k">'+htmlEscape(c[0])+'</div><div class="n">'+c[1]+'</div><div class="s">'+htmlEscape(c[2])+'</div></button>').join('')}
 function quickQuoteUpdate(id,field,value){const o=orders.find(x=>x.id===id);if(!o||!isQuoteOrder(o))return;o[field]=value;if(field==='quoteStatus'&&value==='Quote sent / waiting customer')o.confirmation='Yes';saveLocal();renderAll();showToast('Quote updated locally');if(typeof autoSyncSavedQuoteOrder==='function')autoSyncSavedQuoteOrder(id)}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
 function isReleaseStatus(status){return ['Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(status)}
@@ -1622,6 +1626,7 @@ function needsPacking(o){return ['Ready to assemble','Assembled'].includes(norma
 function readyToRelease(o){return normalStatus(o)==='Packed / ready to send-collect'}
 function paymentBadge(o){
   if(isPaymentCleared(o)) return '<span class="badge-good">Paid/cleared</span>';
+  if(normalStatus(o)==='New / awaiting payment')return '<span class="badge-neutral">Awaiting payment</span>';
   return '<span class="badge-warn">Payment not complete</span>';
 }
 function workflowBadge(o){
@@ -1854,6 +1859,12 @@ function loadAndGenerateConfirmation(id){loadOrder(id);showView('order');generat
 function loadAndGenerateFulfilment(id){loadOrder(id);showView('order');generateFulfilment()}
 function sendQuoteFromHistory(id){loadOrder(id);startSendQuoteWorkflow()}
 function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines||[],materials:o.materials||{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:!!o.packingManualOverride,packingNeedsReview:!!o.packingNeedsReview,commStatus:communicationStatusFromOrder(o),sourceRequestId:o.sourceRequestId||'',sourceRequestMeta:o.sourceRequestMeta||null,sourceQuoteId:o.sourceQuoteId||'',sourceQuoteConvertedAt:o.sourceQuoteConvertedAt||'',supabaseOrderId:o.supabaseOrderId||'',supabaseSyncedAt:o.supabaseSyncedAt||'',supabaseItemSyncStatus:o.supabaseItemSyncStatus||''};packingManualOverride=!!o.packingManualOverride;packingNeedsReview=!!o.packingNeedsReview;set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderType',o.orderType||'Live order');set('orderSource',o.source||'Manual entry');set('referredBy',o.referredBy||'');set('quoteStatus',quoteStatusValue(o));set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('voidReason',o.voidReason||'');set('priceTier',o.tier);set('paymentStatus',paymentValue(o.payment));set('fulfilmentMethod',o.fulfilment||'Hold / not arranged');set('orderStatus',statusValue(o.status));set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageService',o.postageService||defaultPostageService(o));set('postageItems',o.postageItems??0);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('labelStatus',o.labelStatus||'Not booked');set('labelQrRef',o.labelQrRef||'');set('labelQrNote',o.labelQrNote||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');set('internalFulfilmentWarning',o.internalFulfilmentWarning||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();setOptionalDetailsOpen(optionalDetailsHasSavedData(o));showView('order');showOrderDbSyncState(o)}
+function orderTaskTarget(task){if(task==='payment')return paymentStatus?.closest('.field')||paymentStatus;if(task==='confirmation')return communicationRows?.querySelector('[data-comm-key="orderConfirmationStatus"]')||document.getElementById('communicationCentre');if(task==='customer-update')return communicationRows?.querySelector('[data-comm-key="dispatchMessageStatus"]')||document.getElementById('communicationCentre');if(task==='tracking')return fulfilmentTrackingGroup||document.getElementById('fulfilmentSection');if(task==='dispatch')return document.getElementById('fulfilmentSection');if(task==='status')return orderStatus?.closest('.field')||orderStatus;return document.getElementById('view-order')}
+function openOrderTask(id,task=''){
+  loadOrder(id);
+  if(['confirmation','customer-update','tracking','dispatch'].includes(task)){openOptionalDetails();renderCommunicationCentre()}
+  setTimeout(()=>{const target=orderTaskTarget(task);if(!target)return;if(target.tagName==='DETAILS')target.open=true;target.scrollIntoView({behavior:'smooth',block:'center'});target.classList.add('next-action-focus');setTimeout(()=>target.classList.remove('next-action-focus'),2800)},0);
+}
 function toggleValue(btn){}
 function historyMatches(o,filter){
   if(filter==='bin')return isBinned(o);
@@ -1867,7 +1878,7 @@ function historyMatches(o,filter){
   return true;
 }
 function quoteHistoryRow(o){
-  const isQ=isQuoteOrder(o),qStatus=quoteStatusValue(o),source=o.source||'Manual entry';
+  const isQ=isQuoteOrder(o),qStatus=quoteDisplayStatus(o),source=o.source||'Manual entry';
   const ref=o.referredBy?'<div class="tiny">Referred by: '+htmlEscape(o.referredBy)+'</div>':'';
   const req=o.sourceRequestId?'<div class="tiny">Request ID: '+htmlEscape(o.sourceRequestId)+'</div>':'';
   const meta=isQ?'<div class="tiny">Quote status: '+htmlEscape(qStatus)+' - Source: '+htmlEscape(source)+'</div>'+ref+req:'';
@@ -2141,7 +2152,7 @@ function commRow(row){
     secondary.push(commButton('Skip for now',"setCommStatus('"+row.key+"','skipped')",false,'subtle'));
   }
   const secondaryHtml=secondary.length?'<details class="comm-secondary"><summary>Advanced message controls</summary><div class="comm-secondary-actions">'+secondary.join('')+'</div></details>':'';
-  return '<div class="comm-row '+(actionable?'action-ready':'status-only')+'"><div class="comm-main"><strong>'+htmlEscape(row.title)+'</strong><p>'+htmlEscape(row.message)+'</p>'+secondaryHtml+'</div><span class="badge badge-neutral">'+htmlEscape(commStatusLabel(row.status))+'</span>'+(actionable?'<div class="comm-actions">'+actions.join('')+'</div>':'')+'</div>';
+  return '<div class="comm-row '+(actionable?'action-ready':'status-only')+'" data-comm-key="'+htmlEscape(row.key)+'"><div class="comm-main"><strong>'+htmlEscape(row.title)+'</strong><p>'+htmlEscape(row.message)+'</p>'+secondaryHtml+'</div><span class="badge badge-neutral">'+htmlEscape(commStatusLabel(row.status))+'</span>'+(actionable?'<div class="comm-actions">'+actions.join('')+'</div>':'')+'</div>';
 }
 function renderCommunicationCentre(){
   if(!communicationRows)return;
@@ -2171,19 +2182,21 @@ function deriveActionAlerts(){
   openOrders.forEach(o=>{
     const st=normalStatus(o);
     const paid=isPaymentCleared(o);
-    if(st==='Hold / issue')alerts.push({id:'hold-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Hold / issue',title:'Order on hold / issue',message:orderLabel(o)+' needs review.',actionTarget:'order',status:'open'});
-    if(!paid&&['Paid / ready to assemble','Ready to assemble','Assembled','Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(st))alerts.push({id:'unpaid-release-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Payment',title:'Unpaid order is in release flow',message:orderLabel(o)+' is not payment-cleared.',actionTarget:'order',status:'open'});
-    if(!paid)alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Payment',title:'Payment not complete',message:orderLabel(o)+' is awaiting payment.',actionTarget:'order',status:'open'});
-    if((o.confirmation||'No')!=='Yes')alerts.push({id:'confirm-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Communication',title:'Confirmation not marked sent',message:orderLabel(o)+' needs confirmation status checked.',actionTarget:'order',status:'open'});
-    if(['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(st)&&(o.updateSent||'No')!=='Yes')alerts.push({id:'update-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Communication',title:'Customer update not marked sent',message:orderLabel(o)+' is packed/dispatching.',actionTarget:'order',status:'open'});
-    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.tracking||o.trackingRef||'').trim())alerts.push({id:'track-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Packed order missing tracking/ref',message:orderLabel(o)+' needs postage reference checked.',actionTarget:'order',status:'open'});
-    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.labelStatus||'').match(/Label|collection|Collected/i))alerts.push({id:'label-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Postage label not confirmed',message:orderLabel(o)+' needs label/collection status checked.',actionTarget:'order',status:'open'});
+    if(st==='Hold / issue')alerts.push({id:'hold-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Hold / issue',title:'Order on hold / issue',message:orderLabel(o)+' needs review.',actionTarget:'order',task:'status',status:'open'});
+    const releaseFlow=['Paid / ready to assemble','Ready to assemble','Assembled','Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(st);
+    if(!paid&&releaseFlow)alerts.push({id:'unpaid-release-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Payment',title:'Unpaid order is in release flow',message:orderLabel(o)+' is not payment-cleared.',actionTarget:'order',task:'payment',status:'open'});
+    else if(!paid&&st!=='New / awaiting payment')alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Payment',title:'Payment not complete',message:orderLabel(o)+' needs payment status checked.',actionTarget:'order',task:'payment',status:'open'});
+    else if(!paid)alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Payment',title:'Awaiting payment',message:orderLabel(o)+' is in the normal awaiting-payment stage.',actionTarget:'order',task:'payment',status:'open'});
+    if((o.confirmation||'No')!=='Yes')alerts.push({id:'confirm-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Communication',title:'Confirmation not marked sent',message:orderLabel(o)+' needs confirmation status checked.',actionTarget:'order',task:'confirmation',status:'open'});
+    if(['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(st)&&(o.updateSent||'No')!=='Yes')alerts.push({id:'update-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Communication',title:'Customer update not marked sent',message:orderLabel(o)+' is packed/dispatching.',actionTarget:'order',task:'customer-update',status:'open'});
+    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.tracking||o.trackingRef||'').trim())alerts.push({id:'track-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Packed order missing tracking/ref',message:orderLabel(o)+' needs postage reference checked.',actionTarget:'order',task:'tracking',status:'open'});
+    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.labelStatus||'').match(/Label|collection|Collected/i))alerts.push({id:'label-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Postage label not confirmed',message:orderLabel(o)+' needs label/collection status checked.',actionTarget:'order',task:'tracking',status:'open'});
   });
   stockAlerts().slice(0,5).forEach(a=>alerts.push({id:'stock-'+a.k,sourceId:a.k,sourceType:'stock',severity:a.label==='OUT / None'?'critical':'warning',category:'Stock',title:a.label==='OUT / None'?'Stock out':'Stock low',message:(STOCK_LABELS[a.k]||a.k)+' - current qty '+(stock[a.k]||0)+'.',actionTarget:'stock',status:'open'}));
   return alerts;
 }
 function alertHtml(a){
-  const action=a.actionTarget==='order'?'loadOrder('+jsArg(a.sourceId)+')':"showView('stock')";
+  const action=a.actionTarget==='order'?'openOrderTask('+jsArg(a.sourceId)+','+jsArg(a.task||'')+')':"showView('stock')";
   return '<div class="alert-row '+htmlEscape(a.severity)+'"><div><strong>'+htmlEscape(a.title)+'</strong><p>'+htmlEscape(a.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(a.category)+'</span><button type="button" class="secondary" onclick="'+action+'">Open</button></div>';
 }
 function renderActionBanner(){
@@ -2364,7 +2377,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2Y JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2Z JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
