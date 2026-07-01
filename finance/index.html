@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E2Z Next-Action Routing</title>
+<title>PrimeX Finance HQ &middot; v44E3A Customer-Safe Quote &amp; Order Messages</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -173,7 +173,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E2Z</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3A</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -831,7 +831,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E2Z',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3A',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -959,7 +959,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E2Z JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3A JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -2277,20 +2277,26 @@ function quoteGreetingName(raw){
   if(/^(?:px|req|request|quote|order|cust(?:omer)?)[-_#]?\d/i.test(text))return '';
   return text;
 }
+function customerMessageLine(l){
+  const amount=l.kind==='product'?Number(l.price||0)*Number(l.qty||0):Number(l.price||0);
+  const included=l.kind==='product'&&!!PRODUCT_RULES[l.pid]?.supportItem&&amount<=0;
+  return customerLineTitle(l)+' - '+(included?'Included':money(amount));
+}
 function generateConfirmation(){
   openOptionalDetails();
   renderOrder();
   set('confirmationSent','No');
-  const lines=current.lines.map(l=>lineTitle(l)+' - '+money(l.kind==='product'?l.price*l.qty:l.price)).join('\n');
-  const quoteLines=current.lines.map(l=>customerLineTitle(l)+' - '+money(l.kind==='product'?l.price*l.qty:l.price)).join('\n');
+  const customerLines=current.lines.map(customerMessageLine).join('\n');
   const total=totalsBox.querySelector('.money')?.textContent||money(0);
   if(val('orderType')==='Quote / enquiry'){
     const greeting=quoteGreetingName(val('customerRef'));
-    let msg='PrimeX BioLabs - Quote / Availability Check\n\n';
+    const needsBacPrompt=nonRetaSupportSuggestionCount()>0&&!current.lines.some(l=>l.pid==='BAC3_ITEM'||l.pid==='BAC10_ITEM');
+    let msg='PrimeX BioLabs \u2014 Quote & Availability\n\n';
     if(greeting)msg+='Hi '+greeting+',\n\n';
-    msg+='Thank you for your enquiry. Your quote is below:\n\nQuote Ref: '+val('orderRef')+'\n\n';
-    msg+=(quoteLines||'No items added yet')+'\n\nEstimated total: '+total;
-    msg+='\n\nPlease let us know if you would like to proceed. Availability, fulfilment, payment, and dispatch details are confirmed separately before anything is finalised.\n\nResearch Use Only. Not for human or animal use. Not a medicine.';
+    msg+='Thank you for your enquiry. The items below have been checked and are currently available at the time of this quote:\n\nQuote reference: '+val('orderRef')+'\n\n';
+    msg+=(customerLines||'No items added yet')+'\n\nEstimated total: '+total;
+    if(needsBacPrompt)msg+='\n\nWould you like BAC water added?\n\u2022 3ml BAC water \u2014 \u00a35 each\n\u2022 10ml BAC water \u2014 \u00a312 each\nPlease reply with your preferred option, or let us know if you do not need BAC water.';
+    msg+='\n\nPlease reply to proceed, request a change, or ask us a question.\n\nResearch Use Only. Not for human or animal use. Not a medicine.';
     set('confirmationMsg',msg);
     if(confirmationDetails)confirmationDetails.open=true;
     autoExpandTextarea(confirmationMsg);
@@ -2299,13 +2305,17 @@ function generateConfirmation(){
     showToast('Quote message generated');
     return;
   }
-  let fulfilment=val('fulfilmentMethod')||'fulfilment pending';
-  if(fulfilment==='Hold / not arranged')fulfilment='fulfilment pending';
-  let msg='PrimeX BioLabs - Order Confirmation\n\nOrder Ref: '+val('orderRef')+'\n';
-  if(val('customerRef'))msg+='Reference: '+val('customerRef')+'\n';
-  msg+='\nItems confirmed:\n'+(lines||'No items added yet')+'\n\nTotal confirmed: '+total+'\nPayment status: '+val('paymentStatus');
-  if(val('paymentDueNote'))msg+='\nPayment note: '+val('paymentDueNote');
-  msg+='\nFulfilment: '+fulfilment+'\n\nFinal fulfilment contents are confirmed during order review.\nResearch Use Only. Not for human or animal use. Not a medicine.';
+  const greeting=quoteGreetingName(val('customerRef')),payment=val('paymentStatus'),fulfilment=val('fulfilmentMethod');
+  const customerSafeFulfilment=['Royal Mail postage','Royal Mail collection','Courier collection','Customer collection','Local drop-off'].includes(fulfilment);
+  let msg='PrimeX BioLabs \u2014 Order Confirmation\n\n';
+  if(greeting)msg+='Hi '+greeting+',\n\n';
+  msg+='Thank you. Your order is confirmed:\n\nOrder reference: '+val('orderRef')+'\n\nFinal items:\n'+(customerLines||'No items added yet')+'\n\nOrder total: '+total;
+  if(payment==='Paid')msg+='\n\nPayment received \u2014 thank you.';
+  else if(payment==='Waived'||payment==='Approved credit')msg+='\n\nPayment arrangements are confirmed.';
+  else msg+='\n\nPayment has not yet been marked as received.';
+  if(customerSafeFulfilment)msg+='\n\nDelivery / collection: '+customerFulfilmentMethodText({fulfilment,postageService:val('postageService')})+'.';
+  else msg+='\n\nWe\u2019ll confirm collection or dispatch arrangements separately.';
+  msg+='\n\nWe\u2019ll update you when your order is ready for collection or dispatch.\n\nResearch Use Only. Not for human or animal use. Not a medicine.';
   set('confirmationMsg',msg);
   if(confirmationDetails)confirmationDetails.open=true;
   autoExpandTextarea(confirmationMsg);
@@ -2377,7 +2387,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E2Z JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3A JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

@@ -1,5 +1,16 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E3A Customer-Safe Quote & Order Messages
+- Date: 2026-07-01
+- Scope: Customer-facing quote and final order confirmation wording only.
+- Updated Finance visible/version markers to v44E3A.
+- Added `customerMessageLine(l)` so zero-price/no-charge support items display as Included in customer messages while preserving internal pricing and order lines.
+- Updated only the Quote / enquiry branch of `generateConfirmation()` with the approved Quote & Availability wording, customer-safe greeting, conditional BAC prompt, clear reply action, and unchanged RUO wording.
+- Updated only the Live order branch of `generateConfirmation()` with customer-safe final items, total, payment wording, delivery/collection wording, next-step copy, and unchanged RUO wording.
+- Preserved `customerLineTitle(l)`, including the Retatrutide Observation customer wording.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- No payment-request generator/row, persisted fields, availability field, quote/order status, WhatsApp, Mark sent, stock, pricing, Request Hub, Planner, Supabase, fulfilment logic, or Step 2 layout was changed.
+
 ## v44E2Z Next-Action Routing
 - Date: 2026-07-01
 - Scope: Finance HQ next-action routing and presentation only.
