@@ -1,5 +1,15 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E3C Start / Queues Consolidation
+- Date: 2026-07-01
+- Scope: Start/Queues presentation and routing only.
+- Kept Start as a command-centre summary with queue counts, quote follow-up, one Next actions list, urgent stock, quick navigation, and one Backup action.
+- Removed the embedded queue order list, duplicate top Action Banner, direct customer-message action rows, Dispatch handover detail, and duplicate Quick actions backup button from Start.
+- Added `startQueueCardHTML(x)` so Start queue summary cards navigate to Queues and open the selected existing lane.
+- Kept Queues as the sole full operational lane view, with existing rows, filters, buttons, calculations, and transitions unchanged.
+- Preserved queue logic, status transitions, stock logic, storage, message templates, and database fields.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
 ## v44E3B Operator Language Pass
 - Date: 2026-07-01
 - Scope: Operator-facing presentation wording only.
