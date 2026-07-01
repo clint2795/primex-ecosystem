@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E3A Customer-Safe Quote &amp; Order Messages</title>
+<title>PrimeX Finance HQ &middot; v44E3B Operator Language Pass</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -173,7 +173,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3A</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3B</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -186,7 +186,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div class="queue-grid" id="queueCards">
         <button class="queue-card"><div class="k">Awaiting payment</div><div class="n">0</div><div class="s">fallback shown before app starts</div></button>
         <button class="queue-card"><div class="k">To pack / fulfil</div><div class="n">0</div><div class="s">0 postage items</div></button>
-        <button class="queue-card"><div class="k">Ready send / collect</div><div class="n">0</div><div class="s">0 parcels</div></button>
+        <button class="queue-card"><div class="k">Ready to send / collect</div><div class="n">0</div><div class="s">0 parcels</div></button>
         <button class="queue-card"><div class="k">Issues / hold</div><div class="n">0</div><div class="s">needs review</div></button>
       </div>
       <div id="queueList" class="card slim" style="box-shadow:none;margin-top:12px"><span class="tiny">Loading queue...</span></div>
@@ -204,7 +204,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="startActionPrompts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
     </section>
     <section class="card">
-      <div class="section-title"><div><h3>Messages to send</h3><p>Confirmations and updates that still need sending.</p></div></div>
+      <div class="section-title"><div><h3>Customer messages to send</h3><p>Customer confirmations and updates that are ready for action.</p></div></div>
       <div id="startCommsActions" class="card slim" style="box-shadow:none;margin-top:12px"></div>
     </section>
     <section class="card">
@@ -231,7 +231,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <div class="field"><label>Phone / WhatsApp</label><input id="recPhone" placeholder="Phone, WhatsApp, or contact ref"></div>
         <div class="field"><label>Order / request source</label><select id="orderSource"><option>Request Hub / online</option><option>Existing customer</option><option>Word of mouth / referral</option><option>Direct WhatsApp</option><option>Manual entry</option><option>Repeat customer</option><option>Other</option></select></div>
         <div class="field"><label>Referred by</label><input id="referredBy" placeholder="Internal tracking only"></div>
-        <div class="field" id="quoteStatusField"><label>Quote follow-up</label><select id="quoteStatus"><option>New request</option><option>Quote to send</option><option>Quote sent / waiting customer</option><option value="Customer replied / ready to convert">Customer accepted</option><option>Parked</option><option>Cancelled</option></select></div>
+        <div class="field" id="quoteStatusField"><label>Quote next action</label><select id="quoteStatus"><option>New request</option><option>Quote to send</option><option>Quote sent / waiting customer</option><option value="Customer replied / ready to convert">Quote accepted</option><option>Parked</option><option>Cancelled</option></select></div>
       </div>
       <details id="requestIntakeHelper" class="payment-advanced request-intake-helper">
         <summary>Request intake notes</summary>
@@ -304,23 +304,23 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     </section>
 
     <section class="card">
-      <div class="section-title"><div><h2>Step 3 Payment / Save</h2><p>Confirm totals, payment/status, then save locally first.</p></div></div>
+      <div class="section-title"><div><h2>Step 3 Payment & Save</h2><p>Confirm the payment position, choose the next order stage, then save locally first.</p></div></div>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Totals</div><div id="totalsBox"></div></section>
-      <section class="card slim" style="box-shadow:none"><div class="subhead">Payment & release</div>
+      <section class="card slim" style="box-shadow:none"><div class="subhead">Payment / release decision</div>
         <div class="grid two" style="margin-top:10px">
           <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Pay on collection</option><option>Approved credit</option><option>Waived</option><option>Refunded</option></select><span class="tiny">Pay on collection is not treated as paid/cleared.</span></div>
-          <div class="field"><label>Order status</label><select id="orderStatus"><option value="New / awaiting payment">New order</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Dispatched / awaiting delivery confirmation</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
+          <div class="field"><label>Order next stage</label><select id="orderStatus"><option value="New / awaiting payment">New - awaiting payment</option><option>Ready to assemble</option><option>Assembled</option><option>Packed / ready to send-collect</option><option>Dispatched / awaiting delivery confirmation</option><option>Sent / collected</option><option>Complete</option><option>Hold / issue</option><option>Cancelled</option></select></div>
           <details class="field full payment-advanced"><summary>Payment / release notes</summary><label>Payment due note</label><input id="paymentDueNote" placeholder="Expected payment / agreement note"><label>Release override</label><select id="releaseOverride"><option>No</option><option>Yes</option></select><label>Approved by</label><input id="releaseApprovedBy" placeholder="Only if releasing unpaid"></details>
         </div><div id="paymentStatusNotice" class="note warn" style="margin-top:10px">Payment still awaiting. Do not pack/release yet.</div>
       </section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Save</div><div class="tiny" style="margin-bottom:10px">Local save first. Quote / enquiry records appear in Quote follow-up after saving.</div>
-        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn primary" id="sendQuoteBtn" onclick="startSendQuoteWorkflow()">Send quote</button><button class="btn neutral" id="markQuoteAcceptedBtn" onclick="markCurrentQuoteAccepted()">Customer accepted</button><button class="btn good" id="saveOrder">Save order</button></div><details class="payment-advanced" style="margin-top:10px"><summary>Advanced save / database sync controls</summary><div class="btnrow" style="margin-top:10px"><button class="btn subtle" id="saveOrderToDatabase">Save current quote/order to database</button></div></details><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
+        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn primary" id="sendQuoteBtn" onclick="startSendQuoteWorkflow()">Send quote</button><button class="btn neutral" id="markQuoteAcceptedBtn" onclick="markCurrentQuoteAccepted()">Mark quote accepted</button><button class="btn good" id="saveOrder">Save order</button></div><details class="payment-advanced" style="margin-top:10px"><summary>Advanced save / database sync controls</summary><div class="btnrow" style="margin-top:10px"><button class="btn subtle" id="saveOrderToDatabase">Sync current quote/order to database</button></div></details><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
       </section>
     </section>
 
     <section class="card" id="optionalDetailsSection">
       <details id="optionalDetailsToggle" class="payment-advanced optional-details-toggle">
-        <summary><span><strong>Step 4 Optional Details</strong><small>Packing, fulfilment, messages, and exception controls when needed.</small></span><span class="tag">Optional</span></summary>
+        <summary><span><strong>Step 4 Fulfilment & Messages</strong><small>Packing, delivery, customer messages, and exception controls when needed.</small></span><span class="tag">When needed</span></summary>
         <div class="tiny optional-details-help">Closed by default. Open only when the order needs packing checks, fulfilment details, messages, or exception controls.</div>
 <section class="card slim materials-card" id="packingSection">
         <div class="subhead">Packing preview</div>
@@ -344,15 +344,15 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         </details>
       </section>
 
-      <section class="card slim" id="advancedMessageControls" style="box-shadow:none"><details class="payment-advanced"><summary>Advanced message controls</summary>
+      <section class="card slim" id="advancedMessageControls" style="box-shadow:none"><details class="payment-advanced"><summary>Manual message controls</summary>
         <div class="note message-flow-note" style="margin:10px 0">Message flow: generate -> copy/send -> mark sent -> save.</div>
         <div class="grid two" style="margin-top:10px">
-          <div class="field"><label>Order confirmation</label><select id="confirmationSent"><option>No</option><option>Yes</option><option>Confirmation needs regeneration</option></select></div>
+          <div class="field"><label>Order confirmation sent?</label><select id="confirmationSent"><option>No</option><option>Yes</option><option>Confirmation needs regeneration</option></select></div>
           <div class="field"><label>Customer update</label><select id="updateSent"><option>No</option><option>Yes</option><option>Customer update needs regeneration</option></select></div>
-          <details id="confirmationDetails" class="field full payment-advanced"><summary>Order confirmation message</summary><textarea id="confirmationMsg" class="readonly tall-textarea" readonly></textarea></details>
+          <details id="confirmationDetails" class="field full payment-advanced"><summary>Customer confirmation message</summary><textarea id="confirmationMsg" class="readonly tall-textarea" readonly></textarea></details>
           <div id="quoteSendInlineStatus" class="note good hide full" role="status" aria-live="polite"></div>
         </div>
-        <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn hide" id="openConfirmationWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markConfirmationSentNow()">Mark sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark customer update sent</button></div>
+        <div class="btnrow" style="margin-top:12px"><button class="btn" id="genConfirmation">Generate confirmation</button><button class="btn" id="copyConfirmation">Copy confirmation</button><button class="btn hide" id="openConfirmationWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markConfirmationSentNow()">Mark as sent</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark update as sent</button></div>
       </details></section>
 
       <section class="card slim" id="fulfilmentSection">
@@ -398,13 +398,13 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div id="releaseStatus" class="note" style="margin-bottom:10px"></div>
       <input id="internalFulfilmentWarning" type="hidden">
       <div class="field"><textarea id="fulfilmentMsg" class="readonly tall-textarea" readonly></textarea></div>
-      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genFulfilment">Generate customer update</button><button class="btn" id="copyFulfilment">Copy customer update</button><button class="btn hide" id="openFulfilmentWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark update sent</button></div>
+      <div class="btnrow" style="margin-top:12px"><button class="btn" id="genFulfilment">Generate customer update</button><button class="btn" id="copyFulfilment">Copy customer update</button><button class="btn hide" id="openFulfilmentWhatsApp">Open WhatsApp</button><button class="btn good" onclick="markCustomerUpdateSentNow()">Mark update as sent</button></div>
       </details>
       </section>
 
       <section class="card slim" id="communicationCentre">
         <div class="subhead">Communication Centre</div>
-        <div class="tiny" style="margin-bottom:10px">Quotes and live order messages only when an action is ready.</div>
+        <div class="tiny" style="margin-bottom:10px">Shows what customer message is ready, what it is waiting for, and what to do next.</div>
         <div id="communicationRows" class="comm-list"></div>
       </section>
 
@@ -831,7 +831,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3A',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3B',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -841,7 +841,7 @@ function updatePaymentStatusNotice(){
   if(!paymentStatusNotice)return;
   const payment=val('paymentStatus'),cleared=isPaymentCleared({payment});
   paymentStatusNotice.className=cleared?'note good':'note warn';
-  paymentStatusNotice.textContent=cleared?'Payment cleared. This order can enter fulfilment.':(payment==='Awaiting payment'?'Awaiting payment. Do not release until payment is cleared or approved.':'Payment not complete. Do not release until payment is cleared or approved.');
+  paymentStatusNotice.textContent=cleared?'Payment cleared. Next: prepare or fulfil the order.':(payment==='Awaiting payment'?'Awaiting payment. Do not release until payment is cleared or approved.':'Payment needs review before release.');
 }
 function clearAddFeedback(){addProductFeedback?.classList.add('hide');addSupportFeedback?.classList.add('hide')}
 function showAddFeedback(el){if(!el)return;el.textContent='Added to order summary Done';el.classList.remove('hide');setTimeout(()=>el.classList.add('hide'),3000)}
@@ -959,7 +959,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E3A JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3B JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1571,26 +1571,26 @@ function moveRequestToBin(id){const req=requestInbox.find(x=>x.requestId===id);i
 function restoreRequestFromBin(id){const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.binned=false;req.restoredAt=new Date().toISOString();saveLocal();renderRequestInbox();renderStartQuoteFollowup();showToast('Request restored from Bin')}
 function requestLinkedQuote(id){return orders.find(o=>o.id===id&&isQuoteOrder(o))||null}
 function openLinkedRequestQuote(req,field,label){const ref=req?.[field];if(!ref)return false;if(current?.id===ref&&current?.sourceRequestId===req.requestId){showView('order');showToast(label+' resumed');return true}const quote=requestLinkedQuote(ref);if(quote){loadOrder(ref);showToast(label+' opened');return true}showToast('This request is already linked to quote '+ref+', but the quote could not be found.');setRequestImportStatus('This request is already linked to quote '+ref+', but the quote could not be found.','warn');return false}
-function renderRequestInboxActions(req,showBin){if(showBin)return `<button class="btn good" onclick="restoreRequestFromBin(${jsArg(req.requestId)})">Restore from Bin</button>`;const status=String(req.status||'new').toLowerCase();if(req.convertedOrderId)return `<button class="btn primary" onclick="convertRequestToQuote(${jsArg(req.requestId)})">Open quote</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`;if(status==='draft quote'||req.draftOrderId)return `<button class="btn primary" onclick="convertRequestToQuote(${jsArg(req.requestId)})">Resume quote</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`;if(status==='parked')return `<button class="btn primary" onclick="markRequestStatus(${jsArg(req.requestId)},'reviewed')">Unpark</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`;return `<button class="btn primary" onclick="convertRequestToQuote(${jsArg(req.requestId)})">Create quote</button><button class="btn" onclick="saveRequestToDatabase(${jsArg(req.requestId)})">Save selected request to database</button><button class="btn" onclick="markRequestStatus(${jsArg(req.requestId)},'reviewed')">Mark reviewed</button><button class="btn subtle" onclick="markRequestStatus(${jsArg(req.requestId)},'parked')">Park</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`}
-function requestInboxLifecycleLine(req){const status=String(req.status||'new').toLowerCase();if(req.convertedOrderId)return `Quote created: ${htmlEscape(req.convertedOrderId)}`;if(status==='draft quote'||req.draftOrderId)return 'Quote draft created, save quote to move it into Quotes To Send.';if(status==='parked')return 'Parked request. Unpark before creating a quote.';return ''}
+function renderRequestInboxActions(req,showBin){if(showBin)return `<button class="btn good" onclick="restoreRequestFromBin(${jsArg(req.requestId)})">Restore from Bin</button>`;const status=String(req.status||'new').toLowerCase();if(req.convertedOrderId)return `<button class="btn primary" onclick="convertRequestToQuote(${jsArg(req.requestId)})">Open linked quote</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`;if(status==='draft quote'||req.draftOrderId)return `<button class="btn primary" onclick="convertRequestToQuote(${jsArg(req.requestId)})">Resume draft quote</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`;if(status==='parked')return `<button class="btn primary" onclick="markRequestStatus(${jsArg(req.requestId)},'reviewed')">Unpark request</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`;return `<button class="btn primary" onclick="convertRequestToQuote(${jsArg(req.requestId)})">Create customer quote</button><button class="btn" onclick="saveRequestToDatabase(${jsArg(req.requestId)})">Sync request to database</button><button class="btn" onclick="markRequestStatus(${jsArg(req.requestId)},'reviewed')">Mark reviewed</button><button class="btn subtle" onclick="markRequestStatus(${jsArg(req.requestId)},'parked')">Park request</button><button class="btn subtle" onclick="moveRequestToBin(${jsArg(req.requestId)})">Move to Bin</button>`}
+function requestInboxLifecycleLine(req){const status=String(req.status||'new').toLowerCase();if(req.convertedOrderId)return `Linked quote: ${htmlEscape(req.convertedOrderId)}`;if(status==='draft quote'||req.draftOrderId)return 'Draft quote exists. Save it to move into Quotes to send.';if(status==='parked')return 'Request is parked. Unpark before creating a quote.';return ''}
 function requestInboxLifecycleBadge(req,blocked){
   if(req.convertedOrderId){
     const linked=requestLinkedQuote(req.convertedOrderId);
     if(!linked)return '<span class="badge-warn">Linked quote missing</span>';
     if(linked.linkedLiveOrderId||linked.convertedOrderId)return '<span class="badge-good">Converted to live order</span>';
     const stage=quoteStatusValue(linked);
-    if(stage==='Quote to send')return '<span class="badge-info">Quote created</span>';
-    if(stage==='Quote sent / waiting customer')return '<span class="badge-info">Waiting customer</span>';
-    if(stage==='Customer replied / ready to convert')return '<span class="badge-good">Customer accepted</span>';
+    if(stage==='Quote to send')return '<span class="badge-info">Quote saved - send next</span>';
+    if(stage==='Quote sent / waiting customer')return '<span class="badge-info">Awaiting quote decision</span>';
+    if(stage==='Customer replied / ready to convert')return '<span class="badge-good">Quote accepted</span>';
     if(stage==='Parked')return '<span class="badge-neutral">Quote parked</span>';
     if(stage==='Cancelled')return '<span class="badge-bad">Quote cancelled</span>';
-    return '<span class="badge-info">Quote created</span>';
+    return '<span class="badge-info">Quote saved - send next</span>';
   }
   const status=String(req.status||'new').toLowerCase();
   if(status==='draft quote'||req.draftOrderId)return '<span class="badge-info">Quote draft</span>';
   if(status==='parked')return '<span class="badge-neutral">Parked</span>';
   if(status==='cancelled')return '<span class="badge-bad">Cancelled</span>';
-  return blocked?'<span class="badge-warn">Review needed</span>':'<span class="badge-good">Quote ready</span>';
+  return blocked?'<span class="badge-warn">Needs item review</span>':'<span class="badge-good">Ready to create quote</span>';
 }
 function renderRequestInbox(){if(!requestInboxList)return;const active=activeRequestInboxItems(),binned=binnedRequestInboxItems(),showBin=requestInboxView==='bin',list=showBin?binned:active,linkedCount=active.filter(req=>!!req.convertedOrderId).length,activeIntakeCount=active.length-linkedCount;if(requestInboxCount)requestInboxCount.textContent=activeIntakeCount+' active · '+linkedCount+' linked';if(requestInboxTabs)requestInboxTabs.querySelectorAll('button').forEach(btn=>btn.classList.toggle('active',btn.textContent.trim().toLowerCase()===(showBin?'bin':'active')));requestInboxList.innerHTML=list.length?list.map(req=>{const statuses=(req.items||[]).map(requestItemStatus),blocked=statuses.filter(s=>!s.ok).length;const badge=requestInboxLifecycleBadge(req,blocked);const dbLine=req.supabaseSyncedAt?`<div class="tiny">Database saved: ${htmlEscape(new Date(req.supabaseSyncedAt).toLocaleString())}</div>`:'';const binLine=isRequestBinned(req)?`<div class="tiny">Binned: ${htmlEscape(new Date(req.binnedAt||Date.now()).toLocaleString())}</div>`:'';const lifecycleLine=requestInboxLifecycleLine(req);const lifecycleHtml=lifecycleLine?`<div class="tiny">${lifecycleLine}</div>`:'';const actions=renderRequestInboxActions(req,showBin);return `<div class="queue-row"><div><strong>${htmlEscape(req.requestId)} - ${htmlEscape(req.customer?.nameOrRef||'No customer ref')} ${badge} ${isRequestBinned(req)?'<span class="badge-bad">BIN</span>':''}</strong><div class="tiny">${htmlEscape(req.source||'Request Hub')} - ${htmlEscape(new Date(req.receivedAt||Date.now()).toLocaleString())} - Status: ${htmlEscape(req.status||'new')}</div><div class="tiny">${requestInboxSummary(req)||'No item summary'}</div>${blocked?`<div class="tiny warn-text">${blocked} item${blocked===1?'':'s'} need manual review before auto-add.</div>`:''}${lifecycleHtml}${dbLine}${binLine}</div><div class="btnrow">${actions}</div></div>`}).join(''):'<div class="muted">'+(showBin?'No binned requests.':'No active requests imported yet.')+'</div>'}
 function markRequestStatus(id,status){const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.status=status;saveLocal();renderRequestInbox();showToast('Request '+status)}
@@ -1600,9 +1600,10 @@ function renderAll(){renderQueues();renderDispatchQuickAccess();renderHistory(wi
 function isQuoteOrder(o){return (o.orderType||'Live order')==='Quote / enquiry'}
 function quoteStatusValue(o={}){if(!isQuoteOrder(o))return o.quoteStatus||'Quote to send';const st=String(o.quoteStatus||'').trim();if(st)return st;if(o.status==='Cancelled')return 'Cancelled';if((o.confirmation||'No')==='Yes')return 'Quote sent / waiting customer';return 'Quote to send'}
 function isConvertedQuote(o){return isQuoteOrder(o)&&!!(o.linkedLiveOrderId||o.convertedOrderId)}
-function quoteDisplayStatus(o){return isConvertedQuote(o)?'Converted to live order':quoteStatusValue(o)}
+function operatorQuoteStatusLabel(status){if(status==='Quote to send')return 'Quote saved - send next';if(status==='Quote sent / waiting customer')return 'Awaiting quote decision';if(status==='Customer replied / ready to convert')return 'Quote accepted - convert next';return status}
+function quoteDisplayStatus(o){return isConvertedQuote(o)?'Converted to live order':operatorQuoteStatusLabel(quoteStatusValue(o))}
 function quoteFollowUpData(){const savedQuoteIds=new Set(dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)).map(o=>o.id));const activeRequests=activeRequestInboxItems();const draftQuotes=activeRequests.filter(r=>String(r.status||'').toLowerCase()==='draft quote'&&!savedQuoteIds.has(r.convertedOrderId||r.draftOrderId));const requests=activeRequests.filter(r=>!['converted','draft quote','parked','cancelled'].includes(String(r.status||'new').toLowerCase()));const quotes=dashboardOrders().filter(o=>isQuoteOrder(o)&&!isBinned(o)),openQuotes=quotes.filter(o=>!isConvertedQuote(o));return {requests,draftQuotes,toSend:openQuotes.filter(o=>quoteStatusValue(o)==='Quote to send'),waiting:openQuotes.filter(o=>quoteStatusValue(o)==='Quote sent / waiting customer'),ready:openQuotes.filter(o=>quoteStatusValue(o)==='Customer replied / ready to convert'),closed:quotes.filter(o=>isConvertedQuote(o)||['Parked','Cancelled'].includes(quoteStatusValue(o)))}}
-function renderStartQuoteFollowup(){if(!quoteFollowupStart)return;const q=quoteFollowUpData();const cards=[['New requests',q.requests.length,'Request Inbox','request'],['Draft quotes',q.draftQuotes.length,'Quote being prepared','request'],['Quotes to send',q.toSend.length,'Needs customer quote sent','quote'],['Waiting customer',q.waiting.length,'Quote sent follow-up','quote'],['Ready to convert',q.ready.length,'Customer accepted','quote'],['Closed / converted',q.closed.length,'Converted, parked or cancelled','quote']];quoteFollowupStart.innerHTML=cards.map(c=>'<button class="quote-followup-card" onclick="showView('+jsArg(c[3]==='request'?'request':'history')+');'+(c[3]==='quote'?"renderHistory(\'quote\')":'')+'"><div class="k">'+htmlEscape(c[0])+'</div><div class="n">'+c[1]+'</div><div class="s">'+htmlEscape(c[2])+'</div></button>').join('')}
+function renderStartQuoteFollowup(){if(!quoteFollowupStart)return;const q=quoteFollowUpData();const cards=[['New requests',q.requests.length,'Create or review quote','request'],['Draft quotes',q.draftQuotes.length,'Finish and save quote','request'],['Quotes to send',q.toSend.length,'Send quote to customer','quote'],['Awaiting quote decision',q.waiting.length,'Waiting for customer reply','quote'],['Convert to live order',q.ready.length,'Quote accepted','quote'],['Closed or converted',q.closed.length,'No active quote action','quote']];quoteFollowupStart.innerHTML=cards.map(c=>'<button class="quote-followup-card" onclick="showView('+jsArg(c[3]==='request'?'request':'history')+');'+(c[3]==='quote'?"renderHistory(\'quote\')":'')+'"><div class="k">'+htmlEscape(c[0])+'</div><div class="n">'+c[1]+'</div><div class="s">'+htmlEscape(c[2])+'</div></button>').join('')}
 function quickQuoteUpdate(id,field,value){const o=orders.find(x=>x.id===id);if(!o||!isQuoteOrder(o))return;o[field]=value;if(field==='quoteStatus'&&value==='Quote sent / waiting customer')o.confirmation='Yes';saveLocal();renderAll();showToast('Quote updated locally');if(typeof autoSyncSavedQuoteOrder==='function')autoSyncSavedQuoteOrder(id)}
 function isPaymentCleared(o){return ['Paid','Waived','Approved credit'].includes(o.payment)}
 function isReleaseStatus(status){return ['Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(status)}
@@ -1613,7 +1614,7 @@ function statusValue(status){return String(status||'New / awaiting payment')==='
 function normalStatus(o){return statusValue(o?.status)}
 function displayStatus(o){
   const st=normalStatus(o);
-  if(st==='New / awaiting payment')return 'New order';
+  if(st==='New / awaiting payment')return isPaymentCleared(o)?'Payment cleared - prepare order':'Awaiting payment';
   return st;
 }
 function customerStatusText(o){
@@ -1627,18 +1628,18 @@ function readyToRelease(o){return normalStatus(o)==='Packed / ready to send-coll
 function paymentBadge(o){
   if(isPaymentCleared(o)) return '<span class="badge-good">Paid/cleared</span>';
   if(normalStatus(o)==='New / awaiting payment')return '<span class="badge-neutral">Awaiting payment</span>';
-  return '<span class="badge-warn">Payment not complete</span>';
+  return '<span class="badge-warn">Awaiting payment review</span>';
 }
 function workflowBadge(o){
   const st=normalStatus(o);
   if(st==='Ready to assemble') return '<span class="badge-info">Ready to assemble</span>';
   if(st==='Assembled') return '<span class="badge-info">Assembled</span>';
   if(st==='Packed / ready to send-collect' && !isPaymentCleared(o)) return '<span class="badge-warn">Hold - payment required</span>';
-  if(st==='Packed / ready to send-collect') return '<span class="badge-good">Ready send/collect</span>';
+  if(st==='Packed / ready to send-collect') return '<span class="badge-good">Ready to send/collect</span>';
   if(st==='Dispatched / awaiting delivery confirmation') return '<span class="badge-info">In transit</span>';
   if(st==='Sent / collected') return '<span class="badge-good">Sent/collected</span>';
   if(st==='Cancelled') return '<span class="badge-bad">Cancelled</span>';
-  if(st==='Hold / issue') return '<span class="badge-bad">Hold/issue</span>';
+  if(st==='Hold / issue') return '<span class="badge-bad">Review issue</span>';
   return '<span class="badge-info">Awaiting prep</span>';
 }
 function orderTypeBadge(o){return o.orderType==='Test order'?'<span class="badge-bad">TEST</span>':(o.orderType==='Past order'?'<span class="badge-info">PAST</span>':(o.orderType==='Quote / enquiry'?'<span class="badge-info">QUOTE</span>':''))}
@@ -1715,7 +1716,7 @@ function queueRowHTML(o,key){
   const paymentLine=`Payment: ${htmlEscape(paymentValue(o.payment))}`;
   const fulfilLine=`Fulfilment: ${htmlEscape(displayStatus(o))}`;
   const moneyLine=`Value: ${money(o.total)} - ${htmlEscape(fulfilmentCountText(o))}`;
-  const warning=paymentClearedNeedsPrep(o)?'<div class="tiny">Payment cleared - needs prep / packing.</div>':((!isPaymentCleared(o)&&['pack','ready'].includes(key))?'<div class="tiny warn-text">Payment not complete - do not release until paid or approved.</div>':'');
+  const warning=paymentClearedNeedsPrep(o)?'<div class="tiny">Payment cleared - prepare or pack next.</div>':((!isPaymentCleared(o)&&['pack','ready'].includes(key))?'<div class="tiny warn-text">Payment needed before release - do not send/collect until paid or approved.</div>':'');
   return `<div class="${cls}"><div><strong>${htmlEscape(o.id)} - ${htmlEscape(o.customer||'No customer ref')} ${orderTypeBadge(o)} ${paymentBadge(o)} ${workflowBadge(o)}</strong><div class="tiny">${paymentLine}</div><div class="tiny">${fulfilLine}</div><div class="tiny">${moneyLine}</div>${contactLine(o)}${warning}${o.paymentDueNote?`<div class="tiny">Due note: ${htmlEscape(o.paymentDueNote)}</div>`:''}</div><div class="btnrow">${queueButtons(o,key)}</div></div>`;
 }
 function queueButtons(o,key){
@@ -1878,7 +1879,7 @@ function historyMatches(o,filter){
   return true;
 }
 function quoteHistoryRow(o){
-  const isQ=isQuoteOrder(o),qStatus=quoteDisplayStatus(o),source=o.source||'Manual entry';
+  const isQ=isQuoteOrder(o),qRawStatus=quoteStatusValue(o),qStatus=quoteDisplayStatus(o),source=o.source||'Manual entry';
   const ref=o.referredBy?'<div class="tiny">Referred by: '+htmlEscape(o.referredBy)+'</div>':'';
   const req=o.sourceRequestId?'<div class="tiny">Request ID: '+htmlEscape(o.sourceRequestId)+'</div>':'';
   const meta=isQ?'<div class="tiny">Quote status: '+htmlEscape(qStatus)+' - Source: '+htmlEscape(source)+'</div>'+ref+req:'';
@@ -1886,9 +1887,9 @@ function quoteHistoryRow(o){
   const quoteAdvanced='<details class="comm-secondary"><summary>Advanced quote controls</summary><div class="comm-secondary-actions"><button class="btn subtle" onclick="quickQuoteUpdate('+jsArg(o.id)+',&quot;quoteStatus&quot;,&quot;Quote to send&quot;)">Move back to Quote to send</button><button class="btn subtle" onclick="quickQuoteUpdate('+jsArg(o.id)+',&quot;quoteStatus&quot;,&quot;Parked&quot;)">Park</button><button class="btn subtle" onclick="quickQuoteUpdate('+jsArg(o.id)+',&quot;quoteStatus&quot;,&quot;Cancelled&quot;)">Cancel quote</button></div></details>';
   let quoteButtons='';
   if(isQ&&!isBinned(o)){
-    if(qStatus==='Quote to send')quoteButtons='<button class="btn primary" onclick="sendQuoteFromHistory('+jsArg(o.id)+')">Send quote</button>'+quoteAdvanced;
-    else if(qStatus==='Quote sent / waiting customer')quoteButtons='<button class="btn primary" onclick="quickQuoteUpdate('+jsArg(o.id)+',&quot;quoteStatus&quot;,&quot;Customer replied / ready to convert&quot;)">Customer accepted</button>'+quoteAdvanced;
-    else if(qStatus==='Customer replied / ready to convert')quoteButtons='<button class="btn good" onclick="convertQuoteToLive('+jsArg(o.id)+')">Convert to live order</button>'+quoteAdvanced;
+    if(qRawStatus==='Quote to send')quoteButtons='<button class="btn primary" onclick="sendQuoteFromHistory('+jsArg(o.id)+')">Send quote to customer</button>'+quoteAdvanced;
+    else if(qRawStatus==='Quote sent / waiting customer')quoteButtons='<button class="btn primary" onclick="quickQuoteUpdate('+jsArg(o.id)+',&quot;quoteStatus&quot;,&quot;Customer replied / ready to convert&quot;)">Mark quote accepted</button>'+quoteAdvanced;
+    else if(qRawStatus==='Customer replied / ready to convert')quoteButtons='<button class="btn good" onclick="convertQuoteToLive('+jsArg(o.id)+')">Convert to live order</button>'+quoteAdvanced;
     else quoteButtons=quoteAdvanced;
   }
   const normalButtons='<button class="btn" onclick="loadOrder('+jsArg(o.id)+')">Open / edit</button><button class="btn good" onclick="repeatOrderFrom('+jsArg(o.id)+')">Repeat order</button>'+(!isQ&&(o.orderType==='Test order'||normalStatus(o)==='Cancelled')?'<button class="btn subtle" onclick="moveOrderToBin('+jsArg(o.id)+')">Move to bin</button>':'');
@@ -1963,7 +1964,7 @@ function messageActionsForOrder(o){
   const updateReady=['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected'].includes(status);
   const trackingReady=!!String(o.tracking||o.trackingRef||'').trim();
   const updateNeeded=(o.updateSent||'No')!=='Yes';
-  if(confirmationNeeded)actions.push({type:'Send confirmation',label:'Send confirmation',onclick:`loadAndGenerateConfirmation(${jsArg(o.id)})`});
+  if(confirmationNeeded)actions.push({type:'Send order confirmation',label:'Send order confirmation',onclick:`loadAndGenerateConfirmation(${jsArg(o.id)})`});
   if(updateNeeded&&(updateReady||trackingReady))actions.push({type:trackingReady?'Send tracking update':'Send customer update',label:trackingReady?'Send tracking update':'Send customer update',onclick:`loadAndGenerateFulfilment(${jsArg(o.id)})`});
   return actions;
 }
@@ -1975,7 +1976,7 @@ function renderStartCommsActions(){
   const list=commsActionOrders();
   const shown=list.slice(0,5);
   const extra=list.length>shown.length?`<div class="tiny" style="margin-top:8px">${list.length-shown.length} more ready message action${list.length-shown.length===1?'':'s'} in Queues / History.</div>`:'';
-  startCommsActions.innerHTML=shown.length?shown.map(o=>{const actions=messageActionsForOrder(o);return `<div class="queue-row"><div><strong>${htmlEscape(o.id)} - ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">${htmlEscape(actions.map(a=>a.type).join(' + '))} - Status: ${htmlEscape(displayStatus(o))}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button>${actions.map(a=>`<button class="btn" onclick="${a.onclick}">${htmlEscape(a.label)}</button>`).join('')}</div></div>`}).join('')+extra:'<div class="muted">No ready message actions pending.</div>';
+  startCommsActions.innerHTML=shown.length?shown.map(o=>{const actions=messageActionsForOrder(o);return `<div class="queue-row"><div><strong>${htmlEscape(o.id)} - ${htmlEscape(o.customer||'No customer ref')}</strong><div class="tiny">Next: ${htmlEscape(actions.map(a=>a.type).join(' + '))} - Order stage: ${htmlEscape(displayStatus(o))}</div></div><div class="btnrow"><button class="btn" onclick="loadOrder(${jsArg(o.id)})">Open order</button>${actions.map(a=>`<button class="btn" onclick="${a.onclick}">${htmlEscape(a.label)}</button>`).join('')}</div></div>`}).join('')+extra:'<div class="muted">No customer message actions ready.</div>';
 }
 function renderStock(){
   if(!stockList)return;
@@ -2124,8 +2125,8 @@ function communicationStatusPayload(){
   return {commStatus:comm,...comm};
 }
 function commStatusLabel(status){
-  const labels={notNeeded:'Not needed',notReady:'Not ready yet',notSent:'Not sent',generated:'Generated',sent:'Sent',alreadySent:'Already sent',skipped:'Skipped'};
-  return labels[status]||'Not sent';
+  const labels={notNeeded:'Not needed',notReady:'Not ready yet',notSent:'Needs sending',generated:'Generated - send next',sent:'Sent',alreadySent:'Already sent',skipped:'Skipped'};
+  return labels[status]||'Needs sending';
 }
 function setCommStatus(key,status){
   current.commStatus={...communicationStatusDefaults(),...(current.commStatus||{}),[key]:status};
@@ -2146,7 +2147,7 @@ function commRow(row){
   if(actionable){
     if(row.generate)actions.push(commButton('Generate message',row.generate,false));
     if(row.openWhatsApp&&row.canOpenWhatsApp)actions.push(commButton('Open WhatsApp',row.openWhatsApp,false,'neutral'));
-    if(row.markSent)actions.push(commButton('Mark sent',row.markSent,false,'good'));
+    if(row.markSent)actions.push(commButton('Mark as sent',row.markSent,false,'good'));
     if(row.copy)secondary.push(commButton('Copy',row.copy,false,'subtle'));
     secondary.push(commButton('Mark already sent',"setCommStatus('"+row.key+"','alreadySent')",false,'subtle'));
     secondary.push(commButton('Skip for now',"setCommStatus('"+row.key+"','skipped')",false,'subtle'));
@@ -2163,10 +2164,10 @@ function renderCommunicationCentre(){
   const hasTracking=!!val('trackingRef');
   const isQuoteMode=val('orderType')==='Quote / enquiry';
   const rows=[
-    {key:'orderConfirmationStatus',title:isQuoteMode?'Quote message':'Order confirmation',message:isQuoteMode?'Generate the quote message, then mark sent when handled.':'Generate from the existing confirmation template, then mark sent when handled.',status:comm.orderConfirmationStatus,generate:'generateConfirmation();setCommStatus(\'orderConfirmationStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(confirmationMsg)',canOpenWhatsApp:canOpenWhatsApp(confirmationMsg),copy:'copyConfirmation.onclick()',markSent:'markConfirmationSentNow()'},
-    {key:'fulfilmentUpdateStatus',title:'Fulfilment / packing update',message:'Uses the existing customer update template when the order is being prepared.',status:comm.fulfilmentUpdateStatus,generate:'generateFulfilment();setCommStatus(\'fulfilmentUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'fulfilmentUpdateStatus\',\'sent\')',disabled:!paid},
-    {key:'dispatchMessageStatus',title:'Collection / dispatch message',message:packed?'Use the existing customer update after postage or collection details are ready.':'Not ready until the order is packed or ready to send/collect.',status:packed?comm.dispatchMessageStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'dispatchMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'dispatchMessageStatus\',\'sent\')',disabled:!packed},
-    {key:'trackingUpdateStatus',title:'Tracking / sent update',message:hasTracking?'Tracking/reference is present; customer update may be needed.':'Not ready until tracking or dispatch reference is added.',status:hasTracking?comm.trackingUpdateStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'trackingUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'trackingUpdateStatus\',\'sent\')',disabled:!hasTracking}
+    {key:'orderConfirmationStatus',title:isQuoteMode?'Send quote message':'Send order confirmation',message:isQuoteMode?'Send the quote to the customer, then mark as sent.':'Send the final order confirmation to the customer, then mark as sent.',status:comm.orderConfirmationStatus,generate:'generateConfirmation();setCommStatus(\'orderConfirmationStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(confirmationMsg)',canOpenWhatsApp:canOpenWhatsApp(confirmationMsg),copy:'copyConfirmation.onclick()',markSent:'markConfirmationSentNow()'},
+    {key:'fulfilmentUpdateStatus',title:'Send preparation update',message:'Use when the customer needs an update while the order is being prepared.',status:comm.fulfilmentUpdateStatus,generate:'generateFulfilment();setCommStatus(\'fulfilmentUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'fulfilmentUpdateStatus\',\'sent\')',disabled:!paid},
+    {key:'dispatchMessageStatus',title:'Send collection/dispatch message',message:packed?'Send collection or dispatch details once packing and booking details are correct.':'Waiting for packed/ready stage before this message is needed.',status:packed?comm.dispatchMessageStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'dispatchMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'dispatchMessageStatus\',\'sent\')',disabled:!packed},
+    {key:'trackingUpdateStatus',title:'Send tracking update',message:hasTracking?'Send tracking/reference details to the customer if they have not already received them.':'Waiting for tracking or dispatch reference.',status:hasTracking?comm.trackingUpdateStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'trackingUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'trackingUpdateStatus\',\'sent\')',disabled:!hasTracking}
   ];
   communicationRows.innerHTML=rows.map(commRow).join('');
 }
@@ -2182,29 +2183,29 @@ function deriveActionAlerts(){
   openOrders.forEach(o=>{
     const st=normalStatus(o);
     const paid=isPaymentCleared(o);
-    if(st==='Hold / issue')alerts.push({id:'hold-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Hold / issue',title:'Order on hold / issue',message:orderLabel(o)+' needs review.',actionTarget:'order',task:'status',status:'open'});
+    if(st==='Hold / issue')alerts.push({id:'hold-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Hold / issue',title:'Review order issue',message:orderLabel(o)+' is on hold. Decide the next action before release.',actionTarget:'order',task:'status',status:'open'});
     const releaseFlow=['Paid / ready to assemble','Ready to assemble','Assembled','Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(st);
-    if(!paid&&releaseFlow)alerts.push({id:'unpaid-release-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Payment',title:'Unpaid order is in release flow',message:orderLabel(o)+' is not payment-cleared.',actionTarget:'order',task:'payment',status:'open'});
-    else if(!paid&&st!=='New / awaiting payment')alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Payment',title:'Payment not complete',message:orderLabel(o)+' needs payment status checked.',actionTarget:'order',task:'payment',status:'open'});
-    else if(!paid)alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Payment',title:'Awaiting payment',message:orderLabel(o)+' is in the normal awaiting-payment stage.',actionTarget:'order',task:'payment',status:'open'});
-    if((o.confirmation||'No')!=='Yes')alerts.push({id:'confirm-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Communication',title:'Confirmation not marked sent',message:orderLabel(o)+' needs confirmation status checked.',actionTarget:'order',task:'confirmation',status:'open'});
-    if(['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(st)&&(o.updateSent||'No')!=='Yes')alerts.push({id:'update-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Communication',title:'Customer update not marked sent',message:orderLabel(o)+' is packed/dispatching.',actionTarget:'order',task:'customer-update',status:'open'});
-    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.tracking||o.trackingRef||'').trim())alerts.push({id:'track-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Packed order missing tracking/ref',message:orderLabel(o)+' needs postage reference checked.',actionTarget:'order',task:'tracking',status:'open'});
-    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.labelStatus||'').match(/Label|collection|Collected/i))alerts.push({id:'label-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Postage label not confirmed',message:orderLabel(o)+' needs label/collection status checked.',actionTarget:'order',task:'tracking',status:'open'});
+    if(!paid&&releaseFlow)alerts.push({id:'unpaid-release-'+o.id,sourceId:o.id,sourceType:'order',severity:'critical',category:'Payment',title:'Stop - payment needed before release',message:orderLabel(o)+' is in fulfilment but payment is not cleared.',actionTarget:'order',task:'payment',status:'open'});
+    else if(!paid&&st!=='New / awaiting payment')alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Payment',title:'Check payment before release',message:orderLabel(o)+' needs payment confirmed, waived, credited, or held.',actionTarget:'order',task:'payment',status:'open'});
+    else if(!paid)alerts.push({id:'pay-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Payment',title:'Awaiting payment',message:orderLabel(o)+' is waiting for payment before fulfilment.',actionTarget:'order',task:'payment',status:'open'});
+    if((o.confirmation||'No')!=='Yes')alerts.push({id:'confirm-'+o.id,sourceId:o.id,sourceType:'order',severity:'info',category:'Communication',title:'Send order confirmation',message:orderLabel(o)+' needs the customer confirmation sent and marked sent.',actionTarget:'order',task:'confirmation',status:'open'});
+    if(['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation'].includes(st)&&(o.updateSent||'No')!=='Yes')alerts.push({id:'update-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Communication',title:'Send customer update',message:orderLabel(o)+' is packed or dispatching. Send the customer update.',actionTarget:'order',task:'customer-update',status:'open'});
+    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.tracking||o.trackingRef||'').trim())alerts.push({id:'track-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Add tracking or booking reference',message:orderLabel(o)+' needs the dispatch reference recorded.',actionTarget:'order',task:'tracking',status:'open'});
+    if(st==='Packed / ready to send-collect'&&isCarrierDispatchMethod(o)&&!String(o.labelStatus||'').match(/Label|collection|Collected/i))alerts.push({id:'label-'+o.id,sourceId:o.id,sourceType:'order',severity:'warning',category:'Dispatch',title:'Confirm label or collection booking',message:orderLabel(o)+' needs label or collection status confirmed.',actionTarget:'order',task:'tracking',status:'open'});
   });
   stockAlerts().slice(0,5).forEach(a=>alerts.push({id:'stock-'+a.k,sourceId:a.k,sourceType:'stock',severity:a.label==='OUT / None'?'critical':'warning',category:'Stock',title:a.label==='OUT / None'?'Stock out':'Stock low',message:(STOCK_LABELS[a.k]||a.k)+' - current qty '+(stock[a.k]||0)+'.',actionTarget:'stock',status:'open'}));
   return alerts;
 }
 function alertHtml(a){
   const action=a.actionTarget==='order'?'openOrderTask('+jsArg(a.sourceId)+','+jsArg(a.task||'')+')':"showView('stock')";
-  return '<div class="alert-row '+htmlEscape(a.severity)+'"><div><strong>'+htmlEscape(a.title)+'</strong><p>'+htmlEscape(a.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(a.category)+'</span><button type="button" class="secondary" onclick="'+action+'">Open</button></div>';
+  return '<div class="alert-row '+htmlEscape(a.severity)+'"><div><strong>'+htmlEscape(a.title)+'</strong><p>'+htmlEscape(a.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(a.category)+'</span><button type="button" class="secondary" onclick="'+action+'">Open next action</button></div>';
 }
 function renderActionBanner(){
   if(!actionBanner)return;
   const alerts=deriveActionAlerts().filter(a=>a.severity==='critical'||a.severity==='warning').slice(0,3);
   if(!alerts.length){actionBanner.classList.add('hide');actionBanner.innerHTML='';return}
   actionBanner.classList.remove('hide');
-  actionBanner.innerHTML='<div class="section-title"><div><h2>Action needed</h2><p>'+alerts.length+' priority alert'+(alerts.length===1?'':'s')+' showing now.</p></div></div><div class="alert-list">'+alerts.map(alertHtml).join('')+'</div>';
+  actionBanner.innerHTML='<div class="section-title"><div><h2>Next actions</h2><p>'+alerts.length+' priority action'+(alerts.length===1?'':'s')+' showing now.</p></div></div><div class="alert-list">'+alerts.map(alertHtml).join('')+'</div>';
 }
 
 function messageSaveWarning(o){
@@ -2387,7 +2388,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3A JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3B JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

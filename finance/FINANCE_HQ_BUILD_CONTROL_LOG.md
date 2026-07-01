@@ -1,5 +1,16 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E3B Operator Language Pass
+- Date: 2026-07-01
+- Scope: Operator-facing presentation wording only.
+- Updated Finance visible/version markers to v44E3B.
+- Reworded Request Inbox lifecycle badges and actions around the next operator step while preserving technical item-readiness and stored request states.
+- Added `operatorQuoteStatusLabel(status)` and separated raw quote status from its History display label so quote actions continue using unchanged lifecycle values.
+- Reworded Start quote follow-up tiles, action alerts, Customer messages to send, payment/release guidance, and Communication Centre rows/status badges around what to do next, what is awaited, or what is blocking progress.
+- Renamed Step 4 presentation to Fulfilment & Messages / When needed without moving or redesigning its contents.
+- Preserved status values, queue behaviour, database fields, lifecycle transitions, stock logic, customer message templates, and message-generation behaviour.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
 ## v44E3A Customer-Safe Quote & Order Messages
 - Date: 2026-07-01
 - Scope: Customer-facing quote and final order confirmation wording only.
