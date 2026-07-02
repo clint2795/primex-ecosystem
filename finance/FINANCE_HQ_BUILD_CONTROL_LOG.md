@@ -1,5 +1,18 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E3D Workflow Page Foundation
+- Date: 2026-07-02
+- Scope: Active-work presentation and routing only.
+- Renamed the visible Queues page/navigation to Workflow while retaining internal view IDs and persistence contracts.
+- Added twelve derived Workflow stages covering quote drafts, active quote follow-up, stock shortage, payment, preparation, packing, collection, dispatch and tracking follow-up.
+- Added separate Workflow render paths for quote/request-draft rows and live-order rows so quote rows never expose payment, packing or dispatch controls.
+- Made live-order stage assignment mutually exclusive using stock shortage, then uncleared payment, then existing fulfilment/order status.
+- Restricted History presentation to completed, cancelled, converted/closed quote, past/test and binned records; active work remains in Workflow.
+- Restricted the active Request Inbox presentation to new/review intake while preserving linked/draft/closed request records internally.
+- Updated Start summary routing to open the matching Workflow stage.
+- Preserved stored status/quote values, orders, request records, save paths, stock deduction logic, lifecycle functions, message templates and database schema.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
 ## v44E3C Start / Queues Consolidation
 - Date: 2026-07-01
 - Scope: Start/Queues presentation and routing only.
