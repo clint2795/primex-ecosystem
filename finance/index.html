@@ -1,9 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E3E Workflow Usability Layout</title>
+<title>PrimeX Finance HQ &middot; v44E3F Customer Communication System</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -174,7 +174,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3E</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3F</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -818,7 +818,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3E',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3F',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -946,7 +946,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E3E JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3F JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -2122,7 +2122,7 @@ function renderAdmin(panel='system'){
 
 
 function orderLabel(o){return String(o?.id||'Order')+' - '+String(o?.customer||'No customer ref')}
-function communicationStatusDefaults(){return {orderConfirmationStatus:'notSent',paymentMessageStatus:'notReady',fulfilmentUpdateStatus:'notReady',dispatchMessageStatus:'notReady',trackingUpdateStatus:'notReady'}}
+function communicationStatusDefaults(){return {orderConfirmationStatus:'notSent',paymentMessageStatus:'notReady',fulfilmentUpdateStatus:'notReady',packedUpdateStatus:'notReady',collectionMessageStatus:'notReady',dispatchMessageStatus:'notReady',trackingUpdateStatus:'notReady',stockDelayMessageStatus:'notReady'}}
 function communicationStatusFromOrder(o={}){
   const saved=o.commStatus||{};
   const base=communicationStatusDefaults();
@@ -2150,7 +2150,7 @@ function commStatusLabel(status){
 function setCommStatus(key,status){
   current.commStatus={...communicationStatusDefaults(),...(current.commStatus||{}),[key]:status};
   if(key==='orderConfirmationStatus'&&(status==='sent'||status==='alreadySent'))set('confirmationSent','Yes');
-  if((key==='fulfilmentUpdateStatus'||key==='dispatchMessageStatus'||key==='trackingUpdateStatus')&&(status==='sent'||status==='alreadySent'))set('updateSent','Yes');
+  if(['fulfilmentUpdateStatus','packedUpdateStatus','collectionMessageStatus','dispatchMessageStatus','trackingUpdateStatus','stockDelayMessageStatus'].includes(key)&&(status==='sent'||status==='alreadySent'))set('updateSent','Yes');
   renderCommunicationCentre();
   renderActionBanner();
   showToast(commStatusLabel(status)+' - save order');
@@ -2182,11 +2182,19 @@ function renderCommunicationCentre(){
   const packed=['Packed / ready to send-collect','Dispatched / awaiting delivery confirmation','Sent / collected','Complete'].includes(st);
   const hasTracking=!!val('trackingRef');
   const isQuoteMode=val('orderType')==='Quote / enquiry';
+  const isLive=val('orderType')==='Live order';
+  const hasFinalLines=current.lines.length>0;
+  const method=val('fulfilmentMethod');
+  const customerCollection=method==='Customer collection';
   const rows=[
     {key:'orderConfirmationStatus',title:isQuoteMode?'Send quote message':'Send order confirmation',message:isQuoteMode?'Send the quote to the customer, then mark as sent.':'Send the final order confirmation to the customer, then mark as sent.',status:comm.orderConfirmationStatus,generate:'generateConfirmation();setCommStatus(\'orderConfirmationStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(confirmationMsg)',canOpenWhatsApp:canOpenWhatsApp(confirmationMsg),copy:'copyConfirmation.onclick()',markSent:'markConfirmationSentNow()'},
-    {key:'fulfilmentUpdateStatus',title:'Send preparation update',message:'Use when the customer needs an update while the order is being prepared.',status:comm.fulfilmentUpdateStatus,generate:'generateFulfilment();setCommStatus(\'fulfilmentUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'fulfilmentUpdateStatus\',\'sent\')',disabled:!paid},
-    {key:'dispatchMessageStatus',title:'Send collection/dispatch message',message:packed?'Send collection or dispatch details once packing and booking details are correct.':'Waiting for packed/ready stage before this message is needed.',status:packed?comm.dispatchMessageStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'dispatchMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'dispatchMessageStatus\',\'sent\')',disabled:!packed},
-    {key:'trackingUpdateStatus',title:'Send tracking update',message:hasTracking?'Send tracking/reference details to the customer if they have not already received them.':'Waiting for tracking or dispatch reference.',status:hasTracking?comm.trackingUpdateStatus:'notReady',generate:'generateFulfilment();setCommStatus(\'trackingUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'trackingUpdateStatus\',\'sent\')',disabled:!hasTracking}
+    {key:'paymentMessageStatus',title:'Send payment request',message:!isLive?'Available only for a live order.':paid?'Payment is already cleared.':!hasFinalLines?'Add and agree final order contents first.':'Operator must confirm the final contents before generating.',status:isLive&&!paid&&hasFinalLines?(comm.paymentMessageStatus==='notReady'?'notSent':comm.paymentMessageStatus):'notReady',generate:'generatePaymentRequest()',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'setCommStatus(\'paymentMessageStatus\',\'sent\')',disabled:!isLive||paid||!hasFinalLines},
+    {key:'fulfilmentUpdateStatus',title:'Send preparation update',message:'Tell the customer their confirmed order is being prepared.',status:comm.fulfilmentUpdateStatus,generate:'generateFulfilment(\'preparation\');setCommStatus(\'fulfilmentUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'fulfilmentUpdateStatus\',\'sent\')'},
+    {key:'packedUpdateStatus',title:'Send packed update',message:packed?'Tell the customer the order has been packed.':'Waiting for packed/ready stage.',status:packed?comm.packedUpdateStatus:'notReady',generate:'generateFulfilment(\'packed\');setCommStatus(\'packedUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'packedUpdateStatus\',\'sent\')',disabled:!packed},
+    {key:'collectionMessageStatus',title:'Send ready for collection',message:customerCollection?'Tell the customer the order is ready for the agreed collection.':'Available when Customer collection is selected.',status:customerCollection&&packed?comm.collectionMessageStatus:'notReady',generate:'generateFulfilment(\'collection\');setCommStatus(\'collectionMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'collectionMessageStatus\',\'sent\')',disabled:!customerCollection||!packed},
+    {key:'dispatchMessageStatus',title:'Send ready for dispatch',message:!customerCollection&&packed?'Tell the customer the packed order is ready for carrier handover.':'Waiting for a packed delivery order.',status:!customerCollection&&packed?comm.dispatchMessageStatus:'notReady',generate:'generateFulfilment(\'dispatch\');setCommStatus(\'dispatchMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'dispatchMessageStatus\',\'sent\')',disabled:customerCollection||!packed},
+    {key:'trackingUpdateStatus',title:'Send tracking / dispatched update',message:hasTracking?'Send the customer their tracking/reference details.':'Waiting for tracking or dispatch reference.',status:hasTracking?comm.trackingUpdateStatus:'notReady',generate:'generateFulfilment(\'tracking\');setCommStatus(\'trackingUpdateStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'trackingUpdateStatus\',\'sent\')',disabled:!hasTracking},
+    {key:'stockDelayMessageStatus',title:'Send stock / availability update',message:'Use only when an availability check or stock delay needs a customer update.',status:comm.stockDelayMessageStatus==='notReady'?'notSent':comm.stockDelayMessageStatus,generate:'generateFulfilment(\'stock-delay\');setCommStatus(\'stockDelayMessageStatus\',\'generated\')',openWhatsApp:'openWhatsAppMessage(fulfilmentMsg)',canOpenWhatsApp:canOpenWhatsApp(fulfilmentMsg),copy:'copyCustomerUpdate()',markSent:'markCustomerUpdateSentNow();setCommStatus(\'stockDelayMessageStatus\',\'sent\')'}
   ];
   communicationRows.innerHTML=rows.map(commRow).join('');
 }
@@ -2313,7 +2321,7 @@ function generateConfirmation(){
     const needsBacPrompt=nonRetaSupportSuggestionCount()>0&&!current.lines.some(l=>l.pid==='BAC3_ITEM'||l.pid==='BAC10_ITEM');
     let msg='PrimeX BioLabs \u2014 Quote & Availability\n\n';
     if(greeting)msg+='Hi '+greeting+',\n\n';
-    msg+='Thank you for your enquiry. The items below have been checked and are currently available at the time of this quote:\n\nQuote reference: '+val('orderRef')+'\n\n';
+    msg+='Thank you for your enquiry. Your quote is below. We’ll confirm availability before anything is finalised:\n\nQuote reference: '+val('orderRef')+'\n\n';
     msg+=(customerLines||'No items added yet')+'\n\nEstimated total: '+total;
     if(needsBacPrompt)msg+='\n\nWould you like BAC water added?\n\u2022 3ml BAC water \u2014 \u00a35 each\n\u2022 10ml BAC water \u2014 \u00a312 each\nPlease reply with your preferred option, or let us know if you do not need BAC water.';
     msg+='\n\nPlease reply to proceed, request a change, or ask us a question.\n\nResearch Use Only. Not for human or animal use. Not a medicine.';
@@ -2332,9 +2340,9 @@ function generateConfirmation(){
   msg+='Thank you. Your order is confirmed:\n\nOrder reference: '+val('orderRef')+'\n\nFinal items:\n'+(customerLines||'No items added yet')+'\n\nOrder total: '+total;
   if(payment==='Paid')msg+='\n\nPayment received \u2014 thank you.';
   else if(payment==='Waived'||payment==='Approved credit')msg+='\n\nPayment arrangements are confirmed.';
-  else msg+='\n\nPayment has not yet been marked as received.';
+  else msg+='\n\nPayment is still outstanding. Please wait for the payment request before making payment.';
   if(customerSafeFulfilment)msg+='\n\nDelivery / collection: '+customerFulfilmentMethodText({fulfilment,postageService:val('postageService')})+'.';
-  else msg+='\n\nWe\u2019ll confirm collection or dispatch arrangements separately.';
+  else msg+='\n\nDelivery or collection arrangements will be shared when they are ready.';
   msg+='\n\nWe\u2019ll update you when your order is ready for collection or dispatch.\n\nResearch Use Only. Not for human or animal use. Not a medicine.';
   set('confirmationMsg',msg);
   if(confirmationDetails)confirmationDetails.open=true;
@@ -2401,13 +2409,37 @@ function syncFulfilmentPaymentWarning(){
   return warn;
 }
 function legacyMarkCustomerUpdateStale(){markCustomerUpdateStale()}
-function generateFulfilment(){openOptionalDetails();set('updateSent','No');let o=orderPayload();let msg='PrimeX BioLabs - Order Update\n\nOrder Ref: '+o.id;if(o.customer)msg+='\nReference: '+o.customer;msg+='\n\nStatus: '+customerStatusText(o)+'\nFulfilment: '+customerFulfilmentMethodText(o);if(shouldShowCustomerPostageService(o)&&o.postageService)msg+='\nPostage / courier service: '+o.postageService;msg+='\n\n'+customerFulfilmentLine(o);if(o.tracking)msg+='\n\nTracking / reference: '+o.tracking;if(isPaymentCleared(o))msg+='\n\nPayment: marked received.';msg+='\n\nResearch Use Only. Not for human or animal use. Not a medicine.';set('fulfilmentMsg',msg);autoExpandTextarea(fulfilmentMsg);syncFulfilmentPaymentWarning();setTimeout(()=>fulfilmentMessageGroup?.scrollIntoView({behavior:'smooth',block:'center'}),0);refreshWhatsAppButtons();showToast('Fresh customer update generated - mark sent after sending')}
+function customerMessageGreeting(o){const name=quoteGreetingName(o.customer);return name?'Hi '+name+',\n\n':''}
+function customerSafeReference(o){return String(o.id||'').trim()}
+function customerSafeLineItems(o){return (o.lines||[]).map(customerMessageLine).join('\n')}
+function customerMessageFooter(){return 'Research Use Only. Not for human or animal use. Not a medicine.'}
+function autoFulfilmentMessageType(o){const st=normalStatus(o);if(st==='Hold / issue')return 'stock-delay';if(o.tracking)return 'tracking';if(st==='Dispatched / awaiting delivery confirmation'||st==='Sent / collected')return 'tracking';if(st==='Packed / ready to send-collect')return o.fulfilment==='Customer collection'?'collection':'dispatch';if(st==='Assembled')return 'packed';return 'preparation'}
+function fulfilmentMessageBody(type,o){
+  if(type==='preparation')return ['PrimeX BioLabs — Preparation Update','Your confirmed order is now being prepared. We’ll let you know when it has been packed and the next handover step is ready.'];
+  if(type==='packed')return ['PrimeX BioLabs — Packed Update','Your order has been packed. We’ll send the collection or dispatch details when the handover arrangements are ready.'];
+  if(type==='collection')return ['PrimeX BioLabs — Ready for Collection','Your order is ready for the agreed customer collection. Please use the collection arrangements already agreed with us.'];
+  if(type==='dispatch')return ['PrimeX BioLabs — Ready for Dispatch','Your order is packed and ready for '+customerFulfilmentMethodText(o)+'. We’ll send tracking or confirmation after handover when available.'];
+  if(type==='tracking')return ['PrimeX BioLabs — Dispatched Update','Your order has been dispatched.'+(o.tracking?'\n\nTracking / reference: '+o.tracking:' We’ll share tracking details if they become available.')];
+  if(type==='stock-delay')return ['PrimeX BioLabs — Availability Update','We’re still confirming availability for your order. We’ll update you as soon as that check is complete. Nothing has been finalised while we wait for confirmation.'];
+  return fulfilmentMessageBody('preparation',o);
+}
+function writeCustomerUpdate(msg,toast){set('fulfilmentMsg',msg);autoExpandTextarea(fulfilmentMsg);syncFulfilmentPaymentWarning();setTimeout(()=>fulfilmentMessageGroup?.scrollIntoView({behavior:'smooth',block:'center'}),0);refreshWhatsAppButtons();showToast(toast)}
+function generateFulfilment(type){openOptionalDetails();set('updateSent','No');const o=orderPayload();const selected=type||autoFulfilmentMessageType(o);const parts=fulfilmentMessageBody(selected,o);let msg=parts[0]+'\n\n'+customerMessageGreeting(o)+'Order reference: '+customerSafeReference(o)+'\n\n'+parts[1]+'\n\n'+customerMessageFooter();writeCustomerUpdate(msg,'Fresh '+selected+' message generated - send, then mark sent')}
+function generatePaymentRequest(){
+  const o=orderPayload();
+  if(o.orderType!=='Live order'){showToast('Payment requests can only be generated for a live order');return false}
+  if(!o.lines.length){showToast('Add at least one final line before requesting payment');return false}
+  if(isPaymentCleared(o)){showToast('Payment is already cleared - no request generated');return false}
+  if(!confirm('Confirm the operator has agreed the final order contents with the customer. Generate the payment request now?')){showToast('Payment request cancelled - final contents were not confirmed');return false}
+  let msg='PrimeX BioLabs — Payment Request\n\n'+customerMessageGreeting(o)+'Your final order contents are confirmed:\n\n'+customerSafeLineItems(o)+'\n\nOrder total: '+money(o.total)+'\nOrder reference: '+customerSafeReference(o)+'\n\nPlease use the payment instructions sent separately. Your order will move forward once payment arrangements are confirmed.\n\n'+customerMessageFooter();
+  setCommStatus('paymentMessageStatus','generated');writeCustomerUpdate(msg,'Payment request generated - review, send, then mark sent');return true
+}
 function copyCustomerUpdate(){copyText(fulfilmentMsg.value);refreshWhatsAppButtons();showToast('Customer update copied - send it, then mark update sent')}
 function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3E JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3F JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

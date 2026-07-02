@@ -1,4 +1,4 @@
-﻿# PrimeX Finance HQ Build Control Log
+# PrimeX Finance HQ Build Control Log
 
 ## v44E3E Workflow Usability Layout
 - Date: 2026-07-02
@@ -169,9 +169,9 @@
 - Date: 2026-06-24
 - Scope: Planner-origin Retatrutide Observation request mapping only.
 - Added the Finance request alias `RTA20_OBSERVATION -> RTA20` so Retatrutide Observation imports can create a quote line from Request Inbox.
-- Added a zero-line guard in `convertRequestToQuote()` so Finance does not silently create a £0 quote when no request items map into quote lines.
+- Added a zero-line guard in `convertRequestToQuote()` so Finance does not silently create a Â£0 quote when no request items map into quote lines.
 - The guard shows: `No quote items were imported. Review request mapping before creating quote.` and keeps the request active.
-- Existing £0 test quote records were not cleaned or changed.
+- Existing Â£0 test quote records were not cleaned or changed.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No pricing logic, stock logic, Supabase logic, Request Hub, Planner, payment/fulfilment gate, notification system, or button labels were changed.
 
@@ -423,7 +423,7 @@ Privacy / data warning:
 
 Manual browser tests needed:
 - Open GitHub Pages with a cache-busted v42.9B URL and confirm badge shows v42.9B JS OK.
-- Confirm currency shows Â£, not Ã‚Â£.
+- Confirm currency shows Ã‚Â£, not Ãƒâ€šÃ‚Â£.
 - Confirm no real saved customer/order appears on public Pages by default.
 - Confirm Clear test data / Reset local data clears local browser state.
 - Confirm Quote / enquiry, Convert quote to live order, Repeat order, Backup now, Action Alerts, and Communication Centre still appear.
@@ -611,7 +611,7 @@ Files changed:
 - finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
 
 Pre-edit inspection:
-- Active file was v42.9F with title "PrimeX Finance HQ Â· v42.9F Empty State Warning Hierarchy Polish" and boot badge "v42.9F JS OK".
+- Active file was v42.9F with title "PrimeX Finance HQ Ã‚· v42.9F Empty State Warning Hierarchy Polish" and boot badge "v42.9F JS OK".
 - Found Step 1 already using "1. Product / compound".
 - Found Step 2 using "2. Add BAC / support item" and the support selector using "BAC / support item".
 - Found other BAC/support wording in generated summaries/admin notes; those were left unchanged because they can affect packing, totals, or operational output wording.
@@ -646,7 +646,7 @@ Files changed:
 - finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
 
 Pre-edit inspection:
-- Active file was v42.9G with title "PrimeX Finance HQ Â· v42.9G Order Step Label Hierarchy Cleanup" and boot badge "v42.9G JS OK".
+- Active file was v42.9G with title "PrimeX Finance HQ Ã‚· v42.9G Order Step Label Hierarchy Cleanup" and boot badge "v42.9G JS OK".
 - Guide/helper prompts were mostly using the shared `.note` class, including Order Type, pricing preview, structure preview, support item pricing, fulfilment method, fulfilment checklist, release status, message flow, and generated packing helper prompts.
 - `.note` is also used for `.note.warn` and `.note.good`, so the base `.note` style was not changed globally.
 
@@ -685,7 +685,7 @@ Files changed:
 - finance/FINANCE_HQ_BUILD_CONTROL_LOG.md
 
 Pre-edit inspection:
-- Active file was v42.9H with title "PrimeX Finance HQ Â· v42.9H Guide Prompt Visibility Polish" and boot badge "v42.9H JS OK".
+- Active file was v42.9H with title "PrimeX Finance HQ Ã‚· v42.9H Guide Prompt Visibility Polish" and boot badge "v42.9H JS OK".
 - Order page sections were already present as Order, Add order items, Order summary, Packing contents, Fulfilment / Delivery, Communication Centre, and Final check.
 - Existing styling used shared card, section-title, note, flow-block, payment-advanced, and Communication Centre row classes. Global selectors were avoided where possible.
 
@@ -1238,7 +1238,7 @@ Files changed:
 
 What changed:
 - Updated the shared `money()` display formatter to render the pound sign using a stable Unicode escape (`\u00a3`).
-- Open Order Value and other values that use `money()` now render `£` correctly instead of mojibake such as `Â£` / `A£`.
+- Open Order Value and other values that use `money()` now render `Â£` correctly instead of mojibake such as `Ã‚Â£` / `AÂ£`.
 - Inspected Backup / Export warning wording; it remains valid until orders and stock are fully cloud-backed.
 
 What was not changed:
@@ -1523,3 +1523,16 @@ What was not changed:
 - Removed customer-facing Copy finance JSON, Contact section, and Product & fulfilment info buttons from the Request Hub action row.
 - Files changed: order-request/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - No Planner, Finance HQ, payload shape, pricing, stock deduction, quote conversion, product logic, or customer message template wording changed.
+
+
+## v44E3F Customer Communication System — 2026-07-02
+
+- Version: v44E3F
+- Scope: Customer-facing message system only.
+- Replaced the generic fulfilment update with distinct preparation, packed, collection, dispatch, tracking, and stock-delay templates.
+- Added shared customer-safe greeting, reference, line-item, workflow selection, and immutable RUO footer helpers.
+- Made quote availability wording conditional-safe and retained the BAC water prompt and prices.
+- Removed internal status, fulfilment, and payment labels from customer updates; revised order-confirmation payment wording.
+- Added a live-order-only Payment Request row using the existing paymentMessageStatus. Generation requires final lines, uncleared payment, and an explicit operator confirmation that final contents are agreed.
+- Copy and WhatsApp continue to use the generated textarea. Sending and Mark sent remain explicit operator actions.
+- No saved status values, stock calculations, workflow derivation, lifecycle transitions, database schema, totals, Request Hub, or Planner logic changed.
