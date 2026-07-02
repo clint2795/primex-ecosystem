@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E3G Mission Control Counts + Back Navigation</title>
+<title>PrimeX Finance HQ &middot; v44E3H Operator Guidance System</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -165,7 +165,9 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .comm-secondary>summary{cursor:pointer;color:#7f92a5;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
 .comm-secondary-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .comm-secondary-actions .btn{padding:7px 9px;font-size:12px}
-@media(max-width:760px){.comm-secondary-actions .btn{width:auto}.comm-row.action-ready .comm-actions .btn{width:100%}}</style>
+.operator-guide{border:1px solid #203044;border-left:2px solid #35536f;background:#09111a;border-radius:8px;padding:10px 12px;margin:0 0 12px;color:#b9c9d7;font-size:12px;line-height:1.45}
+.operator-guide strong{display:block;color:#dce8f2;font-size:13px;margin-bottom:3px}.operator-guide .guide-state{color:#91a7b9}.operator-guide .guide-next{margin-top:6px;color:#b9c9d7}.operator-guide ul{margin:4px 0 0 18px;padding:0}.operator-guide li{margin:2px 0}.comm-guidance{margin-top:6px;padding-top:6px;border-top:1px solid #172536;color:#8fa4b6;font-size:11px;line-height:1.4}.comm-guidance strong{display:inline;color:#b8c9d7;font-size:11px}.request-row-guide{margin-top:7px;padding:7px 9px;border:1px solid #1b2a3b;border-radius:6px;background:#081019;color:#9db0c0;font-size:11px}
+@media(max-width:760px){.comm-secondary-actions .btn{width:auto}.comm-row.action-ready .comm-actions .btn{width:100%}.operator-guide{padding:9px 10px}}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 </head>
@@ -174,7 +176,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3G</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3H</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" id="backViewButton" type="button" onclick="goBackView()" disabled>← Back</button>
@@ -216,6 +218,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   </main>
 
   <main id="view-order" class="view">
+    <div id="orderGuidance" class="operator-guide" aria-live="polite"></div>
     <section class="card">
       <div class="section-title"><div><h2>Step 1 Customer</h2><p>Customer, date, order type, and source.</p></div><span class="tag" id="activeOrderTag">New</span></div>
       <div class="grid four">
@@ -410,7 +413,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   </main>
 
   <main id="view-queues" class="view">
-    <section class="card"><div class="section-title"><div><h2>Workflow</h2><p>Work the active records below, or choose another stage.</p></div></div><div id="queueList2" class="card slim" style="box-shadow:none;margin-top:12px"></div><div class="subhead">Choose workflow stage</div><div class="workflow-stage-tabs" id="queueCards2"></div></section>
+    <section class="card"><div class="section-title"><div><h2>Workflow</h2><p>Work the active records below, or choose another stage.</p></div></div><div id="workflowGuidance" class="operator-guide" aria-live="polite"></div><div id="queueList2" class="card slim" style="box-shadow:none;margin-top:12px"></div><div class="subhead">Choose workflow stage</div><div class="workflow-stage-tabs" id="queueCards2"></div></section>
   </main>
 
   <main id="view-history" class="view">
@@ -421,6 +424,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <main id="view-request" class="view">
     <section class="card">
       <div class="section-title"><div><h2>Request Inbox</h2><p>Import structured Request Hub submissions and convert them into Quote / enquiry orders.</p></div><span class="tag" id="requestInboxCount">0 requests</span></div>
+      <div id="requestGuidance" class="operator-guide" aria-live="polite"></div>
       <div class="note" style="margin-bottom:10px">Requests stay separate from saved orders. Converting creates an unsaved Quote / enquiry first; stock is not deducted unless that quote is later converted to a live order and saved.</div>
       <div class="card slim" style="box-shadow:none;margin-bottom:10px">
         <div class="section-title"><div><h3>Cloud requests</h3><p>Pull recent Request Hub submissions from Supabase into the local Request Inbox. Cloud refresh can re-import existing Supabase requests. Local wipe does not delete cloud rows.</p></div><button class="btn primary" id="refreshCloudRequestsBtn" type="button">Refresh cloud requests</button></div>
@@ -647,6 +651,9 @@ const voidOrder=document.getElementById('voidOrder');
 const deleteOrder=document.getElementById('deleteOrder');
 const voidReason=document.getElementById('voidReason');
 const queueCards2=document.getElementById('queueCards2');
+const workflowGuidance=document.getElementById('workflowGuidance');
+const orderGuidance=document.getElementById('orderGuidance');
+const requestGuidance=document.getElementById('requestGuidance');
 const queueList2=document.getElementById('queueList2');
 const historyList=document.getElementById('historyList');
 const dispatchQuickAccess=document.getElementById('dispatchQuickAccess');
@@ -856,7 +863,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3G',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3H',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -984,7 +991,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E3G JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3H JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1413,6 +1420,30 @@ function updatePrimarySaveLabel(){
   const convertedUnsaved=val('orderType')==='Live order'&&!!current.sourceQuoteId&&!savedOrderById(current.id);
   saveOrder.textContent=convertedUnsaved?'Save live order':'Save order';
 }
+function orderOperatorGuidance(){
+  if(val('orderType')==='Quote / enquiry'){
+    const q=val('quoteStatus');
+    if(q==='Quote to send')return {title:'Quote ready',state:'The quote is complete and waiting to be sent.',next:'Send the quote, then mark it sent.'};
+    if(q==='Quote sent / waiting customer')return {title:'Awaiting customer decision',state:'The quote has been sent.',next:'Wait for the customer response, then update the quote outcome.'};
+    if(q==='Customer replied / ready to convert')return {title:'Quote accepted',state:'The customer has accepted the quote.',next:'Convert it to a live order and confirm the final contents.'};
+    return {title:'Quote draft',state:'The enquiry is being priced and checked.',next:'Complete the items and price, then save the quote.'};
+  }
+  if(val('orderType')!=='Live order')return {title:'Record only',state:'This record does not follow the active live-order workflow.',next:'Review the details and save when complete.'};
+  const stage=workflowLiveStage({orderType:'Live order',status:val('orderStatus'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),lines:current.lines,materials:current.materials});
+  const map={
+    'waiting-stock':['Waiting on stock','Availability or stock is blocking progress.','Resolve availability before moving the order forward.'],
+    'awaiting-payment':['Awaiting payment','Waiting for customer payment.','Send the payment request if needed and confirm payment when received.'],
+    'ready-prepare':['Ready to prepare','Payment is cleared and the order can move forward.','Prepare the confirmed contents.'],
+    preparing:['Preparing','The order is being assembled.','Prepare the contents and move the order to Packed.'],
+    packed:['Packed','The order has been packed.','Arrange collection or dispatch.'],
+    'ready-collection':['Ready for collection','The order is ready for customer handover.','Confirm collection arrangements and mark the handover when complete.'],
+    'ready-dispatch':['Ready for dispatch','The order is ready for carrier handover.','Complete dispatch and add tracking or reference details.'],
+    tracking:['Tracking','The order has left the preparation workflow.','Confirm shipment and monitor it until complete.']
+  };
+  const g=map[stage]||['Order in progress','The order is active.','Review the current status and complete the next outstanding step.'];
+  return {title:g[0],state:g[1],next:g[2]};
+}
+function renderOrderGuidance(){if(!orderGuidance)return;const g=orderOperatorGuidance();orderGuidance.innerHTML='<strong>What happens next? · '+htmlEscape(g.title)+'</strong><div class="guide-state">'+htmlEscape(g.state)+'</div><div class="guide-next"><b>Next step:</b> '+htmlEscape(g.next)+'</div>'}
 function renderOrder(){
   setQuoteSendInlineStatus('',null);
   updateOrderTypeNotice();
@@ -1433,6 +1464,7 @@ function renderOrder(){
   setVisible(dangerousActions,!isPastOrder);
   setVisible(archiveOrder,!isPastOrder);
   updateFulfilmentVisibility();
+  renderOrderGuidance();
   renderSupportSuggestions();
   refreshWhatsAppButtons();
 }
@@ -1618,7 +1650,17 @@ function requestInboxLifecycleBadge(req,blocked){
   if(status==='cancelled')return '<span class="badge-bad">Cancelled</span>';
   return blocked?'<span class="badge-warn">Needs item review</span>':'<span class="badge-good">Ready to create quote</span>';
 }
-function renderRequestInbox(){if(!requestInboxList)return;const active=activeRequestInboxItems(),intake=activeRequestIntakeItems(),binned=binnedRequestInboxItems(),showBin=requestInboxView==='bin',list=showBin?binned:intake,linkedCount=active.length-intake.length;if(requestInboxCount)requestInboxCount.textContent=intake.length+' new/review · '+linkedCount+' in workflow/closed';if(requestInboxTabs)requestInboxTabs.querySelectorAll('button').forEach(btn=>btn.classList.toggle('active',btn.textContent.trim().toLowerCase()===(showBin?'bin':'active')));requestInboxList.innerHTML=list.length?list.map(req=>{const statuses=(req.items||[]).map(requestItemStatus),blocked=statuses.filter(s=>!s.ok).length;const badge=requestInboxLifecycleBadge(req,blocked);const dbLine=req.supabaseSyncedAt?`<div class="tiny">Database saved: ${htmlEscape(new Date(req.supabaseSyncedAt).toLocaleString())}</div>`:'';const binLine=isRequestBinned(req)?`<div class="tiny">Binned: ${htmlEscape(new Date(req.binnedAt||Date.now()).toLocaleString())}</div>`:'';const lifecycleLine=requestInboxLifecycleLine(req);const lifecycleHtml=lifecycleLine?`<div class="tiny">${lifecycleLine}</div>`:'';const actions=renderRequestInboxActions(req,showBin);return `<div class="queue-row"><div><strong>${htmlEscape(req.requestId)} - ${htmlEscape(req.customer?.nameOrRef||'No customer ref')} ${badge} ${isRequestBinned(req)?'<span class="badge-bad">BIN</span>':''}</strong><div class="tiny">${htmlEscape(req.source||'Request Hub')} - ${htmlEscape(new Date(req.receivedAt||Date.now()).toLocaleString())} - Status: ${htmlEscape(req.status||'new')}</div><div class="tiny">${requestInboxSummary(req)||'No item summary'}</div>${blocked?`<div class="tiny warn-text">${blocked} item${blocked===1?'':'s'} need manual review before auto-add.</div>`:''}${lifecycleHtml}${dbLine}${binLine}</div><div class="btnrow">${actions}</div></div>`}).join(''):'<div class="muted">'+(showBin?'No binned requests.':'No new or review requests.')+'</div>'}
+function requestOperatorGuidance(req,blocked=0){
+  const status=String(req?.status||'new').toLowerCase();
+  if(status==='draft quote'||req?.draftOrderId)return {title:'Quote draft',state:'A quote has been started from this request.',next:'Resume, complete, and save the quote.'};
+  if(req?.convertedOrderId||status==='converted')return {title:'Quote created',state:'This request is already linked to a quote or order.',next:'Open the linked record and continue its workflow.'};
+  if(status==='parked')return {title:'Parked request',state:'This request is paused.',next:'Unpark it when review should continue.'};
+  if(blocked)return {title:'Review required',state:'One or more requested items need manual mapping or price review.',next:'Resolve the flagged items before creating the quote.'};
+  if(status==='reviewed')return {title:'Ready to quote',state:'The enquiry has been reviewed.',next:'Create the customer quote.'};
+  return {title:'New request',state:'A new enquiry is waiting for review.',next:'Review the enquiry and create a quote.'};
+}
+function renderRequestGuidance(){if(!requestGuidance)return;const text=requestInboxView==='bin'?'Binned requests are retained for reference. Restore one only when work should resume.':'Review the active requests below. Each request shows what has happened, what it is waiting for, and its next step.';requestGuidance.innerHTML='<strong>Request assistant</strong><div class="guide-state">'+htmlEscape(text)+'</div>'}
+function renderRequestInbox(){if(!requestInboxList)return;renderRequestGuidance();const active=activeRequestInboxItems(),intake=activeRequestIntakeItems(),binned=binnedRequestInboxItems(),showBin=requestInboxView==='bin',list=showBin?binned:intake,linkedCount=active.length-intake.length;if(requestInboxCount)requestInboxCount.textContent=intake.length+' new/review · '+linkedCount+' in workflow/closed';if(requestInboxTabs)requestInboxTabs.querySelectorAll('button').forEach(btn=>btn.classList.toggle('active',btn.textContent.trim().toLowerCase()===(showBin?'bin':'active')));requestInboxList.innerHTML=list.length?list.map(req=>{const statuses=(req.items||[]).map(requestItemStatus),blocked=statuses.filter(s=>!s.ok).length;const badge=requestInboxLifecycleBadge(req,blocked);const dbLine=req.supabaseSyncedAt?`<div class="tiny">Database saved: ${htmlEscape(new Date(req.supabaseSyncedAt).toLocaleString())}</div>`:'';const binLine=isRequestBinned(req)?`<div class="tiny">Binned: ${htmlEscape(new Date(req.binnedAt||Date.now()).toLocaleString())}</div>`:'';const lifecycleLine=requestInboxLifecycleLine(req);const lifecycleHtml=lifecycleLine?`<div class="tiny">${lifecycleLine}</div>`:'';const actions=renderRequestInboxActions(req,showBin),guide=requestOperatorGuidance(req,blocked);return `<div class="queue-row"><div><strong>${htmlEscape(req.requestId)} - ${htmlEscape(req.customer?.nameOrRef||'No customer ref')} ${badge} ${isRequestBinned(req)?'<span class="badge-bad">BIN</span>':''}</strong><div class="tiny">${htmlEscape(req.source||'Request Hub')} - ${htmlEscape(new Date(req.receivedAt||Date.now()).toLocaleString())} - Status: ${htmlEscape(req.status||'new')}</div><div class="tiny">${requestInboxSummary(req)||'No item summary'}</div>${blocked?`<div class="tiny warn-text">${blocked} item${blocked===1?'':'s'} need manual review before auto-add.</div>`:''}${lifecycleHtml}${dbLine}${binLine}<div class="request-row-guide"><strong>${htmlEscape(guide.title)}</strong><br>${htmlEscape(guide.state)}<br><b>Next:</b> ${htmlEscape(guide.next)}</div></div><div class="btnrow">${actions}</div></div>`}).join(''):'<div class="muted">'+(showBin?'No binned requests.':'No new or review requests.')+'</div>'}
 function markRequestStatus(id,status){const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.status=status;saveLocal();renderRequestInbox();showToast('Request '+status)}
 function requestQuoteNotes(req,skipped){const lines=['Request Hub source: '+(req.source||'Request Hub'),'Request ID: '+req.requestId,'Received: '+(req.receivedAt||''),'Contact: '+(req.customer?.contact||'not supplied')];if(req.requestNotes)lines.push('Request notes: '+req.requestNotes);if(skipped.length){lines.push('Manual review needed:');skipped.forEach(s=>lines.push('- '+s))}lines.push('Request metadata preserved from Request Inbox. Quote/enquiry only; no stock deduction until converted to live order and saved.');return lines.join('\n')}
 function convertRequestToQuote(id){const req=requestInbox.find(x=>x.requestId===id);if(!req){showToast('Request not found');return}if(req.convertedOrderId){openLinkedRequestQuote(req,'convertedOrderId','Quote');return}if(req.draftOrderId||String(req.status||'').toLowerCase()==='draft quote'){if(req.draftOrderId&&openLinkedRequestQuote(req,'draftOrderId','Draft quote'))return;showToast('This request already has a draft quote state, but the draft quote could not be found.');setRequestImportStatus('This request already has a draft quote state, but the draft quote could not be found. Review before creating another quote.','warn');return}newQuote();set('customerRef',req.customer?.nameOrRef||req.requestId);set('recPhone',req.customer?.contact||'');set('orderSource','Request Hub / online');set('quoteStatus','Quote to send');current.sourceRequestId=req.requestId;current.sourceRequestMeta={requestId:req.requestId,source:req.source||'Request Hub',receivedAt:req.receivedAt||'',preferredContact:req.customer?.preferredContact||'',itemCount:(req.items||[]).length};set('priceTier','standard');let skipped=[];(req.items||[]).forEach(item=>{const status=requestItemStatus(item);if(!status.ok){skipped.push((item.productCode||item.requestedName||'Unknown item')+': '+status.label);return}const p=PRODUCT_RULES[status.pid],qty=Math.max(1,Math.floor(Number(item.qty||1))),price=Number(item.standardCataloguePrice);current.lines.push({kind:'product',pid:status.pid,qty,price,name:cleanDisplayText(p.name),review:!!p.needsCheck,note:cleanDisplayText('Request Hub standard catalogue price from '+item.productCode),sourceProductCode:item.productCode,requestId:req.requestId,supportMode:null,materialKey:null})});if(!current.lines.length){set('orderNotes',requestQuoteNotes(req,skipped));renderOrder();renderRequestInbox();showView('request');showToast('No quote items were imported. Review request mapping before creating quote.');setRequestImportStatus('No quote items were imported. Review request mapping before creating quote.','warn');return}set('orderNotes',requestQuoteNotes(req,skipped));if(req.requestNotes)set('customerNote',req.requestNotes);req.status='draft quote';req.draftOrderId=current.id;req.convertedOrderId='';recalcMaterialsFromLines(true);markOrderMessagesStale('all');saveLocal();renderOrder();renderRequestInbox();showView('order');showToast('Draft quote created - save when ready')}
@@ -1728,14 +1770,30 @@ function activeValueCardHTML(){
   const total=money(dashboardOrders().reduce((a,o)=>a+(openOrderValueInclude(o)?o.total:0),0));
   return `<button class="queue-card"><div class="k">Open order value</div><div class="n" data-value="${htmlEscape(total)}">${htmlEscape(total)}</div><div class="s">Live orders still needing action</div></button>`;
 }
+const WORKFLOW_GUIDANCE={
+ 'quote-draft':['Quote draft','These enquiries need their items, prices, or availability checks completed.',['Review the enquiry.','Complete and save the quote.']],
+ 'quote-ready':['Quote ready to send','These quotes are complete and waiting to go to the customer.',['Generate and send the quote.','Mark it sent after the operator sends it.']],
+ 'quote-waiting':['Awaiting quote decision','The customer has the quote and has not yet confirmed a decision.',['Wait for the customer reply.','Record acceptance, changes, parking, or cancellation.']],
+ 'quote-accepted':['Quote accepted / convert','The customer has accepted the quote.',['Convert it to a live order.','Confirm final contents before requesting payment.']],
+ 'waiting-stock':['Waiting on stock','Availability or stock is preventing these orders from moving forward.',['Resolve the availability check.','Update the customer if the wait continues.']],
+ 'awaiting-payment':['Awaiting Payment','These customers have accepted their order and are waiting for payment.',['Confirm payment when received.','Send a payment request if not already sent.','Once payment is confirmed, move the order to Ready to Prepare.']],
+ 'ready-prepare':['Ready to Prepare','Payment is cleared and these orders are ready for preparation.',['Review the confirmed contents.','Begin preparation and update the order stage.']],
+ preparing:['Preparing','These orders are currently being assembled.',['Prepare the confirmed contents.','Move the order to Packed when complete.']],
+ packed:['Packed','These orders have been packed and need a handover route.',['Confirm collection or dispatch method.','Move to the matching ready stage.']],
+ 'ready-collection':['Ready for Collection','These orders are ready for customer handover.',['Confirm the agreed collection arrangements.','Mark the order collected after handover.']],
+ 'ready-dispatch':['Ready for Dispatch','These orders are ready for carrier handover.',['Complete dispatch booking or handover.','Add tracking or reference details when available.']],
+ tracking:['Tracking Follow-up','These orders have been dispatched or handed over and need completion follow-up.',['Monitor delivery or collection confirmation.','Mark complete when the outcome is confirmed.']]
+};
+function renderWorkflowGuidance(key){if(!workflowGuidance)return;const g=WORKFLOW_GUIDANCE[key]||['Workflow','Select a stage to see what has happened and what is waiting.',['Open the relevant stage.']];workflowGuidance.innerHTML='<strong>'+htmlEscape(g[0])+'</strong><div class="guide-state">'+htmlEscape(g[1])+'</div><div class="guide-next"><b>Next step:</b><ul>'+g[2].map(x=>'<li>'+htmlEscape(x)+'</li>').join('')+'</ul></div>'}
 function renderQueues(){
   const data=queueData(),previous=workflowQueueKey(window.lastQueue||''),previousStage=data.find(x=>x.key===previous),selected=previousStage?.orders.length?previousStage:data.find(x=>x.orders.length),active=selected?.key||'';
   queueCards.innerHTML=startWorkflowSummaryData(data).map(startQueueCardHTML).join('')+activeValueCardHTML();
   queueCards2.innerHTML=data.map(x=>queueCardHTML(x,active)).join('');
-  if(active)openQueue(active,true,data);else{window.lastQueue='';queueList2.innerHTML='<div class="section-title"><div><h3>No active workflow</h3><p>0 active records</p></div></div><div class="muted">There is no active quote or live-order work.</div>'}
+  if(active)openQueue(active,true,data);else{window.lastQueue='';renderWorkflowGuidance('');queueList2.innerHTML='<div class="section-title"><div><h3>No active workflow</h3><p>0 active records</p></div></div><div class="muted">There is no active quote or live-order work.</div>'}
 }
 function openQueue(key,skipFocus=false,data=queueData()){
   key=workflowQueueKey(key);window.lastQueue=key;
+  renderWorkflowGuidance(key);
   let q=data.find(x=>x.key===key)||data[0];if(!q)return;
   queueCards2.innerHTML=data.map(x=>queueCardHTML(x,q.key)).join('');
   let html=`<div class="section-title"><div><h3>${htmlEscape(q.title)}</h3><p>${q.orders.length} active record${q.orders.length===1?'':'s'}</p></div></div>`;
@@ -2218,8 +2276,19 @@ function commButton(label,onclick,disabled=false,extraClass=''){return '<button 
 function commRowActionable(row){
   return !row.disabled&&!['notReady','notNeeded','sent','alreadySent','skipped'].includes(row.status);
 }
+function communicationOperatorGuidance(key){const map={
+ orderConfirmationStatus:['Confirms the customer’s final agreed order.','Send when the final order is agreed and the applicable payment wording is correct.'],
+ paymentMessageStatus:['Requests payment for the final agreed order.','Send when final contents are agreed but payment has not yet been received.'],
+ fulfilmentUpdateStatus:['Reassures the customer that preparation is underway.','Send when a confirmed order has entered preparation.'],
+ packedUpdateStatus:['Tells the customer their order has been packed.','Send after packing is complete and before handover arrangements are final.'],
+ collectionMessageStatus:['Tells the customer the order is ready for collection.','Send when packing is complete and customer collection is selected.'],
+ dispatchMessageStatus:['Tells the customer the order is ready for carrier handover.','Send when packing is complete and dispatch is being arranged.'],
+ trackingUpdateStatus:['Provides dispatch confirmation and tracking details.','Send after dispatch when a tracking or reference number is available.'],
+ stockDelayMessageStatus:['Explains that availability is still being confirmed.','Send when stock or availability is delaying a clear next step.']
+};return map[key]||['Supports the current customer communication step.','Send when the row becomes actionable.']}
 function commRow(row){
   const actionable=commRowActionable(row);
+  const guidance=communicationOperatorGuidance(row.key);
   const actions=[];
   const secondary=[];
   if(actionable){
@@ -2231,7 +2300,7 @@ function commRow(row){
     secondary.push(commButton('Skip for now',"setCommStatus('"+row.key+"','skipped')",false,'subtle'));
   }
   const secondaryHtml=secondary.length?'<details class="comm-secondary"><summary>Advanced message controls</summary><div class="comm-secondary-actions">'+secondary.join('')+'</div></details>':'';
-  return '<div class="comm-row '+(actionable?'action-ready':'status-only')+'" data-comm-key="'+htmlEscape(row.key)+'"><div class="comm-main"><strong>'+htmlEscape(row.title)+'</strong><p>'+htmlEscape(row.message)+'</p>'+secondaryHtml+'</div><span class="badge badge-neutral">'+htmlEscape(commStatusLabel(row.status))+'</span>'+(actionable?'<div class="comm-actions">'+actions.join('')+'</div>':'')+'</div>';
+  return '<div class="comm-row '+(actionable?'action-ready':'status-only')+'" data-comm-key="'+htmlEscape(row.key)+'"><div class="comm-main"><strong>'+htmlEscape(row.title)+'</strong><p>'+htmlEscape(row.message)+'</p><div class="comm-guidance"><strong>Purpose:</strong> '+htmlEscape(guidance[0])+'<br><strong>Send when:</strong> '+htmlEscape(guidance[1])+'</div>'+secondaryHtml+'</div><span class="badge badge-neutral">'+htmlEscape(commStatusLabel(row.status))+'</span>'+(actionable?'<div class="comm-actions">'+actions.join('')+'</div>':'')+'</div>';
 }
 function renderCommunicationCentre(){
   if(!communicationRows)return;
@@ -2498,7 +2567,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3G JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3H JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

@@ -1547,3 +1547,15 @@ What was not changed:
 - Routed Mission Control cards to Requests, the first actionable customer communication task, and Stock.
 - Added an in-app distinct-view Back stack and breadcrumb. Start is the root and disables Back; no browser history or hash routing is used.
 - No workflow stages, status values, stock calculations, message templates, lifecycle transitions, or database schema changed.
+
+
+## v44E3H Operator Guidance System — 2026-07-02
+
+- Version: v44E3H
+- Scope: Operator guidance only.
+- Added stage-aware Workflow guidance explaining current state, waiting condition, and next actions.
+- Added derived-state Order guidance under “What happens next?”.
+- Added Request Inbox guidance plus request-specific next-step explanations.
+- Added Purpose and Send when guidance to every Communication Centre row.
+- Styling uses a subtle neutral operator-assistant panel without warning colours.
+- No workflow stages, routing, button behaviour, database schema, lifecycle transitions, stock logic, customer wording, or message generation changed.
