@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E3D Workflow Page Foundation</title>
+<title>PrimeX Finance HQ &middot; v44E3E Workflow Usability Layout</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -62,6 +62,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .action-alert-banner{border-left:4px solid #d97706;margin-bottom:14px}
 .action-alert-banner.hide{display:none}
 .next-action-focus{outline:2px solid rgba(110,168,216,.9);outline-offset:3px;box-shadow:0 0 0 6px rgba(110,168,216,.14),var(--shadow)!important;transition:outline-color .2s ease,box-shadow .2s ease}
+.workflow-stage-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.workflow-stage-tabs button{border:1px solid #27384d;background:#0b1018;color:var(--muted);border-radius:999px;padding:7px 10px;font-size:12px}.workflow-stage-tabs button strong{color:var(--text);margin-left:5px}.workflow-stage-tabs button.active{color:#e8f6ff;border-color:#5f8db0;background:#102234}
 .alert-list,.comm-list{display:grid;gap:10px}
 .alert-row,.comm-row{border:1px solid var(--line);border-radius:8px;padding:10px;background:#0f1722;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .alert-row.critical{border-left:4px solid #dc2626}
@@ -173,7 +174,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3D</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3E</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
@@ -188,10 +189,6 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         <button class="queue-card"><div class="k">Ready to send / collect</div><div class="n">0</div><div class="s">0 parcels</div></button>
         <button class="queue-card"><div class="k">Issues / hold</div><div class="n">0</div><div class="s">needs review</div></button>
       </div>
-    </section>
-    <section class="card">
-      <div class="section-title"><div><h3>Quote follow-up</h3><p>Requests and saved quotes that need customer follow-up. Not live fulfilment work.</p></div><button class="btn" onclick="showView('queues');openQueue('quote-ready')">Open quote workflow</button></div>
-      <div id="quoteFollowupStart" class="quote-followup-grid"></div>
     </section>
     <section class="card">
       <div class="section-title"><div><h3>Quick actions</h3><p>Common daily shortcuts.</p></div></div>
@@ -405,7 +402,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   </main>
 
   <main id="view-queues" class="view">
-    <section class="card"><div class="section-title"><div><h2>Workflow</h2><p>Open an active stage and continue the next action.</p></div></div><div class="queue-grid" id="queueCards2"></div><div id="queueList2" class="card slim" style="box-shadow:none;margin-top:12px"></div></section>
+    <section class="card"><div class="section-title"><div><h2>Workflow</h2><p>Work the active records below, or choose another stage.</p></div></div><div id="queueList2" class="card slim" style="box-shadow:none;margin-top:12px"></div><div class="subhead">Choose workflow stage</div><div class="workflow-stage-tabs" id="queueCards2"></div></section>
   </main>
 
   <main id="view-history" class="view">
@@ -821,7 +818,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3D',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3E',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -949,7 +946,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E3D JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3E JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1587,7 +1584,7 @@ function renderRequestInbox(){if(!requestInboxList)return;const active=activeReq
 function markRequestStatus(id,status){const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.status=status;saveLocal();renderRequestInbox();showToast('Request '+status)}
 function requestQuoteNotes(req,skipped){const lines=['Request Hub source: '+(req.source||'Request Hub'),'Request ID: '+req.requestId,'Received: '+(req.receivedAt||''),'Contact: '+(req.customer?.contact||'not supplied')];if(req.requestNotes)lines.push('Request notes: '+req.requestNotes);if(skipped.length){lines.push('Manual review needed:');skipped.forEach(s=>lines.push('- '+s))}lines.push('Request metadata preserved from Request Inbox. Quote/enquiry only; no stock deduction until converted to live order and saved.');return lines.join('\n')}
 function convertRequestToQuote(id){const req=requestInbox.find(x=>x.requestId===id);if(!req){showToast('Request not found');return}if(req.convertedOrderId){openLinkedRequestQuote(req,'convertedOrderId','Quote');return}if(req.draftOrderId||String(req.status||'').toLowerCase()==='draft quote'){if(req.draftOrderId&&openLinkedRequestQuote(req,'draftOrderId','Draft quote'))return;showToast('This request already has a draft quote state, but the draft quote could not be found.');setRequestImportStatus('This request already has a draft quote state, but the draft quote could not be found. Review before creating another quote.','warn');return}newQuote();set('customerRef',req.customer?.nameOrRef||req.requestId);set('recPhone',req.customer?.contact||'');set('orderSource','Request Hub / online');set('quoteStatus','Quote to send');current.sourceRequestId=req.requestId;current.sourceRequestMeta={requestId:req.requestId,source:req.source||'Request Hub',receivedAt:req.receivedAt||'',preferredContact:req.customer?.preferredContact||'',itemCount:(req.items||[]).length};set('priceTier','standard');let skipped=[];(req.items||[]).forEach(item=>{const status=requestItemStatus(item);if(!status.ok){skipped.push((item.productCode||item.requestedName||'Unknown item')+': '+status.label);return}const p=PRODUCT_RULES[status.pid],qty=Math.max(1,Math.floor(Number(item.qty||1))),price=Number(item.standardCataloguePrice);current.lines.push({kind:'product',pid:status.pid,qty,price,name:cleanDisplayText(p.name),review:!!p.needsCheck,note:cleanDisplayText('Request Hub standard catalogue price from '+item.productCode),sourceProductCode:item.productCode,requestId:req.requestId,supportMode:null,materialKey:null})});if(!current.lines.length){set('orderNotes',requestQuoteNotes(req,skipped));renderOrder();renderRequestInbox();showView('request');showToast('No quote items were imported. Review request mapping before creating quote.');setRequestImportStatus('No quote items were imported. Review request mapping before creating quote.','warn');return}set('orderNotes',requestQuoteNotes(req,skipped));if(req.requestNotes)set('customerNote',req.requestNotes);req.status='draft quote';req.draftOrderId=current.id;req.convertedOrderId='';recalcMaterialsFromLines(true);markOrderMessagesStale('all');saveLocal();renderOrder();renderRequestInbox();showView('order');showToast('Draft quote created - save when ready')}
-function renderAll(){renderQueues();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderStartQuoteFollowup();renderAdmin();renderOrder();renderCommunicationCentre()}
+function renderAll(){renderQueues();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderAdmin();renderOrder();renderCommunicationCentre()}
 function isQuoteOrder(o){return (o.orderType||'Live order')==='Quote / enquiry'}
 function quoteStatusValue(o={}){if(!isQuoteOrder(o))return o.quoteStatus||'Quote to send';const st=String(o.quoteStatus||'').trim();if(st)return st;if(o.status==='Cancelled')return 'Cancelled';if((o.confirmation||'No')==='Yes')return 'Quote sent / waiting customer';return 'Quote to send'}
 function isConvertedQuote(o){return isQuoteOrder(o)&&!!(o.linkedLiveOrderId||o.convertedOrderId)}
@@ -1675,30 +1672,38 @@ function queueData(){const quotes=workflowOpenQuotes(),live=dashboardOrders().fi
 function htmlEscape(v){return cleanDisplayText(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function jsArg(v){return JSON.stringify(String(v??'')).replace(/"/g,'&quot;')}
 function queueCardHTML(x,active){
-  return `<button class="queue-card ${x.key===active?'active':''}" onclick="openQueue(${jsArg(x.key)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.orders.length}</div><div class="s">${htmlEscape(x.sub)}</div></button>`;
+  return `<button class="${x.key===active?'active':''}" onclick="openQueue(${jsArg(x.key)})"><span>${htmlEscape(x.title)}</span><strong>${x.orders.length}</strong></button>`;
 }
 function startQueueCardHTML(x){
-  return `<button class="queue-card" onclick="showView('queues');openQueue(${jsArg(x.key)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.orders.length}</div><div class="s">${htmlEscape(x.sub)}</div></button>`;
+  return `<button class="queue-card" onclick="openWorkflowSummary(${jsArg(x.group)})"><div class="k">${htmlEscape(x.title)}</div><div class="n">${x.count}</div><div class="s">${htmlEscape(x.sub)}</div></button>`;
 }
+function startWorkflowSummaryData(data=queueData()){const byKey=k=>data.find(x=>x.key===k),sum=keys=>keys.reduce((n,k)=>n+(byKey(k)?.orders.length||0),0);return[
+ {group:'quotes',title:'Quotes needing action',keys:['quote-draft','quote-ready','quote-waiting','quote-accepted'],count:sum(['quote-draft','quote-ready','quote-waiting','quote-accepted']),sub:'draft, send, decision or convert'},
+ {group:'stock',title:'Waiting on stock',keys:['waiting-stock'],count:sum(['waiting-stock']),sub:'stock shortage'},
+ {group:'payment',title:'Awaiting payment',keys:['awaiting-payment'],count:sum(['awaiting-payment']),sub:'payment action'},
+ {group:'preparing',title:'Preparing',keys:['ready-prepare','preparing'],count:sum(['ready-prepare','preparing']),sub:'ready to prepare or in progress'},
+ {group:'handover',title:'Ready for handover',keys:['packed','ready-collection','ready-dispatch'],count:sum(['packed','ready-collection','ready-dispatch']),sub:'arrange collection or dispatch'},
+ {group:'tracking',title:'Tracking follow-up',keys:['tracking'],count:sum(['tracking']),sub:'delivery or completion follow-up'}]}
+function openWorkflowSummary(group){const data=queueData(),summary=startWorkflowSummaryData(data).find(x=>x.group===group);if(!summary)return;const target=summary.keys.find(k=>(data.find(x=>x.key===k)?.orders.length||0)>0)||summary.keys[0];showView('queues');openQueue(target)}
 function openOrderValueInclude(o){return isOpenWork(o)&&normalStatus(o)!=='Sent / collected'}
 function activeValueCardHTML(){
   const total=money(dashboardOrders().reduce((a,o)=>a+(openOrderValueInclude(o)?o.total:0),0));
   return `<button class="queue-card"><div class="k">Open order value</div><div class="n" data-value="${htmlEscape(total)}">${htmlEscape(total)}</div><div class="s">Live orders still needing action</div></button>`;
 }
 function renderQueues(){
-  const active=workflowQueueKey(window.lastQueue||'quote-draft');
-  const cards=queueData().map(x=>queueCardHTML(x,active)).join('');
-  queueCards.innerHTML=queueData().map(startQueueCardHTML).join('')+activeValueCardHTML();
-  queueCards2.innerHTML=cards;
-  openQueue(active,true);
+  const data=queueData(),previous=workflowQueueKey(window.lastQueue||''),previousStage=data.find(x=>x.key===previous),selected=previousStage?.orders.length?previousStage:data.find(x=>x.orders.length),active=selected?.key||'';
+  queueCards.innerHTML=startWorkflowSummaryData(data).map(startQueueCardHTML).join('')+activeValueCardHTML();
+  queueCards2.innerHTML=data.map(x=>queueCardHTML(x,active)).join('');
+  if(active)openQueue(active,true,data);else{window.lastQueue='';queueList2.innerHTML='<div class="section-title"><div><h3>No active workflow</h3><p>0 active records</p></div></div><div class="muted">There is no active quote or live-order work.</div>'}
 }
-function openQueue(key,skipCardRender=false){
+function openQueue(key,skipFocus=false,data=queueData()){
   key=workflowQueueKey(key);window.lastQueue=key;
-  if(!skipCardRender){renderQueues();return}
-  let q=queueData().find(x=>x.key===key)||queueData()[0];
-  let html=`<div class="section-title"><div><h3>${htmlEscape(q.title)}</h3><p>${q.orders.length} matching orders</p></div></div>`;
+  let q=data.find(x=>x.key===key)||data[0];if(!q)return;
+  queueCards2.innerHTML=data.map(x=>queueCardHTML(x,q.key)).join('');
+  let html=`<div class="section-title"><div><h3>${htmlEscape(q.title)}</h3><p>${q.orders.length} active record${q.orders.length===1?'':'s'}</p></div></div>`;
   html+=q.orders.length?q.orders.map(o=>workflowRowHTML(o,key)).join(''):'<div class="muted">No active work in this stage.</div>';
   queueList2.innerHTML=html;
+  if(!skipFocus)setTimeout(()=>{queueList2.scrollIntoView({behavior:'smooth',block:'start'});queueList2.classList.add('next-action-focus');setTimeout(()=>queueList2.classList.remove('next-action-focus'),1800)},0)
 }
 function workflowQueueKey(key){return({pay:'awaiting-payment',pack:'preparing',ready:'ready-dispatch',transit:'tracking',hold:'preparing'})[key]||key}
 function workflowQuoteButtons(o){const st=quoteStatusValue(o);let b=`<button class="btn" onclick="loadOrder(${jsArg(o.id)})">Resume / edit</button>`;if(st==='Quote to send')b+=`<button class="btn primary" onclick="sendQuoteFromHistory(${jsArg(o.id)})">Send quote to customer</button>`;if(st==='Quote sent / waiting customer')b+=`<button class="btn primary" onclick="quickQuoteUpdate(${jsArg(o.id)},'quoteStatus','Customer replied / ready to convert')">Mark quote accepted</button>`;if(st==='Customer replied / ready to convert')b+=`<button class="btn good" onclick="convertQuoteToLive(${jsArg(o.id)})">Convert to live order</button>`;return b}
@@ -2100,7 +2105,7 @@ function renderAdmin(panel='system'){
       <button onclick="showAdminPanel('products')"><strong>Product Rules</strong><small>Products, tiers, eligibility</small></button>
       <button onclick="showAdminPanel('structures')"><strong>Structure Rules</strong><small>Pathway-first pricing rules</small></button>
       <button onclick="showAdminPanel('supabase')"><strong>Supabase</strong><small>Login, session and RLS profile test</small></button>
-      <button onclick="resetLocalTestWorkspace()"><strong>?? Wipe Local Finance Workspace</strong><small>Clears local orders, requests and quote follow-up clutter only</small></button>
+      <button onclick="resetLocalTestWorkspace()"><strong>WARNING — Wipe Local Finance Workspace</strong><small>Clears local orders, requests and quote follow-up clutter only</small></button>
       <button onclick="showView('request');refreshCloudRequests()"><strong>Refresh cloud requests</strong><small>Pull live Supabase requests into the local inbox when ready</small></button>
       <button onclick="clearAllTestOrders()"><strong>Move test orders to bin</strong><small>Soft-delete test orders only</small></button>
     </div>`;
@@ -2402,7 +2407,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3D JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3E JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

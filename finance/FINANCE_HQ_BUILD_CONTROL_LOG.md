@@ -1,5 +1,17 @@
 ﻿# PrimeX Finance HQ Build Control Log
 
+## v44E3E Workflow Usability Layout
+- Date: 2026-07-02
+- Scope: Workflow/Start presentation and routing only.
+- Moved the active Workflow record list above the stage selector and converted the twelve large stage cards into compact stage tabs.
+- Added an active-stage heading/count, retained the previous non-empty stage where possible, otherwise selected the first non-empty stage, and added a clear all-empty state.
+- Stage clicks now update and temporarily focus/scroll to the active work list while preserving existing row actions and derived stage membership.
+- Replaced Start's twelve-stage mirror with six aggregate Mission Control cards for quotes, stock, payment, preparation, handover and tracking.
+- Removed the redundant Start Quote follow-up tile section; closed quote access remains available through History and active quote work through Workflow.
+- Replaced the literal Admin `??` label with `WARNING — Wipe Local Finance Workspace`.
+- Preserved stored values, lifecycle transitions, stock logic, database fields and message templates.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
 ## v44E3D Workflow Page Foundation
 - Date: 2026-07-02
 - Scope: Active-work presentation and routing only.
