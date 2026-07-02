@@ -1559,3 +1559,5 @@ What was not changed:
 - Added Purpose and Send when guidance to every Communication Centre row.
 - Styling uses a subtle neutral operator-assistant panel without warning colours.
 - No workflow stages, routing, button behaviour, database schema, lifecycle transitions, stock logic, customer wording, or message generation changed.
+
+Deployment poke for v44E3H GitHub Pages refresh.
