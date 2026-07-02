@@ -1536,3 +1536,14 @@ What was not changed:
 - Added a live-order-only Payment Request row using the existing paymentMessageStatus. Generation requires final lines, uncleared payment, and an explicit operator confirmation that final contents are agreed.
 - Copy and WhatsApp continue to use the generated textarea. Sending and Mark sent remain explicit operator actions.
 - No saved status values, stock calculations, workflow derivation, lifecycle transitions, database schema, totals, Request Hub, or Planner logic changed.
+
+
+## v44E3G Mission Control Counts + Back Navigation — 2026-07-02
+
+- Version: v44E3G
+- Scope: Start-page visibility and lightweight navigation only.
+- Added Mission Control cards for New Requests, Customer Messages, and Stock Alerts while retaining all six workflow aggregate cards.
+- Added live totals to the Next actions and Urgent stock alerts headings.
+- Routed Mission Control cards to Requests, the first actionable customer communication task, and Stock.
+- Added an in-app distinct-view Back stack and breadcrumb. Start is the root and disables Back; no browser history or hash routing is used.
+- No workflow stages, status values, stock calculations, message templates, lifecycle transitions, or database schema changed.

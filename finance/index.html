@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E3F Customer Communication System</title>
+<title>PrimeX Finance HQ &middot; v44E3G Mission Control Counts + Back Navigation</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -174,15 +174,23 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3F</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3G</span></h1></div>
     </div>
     <div class="top-actions">
+      <button class="btn subtle header-action" id="backViewButton" type="button" onclick="goBackView()" disabled>← Back</button>
+      <span class="tiny" id="viewBreadcrumb" aria-live="polite">Start</span>
       <button class="btn subtle header-action" onclick="showView('admin');showAdminPanel('system')">System Map</button>
     </div>
   </header>
   <main id="view-start" class="view active">
     <section class="card">
-      <div class="section-title"><div><h2>Today</h2><p>Active-work summary. Open a stage in Workflow to continue.</p></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
+      <div class="section-title"><div><h2>Mission Control</h2><p>Live entry points first, followed by the existing workflow totals.</p></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
+      <div class="queue-grid" id="missionControlCards">
+        <button class="queue-card" onclick="showView('request')"><div class="k">New Requests</div><div class="n">0</div><div class="s">Open Requests</div></button>
+        <button class="queue-card" onclick="openFirstCustomerMessageTask()"><div class="k">Customer Messages</div><div class="n">0</div><div class="s">Open first actionable task</div></button>
+        <button class="queue-card" onclick="showView('stock')"><div class="k">Stock Alerts</div><div class="n">0</div><div class="s">Open Stock</div></button>
+      </div>
+      <div class="subhead" style="margin-top:14px">Workflow totals</div>
       <div class="queue-grid" id="queueCards">
         <button class="queue-card"><div class="k">Awaiting payment</div><div class="n">0</div><div class="s">fallback shown before app starts</div></button>
         <button class="queue-card"><div class="k">To pack / fulfil</div><div class="n">0</div><div class="s">0 postage items</div></button>
@@ -195,11 +203,11 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
       <div class="sysmap"><button onclick="newQuote();showView('order')"><strong>Quote / enquiry</strong><small>Price a request without affecting stock</small></button><button onclick="showView('queues');openQueue('quote-ready')"><strong>Open quotes</strong><small>Review active quotes and convert when ready</small></button><button onclick="showView('history');renderHistory('live')"><strong>Repeat order</strong><small>Find a completed customer/order and duplicate it</small></button><button onclick="showView('history')"><strong>Order history</strong><small>Find completed, past, converted or cancelled work</small></button><button onclick="showView('request')"><strong>Request Inbox</strong><small>Review new enquiries</small></button><button onclick="showView('stock')"><strong>Stock</strong><small>Receive stock, adjust counts, and check low items</small></button></div>
     </section>
     <section class="card">
-      <div class="section-title"><div><h3>Next actions</h3><p>Priority prompts from open orders, customer messages, dispatch and stock.</p></div></div>
+      <div class="section-title"><div><h3 id="startNextActionsHeading">Next actions · 0</h3><p>Priority prompts from open orders, customer messages, dispatch and stock.</p></div></div>
       <div id="startActionPrompts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
     </section>
     <section class="card">
-      <div class="section-title"><div><h3>Urgent stock alerts</h3><p>Only active items with reorder tracking switched on.</p></div><button class="btn" onclick="showView('stock')">Open stock</button></div>
+      <div class="section-title"><div><h3 id="startStockAlertsHeading">Urgent stock alerts · 0</h3><p>Only active items with reorder tracking switched on.</p></div><button class="btn" onclick="showView('stock')">Open stock</button></div>
       <div id="startStockAlerts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
     </section>
     <section class="card security">
@@ -515,6 +523,11 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 const newOrderTop=document.getElementById('newOrderTop');
 const newOrderStart=document.getElementById('newOrderStart');
 const queueCards=document.getElementById('queueCards');
+const missionControlCards=document.getElementById('missionControlCards');
+const backViewButton=document.getElementById('backViewButton');
+const viewBreadcrumb=document.getElementById('viewBreadcrumb');
+const startNextActionsHeading=document.getElementById('startNextActionsHeading');
+const startStockAlertsHeading=document.getElementById('startStockAlertsHeading');
 const queueList=document.getElementById('queueList');
 const activeOrderTag=document.getElementById('activeOrderTag');
 const orderRef=document.getElementById('orderRef');
@@ -809,7 +822,32 @@ function saveLocal(){localStorage.setItem('px_orders_v21',JSON.stringify(orders)
 function resetLocalTestWorkspace(){const first='This will remove ALL local Finance HQ data.\n\nThis includes:\n\u2022 Orders\n\u2022 Quotes\n\u2022 Requests\n\u2022 Stock\n\u2022 Dashboard history\n\u2022 Customer workflow data\n\nSupabase cloud requests are NOT deleted.';if(!confirm(first))return;const typed=prompt('FINAL WARNING\n\nThis will wipe the entire local Finance HQ workspace.\n\nThis action cannot be undone.\n\nType:\n\nWIPE LOCAL WORKSPACE\n\nto continue.');if(typed!=='WIPE LOCAL WORKSPACE'){showToast('Local workspace wipe cancelled');return}const finalConfirm='FINAL DESTRUCTIVE ACTION CONFIRMATION\n\nYou typed the wipe phrase correctly.\n\nClick OK to permanently clear this browser local Finance HQ workspace now.\n\nSupabase cloud requests are NOT deleted.';if(!confirm(finalConfirm)){showToast('Local workspace wipe cancelled');return}FINANCE_LOCAL_KEYS.forEach(k=>localStorage.removeItem(k));orders=[];stock=JSON.parse(JSON.stringify(INITIAL_STOCK));stockMovements=[];stockThresholds=JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=[];requestInbox=[];prototypeStoredOrdersBlocked=false;saveLocal();newOrder();recalcStock();window.lastHistory='all';requestInboxView='active';renderAll();showView('start');showToast('Local Finance workspace wiped')}
 function clearLocalFinanceData(){resetLocalTestWorkspace()}
 function renderPrototypeDataWarning(){}
-function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));const view=document.getElementById('view-'+v);if(!view){showToast('View not available');return}view.classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));renderAll();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0)}
+const VIEW_LABELS={start:'Start',queues:'Workflow',order:'Order',request:'Requests',stock:'Stock',history:'Order History',admin:'Admin'};
+let currentView='start';
+let viewBackStack=[];
+function updateBackNavigation(){
+  if(backViewButton)backViewButton.disabled=currentView==='start'||viewBackStack.length===0;
+  if(viewBreadcrumb){const trail=[...viewBackStack,currentView].filter((v,i,a)=>i===0||v!==a[i-1]);viewBreadcrumb.textContent=trail.map(v=>VIEW_LABELS[v]||v).join(' / ')}
+}
+function showView(v,track=true){
+  const view=document.getElementById('view-'+v);
+  if(!view){showToast('View not available');return}
+  if(v===currentView){updateBackNavigation();return}
+  if(track){
+    if(v==='start')viewBackStack=[];
+    else if(currentView&&viewBackStack[viewBackStack.length-1]!==currentView)viewBackStack.push(currentView);
+  }
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  view.classList.add('active');currentView=v;
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  updateBackNavigation();renderAll();setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),0);
+}
+function goBackView(){
+  if(currentView==='start'||!viewBackStack.length)return;
+  let previous=viewBackStack.pop();
+  while(previous===currentView&&viewBackStack.length)previous=viewBackStack.pop();
+  showView(previous||'start',false);
+}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 function autoExpandTextarea(el){if(!el||el.tagName!=='TEXTAREA')return;const compact=window.matchMedia&&window.matchMedia('(max-width:760px)').matches&&['orderNotes','customerNote','packingNotes'].includes(el.id);const min=compact?72:(el.classList.contains('tall-textarea')?140:96);el.style.height='auto';el.style.height=Math.max(el.scrollHeight,min)+'px'}
 function bindAutoExpand(){document.querySelectorAll('textarea').forEach(t=>{autoExpandTextarea(t);t.addEventListener('input',()=>autoExpandTextarea(t))})}
@@ -818,7 +856,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3F',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3G',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -946,7 +984,7 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E3F JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3G JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
 ['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
 priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
@@ -1584,7 +1622,7 @@ function renderRequestInbox(){if(!requestInboxList)return;const active=activeReq
 function markRequestStatus(id,status){const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.status=status;saveLocal();renderRequestInbox();showToast('Request '+status)}
 function requestQuoteNotes(req,skipped){const lines=['Request Hub source: '+(req.source||'Request Hub'),'Request ID: '+req.requestId,'Received: '+(req.receivedAt||''),'Contact: '+(req.customer?.contact||'not supplied')];if(req.requestNotes)lines.push('Request notes: '+req.requestNotes);if(skipped.length){lines.push('Manual review needed:');skipped.forEach(s=>lines.push('- '+s))}lines.push('Request metadata preserved from Request Inbox. Quote/enquiry only; no stock deduction until converted to live order and saved.');return lines.join('\n')}
 function convertRequestToQuote(id){const req=requestInbox.find(x=>x.requestId===id);if(!req){showToast('Request not found');return}if(req.convertedOrderId){openLinkedRequestQuote(req,'convertedOrderId','Quote');return}if(req.draftOrderId||String(req.status||'').toLowerCase()==='draft quote'){if(req.draftOrderId&&openLinkedRequestQuote(req,'draftOrderId','Draft quote'))return;showToast('This request already has a draft quote state, but the draft quote could not be found.');setRequestImportStatus('This request already has a draft quote state, but the draft quote could not be found. Review before creating another quote.','warn');return}newQuote();set('customerRef',req.customer?.nameOrRef||req.requestId);set('recPhone',req.customer?.contact||'');set('orderSource','Request Hub / online');set('quoteStatus','Quote to send');current.sourceRequestId=req.requestId;current.sourceRequestMeta={requestId:req.requestId,source:req.source||'Request Hub',receivedAt:req.receivedAt||'',preferredContact:req.customer?.preferredContact||'',itemCount:(req.items||[]).length};set('priceTier','standard');let skipped=[];(req.items||[]).forEach(item=>{const status=requestItemStatus(item);if(!status.ok){skipped.push((item.productCode||item.requestedName||'Unknown item')+': '+status.label);return}const p=PRODUCT_RULES[status.pid],qty=Math.max(1,Math.floor(Number(item.qty||1))),price=Number(item.standardCataloguePrice);current.lines.push({kind:'product',pid:status.pid,qty,price,name:cleanDisplayText(p.name),review:!!p.needsCheck,note:cleanDisplayText('Request Hub standard catalogue price from '+item.productCode),sourceProductCode:item.productCode,requestId:req.requestId,supportMode:null,materialKey:null})});if(!current.lines.length){set('orderNotes',requestQuoteNotes(req,skipped));renderOrder();renderRequestInbox();showView('request');showToast('No quote items were imported. Review request mapping before creating quote.');setRequestImportStatus('No quote items were imported. Review request mapping before creating quote.','warn');return}set('orderNotes',requestQuoteNotes(req,skipped));if(req.requestNotes)set('customerNote',req.requestNotes);req.status='draft quote';req.draftOrderId=current.id;req.convertedOrderId='';recalcMaterialsFromLines(true);markOrderMessagesStale('all');saveLocal();renderOrder();renderRequestInbox();showView('order');showToast('Draft quote created - save when ready')}
-function renderAll(){renderQueues();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderAdmin();renderOrder();renderCommunicationCentre()}
+function renderAll(){renderQueues();renderHistory(window.lastHistory||'all');renderRequestInbox();renderStock();renderMissionControlCards();renderAdmin();renderOrder();renderCommunicationCentre();updateBackNavigation()}
 function isQuoteOrder(o){return (o.orderType||'Live order')==='Quote / enquiry'}
 function quoteStatusValue(o={}){if(!isQuoteOrder(o))return o.quoteStatus||'Quote to send';const st=String(o.quoteStatus||'').trim();if(st)return st;if(o.status==='Cancelled')return 'Cancelled';if((o.confirmation||'No')==='Yes')return 'Quote sent / waiting customer';return 'Quote to send'}
 function isConvertedQuote(o){return isQuoteOrder(o)&&!!(o.linkedLiveOrderId||o.convertedOrderId)}
@@ -1956,13 +1994,16 @@ function stopStockingItem(k){
 function renderStartStockAlerts(){
   if(!startStockAlerts)return;
   const alerts=stockAlerts();
+  if(startStockAlertsHeading)startStockAlertsHeading.textContent='Urgent stock alerts · '+alerts.length;
   const shown=alerts.slice(0,6);
   const extra=alerts.length>shown.length?`<div class="tiny" style="margin-top:8px">${alerts.length-shown.length} more stock alert${alerts.length-shown.length===1?'':'s'} in Stock.</div>`:'';
   startStockAlerts.innerHTML=shown.length?shown.map(a=>`<div class="summary-line"><span>${htmlEscape(STOCK_LABELS[a.k]||a.k)}</span><strong>${htmlEscape(a.label)} - ${stock[a.k]||0}</strong></div>`).join('')+extra:'<div class="muted">No urgent stock alerts.</div>';
 }
 function renderStartActionPrompts(){
   if(!startActionPrompts)return;
-  const alerts=deriveActionAlerts().slice(0,8);
+  const allAlerts=deriveActionAlerts();
+  if(startNextActionsHeading)startNextActionsHeading.textContent='Next actions · '+allAlerts.length;
+  const alerts=allAlerts.slice(0,8);
   if(alerts.length){startActionPrompts.innerHTML='<div class="alert-list">'+alerts.map(alertHtml).join('')+'</div>';return}
   const live=dashboardOrders().filter(isOpenWork);
   let prompts=[];
@@ -1989,6 +2030,24 @@ function messageActionsForOrder(o){
 }
 function commsActionOrders(){
   return dashboardOrders().filter(isOpenWork).filter(o=>messageActionsForOrder(o).length);
+}
+function openFirstCustomerMessageTask(){
+  const o=commsActionOrders()[0];
+  if(!o){showToast('No actionable customer messages');return}
+  const confirmationNeeded=(o.confirmation||'No')!=='Yes';
+  const trackingReady=!!String(o.tracking||o.trackingRef||'').trim();
+  openOrderTask(o.id,confirmationNeeded?'confirmation':(trackingReady?'tracking':'customer-update'));
+}
+function renderMissionControlCards(){
+  if(!missionControlCards)return;
+  const requests=activeRequestIntakeItems().length;
+  const messages=commsActionOrders().length;
+  const stockCount=stockAlerts().length;
+  missionControlCards.innerHTML=[
+    ['New Requests',requests,'Open Requests',"showView('request')"],
+    ['Customer Messages',messages,'Open first actionable task','openFirstCustomerMessageTask()'],
+    ['Stock Alerts',stockCount,'Open Stock',"showView('stock')"]
+  ].map(x=>'<button class="queue-card" onclick="'+x[3]+'"><div class="k">'+x[0]+'</div><div class="n">'+x[1]+'</div><div class="s">'+x[2]+'</div></button>').join('');
 }
 function renderStartCommsActions(){
   if(!startCommsActions)return;
@@ -2439,7 +2498,7 @@ function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3F JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3G JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>
