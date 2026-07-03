@@ -1561,3 +1561,16 @@ What was not changed:
 - No workflow stages, routing, button behaviour, database schema, lifecycle transitions, stock logic, customer wording, or message generation changed.
 
 Deployment poke for v44E3H GitHub Pages refresh.
+
+
+## v44E3J Cloud Request Suppression + Message Send Flow Fix — 2026-07-03
+
+- Version: v44E3J
+- Added browser-local ignored cloud request identities that survive normal workspace wipe.
+- Cloud refresh now skips ignored Supabase IDs/request references before merge.
+- Moving a cloud request to Bin also suppresses it from future refreshes.
+- Added conservative obvious-test request cleanup and Admin controls for test cleanup and clearing ignored IDs.
+- Fixed Payment Request ordering so generated text exists before Communication Centre WhatsApp eligibility rerenders.
+- Generated messages are labelled Ready to send and explain that saving happens after sending/marking sent.
+- Added disabled missing-phone reason and item-specific manual-review guidance/actions.
+- No Supabase rows, schema, workflow stages, stock deductions, lifecycle transitions, or customer message templates changed.
