@@ -11257,6 +11257,11 @@ html{
 
   let activeDrop = null;
 
+  drops.forEach(drop => {
+    const trigger = drop.querySelector(':scope > summary');
+    if(trigger) trigger.setAttribute('aria-expanded','false');
+  });
+
   function isMobile(){
     return window.matchMedia('(max-width: 720px)').matches;
   }
@@ -11268,8 +11273,12 @@ html{
     drops.forEach(drop => {
       drop.classList.remove('px-mobile-open');
       drop.removeAttribute('open');
+      const trigger = drop.querySelector(':scope > summary');
+      if(trigger) trigger.setAttribute('aria-expanded','false');
     });
   }
+
+  window.PrimeXPlannerMobileNav = {close: closePanel};
 
   function positionPanel(){
     if(!activeDrop || panel.hasAttribute('hidden')) return;
@@ -11287,12 +11296,16 @@ html{
       if(other !== drop){
         other.classList.remove('px-mobile-open');
         other.removeAttribute('open');
+        const trigger = other.querySelector(':scope > summary');
+        if(trigger) trigger.setAttribute('aria-expanded','false');
       }
     });
 
     activeDrop = drop;
     drop.classList.add('px-mobile-open');
     drop.removeAttribute('open');
+    const trigger = drop.querySelector(':scope > summary');
+    if(trigger) trigger.setAttribute('aria-expanded','true');
 
     panel.innerHTML = menu.innerHTML;
     panel.removeAttribute('hidden');
@@ -11386,6 +11399,10 @@ section[id],
   }
 
   function closeMobilePanel(){
+    if(window.PrimeXPlannerMobileNav && typeof window.PrimeXPlannerMobileNav.close === 'function'){
+      window.PrimeXPlannerMobileNav.close();
+      return;
+    }
     const panel = document.querySelector('.px-mobile-nav-panel');
     if(panel){
       panel.setAttribute('hidden','');
@@ -11394,6 +11411,8 @@ section[id],
     document.querySelectorAll('.chapter-drop').forEach(drop => {
       drop.classList.remove('px-mobile-open');
       drop.removeAttribute('open');
+      const trigger = drop.querySelector(':scope > summary');
+      if(trigger) trigger.setAttribute('aria-expanded','false');
     });
   }
 
@@ -12546,7 +12565,31 @@ section[id],
     tray.forEach((x,i)=>{ lines.push((i+1)+'. '+x.title+' - '+(x.label||x.name||'Selected item')); if(x.code) lines.push('   Code: '+x.code); if(x.name) lines.push('   Range: '+x.name); if(x.meta) lines.push('   Details: '+x.meta); if(x.price) lines.push('   Reference: '+x.price); lines.push('   Qty: '+(parseInt(x.qty,10)||1)); if(x.sourcePage) lines.push('   Source page: '+x.sourcePage); });
     if(notes.trim()){ lines.push('','Notes:',notes.trim()); }
     const text=lines.join('\n');
-    navigator.clipboard && navigator.clipboard.writeText(text).then(()=>{ alert('Request summary copied. You can continue to the request form or keep this as a fallback.'); }).catch(()=>{ alert(text); });
+    function fallbackCopy(){
+      const textarea=document.createElement('textarea');
+      textarea.value=text;
+      textarea.setAttribute('readonly','');
+      textarea.style.position='fixed';
+      textarea.style.left='-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      let copied=false;
+      try{ copied=document.execCommand('copy'); }catch(e){}
+      document.body.removeChild(textarea);
+      if(copied){
+        alert('Request summary copied. You can continue to the request form or keep this as a fallback.');
+      }else{
+        window.prompt('Copy is unavailable. Please select and copy the request summary manually:', text);
+      }
+    }
+    if(navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+      navigator.clipboard.writeText(text)
+        .then(()=>{ alert('Request summary copied. You can continue to the request form or keep this as a fallback.'); })
+        .catch(fallbackCopy);
+    }else{
+      fallbackCopy();
+    }
   }
   function escapeHTML(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   document.addEventListener('DOMContentLoaded', function(){ addButtons(); ensureTrayBar(); ensureModal(); updateTrayUI(); syncButtons(); });
