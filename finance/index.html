@@ -288,6 +288,34 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 #view-request>.card{border-color:#26374a}.request-actions{margin-top:14px}.request-actions>.btn.primary{box-shadow:inset 0 0 0 1px rgba(126,183,220,.1)}
 .request-row-guide.deferred-review{display:none}.request-row-guide.deferred-review.review-open{display:block}
 @media(max-width:760px){.order-page-title{margin-bottom:8px}.order-page-title h2{font-size:20px}#view-order>section.card{margin-top:15px}}
+/* v45.2C section separation and hierarchy */
+#view-order>section.card{position:relative;margin:24px 0;border-color:#2a3d50;border-top:2px solid #385874;border-left:3px solid #527895;box-shadow:0 14px 34px rgba(0,0,0,.2)}
+#view-order>section.card>.section-title{margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid #25384a}
+#view-order>section.card>.section-title h2{font-size:20px;letter-spacing:.005em}
+#view-order>section.card:nth-of-type(3){border-left-color:#466b86}
+#view-order>section.card:nth-of-type(4){border-left-color:#5b7e99}
+#view-order>section.card section.card.slim{border-color:#1d2d3c;border-left:0;border-right:0;border-radius:8px;box-shadow:none}
+#view-order #optionalDetailsSection{margin-top:26px;border-top-color:#253a4e;border-left-color:#314d65}
+#view-request>.card{border-color:#2a3d50;border-top:2px solid #385874;box-shadow:0 14px 34px rgba(0,0,0,.2)}
+#view-request>.card>.section-title{padding-bottom:12px;border-bottom:1px solid #25384a}
+#view-request .request-inbox-list{display:grid;gap:16px;margin-top:18px}
+#view-request .request-card{margin:0!important;border-color:#26394b!important;box-shadow:0 12px 28px rgba(0,0,0,.2)}
+#view-request .request-card-head{padding-bottom:14px;border-bottom:1px solid #25384a}
+#view-request .request-card-meta{margin-top:11px}.request-contact-grid{padding-bottom:15px;border-bottom:1px solid #1d2d3c}
+#view-request .request-card>.subhead{margin-top:16px}.request-items{margin-bottom:15px}
+#view-request .request-structure-note{border-left-width:2px;padding-left:15px}
+#view-request .request-actions{margin-top:16px;padding-top:14px;border-top:1px solid #25384a}
+#view-request .request-actions>.btn.primary{border-color:#5a829f}
+#view-queues .workflow-shell{border-color:#2a3d50;border-top:2px solid #385874;box-shadow:0 14px 34px rgba(0,0,0,.2)}
+#view-queues .workflow-shell>.section-title{padding-bottom:12px;border-bottom:1px solid #25384a}
+#view-queues .workflow-board{margin-top:17px;margin-bottom:12px}
+#view-queues .workflow-overview-summary{border-color:#2b4357;border-left:3px solid #5a829f;box-shadow:0 10px 24px rgba(0,0,0,.16)}
+#view-queues .workflow-request-attention{margin:0 0 20px;border-left:2px solid #466b86;opacity:1}
+#view-queues .workflow-filter-label{margin-top:20px;padding-top:16px;border-top:1px solid #25384a}
+.nav button[data-view="request"].request-attention:not(.active){box-shadow:inset 0 0 0 1px rgba(126,183,220,.1)}
+.nav button[data-view="request"].request-attention-review:not(.active){box-shadow:inset 0 2px 0 rgba(242,140,40,.78)}
+.nav button[data-view="request"].request-attention-ready:not(.active){box-shadow:inset 0 2px 0 rgba(109,169,199,.7)}
+@media(max-width:760px){#view-order>section.card{margin:18px 0;box-shadow:0 10px 24px rgba(0,0,0,.18)}#view-order>section.card>.section-title{margin-bottom:13px}.request-contact-grid{padding-bottom:12px}#view-request .request-inbox-list{gap:13px}#view-request .request-actions{padding-top:12px}#view-queues .workflow-shell{box-shadow:0 10px 24px rgba(0,0,0,.18)}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
