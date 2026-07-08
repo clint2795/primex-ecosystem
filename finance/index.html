@@ -316,6 +316,23 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 .nav button[data-view="request"].request-attention-review:not(.active){box-shadow:inset 0 2px 0 rgba(242,140,40,.78)}
 .nav button[data-view="request"].request-attention-ready:not(.active){box-shadow:inset 0 2px 0 rgba(109,169,199,.7)}
 @media(max-width:760px){#view-order>section.card{margin:18px 0;box-shadow:0 10px 24px rgba(0,0,0,.18)}#view-order>section.card>.section-title{margin-bottom:13px}.request-contact-grid{padding-bottom:12px}#view-request .request-inbox-list{gap:13px}#view-request .request-actions{padding-top:12px}#view-queues .workflow-shell{box-shadow:0 10px 24px rgba(0,0,0,.18)}}
+/* v45.2D Thin request accents and clearer section lines */
+#view-order>section.card{border-color:#31475b;border-top-color:#426886;border-left-color:#5c86a5}
+#view-order>section.card>.section-title{border-bottom-color:#2d465a}
+#view-order>section.card:nth-of-type(3){border-left-color:#527a98}
+#view-order>section.card:nth-of-type(4){border-left-color:#648ba7}
+#view-order>section.card section.card.slim{border-color:#263d50}
+#view-order #optionalDetailsSection{border-top-color:#2e4a61;border-left-color:#3b5c76}
+#view-order .divider{background:#263d50}
+#view-order .summary-line{border-bottom-color:#22384a}
+#view-request>.card{border-color:#31475b;border-top-color:#426886}
+#view-request>.card>.section-title{border-bottom-color:#2d465a}
+#view-request .request-card{border-color:#30485c!important;border-left-width:2px!important}
+#view-request .request-card.request-blocked{border-left-color:#e98122!important}
+#view-request .request-card.request-ready{border-left-color:#57936c!important}
+#view-request .request-card-head{border-bottom-color:#2d465a}
+#view-request .request-contact-grid{border-bottom-color:#263d50}
+#view-request .request-actions{border-top-color:#2d465a}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
