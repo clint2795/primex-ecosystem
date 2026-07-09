@@ -7962,7 +7962,7 @@ html{
 </nav>
 <nav class="px-mobile-chapter-nav" aria-label="PrimeX planner mobile chapter navigation">
 <div class="px-mobile-chapter-rail" role="list">
-<a class="px-mobile-chapter-tab" href="#top" role="listitem">Start</a>
+<a class="px-mobile-chapter-tab is-current" href="#top" role="listitem" aria-current="true">Start</a>
 <a class="px-mobile-chapter-tab" href="#reta" role="listitem">Core Range</a>
 <a class="px-mobile-chapter-tab" href="#windows" role="listitem">Paths</a>
 <a class="px-mobile-chapter-tab" href="#extended-catalogue" role="listitem">Catalogue</a>
@@ -12718,6 +12718,53 @@ section[id],
 /* Rendered hard fix: mobile uses one dedicated sticky nav before main.
    The old in-flow chapter nav remains desktop-only on mobile. */
 .px-mobile-chapter-nav{display:none!important}
+@media(min-width:721px){
+  .px-mobile-chapter-nav{display:none!important}
+  main{
+    overflow:visible!important;
+  }
+  .chapter-nav{
+    position:sticky!important;
+    top:0!important;
+    z-index:9999!important;
+    display:block!important;
+    overflow:visible!important;
+    transform:none!important;
+    filter:none!important;
+    perspective:none!important;
+    contain:none!important;
+  }
+  .chapter-nav.px-desktop-fixed{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    width:100%!important;
+    z-index:2147481000!important;
+  }
+  .chapter-nav.is-fixed{
+    position:sticky!important;
+    top:0!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    transform:none!important;
+  }
+  .chapter-nav-placeholder,
+  .px-mobile-nav-panel{
+    display:none!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  .chapter-nav-placeholder.is-active{
+    display:block!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+  }
+}
 @media(max-width:720px){
   html{scroll-padding-top:68px!important}
   body,
@@ -12754,6 +12801,7 @@ section[id],
     box-sizing:border-box!important;
     animation:none!important;
     transition:none!important;
+    transition-duration:0s!important;
     transform:none!important;
     scroll-snap-align:none!important;
   }
@@ -12780,10 +12828,10 @@ section[id],
     padding:0!important;
     z-index:2147481000!important;
     overflow:visible!important;
-    background:rgba(3,6,10,.98)!important;
+    background:linear-gradient(180deg,rgba(7,13,21,.985),rgba(3,7,12,.985))!important;
     border-top:1px solid rgba(255,255,255,.045)!important;
-    border-bottom:1px solid rgba(124,172,199,.16)!important;
-    box-shadow:0 8px 18px rgba(0,0,0,.28)!important;
+    border-bottom:1px solid rgba(129,185,216,.20)!important;
+    box-shadow:0 5px 14px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.025)!important;
     -webkit-transform:none!important;
     transform:none!important;
     will-change:auto!important;
@@ -12795,13 +12843,13 @@ section[id],
     display:flex!important;
     align-items:center!important;
     justify-content:flex-start!important;
-    gap:7px!important;
+    gap:5px!important;
     width:100%!important;
     height:54px!important;
     min-height:54px!important;
     max-height:54px!important;
     margin:0!important;
-    padding:6px 12px!important;
+    padding:7px 10px!important;
     overflow-x:auto!important;
     overflow-y:visible!important;
     -webkit-overflow-scrolling:touch!important;
@@ -12824,30 +12872,32 @@ section[id],
     height:40px!important;
     min-height:40px!important;
     max-height:40px!important;
-    min-width:78px!important;
+    min-width:74px!important;
     margin:0!important;
-    padding:0 12px!important;
-    border:1px solid rgba(255,255,255,.075)!important;
-    border-radius:9px!important;
-    background:rgba(255,255,255,.026)!important;
-    color:rgba(210,225,236,.88)!important;
+    padding:0 10px!important;
+    border:1px solid rgba(129,185,216,.13)!important;
+    border-radius:7px!important;
+    background:rgba(255,255,255,.018)!important;
+    color:rgba(224,237,245,.92)!important;
     font-family:'Share Tech Mono',monospace!important;
     font-size:9px!important;
     line-height:1!important;
-    letter-spacing:1.05px!important;
+    letter-spacing:1px!important;
     text-transform:uppercase!important;
     text-decoration:none!important;
     white-space:nowrap!important;
     cursor:pointer!important;
-    box-shadow:none!important;
+    box-shadow:inset 0 -1px 0 rgba(129,185,216,.08)!important;
   }
   .px-mobile-chapter-tab[aria-current="true"],
+  .px-mobile-chapter-tab.is-current,
   .px-mobile-chapter-tab:focus-visible,
   .px-mobile-chapter-tab:active{
-    color:rgba(238,246,252,.96)!important;
-    border-color:rgba(98,178,220,.30)!important;
-    outline:1px solid rgba(98,178,220,.34)!important;
-    background:rgba(62,150,196,.13)!important;
+    color:rgba(247,252,255,.98)!important;
+    border-color:rgba(129,185,216,.34)!important;
+    outline:0!important;
+    background:linear-gradient(180deg,rgba(62,150,196,.105),rgba(62,150,196,.035))!important;
+    box-shadow:inset 0 -2px 0 rgba(129,185,216,.72)!important;
   }
   section[id],
   [id="top"],
@@ -12868,9 +12918,95 @@ section[id],
     scroll-margin-top:68px!important;
   }
   .planner-hero-with-nav{
-    padding-top:30px!important;
+    padding-top:24px!important;
+    padding-bottom:34px!important;
+  }
+  .planner-hero-with-nav .hero-shell{
+    padding-top:0!important;
+  }
+  .planner-hero-with-nav .eyebrow{
+    color:rgba(154,205,231,.92)!important;
+  }
+  .planner-hero-with-nav h1{
+    margin-top:8px!important;
+    margin-bottom:13px!important;
+    color:rgba(246,244,239,.98)!important;
+  }
+  .planner-hero-with-nav .lead{
+    color:rgba(207,220,231,.90)!important;
+    line-height:1.54!important;
+  }
+  .px-customer-journey{
+    margin-top:18px!important;
+    padding:15px 15px 16px!important;
+    border-color:rgba(129,185,216,.28)!important;
+    border-left-color:rgba(129,185,216,.74)!important;
+    background:linear-gradient(135deg,rgba(17,34,50,.72),rgba(6,13,22,.58))!important;
+    box-shadow:0 15px 30px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+  .px-customer-journey-steps{
+    gap:8px!important;
+    color:rgba(241,247,251,.96)!important;
+  }
+  .px-customer-journey-steps span{
+    color:rgba(238,246,251,.95)!important;
+  }
+  .px-customer-journey-steps span::before{
+    border-color:rgba(129,185,216,.42)!important;
+    background:rgba(62,150,196,.13)!important;
+    color:rgba(220,240,250,.96)!important;
+  }
+  .px-customer-journey p{
+    margin-top:10px!important;
+    color:rgba(198,214,226,.90)!important;
+    font-size:13.2px!important;
+    line-height:1.52!important;
+  }
+  main{
+    padding-bottom:calc(92px + env(safe-area-inset-bottom))!important;
   }
 }
 </style>
+<script id="primex-desktop-chapter-nav-sticky-restore">
+(function(){
+  const nav = document.querySelector('.chapter-nav');
+  if(!nav) return;
+  const mq = window.matchMedia('(min-width: 721px)');
+  let placeholder = document.querySelector('.chapter-nav-placeholder');
+  if(!placeholder){
+    placeholder = document.createElement('div');
+    placeholder.className = 'chapter-nav-placeholder';
+    nav.parentNode.insertBefore(placeholder, nav);
+  }
+  let lockPoint = 0;
+  function cleanup(){
+    nav.classList.remove('px-desktop-fixed');
+    placeholder.classList.remove('is-active');
+    placeholder.style.height = '0px';
+  }
+  function measure(){
+    if(!mq.matches){ cleanup(); return; }
+    cleanup();
+    lockPoint = nav.getBoundingClientRect().top + window.pageYOffset;
+    placeholder.style.height = nav.offsetHeight + 'px';
+    update();
+  }
+  function update(){
+    if(!mq.matches){ cleanup(); return; }
+    if(window.pageYOffset >= lockPoint){
+      placeholder.style.height = nav.offsetHeight + 'px';
+      placeholder.classList.add('is-active');
+      nav.classList.add('px-desktop-fixed');
+    }else{
+      cleanup();
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', measure);
+  window.addEventListener('load', measure);
+  if(mq.addEventListener) mq.addEventListener('change', measure);
+  requestAnimationFrame(measure);
+})();
+</script>
 
 </body></html>
