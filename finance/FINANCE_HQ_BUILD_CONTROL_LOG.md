@@ -1574,3 +1574,18 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Generated messages are labelled Ready to send and explain that saving happens after sending/marking sent.
 - Added disabled missing-phone reason and item-specific manual-review guidance/actions.
 - No Supabase rows, schema, workflow stages, stock deductions, lifecycle transitions, or customer message templates changed.
+
+
+## PX-ROUTE-R2 Connected-System Contract Repair — 2026-07-28
+
+- Repair identifier: PX-ROUTE-R2.
+- Aligned Planner, Request Hub, Supabase intake and Finance around the shared 19-product request contract and four stable planning-structure codes.
+- Kept Retatrutide at RTA20 / 20mg, BPC-157 at BPC10 / 10mg, and Melanotan II at MT2_10 with Planner hidden, Request Hub selectable and Finance supported.
+- Removed the duplicated request-only product cards from Planner while preserving its later customer-route UI and request tray.
+- Preserved canonical product, structure and range codes; capped quantities at 1–99; and retained allocated quantities so Planner range totals convert to correct Finance unit prices.
+- Made Request Hub request references retry-stable and collision-resistant, kept email and WhatsApp separate, and preserved audit/null-price items for Finance review.
+- Added strict Edge intake validation, duplicate-safe handling, and legacy acceptance for existing Planner/request codes without calling a live endpoint.
+- Made Finance backward-compatible with stable structure codes, current request-only products, legacy aliases/generic contact fields, structure quantity multipliers and existing local request/order data.
+- Verified inline JavaScript syntax, shared visibility/code contract, Supabase project/schema alignment, Edge handler validation/idempotency, storage-key compatibility, Planner-to-Hub browser handoffs, Finance inbox normalization, legacy mappings, quote quantities/totals and persistence across reload.
+- Browser verification produced no console errors. No live Supabase request, push, merge or deployment was performed.
+- Files changed: planner/index.html, order-request/index.html, supabase/functions/submit-request/index.ts, finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
