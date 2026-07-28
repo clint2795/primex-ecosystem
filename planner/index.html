@@ -12377,20 +12377,14 @@ section[id],
 </style>
 <script id="primex-v179-extended-catalogue-path">
 (function(){
-  const items=[
-    {code:'GHKCU50',title:'GHK-Cu',strength:'50mg vial',price:'£55'},
-    {code:'MOTSC40',title:'MOTS-c',strength:'40mg vial',price:'£95'},
-    {code:'DSIP5',title:'DSIP',strength:'5mg vial',price:'£55'},
-    {code:'SS31_30',title:'SS-31',strength:'30mg vial',price:'£95'},
-    {code:'MT2_10',title:'Melanotan II',strength:'10mg vial',price:'£55'}
-  ];
+  const items=[];
   function card(item){return '<article class="px-extended-card" data-extended-code="'+item.code+'" data-extended-title="'+item.title+'" data-extended-strength="'+item.strength+'" data-extended-price="'+item.price+'"><div><strong>'+item.title+'</strong><span>'+item.strength+'</span></div><div class="px-extended-price">'+item.price+'</div></article>';}
   document.addEventListener('DOMContentLoaded',function(){
     const hero=document.querySelector('.hero .wrap');
     if(hero && !document.querySelector('.px-hero-routes')){
       hero.insertAdjacentHTML('beforeend','<div class="px-hero-routes" aria-label="Planner routes"><a class="px-hero-route" href="#reta"><strong>Core range</strong><span>Browse the main compound range.</span><em>Start with Retatrutide →</em></a><a class="px-hero-route" href="#extended-catalogue"><strong>Extended catalogue</strong><span>View selected additional compounds.</span><em>Explore catalogue →</em></a></div>');
     }
-    if(!document.querySelector('#extended-catalogue')){
+    if(items.length && !document.querySelector('#extended-catalogue')){
       const target=document.querySelector('#pricing') || document.querySelector('main section:last-of-type') || document.querySelector('main');
       if(target){
         target.insertAdjacentHTML('afterend','<section id="extended-catalogue" class="px-extended-section"><div class="wrap"><div class="px-extended-head"><div class="eyebrow">Request route</div><h2>Extended catalogue.</h2><p>Selected compounds can be added to your request.</p></div><div class="px-extended-grid">'+items.map(card).join('')+'</div></div></section>');
@@ -12467,11 +12461,13 @@ section[id],
   const money = s => (s || '').replace(/\s+/g,' ').trim();
   const slug = s => money(s).toLowerCase().replace(/[^a-z0-9£]+/g,'-').replace(/^-+|-+$/g,'');
   const SECTION_CODES={reta:'RTA20',bpc:'BPC10',tb:'TB50010',ta1:'TA110',kpv:'KPV10',foundation:'FOUNDATION',pricing:'SINGLE','extended-catalogue':'EXTENDED'};
-  function codeFromName(name){const n=money(name).toLowerCase();if(n.includes('retatrutide')) return 'RTA20';if(n.includes('bpc-157')) return 'BPC10';if(n.includes('tb-500')) return 'TB50010';if(n.includes('thymosin alpha-1')) return 'TA110';if(n.includes('kpv')) return 'KPV10';if(n.includes('nad+')) return 'NAD500';if(n.includes('5-amino-1mq')) return 'AMINO50';return '';}
+  function codeFromName(name){const n=money(name).toLowerCase();if(n.includes('retatrutide')) return 'RTA20';if(n.includes('bpc-157')) return 'BPC10';if(n.includes('tb-500')) return 'TB50010';if(n.includes('thymosin alpha-1')) return 'TA110';if(n.includes('kpv')) return 'KPV10';if(n.includes('nad+')) return 'NAD500';if(n.includes('5-amino-1mq')) return 'AMINO1MQ50';return '';}
   function sourcePage(sectionId){ return location.pathname+(sectionId?('#'+sectionId):''); }
   function qtyFromMeta(meta){ const m=money(meta).match(/(\d+)\s+vials?/i); return m ? Math.max(1,parseInt(m[1],10)||1) : 1; }
   function structureCode(sectionId,label,title){const base=codeFromName(title)||SECTION_CODES[sectionId]||money(sectionId).toUpperCase()||'PLANNER';const tier=slug(label||'reference').toUpperCase().replace(/-/g,'_')||'REFERENCE';return base+'_'+tier;}
-  function bridgeSpec(card,label){ const rows=[...card.querySelectorAll('.bridge-spec-v97')]; const row=rows.find(r=>money((r.querySelector('span')||{}).textContent||'').toLowerCase()===label.toLowerCase()); return money((row&&row.querySelector('strong')||{}).textContent||''); }
+  const PLANNING_STRUCTURE_CODES={'metabolic regulation':'STRUCT_METABOLIC_REGULATION','tissue repair and recovery':'STRUCT_TISSUE_REPAIR_RECOVERY','inflammation / gut integrity':'STRUCT_INFLAMMATION_GUT_INTEGRITY','immune modulation':'STRUCT_IMMUNE_MODULATION'};
+  function planningStructureCode(title){return PLANNING_STRUCTURE_CODES[money(title).toLowerCase()]||'';}
+  function bridgeSpec(card,label){ const wanted=label.toLowerCase(); const rows=[...card.querySelectorAll('.bridge-spec-v97')]; const row=rows.find(r=>money((r.querySelector('span')||{}).textContent||'').toLowerCase().startsWith(wanted)); return money((row&&row.querySelector('strong')||{}).textContent||''); }
   function getTray(){ try{return JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){return[]} }
   function setTray(items){ sessionStorage.setItem(KEY, JSON.stringify(items)); updateTrayUI(); syncButtons(); }
   function getSectionTitle(el){
@@ -12505,14 +12501,19 @@ section[id],
       const details=bridgeSpec(card,'Structure');
       const price=bridgeSpec(card,'Reference');
       const sourceId=sectionId||'windows';
-      return {id:slug([sourceId,structureTitle,primary,period,details,price].join('|')), code:'MANUAL_REVIEW', sectionId:sourceId, sourceSection:sourceId, sourcePage:sourcePage(sourceId), itemType:'planning_structure', title:structureTitle, label:'Planning structure', primary, period, structureDetails:details, name:period, meta:[primary,details].filter(Boolean).join(' | '), price, qty:1, note:''};
+      const code=planningStructureCode(structureTitle)||'MANUAL_REVIEW';
+      return {id:slug([sourceId,structureTitle,primary,period,details,price].join('|')), code, structureCode:code, sectionId:sourceId, sourceSection:sourceId, sourcePage:sourcePage(sourceId), itemType:'planning_structure', title:structureTitle, label:'Planning structure', primary, period, structureDetails:details, name:period, meta:[primary,details].filter(Boolean).join(' | '), price, qty:1, note:''};
     }
     const label=money((card.querySelector('.label')||{}).textContent||'');
     const name=money((card.querySelector('.plan-name')||{}).textContent||'');
     const meta=money((card.querySelector('.plan-meta')||{}).textContent||'');
     const price=money((card.querySelector('.amount')||card.querySelector('strong')||{}).textContent||'');
-    const code=structureCode(sectionId,label,title);
-    return {id:slug([sectionId,title,label,name,meta,price].join('|')), code, sectionId, sourceSection:sectionId, sourcePage:sourcePage(sectionId), itemType:'planning_range', title, label, name, meta, price, qty:qtyFromMeta(meta), note:''};
+    const group=card.closest('.foundation-price-group');
+    const productName=group?money((group.querySelector('h4')||{}).textContent||''):title;
+    const productCode=codeFromName([productName,title].join(' '))||SECTION_CODES[sectionId]||'MANUAL_REVIEW';
+    const rangeCode=structureCode(sectionId,label,productName||title);
+    const allocatedQty=qtyFromMeta(meta);
+    return {id:slug([sectionId,title,label,name,meta,price].join('|')), code:productCode, productCode, rangeCode, sectionId, sourceSection:sectionId, sourcePage:sourcePage(sectionId), itemType:'planning_range', title:productName||title, label, name, meta, price, qty:allocatedQty, referenceQty:allocatedQty, note:''};
   }
   function buildButton(card){
     if(card.querySelector('.px-request-btn')) return;
@@ -12527,7 +12528,7 @@ section[id],
       const item=getPlanData(card);
       const tray=getTray();
       const found=tray.find(x=>x.id===item.id);
-      if(found){ found.qty=(parseInt(found.qty,10)||1)+1; }
+      if(found){ found.qty=Math.min(99,(parseInt(found.qty,10)||1)+1); }
       else { tray.push(item); }
       setTray(tray);
       openReview(false);
@@ -12538,7 +12539,7 @@ section[id],
   function addButtons(){
     document.querySelectorAll('.plan-price, #pricing .price-row, .bridge-card-v97, .px-extended-card').forEach(buildButton);
   }
-  function compactHandoffItem(item){return {c:item.code||'',q:Math.max(1,parseInt(item.qty,10)||1),t:item.title||'',l:item.label||'',n:item.name||'',m:item.meta||'',p:item.primary||'',r:item.period||'',d:item.structureDetails||'',v:item.price||item.reference||'',y:item.itemType||'',s:item.sourceSection||'',u:item.sourcePage||''};}
+  function compactHandoffItem(item){return {c:item.code||'',pc:item.productCode||'',sc:item.structureCode||'',rc:item.rangeCode||'',q:Math.max(1,Math.min(99,parseInt(item.qty,10)||1)),aq:Math.max(1,Math.min(99,parseInt(item.referenceQty,10)||parseInt(item.qty,10)||1)),t:item.title||'',l:item.label||'',n:item.name||'',m:item.meta||'',p:item.primary||'',r:item.period||'',d:item.structureDetails||'',v:item.price||item.reference||'',y:item.itemType||'',s:item.sourceSection||'',u:item.sourcePage||''};}
   function requestHandoffParam(items){try{const compact=items.slice(0,50).map(compactHandoffItem);return btoa(unescape(encodeURIComponent(JSON.stringify(compact)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}catch(e){return '';}}
   function continueToRequest(){ const tray=getTray(); if(!tray.length){ alert('Select at least one item before continuing to the request form.'); openReview(true); return; } const n=document.querySelector('#pxRequestNotes'); if(n) sessionStorage.setItem(NOTES_KEY,n.value||''); setTray(tray); const handoff=requestHandoffParam(tray); window.location.href='../order-request/index.html'+(handoff?('?pxr='+encodeURIComponent(handoff)):''); }
   function ensureTrayBar(){
@@ -12586,13 +12587,13 @@ section[id],
     if(!tray.length){
       content.innerHTML='<div class="px-request-empty">No items selected for request yet. Select at least one item before continuing to the request form.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-return>Return to planner</button></div>';
     } else {
-      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected item')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" step="1" value="'+(parseInt(item.qty,10)||1)+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-continue>Continue to contact details</button><button type="button" class="px-request-ghost" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button></div>';
+      content.innerHTML='<div class="px-request-list">'+tray.map((item,i)=>'<div class="px-request-item" data-id="'+item.id+'"><div><div class="px-request-item-title">'+escapeHTML(item.title)+' — '+escapeHTML(item.label||item.name||'Selected item')+'</div><div class="px-request-item-meta">'+escapeHTML([item.name,item.meta,item.price].filter(Boolean).join(' · '))+'</div></div><div class="px-request-item-controls"><input class="px-request-qty" type="number" min="1" max="99" step="1" value="'+Math.max(1,Math.min(99,parseInt(item.qty,10)||1))+'" aria-label="Quantity"><button type="button" class="px-request-remove">Remove</button></div></div>').join('')+'</div><div class="px-request-notes"><label for="pxRequestNotes">Request notes / questions</label><textarea id="pxRequestNotes" placeholder="Optional notes. Example: preferred contact method, availability question, collection/drop-off preference, or anything PrimeX should check before confirming."></textarea></div><div class="px-request-next"><strong>Important:</strong> requests can be sent through the request form so selected items and contact details stay together. Availability, fulfilment details, and next steps are confirmed before anything is finalised.</div><div class="px-request-panel-actions"><button type="button" class="px-request-primary" data-px-continue>Continue to contact details</button><button type="button" class="px-request-ghost" data-px-copy>Copy request summary</button><button type="button" class="px-request-ghost" data-px-return>Return to planner</button></div>';
     }
     content.querySelectorAll('.px-request-item').forEach(row=>{
       const id=row.getAttribute('data-id');
       const qty=row.querySelector('.px-request-qty');
       const remove=row.querySelector('.px-request-remove');
-      if(qty){ qty.addEventListener('change', function(){ const t=getTray(); const it=t.find(x=>x.id===id); if(it){it.qty=Math.max(1,parseInt(qty.value,10)||1); setTray(t);} }); }
+      if(qty){ qty.addEventListener('change', function(){ const t=getTray(); const it=t.find(x=>x.id===id); if(it){it.qty=Math.max(1,Math.min(99,parseInt(qty.value,10)||1)); setTray(t);} }); }
       if(remove){ remove.addEventListener('click', function(){ setTray(getTray().filter(x=>x.id!==id)); }); }
     });
     const ret=content.querySelector('[data-px-return]'); if(ret) ret.addEventListener('click', closeReview);

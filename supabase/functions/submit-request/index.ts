@@ -8,6 +8,19 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const MAX_BODY_BYTES = 100_000;
 const MAX_ITEMS = 50;
+const MAX_ITEM_QTY = 99;
+const REQUEST_PRODUCT_CODES = new Set([
+  "RTA20", "BPC10", "TB50010", "KPV10", "TA110", "NAD500", "AMINO1MQ50",
+  "DSIP5", "GHKCU50", "GHKCU100", "CAGRI5", "TESA10", "MT2_10", "EPI10",
+  "MOTSC40", "SS31_30", "SEMAX_AUDIT", "SELANK_AUDIT", "SERMORELIN_AUDIT",
+]);
+const LEGACY_PRODUCT_CODES = new Set(["AMINO50", "RTA20_OBSERVATION", "MANUAL", "MANUAL_REVIEW"]);
+const REQUEST_STRUCTURE_CODES = new Set([
+  "STRUCT_METABOLIC_REGULATION",
+  "STRUCT_TISSUE_REPAIR_RECOVERY",
+  "STRUCT_INFLAMMATION_GUT_INTEGRITY",
+  "STRUCT_IMMUNE_MODULATION",
+]);
 
 type IntakeRequest = {
   requestId?: string;
@@ -54,7 +67,7 @@ function cleanText(value: unknown): string {
 function fallbackRequestRef(): string {
   const d = new Date();
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `PXREQ-${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}-${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}`;
+  return `PXREQ-${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}-${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
 }
 
 function unwrapRequest(body: unknown): IntakeRequest {
@@ -71,6 +84,26 @@ function contactPresent(req: IntakeRequest): boolean {
 
 function requestNote(req: IntakeRequest): string {
   return [req.requestNotes, req.publicSafeNotes].map(cleanText).filter(Boolean).join("\n");
+}
+
+function legacyPlannerCode(code: string): boolean {
+  return /^(RTA20|BPC10|TB50010|KPV10|TA110|NAD500|AMINO1MQ50|AMINO50|FOUNDATION)_[A-Z0-9_]+$/.test(code);
+}
+
+function validateItems(items: unknown[]): string | null {
+  for (let i = 0; i < items.length; i += 1) {
+    const item = items[i];
+    if (!item || typeof item !== "object" || Array.isArray(item)) return `Item ${i + 1} must be an object`;
+    const row = item as Record<string, unknown>;
+    const code = cleanText(row.productCode || row.code || row.structureCode).toUpperCase();
+    if (!code) return `Item ${i + 1} productCode is required`;
+    const allowed = REQUEST_PRODUCT_CODES.has(code) || LEGACY_PRODUCT_CODES.has(code) || REQUEST_STRUCTURE_CODES.has(code) || legacyPlannerCode(code);
+    if (!allowed) return `Item ${i + 1} has an unsupported productCode`;
+    const rawQty = row.qty ?? row.quantity ?? 1;
+    const qty = Number(rawQty);
+    if (!Number.isInteger(qty) || qty < 1 || qty > MAX_ITEM_QTY) return `Item ${i + 1} quantity must be an integer from 1 to ${MAX_ITEM_QTY}`;
+  }
+  return null;
 }
 
 Deno.serve(async (request) => {
@@ -95,6 +128,8 @@ Deno.serve(async (request) => {
     if (!contactPresent(intake)) return json(request, 400, { ok: false, error: "Email or WhatsApp/contact is required" });
     if (!items || !items.length) return json(request, 400, { ok: false, error: "No request items supplied" });
     if (items.length > MAX_ITEMS) return json(request, 400, { ok: false, error: `Maximum ${MAX_ITEMS} items allowed` });
+    const itemError = validateItems(items);
+    if (itemError) return json(request, 400, { ok: false, error: itemError });
 
     const supabase = createClient(url, serviceRoleKey, {
       global: {
@@ -134,7 +169,12 @@ Deno.serve(async (request) => {
       .select("id")
       .single();
 
-    if (inserted.error) throw new Error(`Request insert failed: ${inserted.error.message}`);
+    if (inserted.error) {
+      if (inserted.error.code === "23505" || /duplicate|unique/i.test(inserted.error.message || "")) {
+        return json(request, 200, { ok: true, request_ref: requestRef, created: false, duplicate: true });
+      }
+      throw new Error(`Request insert failed: ${inserted.error.message}`);
+    }
     return json(request, 200, { ok: true, request_ref: requestRef, created: true, duplicate: false });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Request intake failed";
