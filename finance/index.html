@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PrimeX Finance HQ &middot; v44E3J Cloud Request Suppression + Message Send Flow Fix</title>
+<title>PrimeX Finance HQ &middot; v44E3K Tier-safe Quote Approval + Accepted-total Lock</title>
 <style>
 :root{
   --bg:#07090d;--panel:#0d1118;--panel2:#111722;--line:#263141;--line2:#1a2431;
@@ -357,7 +357,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3J</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">v44E3K</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" id="backViewButton" type="button" onclick="goBackView()" disabled>Back</button>
@@ -429,7 +429,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
     <section class="card">
       <div class="section-title"><div><h2>Step 2 Items</h2></div></div>
       <div class="grid two" style="margin-bottom:10px">
-        <div class="field"><label>Price tier</label><select id="priceTier"><option value="standard">Planner / standard - full price</option><option value="existing">Existing / private - relationship price</option><option value="custom">Custom</option><option value="internal">Internal / close - owner-approved only</option></select></div>
+        <div class="field"><label>Customer price tier</label><select id="priceTier"><option value="standard">Public</option><option value="existing">Existing customer</option><option value="internal">Close contact</option><option value="custom">Custom approved price</option></select></div>
         <div class="field full"><div id="priceTierNote" class="note"></div></div>
       </div>
       <div class="tabs"><button id="modeSingle" class="active">Single compound</button><button id="modeStructure">Pathway / bundle</button></div>
@@ -484,7 +484,8 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
 
     <section class="card">
       <div class="section-title"><div><h2>Step 3 Payment & Save</h2></div></div>
-      <section class="card slim" style="box-shadow:none"><div class="subhead">Totals</div><div id="totalsBox"></div></section>
+	      <section class="card slim" id="quoteApprovalPanel" style="box-shadow:none"></section>
+	      <section class="card slim" style="box-shadow:none"><div class="subhead">Totals</div><div id="totalsBox"></div></section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Payment / release decision</div>
         <div class="grid two" style="margin-top:10px">
           <div class="field"><label>Payment status</label><select id="paymentStatus"><option>Awaiting payment</option><option>Part paid</option><option>Paid</option><option>Pay on collection</option><option>Approved credit</option><option>Waived</option><option>Refunded</option></select><span class="tiny">Pay on collection is not treated as paid/cleared.</span></div>
@@ -493,7 +494,7 @@ button,input,select,textarea{font:inherit} button{cursor:pointer} .wrap{max-widt
         </div><div id="paymentStatusNotice" class="note warn" style="margin-top:10px">Payment still awaiting. Do not pack/release yet.</div>
       </section>
       <section class="card slim" style="box-shadow:none"><div class="subhead">Save</div><div class="tiny" style="margin-bottom:10px">Local save first. Quote / enquiry records appear in Quote follow-up after saving.</div>
-        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn primary" id="sendQuoteBtn" onclick="startSendQuoteWorkflow()">Send quote</button><button class="btn neutral" id="markQuoteAcceptedBtn" onclick="markCurrentQuoteAccepted()">Mark quote accepted</button><button class="btn good" id="saveOrder">Save order</button></div><details class="payment-advanced" style="margin-top:10px"><summary>Advanced save / database sync controls</summary><div class="btnrow" style="margin-top:10px"><button class="btn subtle" id="saveOrderToDatabase">Sync current quote/order to database</button></div></details><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
+        <div class="btnrow final-actions" style="margin-top:12px"><button class="btn good" id="approveQuoteBtn" onclick="approveCurrentQuote()">Approve and prepare quote</button><button class="btn primary" id="convertQuoteBtn" onclick="convertCurrentQuoteToLive()">Convert quote to live order</button><button class="btn primary" id="sendQuoteBtn" onclick="startSendQuoteWorkflow()">Send quote</button><button class="btn neutral" id="markQuoteAcceptedBtn" onclick="markCurrentQuoteAccepted()">Mark quote accepted</button><button class="btn good" id="saveOrder">Save order</button></div><details class="payment-advanced" style="margin-top:10px"><summary>Advanced save / database sync controls</summary><div class="btnrow" style="margin-top:10px"><button class="btn subtle" id="saveOrderToDatabase">Sync current quote/order to database</button></div></details><div id="orderDbSyncStatus" class="note hide" style="margin-top:10px"></div>
       </section>
     </section>
 
@@ -779,6 +780,8 @@ const structurePreview=document.getElementById('structurePreview');
 const addStructureBtn=document.getElementById('addStructureBtn');
 const clearItems=document.getElementById('clearItems');
 const orderLines=document.getElementById('orderLines');
+const quoteApprovalPanel=document.getElementById('quoteApprovalPanel');
+const approveQuoteBtn=document.getElementById('approveQuoteBtn');
 const mat3ml=document.getElementById('mat3ml');
 const mat10ml=document.getElementById('mat10ml');
 const matU100=document.getElementById('matU100');
@@ -1056,6 +1059,67 @@ function cleanOrderLine(line){
 function cleanOrderLines(lines){return (lines||[]).map(cleanOrderLine)}
 function lineQuantity(line){return Math.max(1,Math.min(99,Math.floor(Number(line?.qty||1))))}
 function lineExtendedPrice(line){return Number(line?.price||0)*(['product','structure'].includes(line?.kind)?lineQuantity(line):1)}
+const TIER_LABELS={standard:'Public',existing:'Existing customer',internal:'Close contact',custom:'Custom approved price'};
+function tierLabel(tier){return TIER_LABELS[tier]||TIER_LABELS.standard}
+function quoteLineLabel(line){return cleanDisplayText(line?.name||PRODUCT_RULES[line?.pid]?.name||STRUCTURE_RULES[line?.sid]?.name||'Quote line')}
+function normalisePricingLine(line,tier='standard'){
+  const migrated={...line};
+  if(!migrated.priceSource)migrated.priceSource='legacy-protected';
+  if(!migrated.pricedTier)migrated.pricedTier=tier||'standard';
+  if(typeof migrated.priceLocked!=='boolean')migrated.priceLocked=true;
+  if(typeof migrated.priceApprovalRequired!=='boolean')migrated.priceApprovalRequired=false;
+  if(migrated.previousUnitPrice===undefined)migrated.previousUnitPrice=null;
+  return migrated;
+}
+function ensureCurrentCommercialState(){
+  if(!Array.isArray(current.lines))current.lines=[];
+  current.lines.forEach(line=>Object.assign(line,normalisePricingLine(line,val('priceTier')||'standard')));
+  if(!Array.isArray(current.auditHistory))current.auditHistory=[];
+  current.quoteApproval=current.quoteApproval||null;
+  current.acceptedSnapshot=current.acceptedSnapshot||null;
+  current.commercialLock=current.commercialLock||null;
+}
+function recordCommercialAudit(type,details=''){
+  ensureCurrentCommercialState();
+  current.auditHistory.push({at:new Date().toISOString(),type,details:cleanDisplayText(details)});
+  if(current.auditHistory.length>200)current.auditHistory=current.auditHistory.slice(-200);
+}
+function commercialSnapshotData(lines=current.lines){
+  return{
+    tier:val('priceTier')||'standard',
+    lines:cleanOrderLines(JSON.parse(JSON.stringify(lines||[]))),
+    materials:JSON.parse(JSON.stringify(current.materials||{})),
+    materialsCharge:num('materialsCharge'),
+    postageCharge:num('postageCharge'),
+    postageService:val('postageService'),
+    total:(lines||[]).reduce((sum,line)=>sum+lineExtendedPrice(line),0)+num('materialsCharge')+num('postageCharge')
+  };
+}
+function commercialFingerprint(data=commercialSnapshotData()){
+  return JSON.stringify({tier:data.tier,lines:(data.lines||[]).map(line=>({kind:line.kind,pid:line.pid||'',sid:line.sid||'',qty:lineQuantity(line),price:Number(line.price||0),priceSource:line.priceSource||'',pricedTier:line.pricedTier||'',priceLocked:!!line.priceLocked,priceApprovalRequired:!!line.priceApprovalRequired})),materials:data.materials||{},materialsCharge:Number(data.materialsCharge||0),postageCharge:Number(data.postageCharge||0),postageService:data.postageService||''});
+}
+function quoteApprovalCurrent(){return !!(current.quoteApproval&&current.quoteApproval.fingerprint===commercialFingerprint())}
+function invalidateQuoteApproval(reason){
+  if(current.acceptedSnapshot||current.commercialLock)return;
+  if(current.quoteApproval){
+    recordCommercialAudit('quote-approval-invalidated',reason||'Commercial details changed');
+    current.quoteApproval=null;
+  }
+}
+function isAcceptedCommercialLock(){return !!current.acceptedSnapshot}
+function isConvertedCommercialLock(){return val('orderType')==='Live order'&&!!current.commercialLock}
+function commercialEditingLocked(){return isAcceptedCommercialLock()||isConvertedCommercialLock()}
+function restoreLockedCommercialState(){
+  const locked=current.commercialLock||current.acceptedSnapshot;
+  if(!locked)return;
+  current.lines=cleanOrderLines(JSON.parse(JSON.stringify(locked.lines||[])));
+  current.materials=JSON.parse(JSON.stringify(locked.materials||current.materials||{}));
+  set('priceTier',locked.tier||'standard');
+  set('materialsCharge',Number(locked.materialsCharge||0));
+  set('postageCharge',Number(locked.postageCharge||0));
+  if(locked.postageService)set('postageService',locked.postageService);
+  syncMaterialsToInputs();
+}
 function val(id){return document.getElementById(id).value}
 function num(id){return Number(val(id)||0)}
 function set(id,v){const el=document.getElementById(id);el.value=v;autoExpandTextarea(el)}
@@ -1099,7 +1163,7 @@ function activeCustomStockItem(id){return customStockItems.find(x=>x.id===id)}
 function stockItemActive(k){const c=activeCustomStockItem(k);return !c||c.active!==false}
 function defaultStockOnlyForCategory(cat){return ['Kit-build materials','Dispatch packaging','Production consumables','Admin / misc'].includes(cat)}
 function applyCustomStockItems(){customStockItems.forEach(i=>{if(!i||!i.id)return;STOCK_LABELS[i.id]=i.name||i.id;STOCK_CATEGORIES[i.id]=i.category||'Admin / misc';if(!stockThresholds[i.id])stockThresholds[i.id]={reorderAt:Number(i.reorderAt||0),targetQty:Number(i.targetQty||0)};if(stock[i.id]===undefined)stock[i.id]=Number(i.qty||0)})}
-function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3J',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
+function backupPayload(){return{app:'PrimeX Finance HQ',version:'v44E3K',exportedAt:new Date().toISOString(),orders,requestInbox,stock,stockMovements,stockThresholds,customStockItems}}
 function exportFinanceBackup(){const data=JSON.stringify(backupPayload(),null,2),stamp=new Date().toISOString().slice(0,16).replace('T','-').replace(':','');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='primex-finance-hq-backup-'+stamp+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);if(backupStatus)backupStatus.textContent='Backup exported '+new Date().toLocaleString();showToast('Finance HQ backup exported')}
 function importFinanceBackupFile(file){if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.orders)||!data.stock||!Array.isArray(data.stockMovements))throw new Error('This does not look like a Finance HQ backup.');if(!confirm('This will replace current local Finance HQ data in this browser.'))return;orders=data.orders;stock=data.stock||{};stockMovements=data.stockMovements||[];stockThresholds=data.stockThresholds||JSON.parse(JSON.stringify(DEFAULT_THRESHOLDS));customStockItems=Array.isArray(data.customStockItems)?data.customStockItems:[];requestInbox=Array.isArray(data.requestInbox)?data.requestInbox:[];applyCustomStockItems();saveLocal();renderStockItemOptions();newOrder();recalcStock();renderAll();if(backupStatus)backupStatus.textContent='Backup imported '+new Date().toLocaleString();showToast('Finance HQ backup imported')}catch(e){console.error(e);showToast('Import failed - current data unchanged');if(backupStatus)backupStatus.textContent='Import failed: '+e.message}finally{if(importBackupInput)importBackupInput.value=''}};reader.readAsText(file)}
 function markConfirmationStale(){if(val('confirmationSent')==='Yes')set('confirmationSent','Confirmation needs regeneration')}
@@ -1228,16 +1292,16 @@ function renderSupportSuggestions(){
     '</div>';
 }
 
-function init(){document.getElementById('bootBadge').textContent='v44E3J JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
+function init(){document.getElementById('bootBadge').textContent='v44E3K JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();Object.values(STRUCTURE_RULES).forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();refreshSupabaseAuthStatus(false)}
 function bind(){
-['priceTier','productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
-priceTier.addEventListener('input',()=>{updateSupportPreview();markOrderMessagesStale('all')});
+['productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
+priceTier.addEventListener('input',handlePriceTierChange);
 unitPrice.addEventListener('input',()=>{updateManualProductPrice();markOrderMessagesStale('all')});
 productNeedsCheckReviewed?.addEventListener('input',updateSinglePreview);
 ['supportItemSelect','supportQty','supportChargeMode'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSupportPreview()}));
 supportUnitPrice.addEventListener('input',()=>{updateManualSupportPrice();markOrderMessagesStale('all')});
 paymentStatus.addEventListener('input',()=>{updatePaymentStatusNotice();syncFulfilmentPaymentWarning();markCustomerUpdateStale();renderCommunicationCentre();if(isPaymentCleared({payment:val('paymentStatus')}))stageNudge('Payment cleared. Check fulfilment stage and customer update.','info')});
-fulfilmentMethod.addEventListener('input',()=>{if(val('fulfilmentMethod')!=='Hold / not arranged')openOptionalDetails();syncPostageDefaults();updateFulfilmentVisibility();markCustomerUpdateStale()});
+fulfilmentMethod.addEventListener('input',()=>{if(val('fulfilmentMethod')!=='Hold / not arranged')openOptionalDetails();if(commercialEditingLocked()){restoreLockedCommercialState();updateFulfilmentVisibility();markCustomerUpdateStale();renderOrder();return}syncPostageDefaults();invalidateQuoteApproval('Fulfilment or postage service changed');updateFulfilmentVisibility();markCustomerUpdateStale();renderOrder()});
 ['customerRef','recPhone','postageService','labelStatus','trackingRef','labelQrRef','labelQrNote','deliveryNotes','orderStatus'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{markCustomerUpdateStale();refreshWhatsAppButtons();renderCommunicationCentre()}));
 labelStatus.addEventListener('change',()=>stageNudge('Postage or label status changed. Check customer update before release.','info'));
 trackingRef.addEventListener('change',()=>{if(val('trackingRef'))stageNudge('Tracking/reference added. Tracking update may need sending.','info')});
@@ -1246,16 +1310,18 @@ recPhone.addEventListener('input',markConfirmationStale);
 quoteAvailabilityNoteMode?.addEventListener('input',()=>{current.quoteAvailabilityNoteMode=val('quoteAvailabilityNoteMode')||'none';renderQuoteInternalChecks();markConfirmationStale()});
 quoteAvailabilityCustomNote?.addEventListener('input',()=>{current.quoteAvailabilityCustomNote=val('quoteAvailabilityCustomNote');markConfirmationStale()});
 releaseOverride.addEventListener('input',syncFulfilmentPaymentWarning);releaseApprovedBy.addEventListener('input',syncFulfilmentPaymentWarning);
-['priceTier','structureSelect'].forEach(id=>document.getElementById(id).addEventListener('input',updateStructurePreview));
+structureSelect.addEventListener('input',updateStructurePreview);
 structurePrice.addEventListener('input',()=>{updateManualStructurePrice();markOrderMessagesStale('all')});
 orderType.addEventListener('input',renderOrder);modeSingle.onclick=()=>showLineMode('single');modeStructure.onclick=()=>showLineMode('structure');
 addProductBtn.onclick=addProduct;addSupportItemBtn.onclick=addSupportItem;addStructureBtn.onclick=addStructure;
-clearItems.onclick=()=>{current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};packingManualOverride=false;packingNeedsReview=false;current.packingManualOverride=false;current.packingNeedsReview=false;syncMaterialsToInputs();markOrderMessagesStale('all');renderOrder()};
+clearItems.onclick=()=>{if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}current.lines=[];current.materials={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};packingManualOverride=false;packingNeedsReview=false;current.packingManualOverride=false;current.packingNeedsReview=false;invalidateQuoteApproval('Quote lines cleared');syncMaterialsToInputs();markOrderMessagesStale('all');renderOrder()};
 resetPackingAuto.onclick=()=>{resetPackingToAutoRule();markOrderMessagesStale('all')};saveOrder.onclick=saveOrderNow;saveOrderToDatabase?.addEventListener('click',saveCurrentQuoteOrderToDatabase);archiveOrder.onclick=()=>{set('orderStatus','Complete');saveOrderNow();showToast('Order marked complete')};voidOrder.onclick=voidCurrentOrder;deleteOrder.onclick=deleteCurrentOrder;if(newOrderTop)newOrderTop.onclick=()=>{newOrder();showView('order')}; if(newOrderStart)newOrderStart.onclick=()=>{newOrder();showView('order')};
 genAddress.onclick=generateAddress;copyAddress.onclick=()=>copyText(addressBlock.value);openRM.onclick=()=>{if(isRoyalMailFormMethod())window.open('https://send.royalmail.com/','_blank')};genFulfilment.onclick=generateFulfilment;copyFulfilment.onclick=copyCustomerUpdate;openFulfilmentWhatsApp?.addEventListener('click',()=>openWhatsAppMessage(fulfilmentMsg));genConfirmation.onclick=generateConfirmation;copyConfirmation.onclick=()=>{copyText(confirmationMsg.value);showToast('Confirmation copied - send it, then mark sent')};openConfirmationWhatsApp?.addEventListener('click',()=>openWhatsAppMessage(confirmationMsg));
 addStockReceived.onclick=addStockReceivedNow;saveStockAdjustment.onclick=saveStockAdjustmentNow;saveStockItem?.addEventListener('click',saveStockItemNow);clearStockItemForm?.addEventListener('click',clearStockItemEditor);stockShowInactive?.addEventListener('input',renderStockItemOptions);stockStatusFilter?.addEventListener('input',()=>{currentStockStatus=stockStatusFilter.value;renderStock()});clearLocalDataBtn?.addEventListener('click',clearLocalFinanceData);exportBackupBtn?.addEventListener('click',exportFinanceBackup);importBackupInput?.addEventListener('change',e=>importFinanceBackupFile(e.target.files?.[0]));importRequestBtn?.addEventListener('click',importRequestInboxFromText);refreshCloudRequestsBtn?.addEventListener('click',refreshCloudRequests);createLocalTestRequestBtn?.addEventListener('click',createLocalTestRequest);clearRequestImportBtn?.addEventListener('click',()=>{if(requestImportText)requestImportText.value='';setRequestImportStatus('',null);showToast('Request paste box cleared')});
-['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays','materialsCharge'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{openOptionalDetails();syncInputsToMaterials();if(!suppressPackingOverride)markPackingManualOverride();markOrderMessagesStale('all');renderOrder()}));
-postageCharge.addEventListener('input',()=>{renderOrder();markOrderMessagesStale('all')});
+['mat3ml','mat10ml','matU100','matWipes','matBoxes','matInserts','matInlays'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{if(commercialEditingLocked()){restoreLockedCommercialState();showToast('Accepted fulfilment contents are locked');renderOrder();return}openOptionalDetails();syncInputsToMaterials();if(!suppressPackingOverride)markPackingManualOverride();invalidateQuoteApproval('Fulfilment contents changed');markOrderMessagesStale('all');renderOrder()}));
+postageCharge.addEventListener('input',()=>{if(commercialEditingLocked()){restoreLockedCommercialState();showToast('Accepted total is locked');renderOrder();return}invalidateQuoteApproval('Postage changed');renderOrder();markOrderMessagesStale('all')});
+materialsCharge.addEventListener('input',()=>{if(commercialEditingLocked()){restoreLockedCommercialState();showToast('Accepted total is locked');renderOrder();return}invalidateQuoteApproval('Materials charge changed');renderOrder();markOrderMessagesStale('all')});
+postageService.addEventListener('input',()=>{if(commercialEditingLocked()){restoreLockedCommercialState();showToast('Accepted postage is locked');renderOrder();return}invalidateQuoteApproval('Postage service changed');renderOrder();markOrderMessagesStale('all')});
 }
 function showLineMode(mode){addMode=mode;[modeSingle,modeStructure].forEach(b=>b?.classList.remove('active'));if(mode==='structure'){modeStructure.classList.add('active');structurePanel.classList.remove('hide');singlePanel.classList.add('hide');updateStructurePreview();return}modeSingle.classList.add('active');structurePanel.classList.add('hide');singlePanel.classList.remove('hide');updateSinglePreview()}
 function catalogueGroupOfProduct(p){
@@ -1286,7 +1352,7 @@ function renderProductOptions(){
   if(productSelectLabel)productSelectLabel.textContent='Compound / product';
 }
 function renderSupportOptions(){const keep=val('supportItemSelect');supportItemSelect.innerHTML='';let ph=document.createElement('option');ph.value='';ph.textContent='Select support item...';supportItemSelect.appendChild(ph);Object.values(PRODUCT_RULES).filter(p=>p.supportItem).forEach(p=>{let o=document.createElement('option');o.value=p.id;o.textContent=p.name;supportItemSelect.appendChild(o)});if([...supportItemSelect.options].some(o=>o.value===keep))set('supportItemSelect',keep);else set('supportItemSelect','')}
-function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:false,packingNeedsReview:false,commStatus:communicationStatusDefaults(),sourceRequestId:'',sourceRequestMeta:null,sourceQuoteId:'',sourceQuoteConvertedAt:'',quoteInternalWarnings:[],quoteAvailabilityNoteMode:'none',quoteAvailabilityCustomNote:'',supabaseOrderId:'',supabaseSyncedAt:'',supabaseItemSyncStatus:''};packingManualOverride=false;packingNeedsReview=false;set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('orderType','Live order');set('orderSource','Manual entry');set('referredBy','');set('quoteStatus','Quote to send');set('priceTier','standard');set('productSelect','');set('supportItemSelect','');set('supportQty',1);set('supportChargeMode','charged');if(productNeedsCheckReviewed)productNeedsCheckReviewed.checked=false;set('paymentStatus','Awaiting payment');set('fulfilmentMethod','Hold / not arranged');set('postageService','Collection / drop-off / no postage');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');
+function newOrder(){current={id:'PX-'+Date.now().toString().slice(-6),lines:[],materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:false,packingNeedsReview:false,commStatus:communicationStatusDefaults(),sourceRequestId:'',sourceRequestMeta:null,sourceQuoteId:'',sourceQuoteConvertedAt:'',quoteInternalWarnings:[],quoteAvailabilityNoteMode:'none',quoteAvailabilityCustomNote:'',supabaseOrderId:'',supabaseSyncedAt:'',supabaseItemSyncStatus:'',activeTier:'standard',quoteApproval:null,acceptedSnapshot:null,commercialLock:null,auditHistory:[]};packingManualOverride=false;packingNeedsReview=false;set('orderRef',current.id);set('orderDate',new Date().toISOString().slice(0,10));set('customerRef','');set('orderType','Live order');set('orderSource','Manual entry');set('referredBy','');set('quoteStatus','Quote to send');set('priceTier','standard');set('productSelect','');set('supportItemSelect','');set('supportQty',1);set('supportChargeMode','charged');if(productNeedsCheckReviewed)productNeedsCheckReviewed.checked=false;set('paymentStatus','Awaiting payment');set('fulfilmentMethod','Hold / not arranged');set('postageService','Collection / drop-off / no postage');set('postageCharge',0);set('materialsCharge',0);set('orderStatus','New / awaiting payment');set('confirmationSent','No');set('updateSent','No');
   set('quoteStatus','Quote to send');set('releaseOverride','No');set('releaseApprovedBy','');set('paymentDueNote','');['orderNotes','customerNote','paymentDueNote','releaseApprovedBy','voidReason','packingNotes','recName','recPhone','addr1','addr2','town','postcode','deliveryNotes','trackingRef','labelQrRef','labelQrNote','addressBlock','fulfilmentMsg','internalFulfilmentWarning','confirmationMsg','quoteAvailabilityCustomNote'].forEach(id=>set(id,''));set('quoteAvailabilityNoteMode','none');set('labelStatus','Not booked');set('postageItems',0);syncMaterialsToInputs();activeOrderTag.textContent='New';setOptionalDetailsOpen(false);updateSinglePreview();updateSupportPreview();updateStructurePreview();renderOrder();renderAll();setOrderDbSyncStatus('',null);}
 
 function newQuote(){
@@ -1310,17 +1376,25 @@ function convertCurrentQuoteToLive(){
   if(val('orderType')!=='Quote / enquiry'){showToast('This is already a live/order record');return}
   const sourceQuote=orders.find(o=>o.id===current.id&&isQuoteOrder(o));
   if(sourceQuote?.convertedOrderId){showToast('Quote already converted to live order '+sourceQuote.convertedOrderId);return}
-  if(!confirm('Convert this quote/enquiry into a live order? It will enter Workflow and affect stock after you save.'))return;
+  if(!current.acceptedSnapshot){showToast('Customer acceptance and accepted-total lock are required before conversion');return}
+  if(!confirm('Convert the locked accepted quote into a live order? It will enter Workflow and affect stock after you save.'))return;
   const quoteRef=current.id;
   const liveRef=newLiveOrderRef();
-  current={...current,id:liveRef,lines:JSON.parse(JSON.stringify(current.lines||[])),materials:JSON.parse(JSON.stringify(current.materials||{})),commStatus:communicationStatusDefaults(),sourceQuoteId:quoteRef,sourceQuoteConvertedAt:new Date().toISOString(),supabaseOrderId:'',supabaseSyncedAt:'',supabaseItemSyncStatus:''};
+  const locked=JSON.parse(JSON.stringify(current.acceptedSnapshot));
+  current={...current,id:liveRef,lines:cleanOrderLines(locked.lines||[]),materials:JSON.parse(JSON.stringify(locked.materials||{})),commercialLock:locked,commStatus:communicationStatusDefaults(),sourceQuoteId:quoteRef,sourceQuoteConvertedAt:new Date().toISOString(),supabaseOrderId:'',supabaseSyncedAt:'',supabaseItemSyncStatus:''};
   set('orderRef',liveRef);
   set('orderType','Live order');
+  set('priceTier',locked.tier||'standard');
+  current.activeTier=locked.tier||'standard';
+  set('materialsCharge',Number(locked.materialsCharge||0));
+  set('postageCharge',Number(locked.postageCharge||0));
+  if(locked.postageService)set('postageService',locked.postageService);
   set('orderStatus','New / awaiting payment');
   set('paymentStatus','Awaiting payment');
   updatePaymentStatusNotice();
   set('confirmationSent','No');
   set('updateSent','No');
+  recordCommercialAudit('accepted-total-lock','Converted accepted snapshot at locked total '+money(locked.total));
   activeOrderTag.textContent='Converted quote - save to activate';
   updateOrderTypeNotice();
   renderOrder();
@@ -1341,7 +1415,7 @@ function repeatOrderFrom(id){
   if(!confirm('Create a new repeat order from '+id+'? Stock will only be affected after you save the new live order.'))return;
   const newId='PX-'+Date.now().toString().slice(-6);
   const clonedLines=JSON.parse(JSON.stringify(source.lines||[]));
-  current={id:newId,lines:clonedLines,materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:false,packingNeedsReview:false,repeatFrom:id};
+  current={id:newId,lines:clonedLines.map(line=>({...normalisePricingLine(line,source.tier||'standard'),priceLocked:true})),materials:{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:false,packingNeedsReview:false,repeatFrom:id,activeTier:source.tier||'standard',quoteApproval:null,acceptedSnapshot:null,commercialLock:null,auditHistory:[]};
   packingManualOverride=false;
   packingNeedsReview=false;
   set('orderRef',newId);
@@ -1395,10 +1469,10 @@ function getProductPrice(pid,tier,qty=1){
   if(p.supportItem){
     const mode=supportChargeMode?val('supportChargeMode'):'charged';
     if(mode==='charged'){
-      price=p[tier];
-      note='Charged to customer. Stock will be tracked.';
+      price=tier==='standard'?p.standard:null;
+      note=tier==='standard'?'Public support-item price. Stock will be tracked.':'Price approval required - no confirmed '+tierLabel(tier)+' support-item price.';
       review=price==null||price<=0;
-      if(review) note='Enter a positive unit price before adding.';
+      if(review&&tier==='standard') note='Enter and approve a positive unit price before adding.';
     }else if(mode==='included'){
       price=0;
       note='Included in order total. Stock will be tracked.';
@@ -1408,29 +1482,99 @@ function getProductPrice(pid,tier,qty=1){
     }
     return{price,note,review};
   }
-  if(tier==='custom'||p.custom){return{price:0,note:'Manual price required.',review:true}}
-  if(tier==='internal'){
-    if(p.closeEligible==='No'){
-      price=p.internal;
-      note='Owner-approved price.';
-      review=price==null;
-    }else if(p.closeEligible==='Temporary'){
-      price=p.internal;
-      note='Owner-approved price.';
-    }else{
-      price=p.internal;
-      note='Owner-approved price.';
-    }
-  }else{
-    price=p[tier];
-    note='';
-  }
-  if(price==null){price=0;review=true;note='Manual price required.'}
-  if((pid==='RTA20'||pid==='RTA20_KIT')&&tier==='internal'&&qty>3){note='Above locked internal Reta structure range - manual price review required. Safe unit price shown until override.';review=true}
+  if(tier==='custom'||p.custom){return{price:0,note:'Price approval required.',review:true}}
+  const confirmedReta=pid==='RTA20'||pid==='RTA20_KIT';
+  if(tier!=='standard'&&!confirmedReta)return{price:0,note:'Price approval required - no confirmed '+tierLabel(tier)+' tier price.',review:true};
+  price=p[tier];
+  note=tier==='standard'?'Public tier price.':tierLabel(tier)+' confirmed Retatrutide price.';
+  if(price==null){price=0;review=true;note:'Price approval required.'}
   return{price,note,review};
 }
-function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];let price=s.prices[tier],note='',review=false;if(tier==='custom')return{price:0,note:'Manual price required.',review:true};if(price!=null&&price>0){if(tier==='internal')note='Owner-approved price.';else note=''}else{let sum=sumStructureSinglePrices(sid,tier);if(!sum.missing&&hasPositivePrice(sum.total)){price=sum.total;review=true;note='Calculated from component prices. Review before adding.'}else{price=0;review=true;note='Manual price required.'}}return{price,note,review};}
+function getStructurePrice(sid,tier){const s=STRUCTURE_RULES[sid];if(!s)return{price:0,note:'Select a pathway before pricing.',review:true};let price=s.prices[tier],note='',review=false;if(tier!=='standard')return{price:0,note:'Price approval required - no confirmed '+tierLabel(tier)+' pathway price.',review:true};if(price!=null&&price>0){note='Public pathway price.'}else{let sum=sumStructureSinglePrices(sid,tier);if(!sum.missing&&hasPositivePrice(sum.total)){price=sum.total;review=true;note='Calculated from component prices. Price approval required.'}else{price=0;review=true;note='Price approval required.'}}return{price,note,review};}
 function sumStructureSinglePrices(sid,tier){const s=STRUCTURE_RULES[sid];let total=0,missing=false;s.contents.forEach(([pid,qty])=>{let r=getProductPrice(pid,tier,qty);total+=r.price*qty;if(r.review)missing=true});return{total,missing}}
+function automaticPriceSource(tier){return tier==='standard'?'public-tier':tier==='existing'?'existing-customer-tier':tier==='internal'?'close-contact-tier':'custom-manual'}
+function lineIsManualProtected(line){return !!line.priceLocked||['custom-manual','manual-approved','legacy-protected'].includes(line.priceSource)}
+function repriceQuoteLinesForTier(previousTier,nextTier){
+  ensureCurrentCommercialState();
+  let changed=0,protectedCount=0,approvalCount=0;
+  current.lines.forEach(line=>{
+    const oldPrice=Number(line.price||0);
+    if(lineIsManualProtected(line)){
+      protectedCount++;
+      recordCommercialAudit('manual-price-protection',quoteLineLabel(line)+' retained at '+money(oldPrice)+' during '+tierLabel(previousTier)+' to '+tierLabel(nextTier)+' tier change');
+      return;
+    }
+    let result=null;
+    if(line.kind==='product'){
+      const p=PRODUCT_RULES[line.pid],included=p?.supportItem&&line.supportMode&&line.supportMode!=='charged';
+      if(included)result={price:0,note:'Included/no-charge support item retained.',review:false};
+      else result=getProductPrice(line.pid,nextTier,lineQuantity(line));
+    }else if(line.kind==='structure')result=getStructurePrice(line.sid,nextTier);
+    const confirmedRetaLine=line.kind==='product'&&(line.pid==='RTA20'||line.pid==='RTA20_KIT');
+    if(result&&hasPositivePrice(result.price)&&(!(result.review&&nextTier!=='standard')||confirmedRetaLine)){
+      line.previousUnitPrice=oldPrice;
+      line.price=Number(result.price);
+      line.pricedTier=nextTier;
+      line.priceSource=automaticPriceSource(nextTier);
+      line.priceLocked=false;
+      line.priceApprovalRequired=false;
+      line.note=cleanDisplayText(result.note);
+      if(oldPrice!==line.price){
+        changed++;
+        recordCommercialAudit('automatic-repricing',quoteLineLabel(line)+' '+money(oldPrice)+' to '+money(line.price)+' for '+tierLabel(nextTier));
+      }
+    }else{
+      line.previousUnitPrice=oldPrice;
+      line.pricedTier=nextTier;
+      line.priceApprovalRequired=true;
+      line.priceSource='approval-required';
+      line.priceLocked=false;
+      line.note='Price approval required for '+tierLabel(nextTier)+'. Previous price retained for reference only.';
+      approvalCount++;
+    }
+  });
+  recordCommercialAudit('tier-change',tierLabel(previousTier)+' to '+tierLabel(nextTier)+'; '+changed+' repriced, '+protectedCount+' protected, '+approvalCount+' requiring approval');
+  invalidateQuoteApproval('Customer tier changed');
+  markOrderMessagesStale('all');
+  return{changed,protectedCount,approvalCount};
+}
+function handlePriceTierChange(){
+  const nextTier=val('priceTier')||'standard',previousTier=current.activeTier||nextTier;
+  if(commercialEditingLocked()){
+    restoreLockedCommercialState();
+    showToast('Accepted commercial details are locked');
+    renderOrder();
+    return;
+  }
+  current.activeTier=nextTier;
+  if(val('orderType')==='Quote / enquiry'&&previousTier!==nextTier){
+    const result=repriceQuoteLinesForTier(previousTier,nextTier);
+    showToast(result.approvalCount?result.changed+' line(s) repriced; '+result.approvalCount+' need price approval':result.changed+' eligible line(s) repriced');
+  }
+  updateSinglePreview();updateSupportPreview();updateStructurePreview();renderOrder();
+}
+function approveManualLinePrice(index){
+  if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}
+  const line=current.lines[index];
+  if(!line)return;
+  const entered=prompt('Enter the approved unit price for '+quoteLineLabel(line)+':',Number(line.price||0)>0?Number(line.price).toFixed(2):'');
+  if(entered===null)return;
+  const price=Number(entered);
+  if(!hasPositivePrice(price)){showToast('Approved unit price must be greater than zero');return}
+  const oldPrice=Number(line.price||0);
+  line.previousUnitPrice=oldPrice;
+  line.price=price;
+  line.pricedTier=val('priceTier')||'custom';
+  line.priceSource='custom-manual';
+  line.priceLocked=true;
+  line.priceApprovalRequired=false;
+  line.note='Custom/manual price explicitly approved.';
+  recordCommercialAudit('manual-price-approved',quoteLineLabel(line)+' '+money(oldPrice)+' to '+money(price)+' for '+tierLabel(line.pricedTier));
+  invalidateQuoteApproval('Manual line price changed');
+  markOrderMessagesStale('all');
+  renderOrder();
+  showToast('Manual price approved and protected');
+}
 function productNeedsManualPrice(p,r,price,supportMode){return !!p && (!p.supportItem||supportMode==='charged') && (r.review||!hasPositivePrice(price)) && !hasPositivePrice(price)}
 function wholeQty(id){return Math.max(1,Math.floor(num(id)||1))}
 function updateManualProductPrice(){let qty=wholeQty('productQty'),p=PRODUCT_RULES[val('productSelect')],supportMode=p?.supportItem?(val('supportChargeMode')||'charged'):null,r=p?getProductPrice(p.id,val('priceTier'),qty):{review:false};if(productNeedsManualPrice(p,r,num('unitPrice'),supportMode)){set('lineTotal','Price required');addProductBtn.disabled=true;if(addProductDisabledReason)addProductDisabledReason.textContent='Enter a unit price before adding.';return}set('lineTotal',money(num('unitPrice')*qty));addProductBtn.disabled=false;if(addProductDisabledReason)addProductDisabledReason.textContent='';if(p&&(val('priceTier')==='custom'||p.custom)){pricingNote.className='note';pricingNote.textContent='Custom price entered.'}}
@@ -1520,7 +1664,7 @@ function updateManualSupportPrice(){
   if(productNeedsManualPrice(p,r,num('supportUnitPrice'),mode)){set('supportLineTotal','Price required');addSupportItemBtn.disabled=true;if(addSupportDisabledReason)addSupportDisabledReason.textContent='Enter a unit price before adding.';return}
   set('supportLineTotal',money(num('supportUnitPrice')*qty));addSupportItemBtn.disabled=false;if(addSupportDisabledReason)addSupportDisabledReason.textContent='';
 }
-function updatePriceTierNote(){if(!priceTierNote)return;const tier=val('priceTier'),msg=tier==='internal'?'Owner-approved price.':tier==='custom'?'Manual price required.':'';priceTierNote.className='note'+(msg?' warn':' hide');priceTierNote.textContent=msg}
+function updatePriceTierNote(){if(!priceTierNote)return;const tier=val('priceTier'),msg=tier==='standard'?'Public prices apply where configured.':tier==='existing'?'Only confirmed Retatrutide pricing recalculates automatically. Other lines require price approval.':tier==='internal'?'Only confirmed Retatrutide close-contact pricing recalculates automatically. Other lines require price approval.':'Enter and approve each custom price. Automatic repricing is disabled.';priceTierNote.className='note'+(tier==='standard'?'':' warn');priceTierNote.textContent=msg}
 function updateStructurePreview(){updatePriceTierNote();let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);if(r.review&&!hasPositivePrice(r.price))set('structurePrice','');else set('structurePrice',r.price);addStructureBtn.disabled=!hasPositivePrice(num('structurePrice'));structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=!hasPositivePrice(num('structurePrice'))?'Manual price required.':r.note;renderStructurePreview(sid,'structurePreview')}
 function supportReviewNoteHTML(){return '<div class="divider"></div><div class="note warn">Use the support item section below if this order needs BAC water or accessories.</div>'}
 function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">Product contents</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>x '+qty+'</strong></div>'});let hasReta=s.contents.some(([pid])=>pid==='RTA20'||pid==='RTA20_KIT');if(hasReta)html+='<div class="tiny">Reta fulfilment details appear in Packing after adding.</div>';else html+=supportReviewNoteHTML();document.getElementById(target).innerHTML=html}
@@ -1566,7 +1710,23 @@ function canAddStructurePrice(pr,price){
   if(pr.review)structureNote.textContent='Manual price confirmed before adding.';
   return true;
 }
+function addedLinePricingMetadata(kind,id,tier,price,reviewResult,supportMode=null){
+  const included=kind==='product'&&PRODUCT_RULES[id]?.supportItem&&supportMode!=='charged';
+  if(included)return{priceSource:'included-no-charge',pricedTier:tier,priceLocked:true,priceApprovalRequired:false,previousUnitPrice:null};
+  let approvedAutomatic=false;
+  if(kind==='product'){
+    const p=PRODUCT_RULES[id],confirmedTier=tier==='standard'||id==='RTA20'||id==='RTA20_KIT';
+    approvedAutomatic=!!(confirmedTier&&hasPositivePrice(p?.[tier])&&Number(price)===Number(p[tier]));
+  }else{
+    const configured=STRUCTURE_RULES[id]?.prices?.[tier];
+    approvedAutomatic=tier==='standard'&&hasPositivePrice(configured)&&Number(price)===Number(configured)&&!reviewResult.review;
+  }
+  return approvedAutomatic
+    ?{priceSource:automaticPriceSource(tier),pricedTier:tier,priceLocked:false,priceApprovalRequired:false,previousUnitPrice:null}
+    :{priceSource:'custom-manual',pricedTier:tier,priceLocked:true,priceApprovalRequired:false,previousUnitPrice:null};
+}
 function addProduct(){
+  if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}
   let pid=val('productSelect'),qty=wholeQty('productQty'),tier=val('priceTier'),price=num('unitPrice'),p=PRODUCT_RULES[pid];
   if(!p){showToast('Select a product before adding');return}
   let pr=getProductPrice(pid,tier,qty);
@@ -1574,46 +1734,51 @@ function addProduct(){
   const supportMode=p.supportItem?(val('supportChargeMode')||'charged'):null;
   if(p.supportItem && supportMode!=='charged') price=0;
   if(!canAddProductPrice(p,pr,price,supportMode))return;
-  let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note&&(l.supportMode||null)===supportMode);
+  const pricingMeta=addedLinePricingMetadata('product',pid,tier,price,pr,supportMode);
+  let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note&&(l.supportMode||null)===supportMode&&l.priceSource===pricingMeta.priceSource&&l.pricedTier===pricingMeta.pricedTier);
   if(existing){
     existing.qty+=qty;
     existing.review=existing.review||pr.review;
     existing.note=pr.note;
     showToast('Product quantity updated');showAddFeedback(addProductFeedback);
   }else{
-    current.lines.push({kind:'product',pid,qty,price,name:cleanDisplayText(p.name),review:pr.review,note:cleanDisplayText(pr.note),supportMode,materialKey:p.materialKey||null});
+    current.lines.push({kind:'product',pid,qty,price,name:cleanDisplayText(p.name),review:pr.review,note:cleanDisplayText(pr.note),supportMode,materialKey:p.materialKey||null,...pricingMeta});
     showToast('Product added');showAddFeedback(addProductFeedback);
   }
   recalcMaterialsFromLines(true);
   if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);
   set('productQty',1);
+  invalidateQuoteApproval('Quote line added or quantity changed');
   markOrderMessagesStale('all');
   renderOrder();
 }
 function addSupportItem(){
+  if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}
   let pid=val('supportItemSelect'),qty=Math.max(1,Math.floor(num('supportQty')||1)),tier=val('priceTier'),price=num('supportUnitPrice'),p=PRODUCT_RULES[pid];
   if(!p){showToast('Select a support item before adding');return}
   let pr=getProductPrice(pid,tier,qty);
   const supportMode=val('supportChargeMode')||'charged';
   if(supportMode!=='charged')price=0;
   if(productNeedsManualPrice(p,pr,price,supportMode)){supportPricingNote.className='note warn';supportPricingNote.textContent='Manual price required.';if(addSupportDisabledReason)addSupportDisabledReason.textContent='Enter a unit price before adding.';showToast('Manual price required.');return}
-  let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note&&(l.supportMode||null)===supportMode);
+  const pricingMeta=addedLinePricingMetadata('product',pid,tier,price,pr,supportMode);
+  let existing=current.lines.find(l=>l.kind==='product'&&l.pid===pid&&Number(l.price)===Number(price)&&l.note===pr.note&&(l.supportMode||null)===supportMode&&l.priceSource===pricingMeta.priceSource&&l.pricedTier===pricingMeta.pricedTier);
   if(existing){
     existing.qty+=qty;
     existing.review=existing.review||pr.review;
     existing.note=pr.note;
     showToast('Support item quantity updated');showAddFeedback(addSupportFeedback);
   }else{
-    current.lines.push({kind:'product',pid,qty,price,name:cleanDisplayText(p.name),review:pr.review,note:cleanDisplayText(pr.note),supportMode,materialKey:p.materialKey||null});
+    current.lines.push({kind:'product',pid,qty,price,name:cleanDisplayText(p.name),review:pr.review,note:cleanDisplayText(pr.note),supportMode,materialKey:p.materialKey||null,...pricingMeta});
     showToast('Support item added');showAddFeedback(addSupportFeedback);
   }
   recalcMaterialsFromLines(true);
   if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);
   set('supportQty',1);
+  invalidateQuoteApproval('Support line added or quantity changed');
   markOrderMessagesStale('all');
   renderOrder();
 }
-function addStructure(){let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);if(!canAddStructurePrice(pr,price))return;current.lines.push({kind:'structure',sid,qty:1,price,name:cleanDisplayText(s.name),contents:s.contents,review:pr.review,note:cleanDisplayText(pr.note)});if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);recalcMaterialsFromLines(true);markOrderMessagesStale('all');renderOrder();showToast('Pathway added')}
+function addStructure(){if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}let sid=val('structureSelect'),tier=val('priceTier'),price=num('structurePrice'),s=STRUCTURE_RULES[sid],pr=getStructurePrice(sid,tier);if(!canAddStructurePrice(pr,price))return;current.lines.push({kind:'structure',sid,qty:1,price,name:cleanDisplayText(s.name),contents:s.contents,review:pr.review,note:cleanDisplayText(pr.note),...addedLinePricingMetadata('structure',sid,tier,price,pr)});if(shouldDefaultPostageItem()&&num('postageItems')===0)set('postageItems',1);recalcMaterialsFromLines(true);invalidateQuoteApproval('Pathway line added');markOrderMessagesStale('all');renderOrder();showToast('Pathway added')}
 function syncMaterialsToInputs(){suppressPackingOverride=true;set('mat3ml',current.materials.BAC3);set('mat10ml',current.materials.BAC10);set('matU100',current.materials.U100);set('matWipes',current.materials.WIPES);set('matBoxes',current.materials.BOX);set('matInserts',current.materials.INSERT);set('matInlays',current.materials.INLAY);suppressPackingOverride=false}
 function syncInputsToMaterials(){current.materials={BAC3:num('mat3ml'),BAC10:num('mat10ml'),U100:num('matU100'),WIPES:num('matWipes'),BOX:num('matBoxes'),INSERT:num('matInserts'),INLAY:num('matInlays')};current.packingManualOverride=packingManualOverride;current.packingNeedsReview=packingNeedsReview};
 function markPackingManualOverride(){packingManualOverride=true;current.packingManualOverride=true}
@@ -1684,19 +1849,85 @@ function orderOperatorGuidance(){
   return {title:g[0],state:g[1],next:g[2]};
 }
 function renderOrderGuidance(){if(!orderGuidance)return;const hidden=!current.lines.length||val('orderType')==='Past order';orderGuidance.classList.toggle('hide',hidden);if(hidden){orderGuidance.innerHTML='';return}const g=orderOperatorGuidance(),label=g.title==='Awaiting payment'?'Payment awaiting':g.title;orderGuidance.classList.add('compact-order-guidance');orderGuidance.innerHTML='<strong>'+htmlEscape(label)+'</strong>'}
+function pricingSourceLabel(line){
+  const labels={'public-tier':'Public tier','existing-customer-tier':'Existing-customer tier','close-contact-tier':'Close-contact tier','custom-manual':'Custom/manual approval','manual-approved':'Custom/manual approval','legacy-protected':'Legacy price protected','included-no-charge':'Included / no charge','approval-required':'Price approval required'};
+  return labels[line.priceSource]||'Protected saved price';
+}
+function quoteStockNeeds(){
+  const needs={};
+  current.lines.forEach(line=>{
+    if(line.kind==='product'){
+      const p=PRODUCT_RULES[line.pid];
+      if(p?.supportItem)return;
+      const key=p?.stockKey||line.pid;
+      needs[key]=(needs[key]||0)+lineQuantity(line);
+    }
+    if(line.kind==='structure')(line.contents||[]).forEach(([pid,qty])=>{const key=PRODUCT_RULES[pid]?.stockKey||pid;needs[key]=(needs[key]||0)+Number(qty||0)*lineQuantity(line)});
+  });
+  Object.entries(current.materials||{}).forEach(([key,qty])=>{if(Number(qty)>0)needs[key]=(needs[key]||0)+Number(qty)});
+  return needs;
+}
+function quoteApprovalIssues(){
+  if(val('orderType')!=='Quote / enquiry')return[];
+  const issues=[];
+  if(!current.lines.length)issues.push('Add at least one quote line.');
+  current.lines.forEach(line=>{
+    const support=PRODUCT_RULES[line.pid]?.supportItem,chargeFree=support&&line.supportMode&&line.supportMode!=='charged';
+    if(line.priceApprovalRequired)issues.push(quoteLineLabel(line)+': Price approval required.');
+    else if(!chargeFree&&!hasPositivePrice(line.price))issues.push(quoteLineLabel(line)+': approved unit price required.');
+  });
+  return issues;
+}
+function renderQuoteApprovalPanel(){
+  if(!quoteApprovalPanel)return;
+  const isQuote=val('orderType')==='Quote / enquiry',locked=commercialEditingLocked();
+  quoteApprovalPanel.style.display=isQuote||locked?'':'none';
+  if(!isQuote&&!locked)return;
+  const issues=quoteApprovalIssues(),approved=quoteApprovalCurrent(),snapshot=current.acceptedSnapshot||current.commercialLock;
+  const rows=current.lines.map((line,index)=>{
+    const previous=line.previousUnitPrice==null?Number(line.price||0):Number(line.previousUnitPrice||0);
+    const priceStatus=line.priceApprovalRequired?'<span class="badge-warn">Price approval required</span>':'<span class="badge-good">'+htmlEscape(pricingSourceLabel(line))+'</span>';
+    const action=line.priceApprovalRequired&&!locked?'<button class="btn subtle" onclick="approveManualLinePrice('+index+')">Enter / approve price</button>':'';
+    return '<div class="line-item"><div><strong>'+htmlEscape(quoteLineLabel(line))+'</strong><span class="tiny">Qty '+lineQuantity(line)+' · Unit '+money(previous)+' → '+money(line.price)+' · Line '+money(lineExtendedPrice(line))+'</span><div class="tiny">'+priceStatus+' '+action+'</div></div></div>';
+  }).join('');
+  const stockRows=Object.entries(quoteStockNeeds()).filter(([,qty])=>Number(qty)>0).map(([key,qty])=>'<span class="tiny">'+htmlEscape(STOCK_LABELS[key]||key)+' x '+qty+' (held '+Number(stock[key]||0)+')</span>').join('<br>')||'<span class="tiny">No stock requirement calculated.</span>';
+  const contents=Object.entries(productContentsFromLines()).filter(([,qty])=>Number(qty)>0).map(([key,qty])=>htmlEscape(STOCK_LABELS[key]||PRODUCT_RULES[key]?.name||key)+' x '+qty).join(', ')||'No product contents added.';
+  const total=current.lines.reduce((sum,line)=>sum+lineExtendedPrice(line),0)+num('materialsCharge')+num('postageCharge');
+  const state=snapshot?'<div class="note good"><strong>Accepted total locked: '+money(snapshot.total)+'</strong><br>Tier '+htmlEscape(tierLabel(snapshot.tier))+' · Later tier or catalogue changes will not alter this commercial snapshot.</div>':approved?'<div class="note good"><strong>Quote approved and prepared</strong><br>Total '+money(total)+' · Ready to send.</div>':issues.length?'<div class="note warn"><strong>Approval blocked</strong><br>'+issues.map(htmlEscape).join('<br>')+'</div>':'<div class="note"><strong>Approval checkpoint ready</strong><br>Review every price, stock requirement and fulfilment content before approval.</div>';
+  quoteApprovalPanel.innerHTML='<div class="subhead">Quote approval checkpoint</div>'+state+rows+'<div class="divider"></div><div class="summary-line"><span>Postage</span><strong>'+money(num('postageCharge'))+'</strong></div><div class="summary-line"><span>Final total</span><strong>'+money(total)+'</strong></div><div class="summary-line"><span>Margin impact</span><strong>Unavailable — cost basis not configured</strong></div><div class="divider"></div><strong>Stock required</strong><div>'+stockRows+'</div><div class="divider"></div><strong>Fulfilment contents</strong><div class="tiny">'+contents+'</div>';
+}
+function approveCurrentQuote(){
+  if(val('orderType')!=='Quote / enquiry'){showToast('Open a quote/enquiry first');return}
+  if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}
+  ensureCurrentCommercialState();
+  const issues=quoteApprovalIssues();
+  if(issues.length){renderOrder();showToast('Quote approval blocked - resolve required prices');return}
+  const snapshot=commercialSnapshotData();
+  current.quoteApproval={approvedAt:new Date().toISOString(),tier:snapshot.tier,total:snapshot.total,fingerprint:commercialFingerprint(snapshot)};
+  recordCommercialAudit('quote-approved','Approved '+tierLabel(snapshot.tier)+' quote total '+money(snapshot.total));
+  set('quoteStatus','Quote to send');
+  renderOrder();
+  saveOrderNow();
+}
 function renderOrder(){
+  ensureCurrentCommercialState();
   setQuoteSendInlineStatus('',null);
   renderQuoteInternalChecks();
   updateOrderTypeNotice();
   updatePrimarySaveLabel();
   const isPastOrder=val('orderType')==='Past order';
-  if(convertQuoteBtn)convertQuoteBtn.style.display=val('orderType')==='Quote / enquiry'?'':'none';
-  if(sendQuoteBtn)sendQuoteBtn.style.display=val('orderType')==='Quote / enquiry'&&val('quoteStatus')==='Quote to send'&&!!savedOrderById(current.id)?'':'none';
-  if(markQuoteAcceptedBtn)markQuoteAcceptedBtn.style.display=val('orderType')==='Quote / enquiry'?'':'none';
-  orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+lineTitle(l)+'</strong><span class="tiny">'+lineSub(l)+(l.review?' - Manual review':'')+'</span><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(lineExtendedPrice(l))+'</div><button class="btn subtle" onclick="removeLine('+i+')">Remove</button></div></div>').join(''):'<div class="muted">No items added yet.</div>';
+  const locked=commercialEditingLocked(),isQuote=val('orderType')==='Quote / enquiry';
+  if(approveQuoteBtn)approveQuoteBtn.style.display=isQuote&&!current.acceptedSnapshot?'':'none';
+  if(convertQuoteBtn)convertQuoteBtn.style.display=isQuote&&!!current.acceptedSnapshot?'':'none';
+  if(sendQuoteBtn)sendQuoteBtn.style.display=isQuote&&val('quoteStatus')==='Quote to send'&&quoteApprovalCurrent()&&!!savedOrderById(current.id)?'':'none';
+  if(markQuoteAcceptedBtn)markQuoteAcceptedBtn.style.display=isQuote&&!current.acceptedSnapshot&&val('quoteStatus')==='Quote sent / waiting customer'?'':'none';
+  [priceTier,clearItems,materialsCharge,postageCharge,postageService,mat3ml,mat10ml,matU100,matWipes,matBoxes,matInserts,matInlays,resetPackingAuto].forEach(el=>{if(el)el.disabled=locked});
+  if(locked)[addProductBtn,addSupportItemBtn,addStructureBtn].forEach(el=>{if(el)el.disabled=true});
+  orderLines.innerHTML=current.lines.length?current.lines.map((l,i)=>'<div class="line-item"><div><strong>'+lineTitle(l)+'</strong><span class="tiny">'+lineSub(l)+(l.review?' - Manual review':'')+'</span><div class="tiny">Unit '+money(l.price)+' · Qty '+lineQuantity(l)+' · '+htmlEscape(pricingSourceLabel(l))+(l.priceApprovalRequired?' · Price approval required':'')+'</div><div class="tiny">'+(l.note||'')+'</div></div><div><div class="money">'+money(lineExtendedPrice(l))+'</div>'+(locked?'':'<button class="btn subtle" onclick="removeLine('+i+')">Remove</button>')+'</div></div>').join(''):'<div class="muted">No items added yet.</div>';
   materialsSummary.innerHTML=productContentsHTML(productContentsFromLines())+supportMaterialsHTML(current.materials)+packingStateHTML();
   let productTotal=current.lines.reduce((a,l)=>a+lineExtendedPrice(l),0),mat=num('materialsCharge'),post=num('postageCharge');
   totalsBox.innerHTML='<div class="summary-line"><span>Product / structure total</span><strong>'+money(productTotal)+'</strong></div><div class="summary-line"><span>Materials charge</span><strong>'+money(mat)+'</strong></div><div class="summary-line"><span>Postage charge</span><strong>'+money(post)+'</strong></div><div class="summary-line"><span>Total confirmed</span><strong class="money">'+money(productTotal+mat+post)+'</strong></div>';
+  renderQuoteApprovalPanel();
   deleteOrder.style.display=val('orderType')==='Test order'?'':'none';
   setVisible(document.getElementById('optionalDetailsSection'),!isPastOrder);
   setVisible(document.getElementById('packingSection'),!isPastOrder);
@@ -1709,7 +1940,7 @@ function renderOrder(){
   renderSupportSuggestions();
   refreshWhatsAppButtons();
 }
-function removeLine(i){let old=current.lines.splice(i,1)[0];recalcMaterialsFromLines(true);markOrderMessagesStale('all');renderOrder()}
+function removeLine(i){if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}let old=current.lines.splice(i,1)[0];invalidateQuoteApproval('Quote line removed: '+quoteLineLabel(old));recalcMaterialsFromLines(true);markOrderMessagesStale('all');renderOrder()}
 function autoMaterialsFromLines(){let mats={BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0};current.lines.forEach(l=>{if(l.kind==='product'&&l.pid==='RTA20_KIT')addMats(mats,retaMaterials(l.qty));if(l.kind==='product'&&PRODUCT_RULES[l.pid]?.supportItem){const p=PRODUCT_RULES[l.pid];mats[p.materialKey]+=supportMaterialQty(p,l.qty)}if(l.kind==='structure'){const perStructure=structureMaterials(l.sid),qty=lineQuantity(l);Object.keys(perStructure).forEach(k=>perStructure[k]*=qty);addMats(mats,perStructure)}});return mats}
 function isNonRetaProduct(pid){const p=PRODUCT_RULES[pid];return !!p&&!p.supportItem&&pid!=='RTA20'&&pid!=='RTA20_KIT'}
 function lineNeedsSupportReview(l){
@@ -1724,8 +1955,8 @@ function packingStateHTML(){
   return '<div class="note" style="margin-bottom:8px">Auto rule active.</div>';
 }
 function recalcMaterialsFromLines(linesChanged=false){if(packingManualOverride){syncInputsToMaterials();if(linesChanged){packingNeedsReview=true;current.packingNeedsReview=true}showToast('Manual packing override active - packing kept for review');return}current.materials=autoMaterialsFromLines();packingNeedsReview=hasSupportReviewLines();current.packingNeedsReview=packingNeedsReview;syncMaterialsToInputs()}
-function resetPackingToAutoRule(){packingManualOverride=false;current.packingManualOverride=false;current.materials=autoMaterialsFromLines();packingNeedsReview=hasSupportReviewLines();current.packingNeedsReview=packingNeedsReview;syncMaterialsToInputs();renderOrder();showToast(packingNeedsReview?'Reset to generated packing list; review support items if needed':'Reset to generated packing list')}
-function orderPayload(){syncInputsToMaterials();let total=current.lines.reduce((a,l)=>a+lineExtendedPrice(l),0)+num('materialsCharge')+num('postageCharge'),cleanLines=cleanOrderLines(current.lines),quoteWarnings=current.quoteInternalWarnings||current.sourceRequestMeta?.quoteInternalWarnings||[];return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderType:val('orderType'),source:val('orderSource')||'Manual entry',referredBy:val('referredBy'),quoteStatus:quoteStatusValue({orderType:val('orderType'),quoteStatus:val('quoteStatus'),confirmation:val('confirmationSent'),status:val('orderStatus')}),sourceRequestId:current.sourceRequestId||'',sourceRequestMeta:current.sourceRequestMeta||null,quoteInternalWarnings:quoteWarnings,quoteAvailabilityNoteMode:val('quoteAvailabilityNoteMode')||'none',quoteAvailabilityCustomNote:val('quoteAvailabilityCustomNote'),sourceQuoteId:current.sourceQuoteId||'',sourceQuoteConvertedAt:current.sourceQuoteConvertedAt||'',orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),voidReason:val('voidReason'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:statusValue(val('orderStatus')),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:cleanLines,materials:current.materials,packingManualOverride,packingNeedsReview,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageService:val('postageService'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),labelStatus:val('labelStatus'),labelQrRef:val('labelQrRef'),labelQrNote:val('labelQrNote'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),internalFulfilmentWarning:val('internalFulfilmentWarning'),total,supabaseOrderId:current.supabaseOrderId||'',supabaseSyncedAt:current.supabaseSyncedAt||'',supabaseItemSyncStatus:current.supabaseItemSyncStatus||'',...communicationStatusPayload()};}
+function resetPackingToAutoRule(){if(commercialEditingLocked()){showToast('Accepted fulfilment contents are locked');return}packingManualOverride=false;current.packingManualOverride=false;current.materials=autoMaterialsFromLines();packingNeedsReview=hasSupportReviewLines();current.packingNeedsReview=packingNeedsReview;invalidateQuoteApproval('Packing contents reset');syncMaterialsToInputs();renderOrder();showToast(packingNeedsReview?'Reset to generated packing list; review support items if needed':'Reset to generated packing list')}
+function orderPayload(){if(isConvertedCommercialLock())restoreLockedCommercialState();syncInputsToMaterials();ensureCurrentCommercialState();let total=current.lines.reduce((a,l)=>a+lineExtendedPrice(l),0)+num('materialsCharge')+num('postageCharge'),cleanLines=cleanOrderLines(current.lines),quoteWarnings=current.quoteInternalWarnings||current.sourceRequestMeta?.quoteInternalWarnings||[];return{id:current.id,date:val('orderDate'),customer:val('customerRef'),orderType:val('orderType'),source:val('orderSource')||'Manual entry',referredBy:val('referredBy'),quoteStatus:quoteStatusValue({orderType:val('orderType'),quoteStatus:val('quoteStatus'),confirmation:val('confirmationSent'),status:val('orderStatus')}),sourceRequestId:current.sourceRequestId||'',sourceRequestMeta:current.sourceRequestMeta||null,quoteInternalWarnings:quoteWarnings,quoteAvailabilityNoteMode:val('quoteAvailabilityNoteMode')||'none',quoteAvailabilityCustomNote:val('quoteAvailabilityCustomNote'),sourceQuoteId:current.sourceQuoteId||'',sourceQuoteConvertedAt:current.sourceQuoteConvertedAt||'',orderNotes:val('orderNotes'),customerNote:val('customerNote'),paymentDueNote:val('paymentDueNote'),releaseOverride:val('releaseOverride'),releaseApprovedBy:val('releaseApprovedBy'),voidReason:val('voidReason'),packingNotes:val('packingNotes'),deliveryNotes:val('deliveryNotes'),tier:val('priceTier'),payment:val('paymentStatus'),fulfilment:val('fulfilmentMethod'),status:statusValue(val('orderStatus')),confirmation:val('confirmationSent'),updateSent:val('updateSent'),lines:cleanLines,materials:current.materials,packingManualOverride,packingNeedsReview,materialsCharge:num('materialsCharge'),postageCharge:num('postageCharge'),postageService:val('postageService'),postageItems:num('postageItems'),recipientName:val('recName'),recipientPhone:val('recPhone'),addr1:val('addr1'),addr2:val('addr2'),town:val('town'),postcode:val('postcode'),tracking:val('trackingRef'),labelStatus:val('labelStatus'),labelQrRef:val('labelQrRef'),labelQrNote:val('labelQrNote'),addressBlock:val('addressBlock'),confirmationMsg:val('confirmationMsg'),fulfilmentMsg:val('fulfilmentMsg'),internalFulfilmentWarning:val('internalFulfilmentWarning'),total,quoteApproval:current.quoteApproval||null,acceptedSnapshot:current.acceptedSnapshot||null,commercialLock:current.commercialLock||null,auditHistory:current.auditHistory||[],supabaseOrderId:current.supabaseOrderId||'',supabaseSyncedAt:current.supabaseSyncedAt||'',supabaseItemSyncStatus:current.supabaseItemSyncStatus||'',...communicationStatusPayload()};}
 function markSourceQuoteConverted(o){if(!o.sourceQuoteId||o.orderType!=='Live order')return '';const q=orders.find(x=>x.id===o.sourceQuoteId&&isQuoteOrder(x));if(!q)return '';q.quoteStatus='Parked';q.convertedOrderId=o.id;q.convertedAt=o.sourceQuoteConvertedAt||new Date().toISOString();q.linkedLiveOrderId=o.id;return q.id}
 function saveOrderNow(){let o=orderPayload();if(!validateLiveOrderBeforeSave(o))return;if(isReleaseStatus(o.status)&&!isPaymentCleared(o)&&o.releaseOverride!=='Yes'){showToast('Payment gate: release blocked until paid or override approved');return}o.supabaseItemSyncStatus='local_only';let idx=orders.findIndex(x=>x.id===o.id);if(idx>=0)orders[idx]=o;else orders.push(o);const sourceQuoteRef=markSourceQuoteConverted(o);syncRequestAfterQuoteSave(o);recalcStock();saveLocal();renderAll();const warn=messageSaveWarning(o);showToast(sourceQuoteRef?'Live order saved from quote '+sourceQuoteRef+'.':(isQuoteOrder(o)?(warn.length?'Quote saved locally - '+warn.join(' - '):'Quote saved locally - appears in Quote follow-up'):(warn.length?'Order saved - '+warn.join(' - '):'Order saved - queues and stock updated')));setOrderDbSyncStatus(sourceQuoteRef?'Live order saved from quote '+sourceQuoteRef+'.':'Local save complete - database sync pending.',sourceQuoteRef?'good':'warn');postSaveNudge(o);autoSyncSavedQuoteOrder(o.id)}
 
@@ -2050,11 +2281,11 @@ function convertRequestToQuote(id){
   (req.items||[]).forEach(item=>{
     const structureRule=requestKnownPlanningStructure(item);
     if(structureRule){
-      current.lines.push({kind:'structure',sid:structureRule.id,qty:lineQuantity(item),price:requestStructureReferencePrice(structureRule),name:cleanDisplayText(structureRule.name),contents:structureRule.contents,review:false,note:cleanDisplayText('Request Hub structure reference from '+(item.structureCode||item.productCode||item.requestedName||'planning structure'))});
+      current.lines.push({kind:'structure',sid:structureRule.id,qty:lineQuantity(item),price:requestStructureReferencePrice(structureRule),name:cleanDisplayText(structureRule.name),contents:structureRule.contents,review:false,note:cleanDisplayText('Request Hub public structure reference from '+(item.structureCode||item.productCode||item.requestedName||'planning structure')),priceSource:'public-tier',pricedTier:'standard',priceLocked:false,priceApprovalRequired:false,previousUnitPrice:null});
       return
     }
     const status=requestItemStatus(item,req),p=PRODUCT_RULES[status.pid],qty=lineQuantity(item),price=Number(item.standardCataloguePrice);
-    current.lines.push({kind:'product',pid:status.pid,qty,price,name:cleanDisplayText(p.name),review:!!p.needsCheck,note:cleanDisplayText('Request Hub standard catalogue price from '+item.productCode),sourceProductCode:item.productCode,requestId:req.requestId,supportMode:null,materialKey:null})
+    current.lines.push({kind:'product',pid:status.pid,qty,price,name:cleanDisplayText(p.name),review:!!p.needsCheck,note:cleanDisplayText('Request Hub public catalogue price from '+item.productCode),sourceProductCode:item.productCode,requestId:req.requestId,supportMode:null,materialKey:null,priceSource:'public-tier',pricedTier:'standard',priceLocked:false,priceApprovalRequired:false,previousUnitPrice:null})
   });
   set('orderNotes',requestQuoteNotes(req,[],warnings));
   if(req.requestNotes)set('customerNote',req.requestNotes);
@@ -2386,7 +2617,7 @@ function deliveryIssueHold(id){
 function loadAndGenerateConfirmation(id){loadOrder(id);showView('order');generateConfirmation()}
 function loadAndGenerateFulfilment(id){loadOrder(id);showView('order');generateFulfilment()}
 function sendQuoteFromHistory(id){loadOrder(id);startSendQuoteWorkflow()}
-function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;current={id:o.id,lines:o.lines||[],materials:o.materials||{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:!!o.packingManualOverride,packingNeedsReview:!!o.packingNeedsReview,commStatus:communicationStatusFromOrder(o),sourceRequestId:o.sourceRequestId||'',sourceRequestMeta:o.sourceRequestMeta||null,quoteInternalWarnings:o.quoteInternalWarnings||o.sourceRequestMeta?.quoteInternalWarnings||[],quoteAvailabilityNoteMode:o.quoteAvailabilityNoteMode||'none',quoteAvailabilityCustomNote:o.quoteAvailabilityCustomNote||'',sourceQuoteId:o.sourceQuoteId||'',sourceQuoteConvertedAt:o.sourceQuoteConvertedAt||'',supabaseOrderId:o.supabaseOrderId||'',supabaseSyncedAt:o.supabaseSyncedAt||'',supabaseItemSyncStatus:o.supabaseItemSyncStatus||''};packingManualOverride=!!o.packingManualOverride;packingNeedsReview=!!o.packingNeedsReview;set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderType',o.orderType||'Live order');set('orderSource',o.source||'Manual entry');set('referredBy',o.referredBy||'');set('quoteStatus',quoteStatusValue(o));set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('voidReason',o.voidReason||'');set('priceTier',o.tier);set('paymentStatus',paymentValue(o.payment));set('fulfilmentMethod',o.fulfilment||'Hold / not arranged');set('orderStatus',statusValue(o.status));set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageService',o.postageService||defaultPostageService(o));set('postageItems',o.postageItems??0);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('labelStatus',o.labelStatus||'Not booked');set('labelQrRef',o.labelQrRef||'');set('labelQrNote',o.labelQrNote||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');set('internalFulfilmentWarning',o.internalFulfilmentWarning||'');set('quoteAvailabilityNoteMode',o.quoteAvailabilityNoteMode||'none');set('quoteAvailabilityCustomNote',o.quoteAvailabilityCustomNote||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();setOptionalDetailsOpen(optionalDetailsHasSavedData(o));showView('order');showOrderDbSyncState(o)}
+function loadOrder(id){let o=orders.find(x=>x.id===id);if(!o)return;const loadedTier=o.tier||'standard';current={id:o.id,lines:(o.lines||[]).map(line=>normalisePricingLine(line,loadedTier)),materials:o.materials||{BAC3:0,BAC10:0,U100:0,WIPES:0,BOX:0,INSERT:0,INLAY:0},packingManualOverride:!!o.packingManualOverride,packingNeedsReview:!!o.packingNeedsReview,commStatus:communicationStatusFromOrder(o),sourceRequestId:o.sourceRequestId||'',sourceRequestMeta:o.sourceRequestMeta||null,quoteInternalWarnings:o.quoteInternalWarnings||o.sourceRequestMeta?.quoteInternalWarnings||[],quoteAvailabilityNoteMode:o.quoteAvailabilityNoteMode||'none',quoteAvailabilityCustomNote:o.quoteAvailabilityCustomNote||'',sourceQuoteId:o.sourceQuoteId||'',sourceQuoteConvertedAt:o.sourceQuoteConvertedAt||'',supabaseOrderId:o.supabaseOrderId||'',supabaseSyncedAt:o.supabaseSyncedAt||'',supabaseItemSyncStatus:o.supabaseItemSyncStatus||'',activeTier:loadedTier,quoteApproval:o.quoteApproval||null,acceptedSnapshot:o.acceptedSnapshot||null,commercialLock:o.commercialLock||null,auditHistory:Array.isArray(o.auditHistory)?o.auditHistory:[]};packingManualOverride=!!o.packingManualOverride;packingNeedsReview=!!o.packingNeedsReview;set('orderRef',o.id);set('orderDate',o.date);set('customerRef',o.customer);set('orderType',o.orderType||'Live order');set('orderSource',o.source||'Manual entry');set('referredBy',o.referredBy||'');set('quoteStatus',quoteStatusValue(o));set('orderNotes',o.orderNotes||'');set('customerNote',o.customerNote||'');set('paymentDueNote',o.paymentDueNote||'');set('releaseOverride',o.releaseOverride||'No');set('releaseApprovedBy',o.releaseApprovedBy||'');set('voidReason',o.voidReason||'');set('priceTier',loadedTier);set('paymentStatus',paymentValue(o.payment));set('fulfilmentMethod',o.fulfilment||'Hold / not arranged');set('orderStatus',statusValue(o.status));set('confirmationSent',o.confirmation||'No');set('updateSent',o.updateSent||'No');set('materialsCharge',o.materialsCharge);set('postageCharge',o.postageCharge);set('postageService',o.postageService||defaultPostageService(o));set('postageItems',o.postageItems??0);set('packingNotes',o.packingNotes||'');set('recName',o.recipientName||'');set('recPhone',o.recipientPhone||'');set('addr1',o.addr1||'');set('addr2',o.addr2||'');set('town',o.town||'');set('postcode',o.postcode||'');set('deliveryNotes',o.deliveryNotes||'');set('trackingRef',o.tracking||'');set('labelStatus',o.labelStatus||'Not booked');set('labelQrRef',o.labelQrRef||'');set('labelQrNote',o.labelQrNote||'');set('addressBlock',o.addressBlock||'');set('confirmationMsg',o.confirmationMsg||'');set('fulfilmentMsg',o.fulfilmentMsg||'');set('internalFulfilmentWarning',o.internalFulfilmentWarning||'');set('quoteAvailabilityNoteMode',o.quoteAvailabilityNoteMode||'none');set('quoteAvailabilityCustomNote',o.quoteAvailabilityCustomNote||'');activeOrderTag.textContent='Editing '+o.id;syncMaterialsToInputs();renderOrder();setOptionalDetailsOpen(optionalDetailsHasSavedData(o));showView('order');showOrderDbSyncState(o)}
 function orderTaskTarget(task){if(task==='payment')return paymentStatus?.closest('.field')||paymentStatus;if(task==='confirmation')return communicationRows?.querySelector('[data-comm-key="orderConfirmationStatus"]')||document.getElementById('communicationCentre');if(task==='customer-update')return communicationRows?.querySelector('[data-comm-key="dispatchMessageStatus"]')||document.getElementById('communicationCentre');if(task==='tracking')return fulfilmentTrackingGroup||document.getElementById('fulfilmentSection');if(task==='dispatch')return document.getElementById('fulfilmentSection');if(task==='status')return orderStatus?.closest('.field')||orderStatus;return document.getElementById('view-order')}
 function openOrderTask(id,task=''){
   loadOrder(id);
@@ -2829,6 +3060,9 @@ function startSendQuoteWorkflow(){
   if(val('orderType')!=='Quote / enquiry'){showToast('Open a saved quote first');return}
   if(val('quoteStatus')!=='Quote to send'){showToast('Quote is not in Quote to send');return}
   if(!savedOrderById(current.id)){showToast('Save quote before sending');return}
+  if(!quoteApprovalCurrent()){showToast('Approve and prepare the current quote before sending');return}
+  const saved=savedOrderById(current.id);
+  if(!saved?.quoteApproval||saved.quoteApproval.fingerprint!==current.quoteApproval.fingerprint){showToast('Save the approved quote before sending');return}
   generateConfirmation();
   setCommStatus('orderConfirmationStatus','generated');
   openOptionalDetails();
@@ -2840,9 +3074,16 @@ function startSendQuoteWorkflow(){
 }
 function markCurrentQuoteAccepted(){
   if(val('orderType')!=='Quote / enquiry'){showToast('Open a quote/enquiry first');return}
+  if(!quoteApprovalCurrent()){showToast('The quote must be approved before acceptance can be recorded');return}
+  if(val('quoteStatus')!=='Quote sent / waiting customer'){showToast('Mark the quote sent before recording acceptance');return}
+  if(current.acceptedSnapshot){showToast('Accepted total is already locked');return}
+  const accepted=commercialSnapshotData();
+  current.acceptedSnapshot={...accepted,acceptedAt:new Date().toISOString(),quoteRef:current.id,approvalFingerprint:current.quoteApproval.fingerprint};
+  recordCommercialAudit('quote-accepted','Customer acceptance recorded for '+tierLabel(accepted.tier)+' quote total '+money(accepted.total));
+  recordCommercialAudit('accepted-total-lock','Locked '+current.acceptedSnapshot.lines.length+' line(s), postage '+money(current.acceptedSnapshot.postageCharge)+' and total '+money(current.acceptedSnapshot.total));
   set('quoteStatus','Customer replied / ready to convert');
   renderOrder();
-  showToast('Quote marked ready to convert - save quote');
+  saveOrderNow();
 }
 function markCustomerUpdateSentNow(){
   if(!String(fulfilmentMsg?.value||'').trim()){showToast('Generate/copy the customer update first');return}
@@ -3005,15 +3246,15 @@ function generatePaymentRequest(){
   if(!o.lines.length){showToast('Add at least one final line before requesting payment');return false}
   if(isPaymentCleared(o)){showToast('Payment is already cleared - no request generated');return false}
   if(!confirm('Confirm the operator has agreed the final order contents with the customer. Generate the payment request now?')){showToast('Payment request cancelled - final contents were not confirmed');return false}
-  let msg='PrimeX BioLabs - Payment Request\n\n'+customerMessageGreeting(o)+'Your final order contents are confirmed:\n\n'+customerSafeLineItems(o)+'\n\nOrder total: '+money(o.total)+'\nOrder reference: '+customerSafeReference(o)+'\n\nPlease use the payment instructions sent separately. Your order will move forward once payment arrangements are confirmed.\n\n'+customerMessageFooter();
-  writeCustomerUpdate(msg,'Message ready - open WhatsApp or copy it, send it, then mark sent. Save the order afterwards.');setCommStatus('paymentMessageStatus','generated');return true
+  let msg='PrimeX BioLabs - Payment Request\n\n'+customerMessageGreeting(o)+'Your final order contents are confirmed:\n\n'+customerSafeLineItems(o)+'\n\nOrder total: '+money(o.total)+'\nOrder reference: '+customerSafeReference(o)+'\n\nPayment instructions will be issued separately by the PrimeX team. No online checkout link is included in this message. Please wait for those instructions before paying. Your order will move forward once payment arrangements are confirmed.\n\n'+customerMessageFooter();
+  writeCustomerUpdate(msg,'Payment amount message ready. Send it, then issue the genuine payment instructions separately and mark the message sent. Save the order afterwards.');setCommStatus('paymentMessageStatus','generated');return true
 }
 function copyCustomerUpdate(){copyText(fulfilmentMsg.value);refreshWhatsAppButtons();showToast('Customer update copied - send it, then mark update sent')}
 function copyText(t){navigator.clipboard?.writeText(t);showToast('Copied')}
 try { init(); } catch(e) {
   console.error(e);
   const q=document.getElementById('queueCards');
-  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3J JS FAILED';bb.style.color='#d97777';}
+  if(q) q.innerHTML='<div class="note warn"><strong>Startup failed</strong><br>'+e.message+'<br><span class="tiny">JavaScript stopped before rendering. Send this message back into the build chat.</span></div>'; const bb=document.getElementById('bootBadge'); if(bb){bb.textContent='v44E3K JS FAILED';bb.style.color='#d97777';}
 }
 </script>
 </body>

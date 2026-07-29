@@ -1589,3 +1589,28 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Verified inline JavaScript syntax, shared visibility/code contract, Supabase project/schema alignment, Edge handler validation/idempotency, storage-key compatibility, Planner-to-Hub browser handoffs, Finance inbox normalization, legacy mappings, quote quantities/totals and persistence across reload.
 - Browser verification produced no console errors. No live Supabase request, push, merge or deployment was performed.
 - Files changed: planner/index.html, order-request/index.html, supabase/functions/submit-request/index.ts, finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
+
+## v44E3K Tier-safe Quote Approval + Accepted-total Lock — 2026-07-29
+
+- Version: v44E3K.
+- Single purpose: make Finance quote tier pricing deterministic and prevent accepted commercial totals from changing silently.
+- Relabelled the existing stored tiers without changing their values: standard = Public, existing = Existing customer, internal = Close contact, custom = Custom approved price.
+- Confirmed automatic Retatrutide 20mg pricing only: Public GBP 150, Existing customer GBP 130, Close contact GBP 110.
+- Tier changes now recalculate every eligible unlocked Retatrutide quote line already present.
+- Non-Public prices for other products and pathways are no longer inferred from unapproved embedded tier values. They show Price approval required until an operator explicitly enters and approves the price.
+- Added additive line-level price provenance, priced-tier, lock, approval-required and previous-unit-price fields.
+- Custom/manual, included/no-charge and legacy lines are protected from automatic repricing. Older saved lines without v44E3K fields default to legacy-protected without changing their saved price.
+- Added a quote approval checkpoint showing previous/current unit price, quantity, line total, postage, final total, unavailable-margin explanation, stock required and fulfilment contents.
+- Added Approve and prepare quote. Sending is blocked until the current commercial fingerprint is approved and saved.
+- Quote acceptance now captures an accepted snapshot containing tier, lines, quantities, prices, materials, postage service/charge and total.
+- Conversion to a live order requires the accepted snapshot and uses that snapshot. The converted order carries a commercial lock so later tier/catalogue changes cannot alter the accepted total.
+- Added bounded audit-history entries for tier changes, automatic repricing, manual-price protection/approval, quote approval, quote acceptance and accepted-total locking.
+- Kept all existing localStorage keys unchanged. New fields are additive inside existing order/line payloads and remain compatible with existing payload-based database sync.
+- Clarified the payment request: no online checkout link is implied; the operator must issue genuine payment instructions separately. Payment-provider selection and structured reconciliation remain a follow-up job.
+- Verification: all inline JavaScript parsed successfully.
+- Verification: synthetic offline DOM/runtime matrix passed Public to Existing to Close Contact repricing across multiple eligible Retatrutide lines, manual-price protection, non-Retatrutide price blocking/approval, quote approval persistence, accepted snapshot locking, live conversion from the locked snapshot, legacy-line migration defaults, Request Hub contract normalisation/duplicate-safe merge and required audit events.
+- Verification: the first matrix run exposed and corrected an in-place repricing defect before final verification; the complete rerun passed 14/14 checks.
+- Browser note: the controllable browser rejected the local file URL under its URL security policy, so no live endpoint or hosted production page was used for this implementation test.
+- No Planner, Request Hub, Supabase function, schema, product code, request-routing field, public Planner price card, stock deduction rule, localStorage key, commit, push or deployment changed.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
