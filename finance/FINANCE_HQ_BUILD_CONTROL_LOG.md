@@ -1614,3 +1614,17 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Browser note: the controllable browser rejected the local file URL under its URL security policy, so no live endpoint or hosted production page was used for this implementation test.
 - No Planner, Request Hub, Supabase function, schema, product code, request-routing field, public Planner price card, stock deduction rule, localStorage key, commit, push or deployment changed.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+
+## v44E3L Automatic Cloud Request Sync — 2026-07-30
+
+- Version: v44E3L.
+- Single purpose: remove the operational dependency on remembering to press Refresh cloud requests.
+- Restores and validates the persisted Supabase staff session during Finance startup, then imports cloud requests automatically only for an active authenticated profile.
+- Repeats the sync every five minutes while Finance is visible and when the page becomes active or focused again.
+- Prevents overlapping cloud refreshes and keeps the existing manual Refresh cloud requests button as a backup.
+- Shows explicit Checking, Last cloud refresh, Login required, Sync unavailable, and Sync failed states; a local zero is not presented as cloud-verified until a sync succeeds.
+- Reuses the existing duplicate-safe merge and preserves progressed, converted, binned, ignored, and locally edited request workflow state.
+- No Supabase rows, schema, RLS, Edge Function, Planner, Request Hub, pricing, stock, quote lifecycle, localStorage keys, or customer message wording changed.
+- Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
+- Verification: inline JavaScript parses successfully; startup, login, five-minute, visibility/focus, overlap-guard, manual fallback, and untrusted-zero status paths are present.
+
