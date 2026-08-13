@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#05080d">
-  <title>PrimeX BioLabs — Research Planner</title>
-  <!-- PrimeX Planner v184H-TEMP: temporary public holding page. Restore the complete v183B Planner from Git commit 8959e8407e986f48175b325eabc5db2652b47873. -->
+  <title>PrimeX BioLabs — Research Supply</title>
+  <!-- PrimeX customer route v185A: temporary public supply/reference landing while the full website is rebuilt. -->
   <style>
     :root {
       color-scheme: dark;
@@ -24,19 +24,12 @@
       --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html,
-    body {
-      min-height: 100%;
-      margin: 0;
-    }
+    body { min-height: 100%; margin: 0; }
 
-    html {
-      background: var(--bg);
-    }
+    html { background: var(--bg); }
 
     body {
       min-width: 0;
@@ -73,10 +66,7 @@
     }
 
     .topbar,
-    .footer {
-      width: min(1160px, calc(100% - 48px));
-      margin: 0 auto;
-    }
+    .footer { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
 
     .topbar {
       display: flex;
@@ -107,10 +97,7 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
 
-    .brand-copy {
-      display: grid;
-      gap: 3px;
-    }
+    .brand-copy { display: grid; gap: 3px; }
 
     .brand-name {
       color: var(--ink);
@@ -132,7 +119,7 @@
       display: grid;
       width: min(1160px, calc(100% - 48px));
       margin: 0 auto;
-      padding: clamp(64px, 10vh, 116px) 0;
+      padding: clamp(54px, 8vh, 92px) 0;
       place-items: center;
     }
 
@@ -202,15 +189,25 @@
       line-height: 1.72;
     }
 
-    .message .availability {
-      color: #dce9f0;
+    .message .availability { color: #dce9f0; }
+
+    .range-note {
+      margin-top: 20px;
+      padding: 16px 18px;
+      border: 1px solid rgba(121, 168, 196, 0.18);
+      background: rgba(62, 150, 196, 0.045);
+      color: #c8d9e4;
+      font-size: 14px;
+      line-height: 1.65;
     }
+
+    .range-note strong { color: var(--ink); }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
-      margin-top: 34px;
+      margin-top: 28px;
     }
 
     .contact {
@@ -230,6 +227,13 @@
       transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
     }
 
+    .contact.secondary {
+      border-color: rgba(255, 255, 255, 0.14);
+      border-left-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.025);
+      color: #c2d1dc;
+    }
+
     .contact:hover,
     .contact:focus-visible {
       border-color: rgba(139, 199, 230, 0.72);
@@ -238,9 +242,7 @@
       transform: translateY(-1px);
     }
 
-    .contact:focus-visible {
-      box-shadow: 0 0 0 3px rgba(62, 150, 196, 0.2);
-    }
+    .contact:focus-visible { box-shadow: 0 0 0 3px rgba(62, 150, 196, 0.2); }
 
     .footer {
       display: flex;
@@ -257,39 +259,22 @@
     @media (max-width: 620px) {
       .topbar,
       .footer,
-      main {
-        width: min(100% - 28px, 1160px);
-      }
+      main { width: min(100% - 28px, 1160px); }
 
-      .topbar {
-        min-height: 72px;
-      }
-
-      main {
-        padding: 38px 0 44px;
-      }
-
-      .holding {
-        padding: 32px 23px 34px;
-      }
+      .topbar { min-height: 72px; }
+      main { padding: 32px 0 40px; }
+      .holding { padding: 30px 22px 32px; }
 
       .brand-name {
         font-size: 10px;
         letter-spacing: 0.19em;
       }
 
-      h1 {
-        font-size: clamp(42px, 14vw, 58px);
-      }
-
-      .rule {
-        margin: 25px 0;
-      }
+      h1 { font-size: clamp(42px, 14vw, 58px); }
+      .rule { margin: 25px 0; }
 
       .actions,
-      .contact {
-        width: 100%;
-      }
+      .contact { width: 100%; }
 
       .footer {
         min-height: 68px;
@@ -298,9 +283,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .contact {
-        transition: none;
-      }
+      .contact { transition: none; }
     }
   </style>
 </head>
@@ -317,17 +300,19 @@
     </header>
 
     <main>
-      <section class="holding" aria-labelledby="planner-title">
-        <p class="eyebrow">System update</p>
-        <h1 id="planner-title">PrimeX Research Supply</h1>
+      <section class="holding" aria-labelledby="supply-title">
+        <p class="eyebrow">Research supply</p>
+        <h1 id="supply-title">PrimeX Research Supply</h1>
         <div class="rule" aria-hidden="true"></div>
         <div class="message">
-          <p>Our online research supply and request system is currently being updated to improve product selection, pricing clarity and request handling.</p>
-          <p class="availability">The updated system will be available shortly.</p>
-          <p>For existing requests or support, please contact PrimeX directly.</p>
+          <p>Our full online research supply system is being updated.</p>
+          <p class="availability">The current reference range and request route remain available while that work is completed.</p>
+          <p>Browse the available range, then send a request to PrimeX for review. No payment is taken through the request form.</p>
         </div>
+        <div class="range-note"><strong>Current core references:</strong> Retatrutide, BPC-157, TB-500, KPV, Thymosin Alpha-1, NAD+ and 5-Amino-1MQ. Selected extended references are also available through the request route.</div>
         <div class="actions">
-          <a class="contact" href="../order-request/">Contact PrimeX</a>
+          <a class="contact" href="../order-request/#requestAddGroups">Browse current range</a>
+          <a class="contact secondary" href="../order-request/">Send a request / contact PrimeX</a>
         </div>
       </section>
     </main>
