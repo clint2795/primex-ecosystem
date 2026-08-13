@@ -15,9 +15,10 @@ const DUPLICATE_WINDOW_MS = 5 * 60 * 1000;
 const DUPLICATE_LOOKBACK_LIMIT = 30;
 
 const REQUEST_PRODUCT_CODES = new Set([
-  "RTA20", "BPC10", "TB50010", "KPV10", "TA110", "NAD500", "AMINO1MQ50",
+  "RTA20", "BPC10", "BPC40", "TB50010", "KPV10", "TA110", "NAD500", "AMINO1MQ50",
   "DSIP5", "GHKCU50", "GHKCU100", "CAGRI5", "TESA10", "MT2_10", "EPI10",
   "MOTSC40", "SS31_30", "SEMAX_AUDIT", "SELANK_AUDIT", "SERMORELIN_AUDIT",
+  "SET-WOLV10", "SET-GLOW70", "SET-KLOW80",
 ]);
 const LEGACY_PRODUCT_CODES = new Set(["AMINO50", "RTA20_OBSERVATION", "MANUAL", "MANUAL_REVIEW"]);
 const REQUEST_STRUCTURE_CODES = new Set([
@@ -177,7 +178,6 @@ Deno.serve(async (request) => {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    // Idempotency layer 1: exact request_ref replay.
     const existing = await supabase
       .from("quote_requests")
       .select("id")
@@ -189,8 +189,6 @@ Deno.serve(async (request) => {
       return json(request, 200, { ok: true, request_ref: requestRef, created: false, duplicate: true, duplicate_reason: "request_ref" });
     }
 
-    // Idempotency layer 2: an identical customer + items payload submitted again
-    // shortly after a successful send (for example after refresh/back navigation).
     const cutoff = new Date(Date.now() - DUPLICATE_WINDOW_MS).toISOString();
     const recent = await supabase
       .from("quote_requests")
