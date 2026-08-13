@@ -1,5 +1,21 @@
 # PrimeX Planner Build Control Log
 
+## v185C — Temporary Route Identity + Provisional Family Accents (STAGING / NOT LIVE)
+
+- Date: 2026-08-13.
+- Version: `v185C-STAGE`.
+- Branch: `fix/customer-route-v185A`.
+- Status: staging only; `main` and production Supabase remain unchanged.
+- Single purpose: correct temporary-route messaging, use the current PrimeX wordmark treatment, remove meaningless blue family dots, and differentiate known product families without prematurely locking label/site colours.
+- Temporary-state message added: the main PrimeX BioLabs website is currently being developed/updated; this route exists in the meantime for browsing current research references and sending requests for review.
+- Header identity changed from PX-square lockup to the current `PrimeX BioLabs` wordmark treatment with blue X, based on the owner-supplied current website reference. The rest of that website concept remains unapproved.
+- Blue family-dot decoration removed completely because it conveyed no useful information and incorrectly implied one family across the range.
+- Family assignment corrections supplied by owner and reflected in staging accents: Retatrutide = metabolic family; BPC-157 / TB-500 = repair family; Thymosin Alpha-1 = immune family; 5-Amino-1MQ = support family. KPV and NAD+ remain restrained/neutral pending exact family reconciliation.
+- Accent colours in this staging page are PROPOSED visual mappings only and are not label/packaging authority. They must not be treated as locked production colours until the compound→family colour map is reconciled and explicitly approved.
+- Public text remains neutral and RUO-led; family names are not exposed as therapeutic/customer-facing claims.
+- Existing request payload codes, public prices, Supabase endpoint, consent validation, email/copy fallback and sent-state protection remain preserved.
+- Next proof: owner visual review of the same staging preview; then tray/details behaviour and controlled request-submission proof.
+
 ## v185B — Product-led Customer Route Refinement (STAGING / NOT LIVE)
 
 - Date: 2026-08-13.
