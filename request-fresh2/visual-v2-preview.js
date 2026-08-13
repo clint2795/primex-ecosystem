@@ -1,0 +1,1 @@
+const frame=document.getElementById('preview');frame.addEventListener('load',()=>{const doc=frame.contentDocument;const link=doc.createElement('link');link.rel='stylesheet';link.href='visual-v3.css?v=1';doc.head.appendChild(link);});
