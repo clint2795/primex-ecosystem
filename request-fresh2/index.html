@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0a1018">
+<title>PrimeX BioLabs — Early Access Concept 2</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#090e15;--bg2:#0d141e;--panel:#111a27;--panel2:#152131;--panel3:#0f1722;
+  --line:#223448;--line2:#2d4258;--ink:#f5f7f9;--text:#d0d7dc;--muted:#9aa6af;
+  --brand:#258dcc;--ghk:#8d65d8;--bpc:#ee8a2f;--mots:#31b99d;--dsip:#a96bdd;
+  --nad:#3d9fe0;--support:#8a9aa6;--set:#4f79c6;
+  --sans:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg)}
+body{font-family:var(--sans);color:var(--text);background:radial-gradient(circle at 14% 0%,rgba(37,141,204,.12),transparent 30rem),linear-gradient(180deg,#0d141d 0,#090e15 60%,#070b10 100%);-webkit-font-smoothing:antialiased}
+button{font:inherit}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);background:#0b121b}.top{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{text-decoration:none;color:var(--ink);display:inline-flex;align-items:baseline;gap:7px}.brand strong{font-size:28px;letter-spacing:-.04em}.brand .x{color:var(--brand)}.brand span{font-size:21px;color:#dce3e8}.brand small{display:block;margin-top:3px;font:8px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#8a98a3}.ruo{font:9px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#8c9aa5}
+.notice{margin:16px auto 0;padding:13px 15px;border:1px solid var(--line2);background:#101925;font-size:13.5px;line-height:1.55;color:#c4cdd3}.notice b{color:#fff}.notice:before{content:"";display:inline-block;width:3px;height:38px;background:var(--brand);vertical-align:middle;margin-right:12px}
+main{padding:28px 0 72px}.intro{display:flex;align-items:end;justify-content:space-between;gap:28px;margin:22px 0 22px}.eyebrow{font:9px var(--mono);letter-spacing:.17em;text-transform:uppercase;color:#8aa8ba;margin-bottom:9px}.intro h1{font:400 clamp(42px,5.7vw,64px)/1 var(--serif);margin:0;color:#fff;letter-spacing:-.035em}.intro p{margin:10px 0 0;max-width:720px;color:#c2ccd3;font-size:16px;line-height:1.55}.intro-side{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#8d9aa5;white-space:nowrap}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px;align-items:start}.maincol{min-width:0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:13px}.section-head h2{font:400 30px/1.1 var(--serif);margin:0;color:#fff}.section-head p{margin:5px 0 0;color:var(--muted);font-size:13.5px}
+.featured{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.product{--accent:var(--support);position:relative;min-height:154px;padding:16px 16px 18px;border:1px solid var(--line2);background:linear-gradient(180deg,#142030,#101824);overflow:hidden}.product:after{content:"";position:absolute;left:16px;right:16px;bottom:9px;height:2px;background:linear-gradient(90deg,var(--accent),transparent 72%)}
+.family-mark{width:24px;height:24px;border:1px solid color-mix(in srgb,var(--accent) 70%,#2a3d50);display:grid;place-items:center;margin-bottom:13px;background:#101923}.family-mark:before{content:"";width:8px;height:8px;border:1px solid var(--accent);transform:rotate(45deg)}
+.product h3{margin:0;color:#fff;font-size:18px;line-height:1.2}.meta{margin-top:6px;color:#b5c0c8;font:11px var(--mono);letter-spacing:.04em}.add{margin-top:17px;min-height:32px;padding:6px 10px;border:1px solid #40566d;background:#17212d;color:#eef2f5;font-size:12.5px;font-weight:700;cursor:pointer}.add:hover,.add:focus-visible{background:#1d2a38;border-color:#5b7188;outline:none}.add.selected{background:#223244;border-color:#6c8399}
+.jumpgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:11px}.jump{min-height:86px;padding:14px 15px;border:1px solid var(--line);background:#101925;text-align:left;color:inherit;cursor:pointer;position:relative}.jump:hover,.jump.active{background:#142131;border-color:#38526d}.jump small{display:block;color:#91a0ab;font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;margin-bottom:6px}.jump strong{display:block;color:#fff;font-size:15px}.jump span{display:block;margin-top:4px;color:#a7b2ba;font-size:12.5px;line-height:1.4}.jump:after{content:"→";position:absolute;right:14px;top:13px;color:#8ba0b0;font-size:16px}
+.drawer{display:none;margin-top:10px;padding:13px;border:1px solid var(--line2);background:#0f1823}.drawer.open{display:block}.drawer-head{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:10px}.drawer-head strong{color:#fff;font-size:14px}.drawer-head span{color:#9da9b2;font-size:12px}.drawer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.mini{--accent:var(--support);position:relative;padding:12px 12px 15px;border:1px solid var(--line);background:#131e2b}.mini:after{content:"";position:absolute;left:12px;right:12px;bottom:7px;height:2px;background:linear-gradient(90deg,var(--accent),transparent 72%)}.mini strong{display:block;color:#fff;font-size:14px}.mini .meta{margin-top:4px}.mini button{margin-top:9px;min-height:30px;padding:5px 9px;border:1px solid #3f5367;background:#182430;color:#eef2f4;font-size:12px;cursor:pointer}
+.availability{margin-top:11px;padding:12px 14px;border:1px solid var(--line);background:#0e1721;color:#b6c0c7;font-size:12.8px;line-height:1.5}.availability b{color:#edf1f3}
+.request{position:sticky;top:18px;border:1px solid var(--line2);background:linear-gradient(180deg,#152231,#101923);min-height:170px}.request-head{padding:15px;border-bottom:1px solid var(--line)}.request-head small{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:#96a3ad}.request-head h3{font:400 24px var(--serif);margin:5px 0 0;color:#fff}.request-body{padding:13px 15px 15px}.empty{color:#a2adb5;font-size:13px;line-height:1.5}.sel{display:grid;gap:7px}.selrow{display:flex;justify-content:space-between;gap:9px;align-items:center;padding:8px 9px;border:1px solid var(--line);background:#0f1720}.selrow strong{font-size:13px;color:#eef2f4}.selrow button{border:0;background:transparent;color:#9ba7b0;cursor:pointer}.continue{width:100%;min-height:40px;margin-top:11px;border:1px solid #4e6478;background:#1c2a38;color:#f4f6f8;font-size:13px;font-weight:750}.continue:disabled{opacity:.42}.request-note{margin-top:9px;color:#96a2ab;font-size:11.8px;line-height:1.45}
+.details{display:none;margin-top:14px;border:1px solid var(--line2);background:#101924;padding:16px}.details.open{display:block}.details h3{margin:0 0 10px;color:#fff;font-size:18px}.details p{margin:0;color:#b4bfc7;font-size:13px;line-height:1.5}
+footer{border-top:1px solid var(--line);min-height:66px;display:flex;align-items:center;color:#7f8c96;font:8px var(--mono);letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:940px){.featured{grid-template-columns:repeat(2,minmax(0,1fr))}.stage{grid-template-columns:1fr}.request{position:relative}.drawer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.intro{display:block}.intro-side{margin-top:10px;white-space:normal}}
+@media(max-width:620px){.wrap{width:calc(100% - 24px)}.top{min-height:68px}.brand strong{font-size:23px}.brand span{font-size:18px}.ruo{display:none}.notice{font-size:12.8px}.intro h1{font-size:41px}.featured,.jumpgrid,.drawer-grid{grid-template-columns:1fr}.product{min-height:140px}.request{position:sticky;bottom:0;z-index:20;margin:14px -12px 0}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><a class="brand" href="../planner/"><div><strong>Prime<span class="x">X</span></strong><span>BioLabs</span><small>Research Systems</small></div></a><div class="ruo">Research use only</div></div></header>
+<div class="wrap notice"><span><b>PrimeX early access.</b> The full PrimeX BioLabs website is still being completed. This temporary route keeps selected research references and the request pathway available in the meantime. No payment is taken online.</span></div>
+<main class="wrap">
+<section class="intro"><div><div class="eyebrow">PrimeX early access</div><h1>Selected research references.</h1><p>Browse a small early-access selection, then open the supporting categories only if you need them.</p></div><div class="intro-side">Requests reviewed before confirmation · RUO</div></section>
+<div class="stage"><div class="maincol"><div class="section-head"><div><h2>Selected compounds</h2><p>Four current references from the protected V2G public contract.</p></div></div><div id="featured" class="featured"></div>
+<div class="jumpgrid"><button class="jump" data-drawer="beyond"><small>Beyond peptides</small><strong>Cellular &amp; metabolic research</strong><span>NAD+ · 5-Amino-1MQ</span></button><button class="jump" data-drawer="sets"><small>Research Sets</small><strong>Wolverine · Glow · Klow</strong><span>Separate-vial research sets</span></button><button class="jump" data-drawer="wider"><small>Explore</small><strong>Wider range</strong><span>Open the remaining references</span></button></div>
+<div id="drawer" class="drawer"><div class="drawer-head"><strong id="drawerTitle"></strong><span id="drawerSub"></span></div><div id="drawerGrid" class="drawer-grid"></div></div>
+<div class="availability"><b>Availability &amp; fulfilment.</b> Availability is confirmed when your request is reviewed. Some items may require additional fulfilment time; where this applies, please allow approximately 7–10 days before dispatch. We’ll confirm the expected timeframe before anything is finalised.</div>
+<div id="details" class="details"><h3>Request details</h3><p>Research use only. This concept does not submit anywhere yet; request sending remains disabled until the staging backend accepts the current V2G codes.</p></div></div>
+<aside class="request"><div class="request-head"><small>Request</small><h3>Your request</h3></div><div class="request-body"><div id="empty" class="empty">Select a research reference to begin.</div><div id="selected" class="sel"></div><button id="continue" class="continue" disabled>Continue to details</button><div class="request-note">Availability, fulfilment details and expected timings are confirmed before anything is finalised.</div></div></aside></div>
+</main><footer><div class="wrap">PrimeX BioLabs · Research Reference System · RUO</div></footer>
+<script>
+const DATA={featured:[
+{code:'GHKCU50',name:'GHK-Cu',strength:'50mg',price:40,accent:'var(--ghk)'},
+{code:'BPC40',name:'BPC-157',strength:'40mg',price:60,accent:'var(--bpc)'},
+{code:'MOTSC40',name:'MOTS-c',strength:'40mg',price:95,accent:'var(--mots)'},
+{code:'DSIP5',name:'DSIP',strength:'5mg',price:55,accent:'var(--dsip)'}],
+beyond:[{code:'NAD500',name:'NAD+',strength:'500mg',price:65,accent:'var(--nad)'},{code:'AMINO1MQ50',name:'5-Amino-1MQ',strength:'50mg',price:125,accent:'var(--support)'}],
+sets:[{code:'SET-WOLV10',name:'Wolverine',strength:'2 separate vials',price:100,accent:'var(--bpc)'},{code:'SET-GLOW70',name:'Glow',strength:'3 separate vials',price:140,accent:'var(--ghk)'},{code:'SET-KLOW80',name:'Klow',strength:'4 separate vials',price:195,accent:'var(--support)'}],
+wider:[{code:'RTA20',name:'Retatrutide',strength:'20mg',price:150,accent:'var(--set)'},{code:'BPC10',name:'BPC-157',strength:'10mg',price:40,accent:'var(--bpc)'},{code:'TB50010',name:'TB-500',strength:'10mg',price:60,accent:'var(--bpc)'},{code:'KPV10',name:'KPV',strength:'10mg',price:55,accent:'var(--support)'},{code:'TA110',name:'Thymosin Alpha-1',strength:'10mg',price:85,accent:'var(--dsip)'},{code:'SS31_30',name:'SS-31',strength:'30mg',price:105,accent:'var(--nad)'}]};
+let selected=[];const $=s=>document.querySelector(s);const all=()=>Object.values(DATA).flat();const spec=c=>all().find(x=>x.code===c);const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+function add(code){if(!selected.includes(code))selected.push(code);renderRequest();renderFeatured();renderDrawer(currentDrawer)}
+function remove(code){selected=selected.filter(x=>x!==code);renderRequest();renderFeatured();renderDrawer(currentDrawer)}
+function card(x,mini=false){const added=selected.includes(x.code);return `<article class="${mini?'mini':'product'}" style="--accent:${x.accent}">${mini?'':'<div class="family-mark"></div>'}<${mini?'strong':'h3'}>${esc(x.name)}</${mini?'strong':'h3'}><div class="meta">${esc(x.strength)} · £${x.price}</div><button class="${mini?'':'add'} ${added?'selected':''}" data-add="${x.code}">${added?'Added':'Add'}</button></article>`}
+function bindAdds(){document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>add(b.dataset.add))}
+function renderFeatured(){$('#featured').innerHTML=DATA.featured.map(x=>card(x)).join('');bindAdds()}
+let currentDrawer='';
+function renderDrawer(type){currentDrawer=type||'';const d=$('#drawer');document.querySelectorAll('.jump').forEach(b=>b.classList.toggle('active',b.dataset.drawer===type));if(!type){d.classList.remove('open');return}const labels={beyond:['Beyond peptides','Cellular & metabolic research'],sets:['Research Sets','Wolverine · Glow · Klow'],wider:['Wider range','Additional requestable references']};$('#drawerTitle').textContent=labels[type][0];$('#drawerSub').textContent=labels[type][1];$('#drawerGrid').innerHTML=DATA[type].map(x=>card(x,true)).join('');d.classList.add('open');bindAdds()}
+function renderRequest(){const box=$('#selected'),empty=$('#empty'),cont=$('#continue');empty.style.display=selected.length?'none':'block';cont.disabled=!selected.length;box.innerHTML=selected.map(c=>`<div class="selrow"><strong>${esc(spec(c).name)}</strong><button data-remove="${c}">Remove</button></div>`).join('');document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>remove(b.dataset.remove))}
+document.querySelectorAll('.jump').forEach(b=>b.onclick=()=>renderDrawer(currentDrawer===b.dataset.drawer?'':b.dataset.drawer));$('#continue').onclick=()=>{$('#details').classList.add('open');$('#details').scrollIntoView({behavior:'smooth'})};renderFeatured();renderRequest();
+</script>
+</body>
+</html>
