@@ -1,5 +1,27 @@
 # PrimeX Planner Build Control Log
 
+## v185G — Early-Access Customer Flow Completion (STAGING / NOT LIVE)
+
+- Date: 2026-08-13.
+- Branch: `fix/customer-route-v185A`.
+- Status: staging only; `main` and production Supabase remain unchanged.
+- Preferred staging route: `request-fresh2/index.html`.
+- Purpose: remove customer walls from the approved temporary-route direction without copying the future website layout.
+- Public product facts are taken from verified `primex-public-product-contract-v1.2.json`, SHA-256 `cfbb100b267f10faaa55d98c8f8c35bbb2fdecc27ebea713381519de622669e8`.
+- Immediate selected compounds remain GHK-Cu 50mg £40, BPC-157 40mg £60, MOTS-c 40mg £95 and DSIP 5mg £55.
+- Supporting access remains Beyond peptides (NAD+ / 5-Amino-1MQ), Research Sets (Wolverine / Glow / Klow) and Wider range. Retatrutide is not spotlighted.
+- Research Sets now expose their separate-vial contents clearly before selection.
+- Customer request summary now shows item name, strength, quantity and set contents where relevant; quantity can be changed after selection.
+- Supporting category drawer now has an explicit Close action.
+- Contact/review flow now includes name, preferred reply, email, WhatsApp, fulfilment preference, notes, review summary and RUO acknowledgement.
+- Copy-request and email-request fallbacks are available in staging.
+- Online Send remains deliberately release-gated in this preview until the V2G-compatible intake candidate is explicitly approved for production deployment.
+- Staging backend candidate `finance/supabase/functions/submit-request/index.ts` now accepts `BPC40`, `SET-WOLV10`, `SET-GLOW70` and `SET-KLOW80` while preserving existing request-ref and recent-identical-request dedupe. It has NOT been deployed.
+- Existing production Edge Function v19 remains unchanged.
+- Existing live `order-request/index.html` remains unchanged as rollback/fallback.
+- Visual rules carried forward: deep navy card material; no family colour across card tops; family colour only as a small coded marker plus thin lower card line; neutral compact Add action; readable customer text; no internal V2G/build wording exposed.
+- Release proof still required: desktop and ~390px mobile review; selected item/quantity proof; Beyond peptides drawer; Research Set contents; wider-range access; contact validation; consent validation; copy/email fallback; then explicit decision on Edge Function deployment followed by one controlled online request, duplicate replay proof and Supabase-row inspection.
+
 ## v185C — Temporary Route Identity + Provisional Family Accents (STAGING / NOT LIVE)
 
 - Date: 2026-08-13.
