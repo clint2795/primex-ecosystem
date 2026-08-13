@@ -1,5 +1,25 @@
 # PrimeX Planner Build Control Log
 
+## v185B — Product-led Customer Route Refinement (STAGING / NOT LIVE)
+
+- Date: 2026-08-13.
+- Version: `v185B-STAGE`.
+- Branch: `fix/customer-route-v185A`.
+- Draft PR: `#1` — Customer route stabilization v185A.
+- Status: staging only; not merged to `main`; no Supabase Edge Function deployment performed.
+- Single purpose: reduce form-like presentation, reduce blue dominance and align the staging customer route with the recovered PrimeX family-colour system while keeping public wording neutral and RUO-led.
+- `request/index.html` changed only within staging: graphite/near-black becomes the dominant material; PrimeX system blue is reduced to restrained navigation/action cues.
+- Interaction hierarchy changed to: Browse products → compact request tray → Continue to details → contact/review/send. Contact/review content remains hidden until the customer has selected at least one reference and chooses to continue.
+- Family-colour source recovered from `PRIMEX_BRAND_SYSTEM_BOARD.html`: Steel Blue baseline `#275FA9 → #9FD2FB`; Deep Violet `#2A1A4A → #7A58C8`; Warm Amber `#4A3010 → #C87830`; Tactical Crimson `#3A0A10 → #A03040`; Slate `#283340 → #6A8090`; Clinical Teal `#1A4A3C → #4AB890`.
+- Public use rule: family colour may appear as a subtle visual identifier only. Specialist family names such as regenerative/performance/metabolic are not exposed as customer-facing claims in this staging route.
+- Assignment rule for this pass: default core research references use the recovered Steel Blue baseline; Semax/Selank use recovered Deep Violet because those products are explicitly named in that family source. Other specialist assignments remain unresolved rather than guessed.
+- Visible public wording remains neutral: Research references, Core range, Reference structures, Extended catalogue, Research use only, Request for review.
+- Existing customer-route payload shape, product codes, public prices, Supabase endpoint, consent validation, email/copy fallbacks and successful-send session lock remain preserved.
+- Existing `order-request/index.html` remains untouched as fallback.
+- Existing production Supabase Edge Function v19 remains untouched.
+- No current PrimeX website visual concept is promoted or approved by this staging refinement.
+- Next proof: owner desktop/mobile visual review of the same staging preview URL, then selection/tray/details behaviour and controlled request submission tests.
+
 ## v185A — Customer Route Stabilization (STAGING / NOT LIVE)
 
 - Date: 2026-08-13.
