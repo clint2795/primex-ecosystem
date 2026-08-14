@@ -1,5 +1,15 @@
 # PrimeX Planner Build Control Log
 
+## PRICE-ONLY HOTFIX — Temporary Public-Price Correction
+
+- Date: 2026-08-14.
+- Previous live commit and rollback point: `e4951c614029af309cfee188f41a556c37bf5d7e`.
+- Exact product-data corrections: GHK-Cu 50mg £40→£55; the unapproved BPC-157 40mg £60 entry was removed and replaced in the featured selection by BPC-157 10mg £40, with its duplicate wider-range entry removed; NAD+ 500mg £65→£49; 5-Amino-1MQ 50mg £125→£110; TB-500 10mg £60→£65; Thymosin Alpha-1 10mg £85→£75; SS-31 30mg £105→£95. KPV 10mg was verified at £55.
+- Verified scenario total: GHK-Cu ×2 (£110) + BPC-157 ×3 (£120) + Wolverine ×1 (£100) = **£330**.
+- Verified all-product total: all 14 currently listed products at quantity one = **£1,279**.
+- Scope lock: only `planner/app.js` product data and this log entry changed. HTML, CSS, design, copy, functionality, set contents and every other route remain unchanged.
+- This temporary public-price correction does not approve the long-term Planner or product range; both remain unapproved.
+
 ## V01E2-LIVE-ROUTE-HOTFIX — Final Layout, Colour and Copy Release
 
 - Date: 2026-08-14.

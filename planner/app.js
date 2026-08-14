@@ -6,14 +6,14 @@ const WHATSAPP_PATTERN = /^\+?[0-9()\s-]{7,20}$/;
 
 const DATA = {
   featured: [
-    { code: "GHKCU50", name: "GHK-Cu", strength: "50mg", price: 40, accent: "#8f65e5", family: "Family reference 01" },
-    { code: "BPC40", name: "BPC-157", strength: "40mg", price: 60, accent: "#f08a2f", family: "Family reference 02" },
+    { code: "GHKCU50", name: "GHK-Cu", strength: "50mg", price: 55, accent: "#8f65e5", family: "Family reference 01" },
+    { code: "BPC10", name: "BPC-157", strength: "10mg", price: 40, accent: "#f08a2f", family: "Family reference 02" },
     { code: "MOTSC40", name: "MOTS-c", strength: "40mg", price: 95, accent: "#21b89e", family: "Family reference 03" },
     { code: "DSIP5", name: "DSIP", strength: "5mg", price: 55, accent: "#a76be5", family: "Family reference 04" }
   ],
   beyond: [
-    { code: "NAD500", name: "NAD+", strength: "500mg", price: 65, accent: "#3f9fe4", family: "Family reference 05" },
-    { code: "AMINO1MQ50", name: "5-Amino-1MQ", strength: "50mg", price: 125, accent: "#8294a5", family: "Family reference 06" }
+    { code: "NAD500", name: "NAD+", strength: "500mg", price: 49, accent: "#3f9fe4", family: "Family reference 05" },
+    { code: "AMINO1MQ50", name: "5-Amino-1MQ", strength: "50mg", price: 110, accent: "#8294a5", family: "Family reference 06" }
   ],
   sets: [
     { code: "SET-WOLV10", name: "Wolverine", strength: "2 separate vials", price: 100, accent: "#f08a2f", family: "Research set", contents: "BPC-157 10mg + TB-500 10mg · separate vials" },
@@ -22,11 +22,10 @@ const DATA = {
   ],
   wider: [
     { code: "RTA20", name: "Retatrutide", strength: "20mg", price: 150, accent: "#5d7fd6", family: "Family reference 07" },
-    { code: "BPC10", name: "BPC-157", strength: "10mg", price: 40, accent: "#f08a2f", family: "Family reference 02" },
-    { code: "TB50010", name: "TB-500", strength: "10mg", price: 60, accent: "#f08a2f", family: "Family reference 02" },
+    { code: "TB50010", name: "TB-500", strength: "10mg", price: 65, accent: "#f08a2f", family: "Family reference 02" },
     { code: "KPV10", name: "KPV", strength: "10mg", price: 55, accent: "#8294a5", family: "Family reference 06" },
-    { code: "TA110", name: "Thymosin Alpha-1", strength: "10mg", price: 85, accent: "#a76be5", family: "Family reference 04" },
-    { code: "SS31_30", name: "SS-31", strength: "30mg", price: 105, accent: "#3f9fe4", family: "Family reference 05" }
+    { code: "TA110", name: "Thymosin Alpha-1", strength: "10mg", price: 75, accent: "#a76be5", family: "Family reference 04" },
+    { code: "SS31_30", name: "SS-31", strength: "30mg", price: 95, accent: "#3f9fe4", family: "Family reference 05" }
   ]
 };
 
