@@ -1,5 +1,20 @@
 # PrimeX Planner Build Control Log
 
+## V01E2-LIVE-ROUTE-HOTFIX — Final Layout, Colour and Copy Release
+
+- Date: 2026-08-14.
+- Customer-visible failure: live commit `b091f0820a18a611a3e597eda8ff53c87130b1fb` produced oversized featured cards at the owner’s approximately 935px browser width and retained rejected temporary-route/internal wording.
+- Layout cause: `planner/styles.css` changed `.featured-grid` from four columns to two at `max-width: 980px` while `.product-card` retained `aspect-ratio: 1 / 1`, creating two approximately 440px square cards near 935px.
+- Final authoritative colour lock: page `#02050A`; sections `#060C16`; cards/panels `#0A1828`; raised areas `#0E1A2E`; structural borders `#2A3240`; clinical white `#F4F7FA`; Signal core `#275FA9`; Signal hover `#5898D8`; `#80B8F0` and `#9FD2FB` reserved for tiny focus/specular or PrimeX X-gradient stops. The rejected bright cyan token was removed completely while product-family rails remain unchanged.
+- Copy correction: replaced the rejected temporary-site, “reference” and “request for review” customer wording with the owner-approved product/request language; approved success messages and Research Use Only wording remain unchanged.
+- Exact changed files: `planner/index.html`, `planner/styles.css`, `planner/app.js`, `planner/PLANNER_BUILD_CONTROL_LOG.md`.
+- Viewport acceptance: **PASS** at `1440`, `1280`, `1024`, `981`, `980`, `935`, `760`, `759`, `740`, `520`, `519`, and `390×844`; four columns remain through 760px, two columns apply below 760px, 935px cards measure `216×216px`, 390px cards measure `169×202px`, all controls and product text remain visible, and no horizontal overrun occurs.
+- Functional regression: **PASS** — featured and supporting-category selection, selected state, quantity, removal, request details, required/email/WhatsApp/consent validation, copy output, generated PX reference, exact success messages, email mailto URL/body, compliance wording, console and JavaScript syntax.
+- Final colour/accessibility regression: **PASS** — no rejected cyan token or matching RGB value remains; computed page, surface, panel, raised-area, border, heading, steel-text and Signal colours match the authoritative lock; all headings render Clinical White; no large Signal-blue fill exists; minimum audited text contrast is `5.72:1`; product-family rails are unchanged.
+- Final engineering gates: **PASS** — `node --check planner/app.js`, `git diff --check`, browser console, protected copy/behaviour checks and four-file Git scope.
+- Live rollback point: `b091f0820a18a611a3e597eda8ff53c87130b1fb`.
+- Deployment record: validated for direct publication to `main`; this release commit is the commit containing this entry. GitHub Pages workflow and live desktop/mobile verification are recorded in the owner release handoff after publication because a commit cannot contain its own immutable hash or post-commit deployment result.
+
 ## V01E1-LAUNCHER-HOTFIX — Windows Review Port Collision Repair (LOCAL / NOT LIVE)
 
 - Date: 2026-08-14.

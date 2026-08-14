@@ -32,8 +32,8 @@ const DATA = {
 
 const DRAWERS = {
   beyond: { eyebrow: "Beyond peptides", title: "Cellular & metabolic research", copy: "NAD+ · 5-Amino-1MQ" },
-  sets: { eyebrow: "Research sets", title: "Wolverine · Glow · Klow", copy: "Separate-vial research sets" },
-  wider: { eyebrow: "Explore", title: "Wider range", copy: "Open the remaining references" }
+  sets: { eyebrow: "Research sets", title: "Wolverine · Glow · Klow", copy: "View the collection" },
+  wider: { eyebrow: "Explore", title: "Wider range", copy: "View the wider range" }
 };
 
 let selected = [];
@@ -190,7 +190,7 @@ function formValues() {
 
 function validate() {
   const form = formValues();
-  if (!selected.length) return "Add at least one research reference first.";
+  if (!selected.length) return "Add at least one product first.";
   if (!form.name) return "Add your name before continuing.";
   if (!form.email && !form.whatsapp) return "Add an email address or WhatsApp number.";
   if (form.email && !EMAIL_PATTERN.test(form.email)) return "Enter a valid email address.";
@@ -208,7 +208,7 @@ function requestText(reference) {
     return item.contents ? `${base}\n  ${item.contents}` : base;
   }).join("\n");
 
-  return `PRIMEX RESEARCH REQUEST\nReference: ${reference}\n\nName: ${form.name}\nPreferred reply: ${form.method}\nEmail: ${form.email || "Not provided"}\nWhatsApp: ${form.whatsapp || "Not provided"}\nFulfilment preference: ${form.delivery}\n\nRequested references:\n${itemLines}\n\nIndicative total: £${total()}\n\nNotes / questions:\n${form.notes || "None"}\n\nResearch Use Only. Not for human or veterinary use.\nThis is a request for review; availability, fulfilment and next steps are confirmed separately.`;
+  return `PRIMEX RESEARCH REQUEST\nReference: ${reference}\n\nName: ${form.name}\nPreferred reply: ${form.method}\nEmail: ${form.email || "Not provided"}\nWhatsApp: ${form.whatsapp || "Not provided"}\nFulfilment preference: ${form.delivery}\n\nRequested products:\n${itemLines}\n\nIndicative total: £${total()}\n\nNotes / questions:\n${form.notes || "None"}\n\nResearch Use Only. Not for human or veterinary use.\nAvailability, fulfilment and next steps are confirmed separately.`;
 }
 
 function showStatus(message, isError = false) {

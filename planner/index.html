@@ -25,12 +25,12 @@
         <div class="container">
           <div class="route-note">
             <span>PrimeX early access</span>
-            <p>The full PrimeX BioLabs website is still being completed. This temporary route keeps selected research references and the request pathway available in the meantime. No payment is taken online.</p>
+            <p>Browse the current selection and build your request. PrimeX will confirm availability, fulfilment and next steps directly.</p>
           </div>
           <div class="intro-copy">
             <p class="eyebrow">PrimeX early access</p>
-            <h1>Selected research references.</h1>
-            <p>Browse a small early-access selection, then open the supporting categories only if you need them.</p>
+            <h1>Selected research compounds.</h1>
+            <p>Choose from our featured peptides, or explore the wider range below, including our research sets.</p>
           </div>
         </div>
       </section>
@@ -39,14 +39,14 @@
         <div class="container">
           <div class="section-heading">
             <div><p class="eyebrow">Current selection</p><h2 id="featured-title">Selected compounds</h2></div>
-            <p>Four selected references available through the early-access route.</p>
+            <p>Four featured peptides available below.</p>
           </div>
           <div id="featured" class="featured-grid"></div>
 
           <section id="requestShell" class="request-shell" aria-labelledby="request-title">
             <div class="request-intro">
               <div><p class="eyebrow">Request</p><h2 id="request-title">Your request</h2></div>
-              <p id="requestEmpty" class="request-empty">Select a research reference to begin.</p>
+              <p id="requestEmpty" class="request-empty">Select a product to begin.</p>
             </div>
             <div id="selectedList" class="selected-list" hidden></div>
             <div id="requestFooter" class="request-footer" hidden>
@@ -61,17 +61,17 @@
         <div class="container">
           <div class="section-heading support-heading">
             <div><p class="eyebrow">Supporting categories</p><h2 id="support-title">Supporting categories</h2></div>
-            <p>Then open the supporting categories only if you need them.</p>
+            <p>Explore more of the PrimeX range below.</p>
           </div>
           <div class="category-grid">
             <button type="button" class="category-card" data-drawer="beyond" aria-expanded="false" aria-controls="supportDrawer">
               <span><small>Beyond peptides</small><strong>Cellular &amp; metabolic research</strong><em>NAD+ · 5-Amino-1MQ</em></span><b aria-hidden="true">→</b>
             </button>
             <button type="button" class="category-card" data-drawer="sets" aria-expanded="false" aria-controls="supportDrawer">
-              <span><small>Research sets</small><strong>Wolverine · Glow · Klow</strong><em>Separate-vial research sets</em></span><b aria-hidden="true">→</b>
+              <span><small>Research sets</small><strong>Wolverine · Glow · Klow</strong><em>View the collection</em></span><b aria-hidden="true">→</b>
             </button>
             <button type="button" class="category-card" data-drawer="wider" aria-expanded="false" aria-controls="supportDrawer">
-              <span><small>Explore</small><strong>Wider range</strong><em>Open the remaining references</em></span><b aria-hidden="true">→</b>
+              <span><small>Explore</small><strong>Wider range</strong><em>View the wider range</em></span><b aria-hidden="true">→</b>
             </button>
           </div>
 
@@ -83,13 +83,13 @@
             <div id="drawerGrid" class="drawer-grid"></div>
           </div>
 
-          <div class="availability"><span aria-hidden="true">i</span><p><strong>Availability &amp; fulfilment.</strong> Availability is confirmed when your request is reviewed. Some items may require additional fulfilment time. Where this applies, please allow approximately 7–10 days before dispatch. We’ll confirm the expected timeframe before anything is finalised.</p></div>
+          <div class="availability"><span aria-hidden="true">i</span><p><strong>Availability &amp; fulfilment.</strong> Availability and expected timings are confirmed after we receive your request. Some items may take up to 14 days before dispatch, although timings can vary and may be longer around weekends and holiday periods.</p></div>
         </div>
       </section>
 
       <section id="requestDetails" class="details-section" aria-labelledby="details-title" hidden>
         <div class="container details-layout">
-          <div class="details-heading"><p class="eyebrow">PrimeX request</p><h2 id="details-title">Request details</h2><p>Add your contact details so PrimeX can review the request and confirm availability, fulfilment and timing.</p></div>
+          <div class="details-heading"><p class="eyebrow">PrimeX request</p><h2 id="details-title">Request details</h2><p>Add your contact details so PrimeX can confirm availability, fulfilment and timing.</p></div>
           <form id="requestForm" class="request-form" novalidate>
             <div class="form-grid">
               <label><span>Name</span><input id="name" autocomplete="name"></label>
@@ -104,7 +104,7 @@
               <div class="review-head"><div><p class="eyebrow">Review</p><h3>Review your request</h3></div><strong id="reviewTotal">£0</strong></div>
               <div id="reviewList" class="review-list"></div>
             </div>
-            <label class="consent"><input id="consent" type="checkbox"><span>I understand this is a request for review. Availability, fulfilment details and next steps are confirmed separately. Research Use Only. Not for human or veterinary use.</span></label>
+            <label class="consent"><input id="consent" type="checkbox"><span>I understand that availability, fulfilment details and next steps are confirmed separately. Research Use Only. Not for human or veterinary use.</span></label>
             <div id="formStatus" class="form-status" role="status" hidden></div>
             <p class="request-guidance">Review your request, then choose how you’d like to send it. Availability and fulfilment are confirmed separately.</p>
             <div class="send-grid"><button id="copyRequest" type="button">Copy request</button><button id="emailRequest" type="button">Email request</button></div>
@@ -115,7 +115,7 @@
 
     <footer class="site-footer"><div class="container"><span>PrimeX BioLabs · Research Use Only · Not for human or veterinary use</span><a href="#top">Back to top ↑</a></div></footer>
   </div>
-  <noscript>This request route requires JavaScript to manage your selected references.</noscript>
+  <noscript>This request page requires JavaScript to manage your selected products.</noscript>
   <script src="./app.js" defer></script>
 </body>
 </html>
