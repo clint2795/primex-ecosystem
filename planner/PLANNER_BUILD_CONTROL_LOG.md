@@ -1,5 +1,16 @@
 # PrimeX Planner Build Control Log
 
+## PX-ROUTE-R3 — Planner-to-Finance Intake Repair (LOCAL OWNER REVIEW)
+
+- Date: 2026-08-16.
+- Purpose: restore structured Supabase Request Inbox delivery from the current temporary public Planner while preserving its existing email handoff as the fallback.
+- Planner change: the existing Email request action now submits the stable request reference, customer contact fields, product codes, strengths, quantities and approved public prices to the existing `submit-request` intake before opening the unchanged email draft.
+- Failure behaviour: a cloud-intake failure does not block the existing email handoff. The Copy request behaviour and wording remain unchanged.
+- Current public product data, set contents, HTML, CSS, design, layout and request email text remain unchanged.
+- Connected Finance work is recorded under the same `PX-ROUTE-R3` identifier in `finance/FINANCE_HQ_BUILD_CONTROL_LOG.md`.
+- Rollback point: `be1c256fabafd2a76a1c669ea0b9917c16d05dfa`.
+- Status: local owner review only. No commit, push, Edge Function deployment or GitHub Pages deployment performed.
+
 ## PRICE-ONLY HOTFIX — Temporary Public-Price Correction
 
 - Date: 2026-08-14.

@@ -1,6 +1,7 @@
 "use strict";
 
 const EMAIL = "orders@primexbiolabs.co.uk";
+const REQUEST_INTAKE_URL = "https://lamibbavnjwaoiwpqpxj.supabase.co/functions/v1/submit-request";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const WHATSAPP_PATTERN = /^\+?[0-9()\s-]{7,20}$/;
 
@@ -210,6 +211,45 @@ function requestText(reference) {
   return `PRIMEX RESEARCH REQUEST\nReference: ${reference}\n\nName: ${form.name}\nPreferred reply: ${form.method}\nEmail: ${form.email || "Not provided"}\nWhatsApp: ${form.whatsapp || "Not provided"}\nFulfilment preference: ${form.delivery}\n\nRequested products:\n${itemLines}\n\nIndicative total: £${total()}\n\nNotes / questions:\n${form.notes || "None"}\n\nResearch Use Only. Not for human or veterinary use.\nAvailability, fulfilment and next steps are confirmed separately.`;
 }
 
+function requestPayload(reference) {
+  const form = formValues();
+  return {
+    requestId: reference,
+    receivedAt: new Date().toISOString(),
+    source: "PrimeX Planner",
+    status: "new",
+    customer: {
+      name: form.name,
+      email: form.email,
+      whatsapp: form.whatsapp,
+      contact: form.whatsapp || form.email,
+      preferredContact: form.method
+    },
+    items: selected.map((item) => ({
+      productCode: item.code,
+      requestedName: item.name,
+      requestedStrength: item.strength,
+      qty: item.quantity,
+      standardCataloguePrice: item.price,
+      priceMode: "fixed",
+      publicSafeNotes: item.contents || ""
+    })),
+    requestNotes: form.notes,
+    publicSafeNotes: `Fulfilment preference: ${form.delivery}`
+  };
+}
+
+async function submitCloudRequest(reference) {
+  const response = await fetch(REQUEST_INTAKE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestPayload(reference))
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || !result.ok) throw new Error(result.error || "Request intake unavailable");
+  return result;
+}
+
 function showStatus(message, isError = false) {
   const status = $("#formStatus");
   status.className = `form-status${isError ? " error" : ""}`;
@@ -247,13 +287,18 @@ async function copyRequest() {
   }
 }
 
-function emailRequest() {
+async function emailRequest() {
   const error = validate();
   if (error) return showStatus(error, true);
   const reference = getRequestReference();
   const form = formValues();
   const subject = encodeURIComponent(`PrimeX research request — ${form.name}`);
   const body = encodeURIComponent(requestText(reference));
+  try {
+    await submitCloudRequest(reference);
+  } catch {
+    // The existing email handoff remains the operational fallback.
+  }
   window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
   showStatus(`Your completed request is ready in your email app. Reference: ${reference}. Send it when you’re ready.`);
 }

@@ -1627,4 +1627,16 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - No Supabase rows, schema, RLS, Edge Function, Planner, Request Hub, pricing, stock, quote lifecycle, localStorage keys, or customer message wording changed.
 - Files changed: finance/index.html, finance/FINANCE_HQ_BUILD_CONTROL_LOG.md.
 - Verification: inline JavaScript parses successfully; startup, login, five-minute, visibility/focus, overlap-guard, manual fallback, and untrusted-zero status paths are present.
+## PX-ROUTE-R3 — Intake Contract + Public Quote Authority Repair (LOCAL OWNER REVIEW) — 2026-08-16
+
+- Single purpose: make current temporary-Planner requests arrive in Finance with deterministic approved public quote values.
+- Corrected Finance Public prices only: BPC-157 10mg £50→£40; TB-500 10mg £70→£65; Thymosin Alpha-1 10mg £85→£75; NAD+ 500mg £65→£49; 5-Amino-1MQ 50mg £125→£110; SS-31 30mg £105→£95; GHK-Cu 50mg £95→£55.
+- Verified already-matching Public prices remain unchanged: Retatrutide 20mg £150; MOTS-c 40mg £95; DSIP 5mg £55; KPV 10mg £55.
+- Added stable Finance structure mappings for the current public Wolverine £100, Glow £140 and Klow £195 sets so each retains its fixed public total and constituent-vial stock requirements.
+- Extended the existing Supabase intake allowlist only for `SET-WOLV10`, `SET-GLOW70` and `SET-KLOW80`.
+- Retatrutide private options remain unchanged: Existing customer £130 and Close contact £110. Non-Public prices for other products remain manual/approval-gated under v44E3K behaviour.
+- Existing HTML layout, CSS, customer message templates, quote/payment lifecycle, email fallback, stock quantities, historical records, localStorage keys and all other routes remain unchanged.
+- Long-term Planner, permanent product range, legacy pathways, private-price revision, customer-message consolidation and stock cutover are outside this release and remain separate objectives.
+- Rollback point: `be1c256fabafd2a76a1c669ea0b9917c16d05dfa`.
+- Status: local owner review only. No commit, push, Supabase deployment or GitHub Pages deployment performed.
 
