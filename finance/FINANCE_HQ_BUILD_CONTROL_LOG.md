@@ -1650,5 +1650,6 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Applied the same operator behaviour to the isolated `finance-protocol-proof/` review route.
 - Locked authority, product codes, price values, stock logic, Supabase schema/functions, Planner, Request Hub and customer-facing quote/message output were not changed.
 - Verification: both inline JavaScript blocks parse successfully; `git diff --check` passes. Automated browser execution is unresolved because the installed Playwright package has no browser binary in this workspace.
-- Rollback point: accepted main `001135580850756d83e9475f58f4b2da4ff8516d` plus the uncommitted isolated protocol-review route kept as a sibling.
-- Status: local owner review only. No commit, push or deployment performed.
+- Rollback point: accepted main `001135580850756d83e9475f58f4b2da4ff8516d`.
+- GitHub commits: protocol review route `d49d2aef9d451327c3b8a039e820b28ef0326080`; Finance tier clarity `c72684ac296c186dc31075f4bebc8832f54c1093`.
+- Status: committed and pushed to `main` after owner approval. No Supabase deployment or manual deployment action was performed.
