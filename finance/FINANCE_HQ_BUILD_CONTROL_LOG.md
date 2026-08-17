@@ -1640,3 +1640,15 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Rollback point: `be1c256fabafd2a76a1c669ea0b9917c16d05dfa`.
 - Status: local owner review only. No commit, push, Supabase deployment or GitHub Pages deployment performed.
 
+## PX-FINANCE-TIER-CLARITY — Conditional Retatrutide Tier (LOCAL OWNER REVIEW) — 2026-08-17
+
+- Single purpose: remove the redundant Existing-customer choice from routine quoting while preserving Retatrutide's approved exception.
+- The normal selector now shows Standard price, owner-approved Close friends/family and the deliberate Custom approved price override.
+- Existing customer appears only while Retatrutide is selected or already included in the current quote/order, and identifies the approved Retatrutide £130 price in the option label.
+- Switching away from Retatrutide safely returns an unused Existing selection to Standard; non-Retatrutide approved prices remain unchanged because Existing and Standard are identical under PX-COMMERCIAL-2026-08-17.2.
+- Added quiet operator-only helper text explaining both the conditional tier and that order/request source is internal tracking only.
+- Applied the same operator behaviour to the isolated `finance-protocol-proof/` review route.
+- Locked authority, product codes, price values, stock logic, Supabase schema/functions, Planner, Request Hub and customer-facing quote/message output were not changed.
+- Verification: both inline JavaScript blocks parse successfully; `git diff --check` passes. Automated browser execution is unresolved because the installed Playwright package has no browser binary in this workspace.
+- Rollback point: accepted main `001135580850756d83e9475f58f4b2da4ff8516d` plus the uncommitted isolated protocol-review route kept as a sibling.
+- Status: local owner review only. No commit, push or deployment performed.

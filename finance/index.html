@@ -521,7 +521,7 @@ body{font-size:15px}
         <div class="field"><label>Date</label><input id="orderDate" type="date"></div>
         <div class="field"><label>Customer name / ref</label><input id="customerRef" placeholder="Customer, initials, or internal ref"></div>
         <div class="field"><label>Phone / WhatsApp</label><input id="recPhone" placeholder="Phone, WhatsApp, or contact ref"></div>
-        <div class="field"><label>Order / request source</label><select id="orderSource"><option value="Request Hub / online">Website / online request</option><option>Existing customer</option><option>Word of mouth / referral</option><option>Direct WhatsApp</option><option>Manual entry</option><option>Repeat customer</option><option>Other</option></select></div>
+        <div class="field"><label>Order / request source</label><select id="orderSource"><option value="Request Hub / online">Website / online request</option><option>Existing customer</option><option>Word of mouth / referral</option><option>Direct WhatsApp</option><option>Manual entry</option><option>Repeat customer</option><option>Other</option></select><div class="tiny">Internal tracking only — this does not change the customer price.</div></div>
         <div class="field"><label>Referred by</label><input id="referredBy" placeholder="Internal tracking only"></div>
         <div class="field" id="quoteStatusField"><label>Quote next action</label><select id="quoteStatus"><option>New request</option><option>Quote to send</option><option>Quote sent / waiting customer</option><option value="Customer replied / ready to convert">Quote accepted</option><option>Parked</option><option>Cancelled</option></select></div>
       </div>
@@ -542,7 +542,7 @@ body{font-size:15px}
     <section class="card">
       <div class="section-title"><div><h2>Step 2 Items</h2></div></div>
       <div class="grid two" style="margin-bottom:10px">
-        <div class="field"><label>Customer price tier</label><select id="priceTier"><option value="standard">Public</option><option value="existing">Existing customer</option><option value="internal">Close friends/family — owner approved</option><option value="custom">Custom approved price</option></select></div>
+        <div class="field"><label>Customer price tier</label><select id="priceTier"><option value="standard">Standard price</option><option id="existingPriceTierOption" value="existing" hidden disabled>Existing customer — Retatrutide £130</option><option value="internal">Close friends/family — owner approved</option><option value="custom">Custom approved price</option></select><div id="priceTierHelper" class="tiny">Standard pricing covers public and existing customers. A separate Existing option appears only when Retatrutide is selected.</div></div>
         <div class="field full"><div id="priceTierNote" class="note"></div></div>
       </div>
       <div class="tabs"><button id="modeSingle" class="active">Single product</button><button id="modeStructure">Research set</button></div>
@@ -872,6 +872,8 @@ const orderNotes=document.getElementById('orderNotes');
 const customerNote=document.getElementById('customerNote');
 const priceTier=document.getElementById('priceTier');
 const priceTierNote=document.getElementById('priceTierNote');
+const existingPriceTierOption=document.getElementById('existingPriceTierOption');
+const priceTierHelper=document.getElementById('priceTierHelper');
 const paymentStatus=document.getElementById('paymentStatus');
 const paymentStatusNotice=document.getElementById('paymentStatusNotice');
 const paymentDueNote=document.getElementById('paymentDueNote');
@@ -1478,7 +1480,7 @@ function renderSupportSuggestions(){
 
 function init(){document.getElementById('bootBadge').textContent='v45G JS OK';document.getElementById('bootBadge').style.color='#73c28b';applyCustomStockItems();renderProductOptions();renderSupportOptions();activeNewQuoteStructures().forEach(s=>{let o=document.createElement('option');o.value=s.id;o.textContent=s.name;structureSelect.appendChild(o)});renderStockItemOptions();newOrder();bind();bindAutoExpand();recalcStock();updateFulfilmentVisibility();renderAll();startAutomaticCloudRequestSync()}
 function bind(){
-['productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();updateSinglePreview()}));
+['productSelect','productQty'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearAddFeedback();syncPriceTierOptions();updateSinglePreview()}));
 priceTier.addEventListener('input',handlePriceTierChange);
 unitPrice.addEventListener('input',()=>{updateManualProductPrice();markOrderMessagesStale('all')});
 productNeedsCheckReviewed?.addEventListener('input',updateSinglePreview);
@@ -1494,7 +1496,7 @@ recPhone.addEventListener('input',markConfirmationStale);
 quoteAvailabilityNoteMode?.addEventListener('input',()=>{current.quoteAvailabilityNoteMode=val('quoteAvailabilityNoteMode')||'none';renderQuoteInternalChecks();markConfirmationStale()});
 quoteAvailabilityCustomNote?.addEventListener('input',()=>{current.quoteAvailabilityCustomNote=val('quoteAvailabilityCustomNote');markConfirmationStale()});
 releaseOverride.addEventListener('input',syncFulfilmentPaymentWarning);releaseApprovedBy.addEventListener('input',syncFulfilmentPaymentWarning);
-structureSelect.addEventListener('input',updateStructurePreview);
+structureSelect.addEventListener('input',()=>{syncPriceTierOptions();updateStructurePreview()});
 structurePrice.addEventListener('input',()=>{updateManualStructurePrice();markOrderMessagesStale('all')});
 orderType.addEventListener('input',renderOrder);modeSingle.onclick=()=>showLineMode('single');modeStructure.onclick=()=>showLineMode('structure');
 addProductBtn.onclick=addProduct;addSupportItemBtn.onclick=addSupportItem;addStructureBtn.onclick=addStructure;
@@ -1738,6 +1740,35 @@ function handlePriceTierChange(){
   }
   updateSinglePreview();updateSupportPreview();updateStructurePreview();renderOrder();
 }
+function lineContainsReta(line){
+  if(!line)return false;
+  if(line.kind==='product')return line.pid==='RTA20'||line.pid==='RTA20_KIT';
+  return line.kind==='structure'&&(line.contents||STRUCTURE_RULES[line.sid]?.contents||[]).some(([pid])=>pid==='RTA20'||pid==='RTA20_KIT');
+}
+function currentSelectionContainsReta(){
+  if((current.lines||[]).some(lineContainsReta))return true;
+  if(addMode==='single'){
+    const selectedProduct=val('productSelect');
+    return selectedProduct==='RTA20'||selectedProduct==='RTA20_KIT';
+  }
+  const selectedStructure=STRUCTURE_RULES[val('structureSelect')];
+  return !!selectedStructure?.contents?.some(([pid])=>pid==='RTA20'||pid==='RTA20_KIT');
+}
+function syncPriceTierOptions(){
+  if(!existingPriceTierOption)return;
+  const showExisting=currentSelectionContainsReta();
+  existingPriceTierOption.hidden=!showExisting;
+  existingPriceTierOption.disabled=!showExisting;
+  if(priceTierHelper)priceTierHelper.textContent=showExisting
+    ?'Retatrutide selected: use Standard £150, Existing customer £130, or the owner-approved Close price.'
+    :'Standard pricing covers public and existing customers. A separate Existing option appears only when Retatrutide is selected.';
+  if(!showExisting&&val('priceTier')==='existing'){
+    const previousTier=current.activeTier||'existing';
+    set('priceTier','standard');
+    current.activeTier='standard';
+    if(val('orderType')==='Quote / enquiry'&&previousTier!=='standard')repriceQuoteLinesForTier(previousTier,'standard');
+  }
+}
 function approveManualLinePrice(index){
   if(commercialEditingLocked()){showToast('Accepted commercial details are locked');return}
   const line=current.lines[index];
@@ -1766,6 +1797,7 @@ function updateManualProductPrice(){let qty=wholeQty('productQty'),p=PRODUCT_RUL
 function updateManualStructurePrice(){addStructureBtn.disabled=!hasPositivePrice(num('structurePrice'));if(hasPositivePrice(num('structurePrice'))){structureNote.className='note';structureNote.textContent='Custom price entered.'}}
 function supportOutcomeText(mode){return mode==='charged'?'Customer is charged; stock is tracked.':mode==='included'?'Included in the order price; stock is tracked.':'No customer charge; stock is tracked.'}
 function updateSinglePreview(){
+  syncPriceTierOptions();
   let pid=val('productSelect'),qty=wholeQty('productQty'),tier=val('priceTier');
   updatePriceTierNote();
   const p=PRODUCT_RULES[pid];
@@ -1850,7 +1882,7 @@ function updateManualSupportPrice(){
   set('supportLineTotal',money(num('supportUnitPrice')*qty));addSupportItemBtn.disabled=false;if(addSupportDisabledReason)addSupportDisabledReason.textContent='';
 }
 function updatePriceTierNote(){if(!priceTierNote)return;const tier=val('priceTier'),msg=tier==='standard'?'Approved Public prices apply.':tier==='existing'?'Existing matches Public for every current product/set except Retatrutide (£130).':tier==='internal'?'Owner-approved close friends/family only. Do not stack another discount; postage remains separate.':'Enter and approve each custom price. Automatic repricing is disabled.';priceTierNote.className='note'+(tier==='standard'?'':' warn');priceTierNote.textContent=msg}
-function updateStructurePreview(){updatePriceTierNote();let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);if(r.review&&!hasPositivePrice(r.price))set('structurePrice','');else set('structurePrice',r.price);addStructureBtn.disabled=!hasPositivePrice(num('structurePrice'));structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=!hasPositivePrice(num('structurePrice'))?'Manual price required.':r.note;renderStructurePreview(sid,'structurePreview')}
+function updateStructurePreview(){syncPriceTierOptions();updatePriceTierNote();let sid=val('structureSelect'),tier=val('priceTier');let r=getStructurePrice(sid,tier);if(r.review&&!hasPositivePrice(r.price))set('structurePrice','');else set('structurePrice',r.price);addStructureBtn.disabled=!hasPositivePrice(num('structurePrice'));structureNote.className='note'+(r.review?' warn':'');structureNote.textContent=!hasPositivePrice(num('structurePrice'))?'Manual price required.':r.note;renderStructurePreview(sid,'structurePreview')}
 function supportReviewNoteHTML(){return '<div class="divider"></div><div class="note warn">Use the support item section below if this order needs BAC water or accessories.</div>'}
 function renderStructurePreview(sid,target){const s=STRUCTURE_RULES[sid];let html='<strong>'+s.name+'</strong><div class="tiny">Product contents</div>';s.contents.forEach(([pid,qty])=>{html+='<div class="summary-line"><span>'+PRODUCT_RULES[pid].name+'</span><strong>x '+qty+'</strong></div>'});let hasReta=s.contents.some(([pid])=>pid==='RTA20'||pid==='RTA20_KIT');if(hasReta)html+='<div class="tiny">Reta fulfilment details appear in Packing after adding.</div>';else html+=supportReviewNoteHTML();document.getElementById(target).innerHTML=html}
 function retaMaterials(q){return{BAC3:q,BAC10:0,U100:q,WIPES:q*16,BOX:q,INSERT:q,INLAY:q}}
@@ -2099,6 +2131,7 @@ function approveCurrentQuote(){
 }
 function renderOrder(){
   ensureCurrentCommercialState();
+  syncPriceTierOptions();
   setQuoteSendInlineStatus('',null);
   renderQuoteInternalChecks();
   updateOrderTypeNotice();
