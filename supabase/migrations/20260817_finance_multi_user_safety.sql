@@ -69,6 +69,8 @@ create trigger finance_quote_order_before_update
 before update on public.quotes_orders
 for each row execute function public.finance_quote_order_before_update();
 
+revoke all on function public.finance_quote_order_before_update() from public, anon, authenticated;
+
 create or replace function public.claim_quote_order(
   p_order_id uuid,
   p_lease_minutes integer default 10
@@ -102,6 +104,7 @@ begin
 end;
 $$;
 
+revoke all on function public.claim_quote_order(uuid, integer) from public, anon;
 grant execute on function public.claim_quote_order(uuid, integer) to authenticated;
 
 create or replace function public.release_quote_order_claim(p_order_id uuid)
@@ -121,6 +124,7 @@ begin
 end;
 $$;
 
+revoke all on function public.release_quote_order_claim(uuid) from public, anon;
 grant execute on function public.release_quote_order_claim(uuid) to authenticated;
 
 do $$
