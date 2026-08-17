@@ -2,33 +2,57 @@
 
 const EMAIL = "orders@primexbiolabs.co.uk";
 const REQUEST_INTAKE_URL = "https://lamibbavnjwaoiwpqpxj.supabase.co/functions/v1/submit-request";
+const COMMERCIAL_AUTHORITY_URL = "../data/primex-product-library.json";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const WHATSAPP_PATTERN = /^\+?[0-9()\s-]{7,20}$/;
 
-const DATA = {
-  featured: [
-    { code: "GHKCU50", name: "GHK-Cu", strength: "50mg", price: 55, accent: "#8f65e5", family: "Family reference 01" },
-    { code: "BPC10", name: "BPC-157", strength: "10mg", price: 40, accent: "#f08a2f", family: "Family reference 02" },
-    { code: "MOTSC40", name: "MOTS-c", strength: "40mg", price: 95, accent: "#21b89e", family: "Family reference 03" },
-    { code: "DSIP5", name: "DSIP", strength: "5mg", price: 55, accent: "#a76be5", family: "Family reference 04" }
-  ],
-  beyond: [
-    { code: "NAD500", name: "NAD+", strength: "500mg", price: 49, accent: "#3f9fe4", family: "Family reference 05" },
-    { code: "AMINO1MQ50", name: "5-Amino-1MQ", strength: "50mg", price: 110, accent: "#8294a5", family: "Family reference 06" }
-  ],
-  sets: [
-    { code: "SET-WOLV10", name: "Wolverine", strength: "2 separate vials", price: 100, accent: "#f08a2f", family: "Research set", contents: "BPC-157 10mg + TB-500 10mg · separate vials" },
-    { code: "SET-GLOW70", name: "Glow", strength: "3 separate vials", price: 140, accent: "#8f65e5", family: "Research set", contents: "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg · separate vials" },
-    { code: "SET-KLOW80", name: "Klow", strength: "4 separate vials", price: 195, accent: "#7f92a6", family: "Research set", contents: "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg · separate vials" }
-  ],
-  wider: [
-    { code: "RTA20", name: "Retatrutide", strength: "20mg", price: 150, accent: "#5d7fd6", family: "Family reference 07" },
-    { code: "TB50010", name: "TB-500", strength: "10mg", price: 65, accent: "#f08a2f", family: "Family reference 02" },
-    { code: "KPV10", name: "KPV", strength: "10mg", price: 55, accent: "#8294a5", family: "Family reference 06" },
-    { code: "TA110", name: "Thymosin Alpha-1", strength: "10mg", price: 75, accent: "#a76be5", family: "Family reference 04" },
-    { code: "SS31_30", name: "SS-31", strength: "30mg", price: 95, accent: "#3f9fe4", family: "Family reference 05" }
-  ]
-};
+const DATA = { featured: [], beyond: [], sets: [], wider: [] };
+let commercialAuthorityVersion = "unloaded";
+
+function validateCommercialAuthority(authority) {
+  const products = Array.isArray(authority?.products) ? authority.products : [];
+  const active = products.filter((product) => product.activeForNewRequest === true);
+  const codes = new Set(active.map((product) => product.productCode));
+  if (authority?.metadata?.schemaVersion !== "primex-public-commercial-authority.v2") throw new Error("Unsupported commercial authority schema");
+  if (!authority?.metadata?.authorityVersion) throw new Error("Commercial authority version missing");
+  if (active.length !== 15 || codes.size !== 15) throw new Error("Commercial authority must contain 15 unique active entries");
+  ["BPC40", "SET-WOLV10", "SET-GLOW70", "SET-KLOW80"].forEach((code) => {
+    if (!codes.has(code)) throw new Error(`Commercial authority missing ${code}`);
+  });
+  return active;
+}
+
+function authorityProductForDisplay(product) {
+  return {
+    code: product.productCode,
+    name: product.displayName,
+    strength: product.strength,
+    price: Number(product.publicPrice),
+    accent: product.accent,
+    family: product.family,
+    contents: product.contentsDisplay || ""
+  };
+}
+
+async function loadCommercialAuthority() {
+  const response = await fetch(COMMERCIAL_AUTHORITY_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error("Commercial authority unavailable");
+  const authority = await response.json();
+  const active = validateCommercialAuthority(authority);
+  Object.keys(DATA).forEach((section) => { DATA[section] = []; });
+  active.sort((a, b) => Number(a.displayOrder) - Number(b.displayOrder)).forEach((product) => {
+    if (!Object.prototype.hasOwnProperty.call(DATA, product.catalogSection)) throw new Error(`Unsupported catalogue section for ${product.productCode}`);
+    DATA[product.catalogSection].push(authorityProductForDisplay(product));
+  });
+  commercialAuthorityVersion = authority.metadata.authorityVersion;
+}
+
+function showCommercialAuthorityFailure() {
+  const message = "The current PrimeX product list could not be verified. Please contact PrimeX rather than relying on an incomplete or cached price.";
+  const featured = $("#featured");
+  if (featured) featured.innerHTML = `<div class="form-status error" role="alert">${escapeHtml(message)}</div>`;
+  document.querySelectorAll("[data-drawer]").forEach((button) => { button.disabled = true; });
+}
 
 const DRAWERS = {
   beyond: { eyebrow: "Beyond peptides", title: "Cellular & metabolic research", copy: "NAD+ · 5-Amino-1MQ" },
@@ -216,8 +240,9 @@ function requestPayload(reference) {
   return {
     requestId: reference,
     receivedAt: new Date().toISOString(),
-    source: "PrimeX Planner",
+    source: "PrimeX Early Access stand-in",
     status: "new",
+    authorityVersion: commercialAuthorityVersion,
     customer: {
       name: form.name,
       email: form.email,
@@ -227,12 +252,7 @@ function requestPayload(reference) {
     },
     items: selected.map((item) => ({
       productCode: item.code,
-      requestedName: item.name,
-      requestedStrength: item.strength,
-      qty: item.quantity,
-      standardCataloguePrice: item.price,
-      priceMode: "fixed",
-      publicSafeNotes: item.contents || ""
+      qty: item.quantity
     })),
     requestNotes: form.notes,
     publicSafeNotes: `Fulfilment preference: ${form.delivery}`
@@ -338,4 +358,7 @@ $("#emailRequest").addEventListener("click", emailRequest);
 $("#requestForm").addEventListener("input", resetRequestResult);
 $("#requestForm").addEventListener("change", resetRequestResult);
 
-renderAll();
+loadCommercialAuthority().then(renderAll).catch((error) => {
+  console.error(error);
+  showCommercialAuthorityFailure();
+});

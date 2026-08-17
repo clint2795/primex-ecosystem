@@ -1,184 +1,237 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// PrimeX Commercial Authority & Price Integrity intake.
+// New public requests contain productCode + qty only.
+// Every commercial field stored below is resolved server-side from the current authority.
 
-// Required Edge Function secrets:
-// - PRIME_SUPABASE_URL
-// - PRIME_SUPABASE_SERVICE_ROLE_KEY
-// Optional:
-// - REQUEST_INTAKE_ALLOWED_ORIGINS: comma-separated origins, defaults to *
+import {
+  HttpError,
+  canonicalItems,
+  canonicalRequestRef,
+  cleanText,
+  clientSelections,
+} from "./commercial-contract.mjs";
 
-const MAX_BODY_BYTES = 100_000;
-const MAX_ITEMS = 50;
-const MAX_ITEM_QTY = 99;
-const REQUEST_PRODUCT_CODES = new Set([
-  "RTA20", "BPC10", "TB50010", "KPV10", "TA110", "NAD500", "AMINO1MQ50",
-  "DSIP5", "GHKCU50", "GHKCU100", "CAGRI5", "TESA10", "MT2_10", "EPI10",
-  "MOTSC40", "SS31_30", "SEMAX_AUDIT", "SELANK_AUDIT", "SERMORELIN_AUDIT",
-  "SET-WOLV10", "SET-GLOW70", "SET-KLOW80",
-]);
-const LEGACY_PRODUCT_CODES = new Set(["AMINO50", "RTA20_OBSERVATION", "MANUAL", "MANUAL_REVIEW"]);
-const REQUEST_STRUCTURE_CODES = new Set([
-  "STRUCT_METABOLIC_REGULATION",
-  "STRUCT_TISSUE_REPAIR_RECOVERY",
-  "STRUCT_INFLAMMATION_GUT_INTEGRITY",
-  "STRUCT_IMMUNE_MODULATION",
-]);
+const MAX_BODY_BYTES = 50_000;
 
 type IntakeRequest = {
-  requestId?: string;
-  receivedAt?: string;
-  source?: string;
-  status?: string;
+  requestId?: unknown;
+  authorityVersion?: unknown;
   customer?: {
-    name?: string;
-    email?: string;
-    whatsapp?: string;
-    contact?: string;
-    preferredContact?: string;
+    name?: unknown;
+    email?: unknown;
+    whatsapp?: unknown;
+    contact?: unknown;
+    preferredContact?: unknown;
   };
   items?: unknown[];
-  requestNotes?: string;
-  publicSafeNotes?: string;
+  requestNotes?: unknown;
+  publicSafeNotes?: unknown;
 };
 
-function allowedOrigin(req: Request): string {
-  const origin = req.headers.get("origin") || "";
-  const configured = (Deno.env.get("REQUEST_INTAKE_ALLOWED_ORIGINS") || "").trim();
-  if (!configured) return "*";
-  const origins = configured.split(",").map((x) => x.trim()).filter(Boolean);
-  return origins.includes(origin) ? origin : origins[0] || "*";
+type AuthorityProduct = {
+  authority_version: string;
+  product_code: string;
+  display_name: string;
+  strength: string;
+  supply_format: string;
+  product_kind: "single_vial" | "research_set";
+  public_price: number | string;
+  price_mode: "fixed";
+  active_for_new_request: boolean;
+  components: Array<{ productCode: string; quantity: number }>;
+};
+
+function configuredOrigins(): string[] {
+  return cleanText(Deno.env.get("REQUEST_INTAKE_ALLOWED_ORIGINS"), 2000)
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 }
 
-function corsHeaders(req: Request): HeadersInit {
+function responseOrigin(request: Request): string {
+  const origin = request.headers.get("origin") || "";
+  const configured = configuredOrigins();
+  if (!configured.length) return "*";
+  return configured.includes(origin) ? origin : "";
+}
+
+function corsHeaders(request: Request): HeadersInit {
+  const origin = responseOrigin(request);
   return {
-    "Access-Control-Allow-Origin": allowedOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    ...(origin ? { "Access-Control-Allow-Origin": origin } : {}),
+    "Access-Control-Allow-Headers": "content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Content-Type": "application/json",
+    "Vary": "Origin",
   };
 }
 
-function json(req: Request, status: number, body: Record<string, unknown>): Response {
-  return new Response(JSON.stringify(body), { status, headers: corsHeaders(req) });
+function json(request: Request, status: number, body: Record<string, unknown>): Response {
+  return new Response(JSON.stringify(body), { status, headers: corsHeaders(request) });
 }
 
-function cleanText(value: unknown): string {
-  return String(value || "").trim();
-}
-
-function fallbackRequestRef(): string {
-  const d = new Date();
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `PXREQ-${d.getUTCFullYear()}${pad(d.getUTCMonth() + 1)}${pad(d.getUTCDate())}-${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+function requireAllowedOrigin(request: Request): void {
+  if (configuredOrigins().length && !responseOrigin(request)) {
+    throw new HttpError(403, "Request origin is not allowed");
+  }
 }
 
 function unwrapRequest(body: unknown): IntakeRequest {
-  if (!body || typeof body !== "object") throw new Error("Request body must be an object.");
-  const obj = body as Record<string, unknown>;
-  const wrapped = obj.request && typeof obj.request === "object" ? obj.request : obj;
+  if (!body || typeof body !== "object" || Array.isArray(body)) throw new HttpError(400, "Request body must be an object");
+  const object = body as Record<string, unknown>;
+  const wrapped = object.request && typeof object.request === "object" && !Array.isArray(object.request)
+    ? object.request
+    : object;
   return wrapped as IntakeRequest;
 }
 
-function contactPresent(req: IntakeRequest): boolean {
-  const c = req.customer || {};
-  return !!(cleanText(c.email) || cleanText(c.whatsapp) || cleanText(c.contact));
+function sanitisedCustomer(intake: IntakeRequest) {
+  const customer = intake.customer || {};
+  const result = {
+    name: cleanText(customer.name, 160),
+    email: cleanText(customer.email, 254),
+    whatsapp: cleanText(customer.whatsapp, 80),
+    contact: cleanText(customer.contact, 254),
+    preferredContact: cleanText(customer.preferredContact, 80),
+  };
+  if (!result.email && !result.whatsapp && !result.contact) throw new HttpError(400, "Email or WhatsApp/contact is required");
+  return result;
 }
 
-function requestNote(req: IntakeRequest): string {
-  return [req.requestNotes, req.publicSafeNotes].map(cleanText).filter(Boolean).join("\n");
+function databaseHeaders(serviceRoleKey: string): HeadersInit {
+  return {
+    "Content-Type": "application/json",
+    "apikey": serviceRoleKey,
+    "Authorization": `Bearer ${serviceRoleKey}`,
+  };
 }
 
-function legacyPlannerCode(code: string): boolean {
-  return /^(RTA20|BPC10|TB50010|KPV10|TA110|NAD500|AMINO1MQ50|AMINO50|FOUNDATION)_[A-Z0-9_]+$/.test(code);
-}
-
-function validateItems(items: unknown[]): string | null {
-  for (let i = 0; i < items.length; i += 1) {
-    const item = items[i];
-    if (!item || typeof item !== "object" || Array.isArray(item)) return `Item ${i + 1} must be an object`;
-    const row = item as Record<string, unknown>;
-    const code = cleanText(row.productCode || row.code || row.structureCode).toUpperCase();
-    if (!code) return `Item ${i + 1} productCode is required`;
-    const allowed = REQUEST_PRODUCT_CODES.has(code) || LEGACY_PRODUCT_CODES.has(code) || REQUEST_STRUCTURE_CODES.has(code) || legacyPlannerCode(code);
-    if (!allowed) return `Item ${i + 1} has an unsupported productCode`;
-    const rawQty = row.qty ?? row.quantity ?? 1;
-    const qty = Number(rawQty);
-    if (!Number.isInteger(qty) || qty < 1 || qty > MAX_ITEM_QTY) return `Item ${i + 1} quantity must be an integer from 1 to ${MAX_ITEM_QTY}`;
+async function databaseJson<T>(
+  projectUrl: string,
+  serviceRoleKey: string,
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const response = await fetch(`${projectUrl}/rest/v1/${path}`, {
+    ...init,
+    headers: {
+      ...databaseHeaders(serviceRoleKey),
+      ...(init.headers || {}),
+    },
+  });
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    console.error("PrimeX database request failed", response.status, body);
+    throw new HttpError(500, "Request service is temporarily unavailable");
   }
-  return null;
+  return body as T;
+}
+
+async function currentAuthorityVersion(projectUrl: string, serviceRoleKey: string): Promise<string> {
+  const rows = await databaseJson<Array<{ authority_version: string }>>(
+    projectUrl,
+    serviceRoleKey,
+    "commercial_authority_versions?select=authority_version&is_current=eq.true&limit=2",
+  );
+  if (rows.length !== 1 || !rows[0].authority_version) throw new HttpError(503, "Current product authority is unavailable");
+  return rows[0].authority_version;
+}
+
+async function authorityProducts(
+  projectUrl: string,
+  serviceRoleKey: string,
+  authorityVersion: string,
+  selections: Array<{ productCode: string; qty: number }>,
+): Promise<Map<string, AuthorityProduct>> {
+  const codes = selections.map(({ productCode }) => productCode).join(",");
+  const path = [
+    "commercial_product_authority",
+    "?select=authority_version,product_code,display_name,strength,supply_format,product_kind,public_price,price_mode,active_for_new_request,components",
+    `&authority_version=eq.${encodeURIComponent(authorityVersion)}`,
+    "&active_for_new_request=eq.true",
+    `&product_code=in.(${codes})`,
+  ].join("");
+  const rows = await databaseJson<AuthorityProduct[]>(projectUrl, serviceRoleKey, path);
+  return new Map(rows.map((product) => [product.product_code, product]));
 }
 
 Deno.serve(async (request) => {
-  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(request) });
+  if (request.method === "OPTIONS") {
+    try {
+      requireAllowedOrigin(request);
+      return new Response(null, { status: 204, headers: corsHeaders(request) });
+    } catch (error) {
+      const status = error instanceof HttpError ? error.status : 403;
+      return json(request, status, { ok: false, error: "Request origin is not allowed" });
+    }
+  }
   if (request.method !== "POST") return json(request, 405, { ok: false, error: "POST required" });
 
-  const url = cleanText(Deno.env.get("PRIME_SUPABASE_URL"));
-  const serviceRoleKey = cleanText(Deno.env.get("PRIME_SUPABASE_SERVICE_ROLE_KEY"));
-  if (!url || !serviceRoleKey) return json(request, 500, { ok: false, error: "Request intake is not configured" });
-
   try {
+    requireAllowedOrigin(request);
+    const projectUrl = cleanText(Deno.env.get("PRIME_SUPABASE_URL"), 500);
+    const serviceRoleKey = cleanText(Deno.env.get("PRIME_SUPABASE_SERVICE_ROLE_KEY"), 1000);
+    if (!projectUrl || !serviceRoleKey) throw new HttpError(500, "Request intake is not configured");
+
     const raw = await request.text();
-    if (!raw) return json(request, 400, { ok: false, error: "Request body is empty" });
-    if (new TextEncoder().encode(raw).length > MAX_BODY_BYTES) return json(request, 413, { ok: false, error: "Request body too large" });
+    if (!raw) throw new HttpError(400, "Request body is empty");
+    if (new TextEncoder().encode(raw).length > MAX_BODY_BYTES) throw new HttpError(413, "Request body too large");
 
-    const body = JSON.parse(raw);
-    const intake = unwrapRequest(body);
-    const requestRef = cleanText(intake.requestId) || fallbackRequestRef();
-    const items = Array.isArray(intake.items) ? intake.items : null;
-
-    if (!requestRef) return json(request, 400, { ok: false, error: "requestId is required" });
-    if (!contactPresent(intake)) return json(request, 400, { ok: false, error: "Email or WhatsApp/contact is required" });
-    if (!items || !items.length) return json(request, 400, { ok: false, error: "No request items supplied" });
-    if (items.length > MAX_ITEMS) return json(request, 400, { ok: false, error: `Maximum ${MAX_ITEMS} items allowed` });
-    const itemError = validateItems(items);
-    if (itemError) return json(request, 400, { ok: false, error: itemError });
-
-    const supabase = createClient(url, serviceRoleKey, {
-      global: {
-        headers: {
-          apikey: serviceRoleKey,
-          Authorization: `Bearer ${serviceRoleKey}`,
-        },
-      },
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
-
-    const existing = await supabase
-      .from("quote_requests")
-      .select("id")
-      .eq("request_ref", requestRef)
-      .maybeSingle();
-
-    if (existing.error) throw new Error(`Request lookup failed: ${existing.error.message}`);
-    if (existing.data?.id) {
-      return json(request, 200, { ok: true, request_ref: requestRef, created: false, duplicate: true });
+    const intake = unwrapRequest(JSON.parse(raw));
+    const requestRef = canonicalRequestRef(intake.requestId);
+    const customer = sanitisedCustomer(intake);
+    const selections = clientSelections(Array.isArray(intake.items) ? intake.items : []);
+    const authorityVersion = await currentAuthorityVersion(projectUrl, serviceRoleKey);
+    const submittedVersion = cleanText(intake.authorityVersion, 100);
+    if (!submittedVersion || submittedVersion !== authorityVersion) {
+      throw new HttpError(409, "Product information has changed. Refresh the PrimeX page and rebuild the request.");
     }
 
-    const payload = {
-      customer_id: null,
-      request_ref: requestRef,
-      request_status: "new",
-      request_source: "Request Hub",
-      requested_items: items,
-      request_note: requestNote(intake),
-      payload: intake,
-      created_by: null,
+    const products = await authorityProducts(projectUrl, serviceRoleKey, authorityVersion, selections);
+    const items = canonicalItems(selections, products, authorityVersion);
+    const existing = await databaseJson<Array<{ id: string }>>(
+      projectUrl,
+      serviceRoleKey,
+      `quote_requests?select=id&request_ref=eq.${encodeURIComponent(requestRef)}&limit=2`,
+    );
+    if (existing.length) return json(request, 200, { ok: true, request_ref: requestRef, authority_version: authorityVersion, created: false, duplicate: true });
+
+    const receivedAt = new Date().toISOString();
+    const sanitisedRequest = {
+      requestId: requestRef,
+      receivedAt,
+      source: "PrimeX Early Access stand-in",
+      status: "new",
+      authorityVersion,
+      customer,
+      items,
+      requestNotes: cleanText(intake.requestNotes, 4000),
+      publicSafeNotes: cleanText(intake.publicSafeNotes, 1000),
     };
-
-    const inserted = await supabase
-      .from("quote_requests")
-      .insert(payload)
-      .select("id")
-      .single();
-
-    if (inserted.error) {
-      if (inserted.error.code === "23505" || /duplicate|unique/i.test(inserted.error.message || "")) {
-        return json(request, 200, { ok: true, request_ref: requestRef, created: false, duplicate: true });
-      }
-      throw new Error(`Request insert failed: ${inserted.error.message}`);
-    }
-    return json(request, 200, { ok: true, request_ref: requestRef, created: true, duplicate: false });
+    const rows = await databaseJson<Array<{ id: string }>>(
+      projectUrl,
+      serviceRoleKey,
+      "quote_requests?select=id",
+      {
+        method: "POST",
+        headers: { Prefer: "return=representation" },
+        body: JSON.stringify({
+          customer_id: null,
+          request_ref: requestRef,
+          request_status: "new",
+          request_source: "PrimeX Early Access stand-in",
+          requested_items: items,
+          request_note: [sanitisedRequest.requestNotes, sanitisedRequest.publicSafeNotes].filter(Boolean).join("\n"),
+          payload: sanitisedRequest,
+          created_by: null,
+        }),
+      },
+    );
+    if (!rows[0]?.id) throw new HttpError(500, "Request could not be saved");
+    return json(request, 201, { ok: true, request_ref: requestRef, authority_version: authorityVersion, created: true, duplicate: false });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Request intake failed";
-    return json(request, 400, { ok: false, error: message });
+    if (!(error instanceof HttpError)) console.error("PrimeX request intake failed", error);
+    const status = error instanceof HttpError ? error.status : 400;
+    const message = error instanceof HttpError ? error.message : "Request could not be processed";
+    return json(request, status, { ok: false, error: message });
   }
 });
