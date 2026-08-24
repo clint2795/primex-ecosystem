@@ -1,5 +1,27 @@
 # PrimeX Finance HQ Build Control Log
 
+## PX-ROUTE-R5 — Finance Reliability (PROTECTED OWNER REVIEW)
+
+- Date: 2026-08-24.
+- Purpose: make quote and order processing dependable while the accepted Early Access page remains on its emergency email-only route.
+- Accepted remote checkpoint: `1a75491964ce326bf57dcdde129d9aab2caf2d3b`; equivalent protected local source: `3d0ac53`.
+- Quotes with uncertain stock or dispatch timing require a future customer-update deadline. Due-soon and overdue commitments appear on Start.
+- Customer availability messages state the promised next-update deadline and cannot be generated without one.
+- New quotes and orders require an explicit postage decision. A charged decision requires a positive postage amount; a no-charge decision requires £0.
+- Existing saved records derive their earlier postage decision from the saved amount so accepted historical work is not stranded.
+- Quotes and workflow changes remain saved on the operator device if the online backup fails. The failure is surfaced as `Retry online backup` rather than blocking the operator path.
+- Customer deadlines outrank routine online-backup warnings within the same severity.
+- Record-dependent quote, confirmation and fulfilment actions wait for the requested record to finish loading before acting.
+- Workflow quick actions now attempt the same online backup after the local save, preventing silent device-only status changes.
+- The stale direct cloud-submission Planner changes from the earlier audit were not carried into this review. The accepted public email-only route is unchanged.
+- Commercial pricing, product authority, strengths, stock quantities, protocol calculations, database schema, RLS and the permanent website remain unchanged.
+- Supabase review: current changelog/docs checked; no database, policy, table, function or Edge Function change is included.
+- Focused checks: Finance JavaScript parsing, workflow-reliability regression, commercial authority, message direction, email-only handoff and diff formatting.
+- Review publication: `3c850165968f0c7098d16cb7590a18096dd631aa` adds only `finance-reliability-review/index.html`; live `/finance/` and the public Planner remain unchanged.
+- Live verification: `https://portal.primexbiolabs.co.uk/finance-reliability-review/` serves `PX-ROUTE-R5 JS OK`, loads the shared Finance configuration and contains the explicit postage and customer-update controls.
+- Rollback: remove the isolated `finance-reliability-review/` route and retain remote `1a75491964ce326bf57dcdde129d9aab2caf2d3b` for live Finance behaviour.
+- Status: published for protected owner review. No live Finance replacement or database write performed.
+
 ## v44E3E Workflow Usability Layout
 - Date: 2026-07-02
 - Scope: Workflow/Start presentation and routing only.
