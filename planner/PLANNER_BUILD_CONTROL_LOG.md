@@ -14,7 +14,9 @@
 - Rollback point: `553a4438fb6dbc5cfa6f914f81bf320c0457bfa0`.
 - Focused verification: **PASS** — JavaScript syntax, approved inbox, one-action presentation, delayed fallback, pre-send explanation, post-open warning, clean and complete inbound request fields, outbound Finance message footer coverage, absence of the cloud endpoint/function, changed-file scope and diff formatting.
 - Existing broad-verifier blocker: `scripts/verify-commercial-authority.mjs` cannot complete at this accepted checkpoint because its referenced `supabase/cutover/20260817_commercial_authority_v2_price_integrity.sql` file is absent. This emergency change did not delete or alter that missing dependency.
-- Publication status: protected local review only. No commit, push or deployment performed.
+- Publication: release commit `f0ee2191ad4c1ccdb5c821438541dbaabb8e63ad` was fast-forwarded to `main` after owner approval.
+- Live verification: `https://portal.primexbiolabs.co.uk/planner/` serves the approved email guidance, one visible `Email request` action and the initially hidden fallback. The deployed source contains the `mailto:` handoff, excludes the cloud intake endpoint and excludes customer-facing footer wording from the inbound request body.
+- Environment limit: the cloud verification browser blocks external `mailto:` navigation, so launching the device email application was not re-proven there; the customer path up to that operating-system boundary passed.
 
 ## PX-ROUTE-R3 — Planner-to-Finance Intake Repair (LOCAL OWNER REVIEW)
 
