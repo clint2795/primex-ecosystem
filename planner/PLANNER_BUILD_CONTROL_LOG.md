@@ -1,5 +1,21 @@
 # PrimeX Planner Build Control Log
 
+## PX-EMAIL-E1 — Emergency Email-Only Request Handoff (PROTECTED OWNER REVIEW)
+
+- Date: 2026-08-24.
+- Purpose: temporarily route every completed Early Access request through the established PrimeX order inbox while the shared Finance intake is audited and repaired.
+- Customer action: `Email request` opens a completed draft addressed to `orders@primexbiolabs.co.uk`, containing the selected products, quantities, indicative total, contact details, notes and stable request reference.
+- Truthful handoff: the page now states before and after the action that opening the draft does not submit the request; the customer must press Send in their email app.
+- Backup action: the normal form now shows only `Email request`. `Email didn’t open? Copy request instead` appears only after the email action is used and directs the customer to the same PrimeX inbox.
+- Message-direction correction: the inbound customer-to-PrimeX email now contains only the request reference, contact details, fulfilment preference, selected products, quantities, indicative total and notes. Customer-facing RUO and fulfilment footer wording remains on the public page but has been removed from the inbound email body.
+- Cloud isolation: the Planner no longer calls the Supabase `submit-request` endpoint and cannot create a Finance request record.
+- Exact repository scope: `planner/app.js`, `planner/index.html`, `planner/styles.css`, `scripts/verify-commercial-authority.mjs`, `scripts/verify-email-only-handoff.mjs`, `scripts/verify-message-direction.mjs` and this control-log entry only.
+- Locked and unchanged: product authority, prices, products, sets, quantities, public RUO treatment, Finance HQ code and customer templates, Supabase functions, database schema and every other route.
+- Rollback point: `553a4438fb6dbc5cfa6f914f81bf320c0457bfa0`.
+- Focused verification: **PASS** — JavaScript syntax, approved inbox, one-action presentation, delayed fallback, pre-send explanation, post-open warning, clean and complete inbound request fields, outbound Finance message footer coverage, absence of the cloud endpoint/function, changed-file scope and diff formatting.
+- Existing broad-verifier blocker: `scripts/verify-commercial-authority.mjs` cannot complete at this accepted checkpoint because its referenced `supabase/cutover/20260817_commercial_authority_v2_price_integrity.sql` file is absent. This emergency change did not delete or alter that missing dependency.
+- Publication status: protected local review only. No commit, push or deployment performed.
+
 ## PX-ROUTE-R3 — Planner-to-Finance Intake Repair (LOCAL OWNER REVIEW)
 
 - Date: 2026-08-16.

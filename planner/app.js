@@ -1,13 +1,11 @@
 "use strict";
 
 const EMAIL = "orders@primexbiolabs.co.uk";
-const REQUEST_INTAKE_URL = "https://lamibbavnjwaoiwpqpxj.supabase.co/functions/v1/submit-request";
 const COMMERCIAL_AUTHORITY_URL = "../data/primex-product-library.json";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const WHATSAPP_PATTERN = /^\+?[0-9()\s-]{7,20}$/;
 
 const DATA = { featured: [], beyond: [], sets: [], wider: [] };
-let commercialAuthorityVersion = "unloaded";
 
 function validateCommercialAuthority(authority) {
   const products = Array.isArray(authority?.products) ? authority.products : [];
@@ -44,7 +42,6 @@ async function loadCommercialAuthority() {
     if (!Object.prototype.hasOwnProperty.call(DATA, product.catalogSection)) throw new Error(`Unsupported catalogue section for ${product.productCode}`);
     DATA[product.catalogSection].push(authorityProductForDisplay(product));
   });
-  commercialAuthorityVersion = authority.metadata.authorityVersion;
 }
 
 function showCommercialAuthorityFailure() {
@@ -131,6 +128,7 @@ function resetRequestResult() {
   status.hidden = true;
   status.textContent = "";
   status.className = "form-status";
+  $("#copyRequest").hidden = true;
 }
 
 function renderFeatured() {
@@ -232,42 +230,7 @@ function requestText(reference) {
     return item.contents ? `${base}\n  ${item.contents}` : base;
   }).join("\n");
 
-  return `PRIMEX RESEARCH REQUEST\nReference: ${reference}\n\nName: ${form.name}\nPreferred reply: ${form.method}\nEmail: ${form.email || "Not provided"}\nWhatsApp: ${form.whatsapp || "Not provided"}\nFulfilment preference: ${form.delivery}\n\nRequested products:\n${itemLines}\n\nIndicative total: £${total()}\n\nNotes / questions:\n${form.notes || "None"}\n\nResearch Use Only. Not for human or veterinary use.\nAvailability, fulfilment and next steps are confirmed separately.`;
-}
-
-function requestPayload(reference) {
-  const form = formValues();
-  return {
-    requestId: reference,
-    receivedAt: new Date().toISOString(),
-    source: "PrimeX Early Access stand-in",
-    status: "new",
-    authorityVersion: commercialAuthorityVersion,
-    customer: {
-      name: form.name,
-      email: form.email,
-      whatsapp: form.whatsapp,
-      contact: form.whatsapp || form.email,
-      preferredContact: form.method
-    },
-    items: selected.map((item) => ({
-      productCode: item.code,
-      qty: item.quantity
-    })),
-    requestNotes: form.notes,
-    publicSafeNotes: `Fulfilment preference: ${form.delivery}`
-  };
-}
-
-async function submitCloudRequest(reference) {
-  const response = await fetch(REQUEST_INTAKE_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(requestPayload(reference))
-  });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || !result.ok) throw new Error(result.error || "Request intake unavailable");
-  return result;
+  return `PRIMEX RESEARCH REQUEST\nReference: ${reference}\n\nName: ${form.name}\nPreferred reply: ${form.method}\nEmail: ${form.email || "Not provided"}\nWhatsApp: ${form.whatsapp || "Not provided"}\nFulfilment preference: ${form.delivery}\n\nRequested products:\n${itemLines}\n\nIndicative total: £${total()}\n\nNotes / questions:\n${form.notes || "None"}`;
 }
 
 function showStatus(message, isError = false) {
@@ -301,26 +264,22 @@ async function copyRequest() {
   const reference = getRequestReference();
   try {
     await writeClipboard(requestText(reference));
-    showStatus(`Request copied. Reference: ${reference}. Paste it into WhatsApp or email to send it to PrimeX.`);
+    showStatus(`Request copied. Reference: ${reference}. Paste it into an email to ${EMAIL} and press Send.`);
   } catch {
     showStatus("Copy was unavailable in this browser. Use the email request option instead.", true);
   }
 }
 
-async function emailRequest() {
+function emailRequest() {
   const error = validate();
   if (error) return showStatus(error, true);
   const reference = getRequestReference();
   const form = formValues();
   const subject = encodeURIComponent(`PrimeX research request — ${form.name}`);
   const body = encodeURIComponent(requestText(reference));
-  try {
-    await submitCloudRequest(reference);
-  } catch {
-    // The existing email handoff remains the operational fallback.
-  }
+  $("#copyRequest").hidden = false;
   window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
-  showStatus(`Your completed request is ready in your email app. Reference: ${reference}. Send it when you’re ready.`);
+  showStatus(`Your email draft should now be open. PrimeX has not received your request until you press Send. Reference: ${reference}.`);
 }
 
 document.addEventListener("click", (event) => {

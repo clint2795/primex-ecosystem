@@ -8,6 +8,7 @@ import { canonicalItems, clientSelections } from "../supabase/functions/submit-r
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const authority = JSON.parse(read("data/primex-product-library.json"));
+const plannerHtml = read("planner/index.html");
 const planner = read("planner/app.js");
 const requestRoute = read("order-request/index.html");
 const edge = read("supabase/functions/submit-request/index.ts");
@@ -55,11 +56,17 @@ assert.deepEqual(set("SET-GLOW70").components.map((row) => row.productCode), ["G
 assert(!set("SET-KLOW80").components.some((row) => row.productCode === "BPC40"));
 
 assert(planner.includes('const COMMERCIAL_AUTHORITY_URL = "../data/primex-product-library.json"'));
-assert(planner.includes("authorityVersion: commercialAuthorityVersion"));
-const submittedItems = planner.match(/items:\s*selected\.map\(\(item\) => \(\{([\s\S]*?)\}\)\),\s*requestNotes:/)?.[1] || "";
-assert(submittedItems.includes("productCode: item.code"));
-assert(submittedItems.includes("qty: item.quantity"));
-for (const forbidden of ["price", "name", "strength", "contents", "components"]) assert(!submittedItems.includes(forbidden), `Planner submits forbidden ${forbidden}`);
+assert(planner.includes('const EMAIL = "orders@primexbiolabs.co.uk"'));
+assert(planner.includes("window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`"));
+assert(planner.includes("PrimeX has not received your request until you press Send"));
+assert(planner.includes("Name: ${form.name}"));
+assert(planner.includes("Requested products:\\n${itemLines}"));
+assert(planner.includes("Indicative total: £${total()}"));
+assert(plannerHtml.includes('id="emailRequest"'));
+assert(plannerHtml.includes('id="copyRequest" class="fallback-action" type="button" hidden'));
+assert(plannerHtml.includes("Your email app will open with the details ready — press Send to submit it."));
+assert(!planner.includes("REQUEST_INTAKE_URL"), "Emergency Planner must not contain the cloud intake endpoint");
+assert(!planner.includes("submitCloudRequest"), "Emergency Planner must not submit requests to the cloud intake");
 
 assert(requestRoute.includes('window.location.replace("../planner/")'));
 assert(!/BPC-157|KPV 10mg|£\d|STRUCT_/.test(requestRoute), "Retired Request Hub still exposes commercial content");
