@@ -23,7 +23,7 @@ assert.equal((confirmation.match(/Research Use Only\. Not for human or animal us
 
 assert(finance.includes("function customerMessageFooter(){return 'Research Use Only. Not for human or animal use. Not a medicine.'}"), "Shared outbound customer footer is missing");
 assert(finance.includes("function generateFulfilment(type)"), "Fulfilment message generator is missing");
-assert(finance.includes("+'\\n\\n'+customerMessageFooter();writeCustomerUpdate(msg,'Fresh "+"'"+"+selected+"+"'"+" message generated - send, then mark sent')"), "Fulfilment messages do not use the approved outbound footer");
+assert(/\+'\\n\\n'\+customerMessageFooter\(\);writeCustomerUpdate\(msg,'Fresh '\+selected\+' message generated - send, then mark sent',selected\)/.test(finance), "Fulfilment messages do not use the approved outbound footer");
 assert(finance.includes("function generatePaymentRequest()"), "Payment request generator is missing");
 assert(finance.includes("Your order will move forward once payment arrangements are confirmed.\\n\\n'+customerMessageFooter()"), "Payment request does not use the approved outbound footer");
 
