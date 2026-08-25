@@ -1,5 +1,24 @@
 # PrimeX Finance HQ Build Control Log
 
+## PX-ROUTE-R5B — Email Quote Workflow (PROTECTED OWNER REVIEW)
+
+- Date: 2026-08-25.
+- Purpose: make the accepted email-only Early Access intake process usable from customer email through quote preparation and deliberate sending.
+- Start now separates `Quote from email` from `Direct order`; email intake starts as `Quote / enquiry`, source `Early Access email`, next action `Quote to send`.
+- Adds a customer email field and preserves it through local save, shared payload backup, reopen, request conversion and quote-to-live conversion.
+- Quote/order duplicate identity can use customer email when no structured request identity exists.
+- Generated quote messages now expose deliberate `Open email`, `Open WhatsApp` and `Copy` routes according to the stored contact details.
+- `Send quote` prepares the message and sending choices but does not launch a channel or mark the message sent automatically.
+- Email handoff pre-fills the customer address, quote/order reference subject and the approved generated message body. The operator must review and send it in the device email app.
+- Existing records without an email remain readable; WhatsApp and Copy remain available.
+- No message was sent during implementation or verification. No pricing, stock, protocol, database schema, RLS, Early Access page or live Finance change is included.
+- Verification: JavaScript parsing, email intake defaults, email persistence, encoded email handoff, non-automatic sending, shared archive controls, commercial authority, message direction, email-only handoff and diff formatting passed.
+- Rollback: republish protected review commit `42c3eaef34b428e3632dedf2234b5b922e4c2e9b`.
+- Review publication: `ac6b09e03e6079dc12685e02253c9aca2eb27f2d` updated only `finance-reliability-review/index.html`.
+- Live verification: the protected route serves `PX-ROUTE-R5B JS OK`; `Quote from email` opens an Email quote with `Quote / enquiry`, `Early Access email` and `Quote to send` selected, with customer email visible before Phone/WhatsApp.
+- Environment limit: the cloud browser cannot prove the device email application boundary without launching a real `mailto:` handoff; static verification confirms the address, subject and body are encoded and no send/mark-sent action is automatic.
+- Status: published for protected owner review; live `/finance/` remains unchanged.
+
 ## PX-ROUTE-R5A — Shared Request Archive (PROTECTED OWNER REVIEW)
 
 - Date: 2026-08-25.
