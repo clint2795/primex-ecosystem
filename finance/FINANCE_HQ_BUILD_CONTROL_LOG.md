@@ -14,11 +14,14 @@
 - Availability modes `Available now`, `Part ready`, `Incoming stock` and custom wording require an explicit expected-dispatch entry before approval. Unconfirmed timing continues to require a future dated update.
 - Regression coverage: `scripts/verify-finance-message-authority.mjs` blocks the retired wording, missing authority metadata, copy/open/mark-sent bypasses and quote-message carry-over. Workflow, commercial-authority, message-direction and email-only checks remain in the suite.
 - Verification passed: Finance JavaScript parsing; message-authority regression; workflow reliability; commercial authority; message direction; emergency email-only handoff; diff formatting.
-- Environment limit: no local browser binary is available in this workspace, so rendered desktop/mobile interaction remains for owner review on the protected route after publication is separately authorised.
+- Environment limit: no local browser binary is available in this workspace, so full rendered desktop/mobile interaction remains for owner review on the protected route.
 - Files in this work unit: `finance/index.html`, `scripts/verify-finance-message-authority.mjs`, `scripts/verify-finance-workflow-reliability.mjs`, `scripts/verify-message-direction.mjs`, this control log.
-- No customer message was sent, no database record was changed, and no commit, push, publication or live Finance change was made.
+- No customer message was sent, no database record was changed and live Finance was not changed.
 - Accepted rollback remains protected review publication `ac6b09e03e6079dc12685e02253c9aca2eb27f2d`; live `/finance/` remains unchanged.
-- Status: local protected review ready. R5D stock/deadline truth and R5E app-wide mobile readability remain queued and were not started.
+- Local source commit: `6034646`; protected branch publication head: `470a5f97ccd9650280eae799ea59d953eb91e92f`.
+- Review publication: `a321fb4808a33d20fc19af45db23a4d820e15bed` updated only `finance-reliability-review/index.html`; publication record: `4d6062c90b39ecb2bb033a9332a5c3f6f3dcef7c`.
+- Live verification: the protected route serves `PX-ROUTE-R5C JS OK`; live `/finance/` continues to serve `v45G JS OK`.
+- Status: published for protected owner review. R5D stock/deadline truth and R5E app-wide mobile readability remain queued and were not started.
 
 ## PX-ROUTE-R5B — Email Quote Workflow (PROTECTED OWNER REVIEW)
 
