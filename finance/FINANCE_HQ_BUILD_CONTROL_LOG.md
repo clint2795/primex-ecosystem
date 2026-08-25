@@ -1,5 +1,25 @@
 # PrimeX Finance HQ Build Control Log
 
+## PX-ROUTE-R5C — Customer Message Authority (LOCAL PROTECTED REVIEW)
+
+- Date: 2026-08-25.
+- Purpose: stop incomplete, legacy or mismatched customer messages being copied, opened or marked sent, and make the first quote carry the information already known at quote time.
+- Destination controls: Finance screen remains internal operator-only; generated quote/order/update bodies remain outbound customer copy; email and WhatsApp actions remain deliberate handoffs and never send automatically.
+- Adds message template authority `PX-MSG-R5C-1`. Every newly generated confirmation or fulfilment message stores its type, template version and a dependency fingerprint covering the customer, contact route, reference, line items, prices, total and the operational facts used by that message.
+- Changing a relevant order or quote fact invalidates the saved message. Old records without current authority metadata and generated rows pointing at another message type show `Regenerate required`.
+- Stale messages cannot be copied, opened in email/WhatsApp, marked sent, marked already sent or skipped. The only active row action is to generate a fresh message.
+- Quote-to-live conversion clears the quote message and message metadata so a quote body cannot become the live-order confirmation.
+- The first quote now contains itemised lines, product total, postage, total, availability, explicit expected dispatch when known, or a dated next-update promise when dispatch is genuinely unconfirmed, plus one confirmation/change reply instruction.
+- Retires the vague `Availability, fulfilment, payment, and dispatch details are confirmed separately` quote wording and the `Estimated total` label.
+- Availability modes `Available now`, `Part ready`, `Incoming stock` and custom wording require an explicit expected-dispatch entry before approval. Unconfirmed timing continues to require a future dated update.
+- Regression coverage: `scripts/verify-finance-message-authority.mjs` blocks the retired wording, missing authority metadata, copy/open/mark-sent bypasses and quote-message carry-over. Workflow, commercial-authority, message-direction and email-only checks remain in the suite.
+- Verification passed: Finance JavaScript parsing; message-authority regression; workflow reliability; commercial authority; message direction; emergency email-only handoff; diff formatting.
+- Environment limit: no local browser binary is available in this workspace, so rendered desktop/mobile interaction remains for owner review on the protected route after publication is separately authorised.
+- Files in this work unit: `finance/index.html`, `scripts/verify-finance-message-authority.mjs`, `scripts/verify-finance-workflow-reliability.mjs`, `scripts/verify-message-direction.mjs`, this control log.
+- No customer message was sent, no database record was changed, and no commit, push, publication or live Finance change was made.
+- Accepted rollback remains protected review publication `ac6b09e03e6079dc12685e02253c9aca2eb27f2d`; live `/finance/` remains unchanged.
+- Status: local protected review ready. R5D stock/deadline truth and R5E app-wide mobile readability remain queued and were not started.
+
 ## PX-ROUTE-R5B — Email Quote Workflow (PROTECTED OWNER REVIEW)
 
 - Date: 2026-08-25.
