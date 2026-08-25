@@ -12,7 +12,6 @@ const plannerHtml = read("planner/index.html");
 const planner = read("planner/app.js");
 const requestRoute = read("order-request/index.html");
 const edge = read("supabase/functions/submit-request/index.ts");
-const sql = read("supabase/cutover/20260817_commercial_authority_v2_price_integrity.sql");
 const pricingMigration = read("supabase/migrations/20260817183000_commercial_pricing_review_v45g.sql");
 const finance = read("finance/index.html");
 
@@ -106,8 +105,8 @@ const canonicalKlow = canonicalItems([{ productCode: "SET-KLOW80", qty: 1 }], au
 assert.equal(canonicalKlow.components.length, 4);
 assert.equal(canonicalKlow.authorityVersion, authority.metadata.authorityVersion);
 
-assert.equal((sql.match(/'PX-COMMERCIAL-2026-08-17\.2',\s*'[A-Z0-9_-]+'.*?'fixed',\s*true/g) || []).length, 15);
-for (const retired of ["GHKCU100", "CAGRI5", "STRUCT_TISSUE_REPAIR_RECOVERY"]) assert(!sql.includes(`'${retired}'`));
+assert.equal(products.filter((product) => product.activeForNewRequest).length, 15, "Active public authority count");
+for (const retired of ["GHKCU100", "CAGRI5", "STRUCT_TISSUE_REPAIR_RECOVERY"]) assert(!products.some((product) => product.productCode === retired), `${retired} remains in public authority`);
 assert(pricingMigration.includes("enable row level security"));
 assert(pricingMigration.includes("p.role in ('admin', 'finance')"));
 assert(pricingMigration.includes("revoke all on table public.commercial_price_review_private from anon, authenticated"));
