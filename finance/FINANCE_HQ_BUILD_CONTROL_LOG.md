@@ -16,8 +16,11 @@
 - Environment limit: Playwright is present but its Chromium binary is not installed, so rendered desktop/mobile interaction remains for owner review after an authorised protected publication.
 - Files in this work unit: `finance/index.html`, `scripts/verify-finance-operational-truth.mjs`, three updated route/authority regression scripts, and this control log.
 - No request, quote, order, stock movement, customer message or database record was changed. No customer message was sent.
-- Rollback point: local accepted R5C record commit `bbcda6f`; accepted protected R5C publication remains unchanged.
-- Status: local protected implementation complete; not committed, pushed or published. R5E–R5G remain queued and untouched.
+- Rollback point: protected R5C branch commit `98ad66e3ccf28cc3eda730c023a7b8bd12fe9774`; live `/finance/` remains unchanged.
+- Verified source commit on `review/finance-reliability-r5`: `7cb98e1f97a8b35b96a8434897a6065b431052aa`.
+- Protected-route publication commit on `main`: `802660eb9eb673154794911a4d96e38b5877c902`.
+- Live verification: `/finance-reliability-review/` serves `PX-ROUTE-R5D JS OK`; its SHA-256 is `60046556326315f0d9e84fa642909bcce9c4a4897c6959d795f75967db38dcd6`, exactly matching the verified source file. Live `/finance/` continues to serve `v45G JS OK`.
+- Status: published for protected owner review. R5E–R5G remain queued and untouched.
 
 ## PX-ROUTE-R5C — Customer Message Authority (LOCAL PROTECTED REVIEW)
 
