@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const finance = fs.readFileSync(path.join(root, "finance/index.html"), "utf8");
 
 for (const required of [
-  "PX-ROUTE-R5C JS OK",
+  "PX-ROUTE-R5D JS OK",
   "const CUSTOMER_MESSAGE_TEMPLATE_VERSION='PX-MSG-R5C-1'",
   'id="quoteExpectedDispatch"',
   "Enter the expected dispatch timing for the customer.",

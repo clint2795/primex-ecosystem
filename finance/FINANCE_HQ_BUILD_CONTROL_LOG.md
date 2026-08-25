@@ -1,5 +1,24 @@
 # PrimeX Finance HQ Build Control Log
 
+## PX-ROUTE-R5D — Operational Truth (LOCAL PROTECTED REVIEW)
+
+- Date: 2026-08-25.
+- Purpose: prevent legacy/test records, requested quantities, device-only saves and earlier customer updates from producing a misleading current operational state.
+- Recognised older request items now resolve against the current approved product and public price when a new quote is created. The original submission remains unchanged; genuinely unmapped items alone show as not recognised/currently outside the catalogue.
+- Obvious Finance test requests are excluded from genuine request totals and active work, appear as TEST records in the local Bin view, and expose a deliberate Remove test request action. Shared test records are archived through the existing authenticated shared-status path; local tests are binned locally.
+- Request availability now compares requested quantity with current available quantity and displays requested, available, covered or short amounts. Low remaining stock is kept separate from whether the specific request can be covered.
+- Saved live orders now affect the current device's stock immediately even while their online backup is pending or retrying. Quotes, test records, past orders, binned records and cancelled orders remain non-deducting under their existing rules.
+- Quote approval rejects Available now when stock cannot cover the complete quote, and rejects Part ready when none of the quoted stock is held. Other approved availability modes and dated follow-up requirements remain unchanged.
+- Customer updates are now judged by their specific stage status rather than the old general update flag. A stock-delay update cannot satisfy packed, collection, dispatch or tracking work.
+- Marking a stock-delay update sent records its send time in the saved communication state, closes the used deadline and immediately requires either resolved availability or a new dated customer-update promise.
+- New regression: `scripts/verify-finance-operational-truth.mjs` covers known legacy products, unknown products, test isolation, quantity-aware stock, local stock reservation, availability-mode contradictions, completed stock-delay promises and stage-specific follow-ups.
+- Existing commercial-authority, message-authority, workflow-reliability, message-direction, email-only and JavaScript parsing checks pass. Diff formatting passes.
+- Environment limit: Playwright is present but its Chromium binary is not installed, so rendered desktop/mobile interaction remains for owner review after an authorised protected publication.
+- Files in this work unit: `finance/index.html`, `scripts/verify-finance-operational-truth.mjs`, three updated route/authority regression scripts, and this control log.
+- No request, quote, order, stock movement, customer message or database record was changed. No customer message was sent.
+- Rollback point: local accepted R5C record commit `bbcda6f`; accepted protected R5C publication remains unchanged.
+- Status: local protected implementation complete; not committed, pushed or published. R5E–R5G remain queued and untouched.
+
 ## PX-ROUTE-R5C — Customer Message Authority (LOCAL PROTECTED REVIEW)
 
 - Date: 2026-08-25.

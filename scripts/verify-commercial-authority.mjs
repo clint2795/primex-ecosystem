@@ -150,7 +150,8 @@ assert(finance.includes("applyProtectedCommercialTiers(pricingReviewState.rows)"
 assert(finance.includes("pricingReviewAccessAllowed()"));
 assert(finance.includes("['admin','finance'].includes(p.role)"));
 assert(finance.includes("requestItemAuthorityCurrent(item,req)"));
-assert(finance.includes("Historical/unverified price snapshot - rebuild from approved products"));
+assert(finance.includes("if(p)return {ok:true,label:'Current product / price',pid,legacyKnown:true"));
+assert(finance.includes("Older request - product not recognised"));
 assert(finance.includes("requestStructurePriceClear(item,structureRule)"));
 assert(finance.includes("price=Number(p.standard)"));
 assert(!finance.includes("price=Number(item.standardCataloguePrice);"));
