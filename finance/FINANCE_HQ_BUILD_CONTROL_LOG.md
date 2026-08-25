@@ -1,5 +1,22 @@
 # PrimeX Finance HQ Build Control Log
 
+## PX-ROUTE-R5A — Shared Request Archive (PROTECTED OWNER REVIEW)
+
+- Date: 2026-08-25.
+- Purpose: remove retired/test Early Access submissions from active work consistently for the owner and Jade without deleting customer records.
+- Adds a shared `Archive request` action which updates `quote_requests.request_status` to `closed` only after an authenticated database update succeeds.
+- Adds an `Archived` request view and a shared restore action. Archived requests remain recoverable and are excluded from active Request counts and alerts.
+- Shared closed records are included during refresh solely so they remain visible in Archived; database request status overrides stale payload status.
+- Cross-device reconciliation handles archive and restore changes without allowing an older local status to silently win.
+- The existing local Bin is explicitly labelled device-only and is no longer offered as the cleanup action for cloud-backed requests.
+- No database records were archived, restored, deleted or otherwise changed during implementation or verification.
+- No schema, RLS, commercial pricing, stock, protocol, customer page or live Finance change is included.
+- Verification: JavaScript parsing, shared archive controls, non-deletion guard, cross-device status reconciliation, commercial authority, message direction, email-only handoff and diff formatting passed.
+- Rollback: republish the earlier protected review route from commit `3c850165968f0c7098d16cb7590a18096dd631aa`.
+- Review publication: `42c3eaef34b428e3632dedf2234b5b922e4c2e9b` updated only `finance-reliability-review/index.html`.
+- Live verification: the protected route serves `PX-ROUTE-R5A JS OK`; Requests contains `Archived` and `Local bin`, Archived opens independently, and no database record was changed during verification.
+- Status: published for protected owner review; live `/finance/` remains unchanged.
+
 ## PX-ROUTE-R5 — Finance Reliability (PROTECTED OWNER REVIEW)
 
 - Date: 2026-08-24.
