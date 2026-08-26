@@ -16,7 +16,11 @@
 - Verification passed: JavaScript parse, R5G layout, combined candidate, message authority, operational truth, workflow reliability and diff formatting.
 - Locked and unchanged: commercial values, message bodies, product codes, stock calculations, stored records, protocols, Early Access, permanent website, Supabase schema/functions/RLS and live `/finance/`.
 - Environment limit: local Playwright exists but its browser binary is not installed, and the managed cloud browser blocks localhost. Protected publication is required for desktop/mobile rendered inspection.
-- Status: local candidate verified; protected publication and owner viewport review pending.
+- Published review route: `https://portal.primexbiolabs.co.uk/finance-operator-layout-review/`.
+- Publication commits: initial R5G `4b4256dc88a9430179f529b1bc8d6bc5113a5cd2`; hosted-inspection correction `a47a99f8d3a95602305f27e2efe7ba1a86aa186d` keeps the collapsed receive/adjust control directly above the catalogue.
+- Hosted SHA-256 `a322292cfe572d34b05c278337cf307a29c77ede5346738f4c8415ffcc50873d` exactly matches the corrected local candidate.
+- Hosted desktop Start, Workflow, Requests and Stock were visually inspected after deployment; no covered navigation or missing primary control was found.
+- Status: protected candidate published and desktop inspected; owner phone and Jade-sized phone review pending.
 
 ## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
 
