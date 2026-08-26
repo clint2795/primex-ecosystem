@@ -12,15 +12,18 @@
 - Requests retain every R5E resolution, stock and cleanup action while using tighter, restrained records and readable mobile controls.
 - Stock search, filters and item overview now precede a collapsed Receive or adjust stock tool; item cards and nested setup areas use a denser operator pattern.
 - One final R5G CSS authority sets restrained radii, useful 1180px desktop width, 16px mobile body/field text, 44px mobile controls and fixed-navigation clearance.
+- Owner-phone review exposed one remaining shared breakpoint failure: header controls scattered vertically, action cards compressed their descriptions between a badge and an unstyled browser button, repeated jobs lacked strong boundaries, and heavyweight text obscured hierarchy.
+- The approved mobile hierarchy correction now compacts the header into one operator row, keeps a discreet `R5G` fingerprint, removes the breadcrumb from the phone header, gives Start alerts and Workflow/History records deliberate job boundaries, restores normal body/status weight and gives each mobile job one clear full-width action.
+- The same-pattern sweep covered Start action alerts, Workflow record lists and History records; Requests retain their already distinct R5E card boundaries. No message text, record state or button behaviour changed.
 - New regression `scripts/verify-finance-operator-layout.mjs` proves JavaScript parity with R5F except for the visible route marker and asserts the R5G layout controls.
-- Verification passed: JavaScript parse, R5G layout, combined candidate, message authority, operational truth, workflow reliability and diff formatting.
+- Verification passed: JavaScript parse, R5G layout including the new shared mobile controls, combined candidate, commercial authority, message authority, operational truth, workflow reliability, message direction and diff formatting.
 - Locked and unchanged: commercial values, message bodies, product codes, stock calculations, stored records, protocols, Early Access, permanent website, Supabase schema/functions/RLS and live `/finance/`.
 - Environment limit: local Playwright exists but its browser binary is not installed, and the managed cloud browser blocks localhost. Protected publication is required for desktop/mobile rendered inspection.
 - Published review route: `https://portal.primexbiolabs.co.uk/finance-operator-layout-review/`.
 - Publication commits: initial R5G `4b4256dc88a9430179f529b1bc8d6bc5113a5cd2`; hosted-inspection correction `a47a99f8d3a95602305f27e2efe7ba1a86aa186d` keeps the collapsed receive/adjust control directly above the catalogue.
 - Hosted SHA-256 `a322292cfe572d34b05c278337cf307a29c77ede5346738f4c8415ffcc50873d` exactly matches the corrected local candidate.
 - Hosted desktop Start, Workflow, Requests and Stock were visually inspected after deployment; no covered navigation or missing primary control was found.
-- Status: protected candidate published and desktop inspected; owner phone and Jade-sized phone review pending.
+- Status: approved mobile hierarchy correction locally verified; corrected protected publication and repeat owner-phone review pending.
 
 ## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
 
