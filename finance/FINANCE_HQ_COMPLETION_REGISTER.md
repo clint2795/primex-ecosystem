@@ -4,8 +4,8 @@
 **Status:** APPROVED controlling work register  
 **Owner:** PrimeX owner/operator  
 **Technical record:** `finance/FINANCE_HQ_BUILD_CONTROL_LOG.md`  
-**Current protected checkpoint:** `PX-ROUTE-R5E` / local record commit `c8e6706`  
-**Current protected review route:** `https://portal.primexbiolabs.co.uk/finance-request-resolution-review/`  
+**Current protected checkpoint:** `PX-ROUTE-R5F` / publication record commit `cc2b77c6c483e13d1a20acc01047af63a28d81cb`
+**Current protected review route:** `https://portal.primexbiolabs.co.uk/finance-completion-review/`
 **Live Finance:** remains separate and must not be replaced until the cutover gate passes.
 
 ## Purpose
@@ -63,7 +63,7 @@ These checks must be reused as regressions. Do not commission another broad tech
 
 ### 2. R5G — Operator layout and mobile control pass
 
-**State:** READY — R5F candidate published and verified
+**State:** IMPLEMENTED / REGRESSION VERIFIED — protected publication and owner viewport review pending
 **Job:** Correct the app-wide human-use problems already observed without redesigning commercial or workflow logic.
 
 **Required outcomes:**
@@ -80,6 +80,8 @@ These checks must be reused as regressions. Do not commission another broad tech
 - desktop width is used for control and comparison, not empty filler.
 
 **Acceptance viewports:** owner desktop, owner phone portrait, and a Jade-sized phone portrait. Each key task must be usable without browser zoom.
+
+**Implementation evidence:** `finance-operator-layout-review/index.html` starts from the exact R5F protected artifact. Its final R5G layout authority raises mobile body/control sizing, reduces card radius and nesting, widens useful desktop space, compacts Start priorities, separates Workflow records from filters, tightens Request records, and places Stock search/overview before collapsed receive/adjust operations. `scripts/verify-finance-operator-layout.mjs` parses the candidate JavaScript and proves the application script is unchanged from R5F except for the visible R5G marker. All existing R5 commercial, message, operational-truth and workflow regressions pass. Protected hosted rendering remains required before this work unit can become `COMPLETE / EVIDENCED`.
 
 ### 3. R5H — Complete operator-journey acceptance
 

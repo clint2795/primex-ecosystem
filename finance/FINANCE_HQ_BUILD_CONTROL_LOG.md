@@ -2,6 +2,22 @@
 
 > Controlling completion queue: `finance/FINANCE_HQ_COMPLETION_REGISTER.md` (`PX-FINANCE-COMPLETION-2026-08-26`). Read it before proposing or starting further Finance work. This log remains the technical history; the completion register controls what is next and prevents completed work being repeated.
 
+## PX-ROUTE-R5G — Operator Layout and Mobile Control (LOCAL VERIFIED) — 2026-08-26
+
+- Accepted source and rollback: published R5F protected artifact `finance-completion-review/index.html`; publication record commit `cc2b77c6c483e13d1a20acc01047af63a28d81cb`.
+- Single purpose: correct app-wide operator density, hierarchy, mobile readability and navigation clearance without changing Finance behaviour.
+- Added protected sibling candidate `finance-operator-layout-review/index.html`; live `/finance/` and the accepted R5F route remain unchanged.
+- Start now uses compact priority cards, a smaller action area and a two-column secondary layout on desktop.
+- Workflow presents active work before a compact, separately labelled stage filter; record/action rows remain distinct when several orders are active.
+- Requests retain every R5E resolution, stock and cleanup action while using tighter, restrained records and readable mobile controls.
+- Stock search, filters and item overview now precede a collapsed Receive or adjust stock tool; item cards and nested setup areas use a denser operator pattern.
+- One final R5G CSS authority sets restrained radii, useful 1180px desktop width, 16px mobile body/field text, 44px mobile controls and fixed-navigation clearance.
+- New regression `scripts/verify-finance-operator-layout.mjs` proves JavaScript parity with R5F except for the visible route marker and asserts the R5G layout controls.
+- Verification passed: JavaScript parse, R5G layout, combined candidate, message authority, operational truth, workflow reliability and diff formatting.
+- Locked and unchanged: commercial values, message bodies, product codes, stock calculations, stored records, protocols, Early Access, permanent website, Supabase schema/functions/RLS and live `/finance/`.
+- Environment limit: local Playwright exists but its browser binary is not installed, and the managed cloud browser blocks localhost. Protected publication is required for desktop/mobile rendered inspection.
+- Status: local candidate verified; protected publication and owner viewport review pending.
+
 ## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
 
 - Accepted source and rollback: cumulative R5E checkpoint `c8e6706` on `review/finance-request-resolution-r5e`.
@@ -17,6 +33,25 @@
 - Hosted SHA-256 `9973f42066c7ba354f40a5b0dcdf1c0a16fa8f8bd27c97e64aba22478c7aecb9` exactly matches the verified candidate. The publication check caught and replaced one truncated large-file blob before handoff.
 - Live `/finance/` remains unchanged and serves `v45G JS OK`.
 - Status: complete and evidenced on the protected isolated route. R5G is the next authorised work unit.
+
+## PX-ROUTE-R5D — Operational Truth (LOCAL PROTECTED REVIEW)
+
+- Date: 2026-08-25.
+- Purpose: prevent legacy/test records, requested quantities, device-only saves and earlier customer updates from producing a misleading current operational state.
+- Recognised older request items now resolve against the current approved product and public price when a new quote is created. The original submission remains unchanged; genuinely unmapped items alone show as not recognised/currently outside the catalogue.
+- Obvious Finance test requests are excluded from genuine request totals and active work, appear as TEST records in the local Bin view, and expose a deliberate Remove test request action. Shared test records are archived through the existing authenticated shared-status path; local tests are binned locally.
+- Request availability now compares requested quantity with current available quantity and displays requested, available, covered or short amounts. Low remaining stock is kept separate from whether the specific request can be covered.
+- Saved live orders now affect the current device's stock immediately even while their online backup is pending or retrying. Quotes, test records, past orders, binned records and cancelled orders remain non-deducting under their existing rules.
+- Quote approval rejects Available now when stock cannot cover the complete quote, and rejects Part ready when none of the quoted stock is held. Other approved availability modes and dated follow-up requirements remain unchanged.
+- Customer updates are now judged by their specific stage status rather than the old general update flag. A stock-delay update cannot satisfy packed, collection, dispatch or tracking work.
+- Marking a stock-delay update sent records its send time in the saved communication state, closes the used deadline and immediately requires either resolved availability or a new dated customer-update promise.
+- New regression: `scripts/verify-finance-operational-truth.mjs` covers known legacy products, unknown products, test isolation, quantity-aware stock, local stock reservation, availability-mode contradictions, completed stock-delay promises and stage-specific follow-ups.
+- Existing commercial-authority, message-authority, workflow-reliability, message-direction, email-only and JavaScript parsing checks pass. Diff formatting passes.
+- Environment limit: Playwright is present but its Chromium binary is not installed, so rendered desktop/mobile interaction remains for owner review after an authorised protected publication.
+- Files in this work unit: `finance/index.html`, `scripts/verify-finance-operational-truth.mjs`, three updated route/authority regression scripts, and this control log.
+- No request, quote, order, stock movement, customer message or database record was changed. No customer message was sent.
+- Rollback point: local accepted R5C record commit `bbcda6f`; accepted protected R5C publication remains unchanged.
+- Status: local protected implementation complete; not committed, pushed or published. R5E–R5G remain queued and untouched.
 
 ## PX-ROUTE-R5C — Customer Message Authority (LOCAL PROTECTED REVIEW)
 
@@ -1752,3 +1787,25 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Rollback point: accepted main `001135580850756d83e9475f58f4b2da4ff8516d`.
 - GitHub commits: protocol review route `d49d2aef9d451327c3b8a039e820b28ef0326080`; Finance tier clarity `c72684ac296c186dc31075f4bebc8832f54c1093`.
 - Status: committed and pushed to `main` after owner approval. No Supabase deployment or manual deployment action was performed.
+
+## PX-ROUTE-R5E — Request Resolution + Discoverable Operator Tests (LOCAL OWNER REVIEW) — 2026-08-25
+
+- Accepted source and rollback: clean R5D checkpoint `574d94f`; the published R5D review route remains untouched.
+- Single purpose: replace request controls that only described problems with actions that resolve them, and make request testing followable without prior system knowledge.
+- Replaced the dead custom-request `Review details` disclosure with `Resolve request`.
+- `Resolve request` now preserves the original request and allows the operator to match it to a current approved product, start a manual quote line, park the request, archive it, or cancel.
+- A saved product match records the current commercial-authority version and current approved public price; it does not create a new product, price or commercial rule.
+- Removed the item-level `CURRENT PRODUCT / PRICE` and `CUSTOM REVIEW` pills. Item state is now quiet operational text: `Ready to quote`, `Stock short`, or `Product needs matching`.
+- Reworked stock copy to show the immediate answer: Requested, Available, and either Ready or Short.
+- Removed the two-step `Check availability` / `Confirm available` trap for stock shortages. A short request can proceed to a draft quote, but the quote is preset to the truthful timing route and existing send validation still requires the missing timing/update information.
+- Covered requests preset quote availability to `Available now`; partly covered requests preset `Part ready now`; wholly short requests preset `Dispatch date not confirmed`.
+- Added selectable request cleanup with recoverable `Archive selected` and device-only `Move selected to local bin` actions. Shared archive writes still require authenticated shared Finance access.
+- Replaced the generic Request step guide with exact control, route and expected-result instructions for matching, cleanup, covered stock, shortages, and quote resumption.
+- Locked and unchanged: commercial price values, product codes, stock quantities, stock deduction, customer message templates, protocol route, Early Access website, Supabase schema/functions, live `/finance/`, commit, push and deployment.
+- Verification passed: inline JavaScript parse, commercial authority, operational truth, customer-message authority, workflow reliability, message direction and `git diff --check`.
+- Responsive browser execution is unresolved in this workspace because the installed Playwright package has no Chromium binary. Mobile/desktop owner visual review remains required before any publication decision.
+- Local protected implementation commit: `a5c9eefa41e96ecb4d247e6b3636437d2d76c244`.
+- Isolated review publication commit on `main`: `26bab142f3d7dfe5267e6c2ef7e48d1c58fccf56`.
+- Published review route: `https://portal.primexbiolabs.co.uk/finance-request-resolution-review/`.
+- Deployment verification: GitHub Pages served the R5E marker and actionable request controls; live SHA-256 `fbf723a49da8816a87dbe1393cbe673fe83002420f7782f29c4c97f94a13fc7c` exactly matched the protected local source.
+- Live `/finance/` and the earlier R5D review route were not changed.
