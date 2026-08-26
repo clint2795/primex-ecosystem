@@ -12,7 +12,11 @@
 - Verification passed: combined-candidate equality and JavaScript parse, commercial authority, operational truth, customer-message authority, workflow reliability, message direction, email-only handoff and diff formatting.
 - Locked and unchanged: live `/finance/`, protocol route, Early Access, permanent website, commercial values, product codes, stock quantities/deductions, message templates, Supabase schema/functions/RLS and all stored records.
 - Browser/mobile human review remains an R5G task after the protected R5F route is available.
-- Status: local verification passed; protected isolated publication in progress under the standing review-route authority.
+- Protected publication commits: initial candidate `bba137f29b7ec1af6098cbc063799578629fdc5e`; integrity correction `af3b96e16a13968c48554002d429f79851adb3f9`.
+- Published review route: `https://portal.primexbiolabs.co.uk/finance-completion-review/`.
+- Hosted SHA-256 `9973f42066c7ba354f40a5b0dcdf1c0a16fa8f8bd27c97e64aba22478c7aecb9` exactly matches the verified candidate. The publication check caught and replaced one truncated large-file blob before handoff.
+- Live `/finance/` remains unchanged and serves `v45G JS OK`.
+- Status: complete and evidenced on the protected isolated route. R5G is the next authorised work unit.
 
 ## PX-ROUTE-R5C — Customer Message Authority (LOCAL PROTECTED REVIEW)
 

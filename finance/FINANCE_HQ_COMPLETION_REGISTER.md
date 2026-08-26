@@ -49,7 +49,7 @@ These checks must be reused as regressions. Do not commission another broad tech
 
 ### 1. R5F — Combined protected candidate
 
-**State:** LOCAL VERIFICATION PASSED / PROTECTED PUBLICATION IN PROGRESS  
+**State:** COMPLETE / EVIDENCED — PROTECTED ROUTE PUBLISHED
 **Job:** Build one protected candidate containing the accepted R5A–R5E behaviour. The owner must no longer need to switch between isolated review routes to understand the current system.
 
 **Must prove:**
@@ -59,11 +59,11 @@ These checks must be reused as regressions. Do not commission another broad tech
 - current commercial authority is loaded rather than copied from an older review;
 - live `/finance/`, the protocol route and public customer routes remain untouched.
 
-**Evidence:** `scripts/verify-finance-combined-candidate.mjs` proves the R5F artifact is identical to the cumulative R5E source except for its route-safe config path and visible fingerprint. Commercial-authority, operational-truth, message-authority, workflow-reliability, message-direction and email-only regressions also pass.
+**Evidence:** `scripts/verify-finance-combined-candidate.mjs` proves the R5F artifact is identical to the cumulative R5E source except for its route-safe config path and visible fingerprint. Commercial-authority, operational-truth, message-authority, workflow-reliability, message-direction and email-only regressions also pass. Protected route `https://portal.primexbiolabs.co.uk/finance-completion-review/` serves SHA-256 `9973f42066c7ba354f40a5b0dcdf1c0a16fa8f8bd27c97e64aba22478c7aecb9` from publication commit `af3b96e16a13968c48554002d429f79851adb3f9`; live `/finance/` remains `v45G JS OK`.
 
 ### 2. R5G — Operator layout and mobile control pass
 
-**State:** BLOCKED until R5F candidate exists  
+**State:** READY — R5F candidate published and verified
 **Job:** Correct the app-wide human-use problems already observed without redesigning commercial or workflow logic.
 
 **Required outcomes:**
