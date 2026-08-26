@@ -29,7 +29,9 @@
 - Hosted desktop Start, Workflow, Requests and Stock were visually inspected after deployment; no covered navigation or missing primary control was found.
 - Mobile hierarchy publication commit: `559546447fe159da972480018ddecf5527c4aea8`; verifier/control-record commits `738a3b40be88f9bfc7386ea2ca568c3275d8f8bd`, `4d27f3b9c970f102362457bfac6ef97ff9e20219` and `303a964448a5df186671d3473a385a0d13e30a2a`.
 - Corrected hosted SHA-256 `41b5b00a6f86ca11497502bcbca666d8836282724f58b3195edfb1b6e9fb244c` exactly matches the approved local candidate.
-- Status: second owner-phone correction locally verified; corrected protected publication and full-view phone review pending.
+- Second phone-correction publication commit: `4ddb765ed7ebc429dda03df466b0501908c76024`; verifier/control-record commits `0d2523d707e7a739500b2ef6933f5e322e612405`, `cadad80008dfdfc71cf7375ff1af38d54968b38e` and `e07308832305910f3938d30b876365cf382f3d88`.
+- Second corrected hosted SHA-256 `d4e4832864e4c86ab955fccd2c0b742a0fc5f9bb7f7f5ce6c4523f596728fae3` exactly matches the approved local candidate.
+- Status: second corrected protected route published and source-hash verified; full-view owner-phone and Jade-sized phone review pending.
 
 ## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
 
