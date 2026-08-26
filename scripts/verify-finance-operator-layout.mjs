@@ -30,7 +30,7 @@ assert(normaliseReviewMarker(candidateScript)===inlineScript(baseline),'R5G chan
   'min-height:44px'
 ].forEach(token=>assert(candidate.includes(token),'Missing R5G operator-layout control: '+token));
 
-assert(candidate.indexOf('stock-overview-title')<candidate.indexOf('stock-operations{order:6}'),'Stock overview ordering authority is missing');
+assert(candidate.indexOf('stock-overview-title')<candidate.indexOf('stock-operations{order:5}'),'Stock overview ordering authority is missing');
 assert(candidate.includes('<details class="stock-operations"><summary>Receive or adjust stock</summary>'),'Stock operations are not collapsed');
 assert(!candidate.includes('PX-ROUTE-R5F COMBINED REVIEW'),'Old visible R5F review marker remains');
 assert(candidate.includes('.wrap,.nav-inner{max-width:1180px}'),'Desktop workspace width was not increased');
