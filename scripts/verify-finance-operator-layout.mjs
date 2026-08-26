@@ -38,7 +38,11 @@ assert(normaliseReviewMarker(candidateScript)===inlineScript(baseline),'R5G chan
   'runtime-fingerprint',
   '.alert-row>button.secondary',
   '#viewBreadcrumb{display:none}',
-  '#historyList .queue-row'
+  '#historyList .queue-row',
+  'R5G Stock hierarchy correction',
+  '#view-stock .stock-card-head strong{font-weight:650',
+  '#view-stock .stock-card-controls .field label{font-weight:600',
+  '#view-stock .stock-card-toggle{font-weight:600'
 ].forEach(token=>assert(candidate.includes(token),'Missing R5G operator-layout control: '+token));
 
 assert(candidate.indexOf('stock-overview-title')<candidate.indexOf('stock-operations{order:5}'),'Stock overview ordering authority is missing');
