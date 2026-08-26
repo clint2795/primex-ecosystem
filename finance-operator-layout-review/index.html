@@ -548,6 +548,35 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
   .workflow-stage-summary,.workflow-record-access,.workflow-stage-detail-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
   .workflow-stage-summary .btn,.workflow-record-access .btn,.workflow-stage-detail-head .btn{width:auto;min-width:0}
 }
+
+/* R5G mobile hierarchy correction: compact shell and distinct operator jobs */
+.route-fingerprint{display:inline-flex;align-items:center;margin-left:7px;color:#73c28b;font-size:10px;font-weight:650;letter-spacing:.05em;vertical-align:middle}
+.runtime-fingerprint{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.alert-row>div:first-child{min-width:0}.alert-row>div:first-child strong{font-size:15px;font-weight:680;line-height:1.35}.alert-row>div:first-child p{margin:5px 0 0;color:#b8c6d2;font-size:14px;font-weight:450;line-height:1.45}
+.alert-row>.badge{margin:0;white-space:nowrap;font-weight:650}
+.alert-row>button.secondary{border:1px solid #426888;border-radius:6px;background:#17334a;color:#edf8ff;padding:9px 12px;font-family:inherit;font-size:14px;font-weight:600;line-height:1.25;cursor:pointer}
+.workflow-record-access{border:1px solid #223143;border-left:3px solid #527895;border-radius:6px;background:#09111a;padding:11px 12px;margin:9px 0}
+.workflow-record-access:last-child{border-bottom:1px solid #223143}.workflow-record-title{font-weight:650}.workflow-record-context{font-weight:450}
+#historyList .queue-row{border-left:3px solid #3f617d}#historyList .queue-row>div:first-child>strong{font-weight:650}#historyList .tiny{font-weight:450}
+@media(max-width:760px){
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;margin-bottom:6px}
+  .brand{align-items:center;gap:8px}.mark{width:30px;height:30px;border-radius:7px;font-size:13px}.brand small{display:none}.brand h1{display:flex;align-items:baseline;white-space:nowrap;font-size:17px;line-height:1.1}
+  .route-fingerprint{font-size:9px;margin-left:6px}
+  .top-actions{display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:5px}.top-actions .header-action{min-height:38px;padding:7px 9px;font-size:12px;white-space:nowrap}
+  #viewBreadcrumb{display:none}
+  .alert-list{gap:12px}.alert-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 10px;align-items:start;padding:13px 12px;border-radius:6px}
+  .alert-row>div:first-child{grid-column:1;grid-row:1}.alert-row>.badge{grid-column:2;grid-row:1;align-self:start}.alert-row>button.secondary{grid-column:1/-1;grid-row:2;width:100%;min-height:44px}
+  .alert-row>div:first-child strong{font-size:16px}.alert-row>div:first-child p{font-size:15px;line-height:1.45}
+  .workflow-stage-detail{padding:12px 10px}.workflow-stage-detail-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start}
+  .workflow-record-access{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;margin:10px 0}
+  .workflow-record-access .btn{width:auto;min-width:0;min-height:42px}.workflow-record-title{font-size:16px;line-height:1.35}.workflow-record-context{font-size:14px;line-height:1.4}
+  #historyList .queue-row{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}#historyList .queue-row .btnrow{margin-top:0}
+  #historyList .queue-row>div:first-child>strong{font-size:16px;line-height:1.4}
+}
+@media(max-width:390px){
+  .top-actions .header-action{padding:7px 8px}.route-fingerprint{display:none}
+  .workflow-record-access{grid-template-columns:1fr}.workflow-record-access .btn{width:100%}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../finance/config.js"></script>
@@ -557,7 +586,7 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" style="font-size:11px;color:#9caaba;font-weight:600">PX-ROUTE-R5G OPERATOR LAYOUT</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span class="route-fingerprint">R5G</span><span id="bootBadge" class="runtime-fingerprint">PX-ROUTE-R5G OPERATOR LAYOUT</span></h1></div>
     </div>
     <div class="top-actions">
       <button class="btn subtle header-action" id="viewHelpButton" type="button" onclick="showCurrentViewHelp()">? Step guide</button>
