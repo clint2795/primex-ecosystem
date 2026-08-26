@@ -27,7 +27,13 @@ assert(normaliseReviewMarker(candidateScript)===inlineScript(baseline),'R5G chan
   'stock-overview-title',
   'font-size:16px',
   'padding-bottom:84px',
-  'min-height:44px'
+  'min-height:44px',
+  'R5G mobile hierarchy correction',
+  'route-fingerprint',
+  'runtime-fingerprint',
+  '.alert-row>button.secondary',
+  '#viewBreadcrumb{display:none}',
+  '#historyList .queue-row'
 ].forEach(token=>assert(candidate.includes(token),'Missing R5G operator-layout control: '+token));
 
 assert(candidate.indexOf('stock-overview-title')<candidate.indexOf('stock-operations{order:5}'),'Stock overview ordering authority is missing');
@@ -35,5 +41,8 @@ assert(candidate.includes('<details class="stock-operations"><summary>Receive or
 assert(!candidate.includes('PX-ROUTE-R5F COMBINED REVIEW'),'Old visible R5F review marker remains');
 assert(candidate.includes('.wrap,.nav-inner{max-width:1180px}'),'Desktop workspace width was not increased');
 assert(candidate.includes('.workflow-stage-tabs{display:grid;grid-template-columns:repeat(4'),'Workflow filters are not compact');
+assert(candidate.includes('.alert-row{display:grid;grid-template-columns:minmax(0,1fr) auto'),'Mobile action jobs are not deliberately separated');
+assert(candidate.includes('.workflow-record-access{border:1px solid #223143'),'Workflow records do not have distinct operator boundaries');
+assert(candidate.includes('<span class="route-fingerprint">R5G</span>'),'Compact visible review fingerprint is missing');
 
 console.log('Finance operator layout verification passed');
