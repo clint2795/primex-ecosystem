@@ -23,7 +23,9 @@
 - Publication commits: initial R5G `4b4256dc88a9430179f529b1bc8d6bc5113a5cd2`; hosted-inspection correction `a47a99f8d3a95602305f27e2efe7ba1a86aa186d` keeps the collapsed receive/adjust control directly above the catalogue.
 - Hosted SHA-256 `a322292cfe572d34b05c278337cf307a29c77ede5346738f4c8415ffcc50873d` exactly matches the corrected local candidate.
 - Hosted desktop Start, Workflow, Requests and Stock were visually inspected after deployment; no covered navigation or missing primary control was found.
-- Status: approved mobile hierarchy correction locally verified; corrected protected publication and repeat owner-phone review pending.
+- Mobile hierarchy publication commit: `559546447fe159da972480018ddecf5527c4aea8`; verifier/control-record commits `738a3b40be88f9bfc7386ea2ca568c3275d8f8bd`, `4d27f3b9c970f102362457bfac6ef97ff9e20219` and `303a964448a5df186671d3473a385a0d13e30a2a`.
+- Corrected hosted SHA-256 `41b5b00a6f86ca11497502bcbca666d8836282724f58b3195edfb1b6e9fb244c` exactly matches the approved local candidate.
+- Status: corrected protected route published and source-hash verified; repeat owner-phone and Jade-sized phone review pending.
 
 ## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
 
