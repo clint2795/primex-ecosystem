@@ -15,6 +15,10 @@
 - Owner-phone review exposed one remaining shared breakpoint failure: header controls scattered vertically, action cards compressed their descriptions between a badge and an unstyled browser button, repeated jobs lacked strong boundaries, and heavyweight text obscured hierarchy.
 - The approved mobile hierarchy correction now compacts the header into one operator row, keeps a discreet `R5G` fingerprint, removes the breadcrumb from the phone header, gives Start alerts and Workflow/History records deliberate job boundaries, restores normal body/status weight and gives each mobile job one clear full-width action.
 - The same-pattern sweep covered Start action alerts, Workflow record lists and History records; Requests retain their already distinct R5E card boundaries. No message text, record state or button behaviour changed.
+- Follow-up owner-phone review found the remaining app-wide shell and cleanup-control problems before R5G acceptance. The phone header is now one compact operator row with icon Help/Back controls; Back disappears when unavailable and the build marker no longer consumes working space.
+- Start now has one compact `New quote` action. The duplicate `Direct order`, duplicate Quick-actions quote entry and stale Start-guide reference were removed; direct orders remain correctly owned by the Order tab.
+- Selecting a Request now highlights its whole card and opens a fixed action bar above the bottom navigation with Archive, distinctly styled Move to bin and Cancel selection. The bar disappears when selection is cleared.
+- The expanded same-pattern sweep rechecked all shared header consumers, Start action entrypoints, Workflow/History record boundaries and the Requests multi-select flow. No other shared multi-select control exists in the candidate.
 - New regression `scripts/verify-finance-operator-layout.mjs` proves JavaScript parity with R5F except for the visible route marker and asserts the R5G layout controls.
 - Verification passed: JavaScript parse, R5G layout including the new shared mobile controls, combined candidate, commercial authority, message authority, operational truth, workflow reliability, message direction and diff formatting.
 - Locked and unchanged: commercial values, message bodies, product codes, stock calculations, stored records, protocols, Early Access, permanent website, Supabase schema/functions/RLS and live `/finance/`.
@@ -25,7 +29,7 @@
 - Hosted desktop Start, Workflow, Requests and Stock were visually inspected after deployment; no covered navigation or missing primary control was found.
 - Mobile hierarchy publication commit: `559546447fe159da972480018ddecf5527c4aea8`; verifier/control-record commits `738a3b40be88f9bfc7386ea2ca568c3275d8f8bd`, `4d27f3b9c970f102362457bfac6ef97ff9e20219` and `303a964448a5df186671d3473a385a0d13e30a2a`.
 - Corrected hosted SHA-256 `41b5b00a6f86ca11497502bcbca666d8836282724f58b3195edfb1b6e9fb244c` exactly matches the approved local candidate.
-- Status: corrected protected route published and source-hash verified; repeat owner-phone and Jade-sized phone review pending.
+- Status: second owner-phone correction locally verified; corrected protected publication and full-view phone review pending.
 
 ## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
 
