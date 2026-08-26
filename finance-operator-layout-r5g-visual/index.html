@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PrimeX Finance HQ · R5G Visual Correction Review</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#07090d;overflow:hidden}
+#reviewFrame{display:block;width:100%;height:100%;border:0;background:#07090d}
+</style>
+</head>
+<body>
+<iframe id="reviewFrame" title="PrimeX Finance R5G protected visual review" src="../finance-operator-layout-review/"></iframe>
+<script>
+const frame=document.getElementById('reviewFrame');
+frame.addEventListener('load',()=>{
+  const doc=frame.contentDocument;
+  const win=frame.contentWindow;
+  if(!doc||!win)return;
+  const style=doc.createElement('style');
+  style.id='r5g-visual-correction-overlay';
+  style.textContent=`
+/* R5G protected desktop hierarchy correction overlay */
+:root{--r5g-edge:#5f9fd0;--r5g-edge-soft:rgba(95,159,208,.22);--r5g-panel:#0b121b;--r5g-line:#31465b}
+body{background:radial-gradient(circle at top left,#101923 0,#07090d 38%,#05070a 100%)}
+.topbar{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;min-height:54px!important;padding:2px 0 8px!important;margin-bottom:10px!important}
+.top-actions{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important;min-width:max-content!important}
+.top-actions .header-action{flex:0 0 auto!important;display:grid!important;place-items:center!important;min-width:42px!important;width:42px!important;min-height:42px!important;padding:0!important}
+#viewBreadcrumb{display:block!important;flex:0 0 auto!important;width:auto!important;white-space:nowrap!important;margin-left:2px!important;color:#b8cad9!important}
+#view-start>.card:first-child{border-color:#38546d!important;background:linear-gradient(180deg,rgba(14,23,34,.985),rgba(8,13,20,.99))!important;box-shadow:0 16px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(157,204,240,.035)!important}
+#view-start>.card:first-child>.mission-control-layout{padding-bottom:3px}
+#view-start>.card:first-child #missionControlCards{padding-top:12px;border-top:1px solid #26394b}
+#missionControlCards .queue-card,#queueCards .queue-card{position:relative;overflow:hidden;border-color:#31465b!important;background:linear-gradient(180deg,#0b121b,#080d13)!important;box-shadow:0 8px 20px rgba(0,0,0,.16)!important}
+#missionControlCards .queue-card::before,#queueCards .queue-card::before,.alert-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:.16s ease}
+#missionControlCards .queue-card.r5g-attention,#queueCards .queue-card.r5g-attention{border-color:#4f7897!important;box-shadow:0 0 0 1px rgba(95,159,208,.12),0 10px 24px rgba(0,0,0,.24)!important}
+#missionControlCards .queue-card.r5g-attention::before,#queueCards .queue-card.r5g-attention::before{background:linear-gradient(180deg,#8ac6ef,#4d82aa);box-shadow:0 0 12px rgba(95,159,208,.7)}
+#missionControlCards .queue-card.r5g-attention .n,#queueCards .queue-card.r5g-attention .n{color:#f3fbff;text-shadow:0 0 14px rgba(126,183,220,.2)}
+#view-start .start-secondary-grid{gap:14px!important;margin-top:14px!important}
+#view-start .start-secondary-grid>.card,#view-start>section.card:not(:first-child){border-color:#26394b!important;background:linear-gradient(180deg,rgba(12,18,27,.98),rgba(8,12,18,.99))!important;box-shadow:0 12px 28px rgba(0,0,0,.18)!important}
+#view-start .start-secondary-grid>.card>.section-title,#view-start>section.card:not(:first-child)>.section-title{padding-bottom:10px;border-bottom:1px solid #243647}
+#view-start .section-title h2,#view-start .section-title h3{color:#f1f7fc!important}
+#view-start .section-title p{color:#afc0ce!important}
+#startActionPrompts .alert-row{position:relative;overflow:hidden;border-color:#3d5c76!important;background:#0a141e!important;box-shadow:0 7px 18px rgba(0,0,0,.17)!important}
+#startActionPrompts .alert-row::before{background:linear-gradient(180deg,#8ac6ef,#4d82aa);box-shadow:0 0 12px rgba(95,159,208,.58)}
+#startActionPrompts .alert-row>div:first-child strong{color:#f3f9ff!important}
+#view-request .request-card{border-color:#30485c!important;background:#091018!important}
+#view-request .request-card.request-selected{border-color:#75aed7!important;background:#0d1a27!important;box-shadow:inset 4px 0 0 #6db3e8,0 0 0 1px rgba(109,179,232,.2),0 8px 22px rgba(0,0,0,.2)!important}
+#view-request .request-card.request-blocked:not(.request-selected){border-left:3px solid #c77d31!important}
+#view-request .request-card.request-ready:not(.request-selected){border-left:3px solid #48708d!important}
+#view-queues .workflow-stage-summary,#view-queues .workflow-stage-detail,#historyList .queue-row{border-color:#30465a!important;background:#091119!important}
+#view-queues .workflow-stage-summary{border-left:3px solid #517c9d!important}
+#view-queues .workflow-stage-summary.r5g-attention{border-color:#4e7898!important;box-shadow:inset 3px 0 0 #79b4df,0 8px 20px rgba(0,0,0,.18)!important}
+#view-stock>.card{border-color:#30465a!important}
+@media(min-width:761px){
+  .wrap{max-width:1240px!important;padding:14px 18px 28px!important}
+  #missionControlCards{gap:12px!important}
+  #queueCards{gap:10px!important}
+  #view-start>.card:first-child{padding:16px!important}
+  #view-start .start-secondary-grid{grid-template-columns:minmax(0,1.35fr) minmax(360px,.65fr)!important}
+  #startActionPrompts .alert-row{grid-template-columns:minmax(0,1fr) auto!important;gap:10px 14px!important}
+}
+@media(max-width:760px){
+  .topbar{display:flex!important;min-height:38px!important;padding-bottom:2px!important;margin-bottom:4px!important}
+  .top-actions{gap:5px!important}
+  .top-actions .header-action{min-width:36px!important;width:36px!important;min-height:36px!important}
+  #viewBreadcrumb{display:none!important}
+  #view-start .start-secondary-grid{gap:8px!important;margin-top:8px!important}
+}
+`;
+  doc.head.appendChild(style);
+
+  function numericText(el){
+    if(!el)return 0;
+    const raw=(el.textContent||'').replace(/[^0-9.-]/g,'');
+    const n=Number(raw);
+    return Number.isFinite(n)?n:0;
+  }
+  function applyAttention(){
+    doc.querySelectorAll('#missionControlCards .queue-card,#queueCards .queue-card').forEach(card=>{
+      card.classList.toggle('r5g-attention',numericText(card.querySelector('.n'))>0);
+    });
+    doc.querySelectorAll('#view-queues .workflow-stage-summary').forEach(card=>{
+      const heading=card.querySelector('.workflow-stage-heading span');
+      card.classList.toggle('r5g-attention',numericText(heading)>0);
+    });
+  }
+  applyAttention();
+  const observer=new win.MutationObserver(()=>applyAttention());
+  observer.observe(doc.body,{childList:true,subtree:true,characterData:true});
+});
+</script>
+</body>
+</html>
