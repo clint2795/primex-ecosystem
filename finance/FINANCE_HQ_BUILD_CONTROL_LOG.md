@@ -1,5 +1,19 @@
 # PrimeX Finance HQ Build Control Log
 
+> Controlling completion queue: `finance/FINANCE_HQ_COMPLETION_REGISTER.md` (`PX-FINANCE-COMPLETION-2026-08-26`). Read it before proposing or starting further Finance work. This log remains the technical history; the completion register controls what is next and prevents completed work being repeated.
+
+## PX-ROUTE-R5F — Combined Protected Candidate (LOCAL VERIFIED) — 2026-08-26
+
+- Accepted source and rollback: cumulative R5E checkpoint `c8e6706` on `review/finance-request-resolution-r5e`.
+- Single purpose: expose the already accepted R5A–R5E Finance behaviour through one protected candidate without rebuilding or changing it.
+- Added `finance-completion-review/index.html` directly from the cumulative `finance/index.html` source.
+- Route-only differences are the R5F title/loading/ready fingerprint and the sibling-safe `../finance/config.js` path.
+- Added `scripts/verify-finance-combined-candidate.mjs`; it fails if the candidate differs from the cumulative source beyond those four deliberate route substitutions.
+- Verification passed: combined-candidate equality and JavaScript parse, commercial authority, operational truth, customer-message authority, workflow reliability, message direction, email-only handoff and diff formatting.
+- Locked and unchanged: live `/finance/`, protocol route, Early Access, permanent website, commercial values, product codes, stock quantities/deductions, message templates, Supabase schema/functions/RLS and all stored records.
+- Browser/mobile human review remains an R5G task after the protected R5F route is available.
+- Status: local verification passed; protected isolated publication in progress under the standing review-route authority.
+
 ## PX-ROUTE-R5C — Customer Message Authority (LOCAL PROTECTED REVIEW)
 
 - Date: 2026-08-25.
