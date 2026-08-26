@@ -1824,3 +1824,13 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Published review route: `https://portal.primexbiolabs.co.uk/finance-request-resolution-review/`.
 - Deployment verification: GitHub Pages served the R5E marker and actionable request controls; live SHA-256 `fbf723a49da8816a87dbe1393cbe673fe83002420f7782f29c4c97f94a13fc7c` exactly matched the protected local source.
 - Live `/finance/` and the earlier R5D review route were not changed.
+
+## PX-ROUTE-R5G — Whole-view Stock typography correction (PROTECTED REVIEW) — 2026-08-26
+
+- The hosted whole-view audit confirmed Stock was the remaining heavyweight typography outlier after the second R5G correction.
+- Product rows, quantities, helpers, action labels and controls now use regular or semibold hierarchy; strong weight remains reserved for genuine headings and live status.
+- Pricing, stock quantities, product codes, stock operations, messages and workflow logic were not changed.
+- All R5 operator-layout, combined-candidate, commercial-authority, message-authority, operational-truth, workflow-reliability and message-direction checks pass.
+- Protected publication commits: route `4eb0459994ad7159839626976e0e49a5a446ef38`; verifier `30538c1ffb046694dfbd627fbf13e1bc8cbc59e3`.
+- Hosted SHA-256 `b9e6cb7e8c96bf6fc8f6ab162a206d6b9127835249cd4a2b30ea1b6cd5c5ce61` exactly matches the protected source. Live `/finance/` remains untouched.
+- R5G remains open pending full owner-phone and Jade-sized review; R5H has not started.
