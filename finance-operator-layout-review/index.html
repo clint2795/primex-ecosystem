@@ -558,12 +558,15 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
 .workflow-record-access{border:1px solid #223143;border-left:3px solid #527895;border-radius:6px;background:#09111a;padding:11px 12px;margin:9px 0}
 .workflow-record-access:last-child{border-bottom:1px solid #223143}.workflow-record-title{font-weight:650}.workflow-record-context{font-weight:450}
 #historyList .queue-row{border-left:3px solid #3f617d}#historyList .queue-row>div:first-child>strong{font-weight:650}#historyList .tiny{font-weight:450}
+.request-card.request-selected{border-color:#6ea8d8!important;background:#0d1a27!important;box-shadow:inset 4px 0 0 #4a9eff,0 0 0 1px rgba(74,158,255,.2)!important}
+.request-selection-tools .cleanup-bin{border-color:#8d5d29;background:#2a1a0d;color:#ffd5a3}
 @media(max-width:760px){
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;margin-bottom:6px}
-  .brand{align-items:center;gap:8px}.mark{width:30px;height:30px;border-radius:7px;font-size:13px}.brand small{display:none}.brand h1{display:flex;align-items:baseline;white-space:nowrap;font-size:17px;line-height:1.1}
-  .route-fingerprint{font-size:9px;margin-left:6px}
-  .top-actions{display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:5px}.top-actions .header-action{min-height:38px;padding:7px 9px;font-size:12px;white-space:nowrap}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:38px;margin-bottom:4px}
+  .brand{align-items:center;gap:7px}.mark{width:28px;height:28px;border-radius:6px;font-size:12px}.brand small{display:none}.brand h1{display:block;white-space:nowrap;font-size:16px;line-height:1.1}
+  .route-fingerprint{display:none}
+  .top-actions{display:flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:5px}.top-actions .header-action{display:grid;place-items:center;width:36px;min-width:36px;min-height:36px;padding:0;font-size:18px;line-height:1;white-space:nowrap}.top-actions .header-action:disabled{display:none}
   #viewBreadcrumb{display:none}
+  .mission-control-layout{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.mission-control-layout .section-title{min-width:0}.mission-control-layout .btnrow{flex:0 0 auto}.mission-control-layout .btn{min-height:40px;padding:8px 10px;white-space:nowrap}
   .alert-list{gap:12px}.alert-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 10px;align-items:start;padding:13px 12px;border-radius:6px}
   .alert-row>div:first-child{grid-column:1;grid-row:1}.alert-row>.badge{grid-column:2;grid-row:1;align-self:start}.alert-row>button.secondary{grid-column:1/-1;grid-row:2;width:100%;min-height:44px}
   .alert-row>div:first-child strong{font-size:16px}.alert-row>div:first-child p{font-size:15px;line-height:1.45}
@@ -572,9 +575,12 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
   .workflow-record-access .btn{width:auto;min-width:0;min-height:42px}.workflow-record-title{font-size:16px;line-height:1.35}.workflow-record-context{font-size:14px;line-height:1.4}
   #historyList .queue-row{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0}#historyList .queue-row .btnrow{margin-top:0}
   #historyList .queue-row>div:first-child>strong{font-size:16px;line-height:1.4}
+  .request-selection-tools{position:fixed;left:9px;right:9px;top:auto;bottom:66px;z-index:60;display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:10px;border-color:#507696;background:#0b1722;box-shadow:0 -8px 24px rgba(0,0,0,.48)}
+  .request-selection-tools.hide{display:none!important}.request-selection-tools strong{grid-column:1/-1;font-size:14px}.request-selection-tools .btn{width:100%;min-height:42px;padding:7px 8px}.request-selection-tools .selection-clear{grid-column:1/-1}
 }
 @media(max-width:390px){
-  .top-actions .header-action{padding:7px 8px}.route-fingerprint{display:none}
+  .brand h1{font-size:15px}.top-actions .header-action{width:34px;min-width:34px;min-height:34px}
+  .mission-control-layout .section-title p{display:none}
   .workflow-record-access{grid-template-columns:1fr}.workflow-record-access .btn{width:100%}
 }
 </style>
@@ -586,17 +592,17 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
   <header class="topbar">
     <div class="brand">
       <div class="mark">PX</div>
-      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span class="route-fingerprint">R5G</span><span id="bootBadge" class="runtime-fingerprint">PX-ROUTE-R5G OPERATOR LAYOUT</span></h1></div>
+      <div><small>PrimeX BioLabs</small><h1>Finance HQ <span id="bootBadge" class="runtime-fingerprint">PX-ROUTE-R5G OPERATOR LAYOUT</span></h1></div>
     </div>
     <div class="top-actions">
-      <button class="btn subtle header-action" id="viewHelpButton" type="button" onclick="showCurrentViewHelp()">? Step guide</button>
-      <button class="btn subtle header-action" id="backViewButton" type="button" onclick="goBackView()" disabled>Back</button>
+      <button class="btn subtle header-action" id="viewHelpButton" type="button" onclick="showCurrentViewHelp()" aria-label="Open step guide" title="Step guide">?</button>
+      <button class="btn subtle header-action" id="backViewButton" type="button" onclick="goBackView()" aria-label="Go back" title="Back" disabled>←</button>
       <span class="tiny" id="viewBreadcrumb" aria-live="polite">Start</span>
     </div>
   </header>
   <main id="view-start" class="view active">
     <section class="card">
-      <div class="mission-control-layout"><div class="section-title"><div><h2>Mission Control</h2><p>See what needs attention or start today’s work.</p></div></div><div class="btnrow"><button class="btn primary" id="newEmailQuoteStart">+ Quote from email</button><button class="btn" id="newOrderStart">+ Direct order</button></div></div>
+      <div class="mission-control-layout"><div class="section-title"><div><h2>Mission Control</h2><p>See what needs attention or start today’s work.</p></div></div><div class="btnrow"><button class="btn primary" id="newEmailQuoteStart">+ New quote</button></div></div>
       <div class="queue-grid" id="missionControlCards">
         <button class="queue-card" onclick="showView('request')"><div class="k">New Requests</div><div class="n">0</div><div class="s">Open Requests</div></button>
         <button class="queue-card" onclick="openFirstCustomerMessageTask()"><div class="k">Customer Messages</div><div class="n">0</div><div class="s">Open first actionable task</div></button>
@@ -612,7 +618,7 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
     </section>
     <div class="start-secondary-grid"><section class="card">
       <div class="section-title"><div><h3>Quick actions</h3><p>Common daily shortcuts.</p></div></div>
-      <div class="sysmap"><button onclick="newQuote();showView('order')"><strong>Quote / enquiry</strong><small>Price a request without affecting stock</small></button><button onclick="showView('queues');openQueue('quote-ready')"><strong>Open quotes</strong><small>Review active quotes and convert when ready</small></button><button onclick="showView('history');renderHistory('live')"><strong>Repeat order</strong><small>Find a completed customer/order and duplicate it</small></button><button onclick="showView('history')"><strong>Order history</strong><small>Find completed, past, converted or cancelled work</small></button><button onclick="showView('request')"><strong>Request Inbox</strong><small>Review new enquiries</small></button><button onclick="showView('stock')"><strong>Stock</strong><small>Receive stock, adjust counts, and check low items</small></button></div>
+      <div class="sysmap"><button onclick="showView('queues');openQueue('quote-ready')"><strong>Open quotes</strong><small>Review active quotes and convert when ready</small></button><button onclick="showView('history');renderHistory('live')"><strong>Repeat order</strong><small>Find a completed customer/order and duplicate it</small></button><button onclick="showView('history')"><strong>Order history</strong><small>Find completed, past, converted or cancelled work</small></button><button onclick="showView('request')"><strong>Request Inbox</strong><small>Review new enquiries</small></button><button onclick="showView('stock')"><strong>Stock</strong><small>Receive stock, adjust counts, and check low items</small></button></div>
     </section>
     <section class="card">
       <div class="section-title"><div><h3 id="startNextActionsHeading">Next actions 0</h3><p>Priority prompts from open orders, customer messages, dispatch and stock.</p></div></div>
@@ -858,7 +864,7 @@ body{padding-bottom:82px;font-size:16px;line-height:1.45}
         </details>
       </details>
       <div class="tabs" id="requestInboxTabs"><button class="active" type="button" data-request-view="review" onclick="setRequestInboxView('review')">Needs review</button><button type="button" data-request-view="ready" onclick="setRequestInboxView('ready')">Ready to quote</button><button type="button" data-request-view="progress" onclick="setRequestInboxView('progress')">Quote in progress</button><button type="button" data-request-view="closed" onclick="setRequestInboxView('closed')">Parked/closed</button><button type="button" data-request-view="archived" onclick="setRequestInboxView('archived')">Archived</button><button type="button" data-request-view="bin" onclick="setRequestInboxView('bin')">Local bin</button></div>
-      <div id="requestSelectionTools" class="request-selection-tools hide"><strong id="requestSelectionCount">0 selected</strong><button class="btn subtle" type="button" onclick="clearRequestSelection()">Clear</button><button class="btn" type="button" onclick="archiveSelectedRequests()">Archive selected</button><button class="btn subtle" type="button" onclick="binSelectedRequests()">Move selected to local bin</button></div>
+      <div id="requestSelectionTools" class="request-selection-tools hide"><strong id="requestSelectionCount">0 selected</strong><button class="btn" type="button" onclick="archiveSelectedRequests()">Archive</button><button class="btn cleanup-bin" type="button" onclick="binSelectedRequests()">Move to bin</button><button class="btn subtle selection-clear" type="button" onclick="clearRequestSelection()">Cancel selection</button></div>
       <div id="requestInboxList" class="card slim request-inbox-list"></div>
     </section>
   </main>
@@ -1438,7 +1444,7 @@ function resetLocalTestRecordsOnly(){const typed=prompt('This clears local quote
 function renderPrototypeDataWarning(){}
 const VIEW_LABELS={start:'Start',queues:'Workflow',order:'Order',request:'Requests',stock:'Stock',history:'Order History',admin:'Admin'};
 const VIEW_GUIDES={
-  start:{title:'Start',steps:['Open Requests when a new online request arrives.','Open Customer Messages for the next reply or follow-up.','Use New Order for a direct sale, manual quote or historical record.']},
+  start:{title:'Start',steps:['Open Requests when a new online request arrives.','Open Customer Messages for the next reply or follow-up.','Use New quote for an emailed enquiry. Use the Order tab for direct orders and existing order work.']},
   order:{title:'Order',steps:['Choose the customer, source and record type.','Add the requested items and confirm the approved price.','Check availability, payment and the customer message.','Save only when the details are correct. Shared Finance checks for duplicates.']},
   queues:{title:'Workflow',steps:['Start with the highlighted stage.','Open one record and complete its next required action.','Move it forward only when payment, fulfilment or dispatch is genuinely complete.']},
   history:{title:'Order history',steps:['Use the filters to find closed, past, test or cancelled records.','Past orders are reference records and must not change today’s stock.','Use Bin only for confirmed test records or mistakes.']},
@@ -2747,13 +2753,13 @@ function renderRequestInbox(){
     const issues=requestManualReviewIssues(req),blocked=issues.length,warnings=blocked?[]:requestInternalWarnings(req),reviewId=requestReviewId(requestIndex),planningMatch=requestPlanningStructureMatch(req),badge=requestInboxLifecycleBadge(req,blocked),guide=requestOperatorGuidance(req,blocked),lifecycleLine=requestInboxLifecycleLine(req),actions=renderRequestInboxActions(req,showBin,issues,reviewId),received=new Date(req.receivedAt||Date.now()).toLocaleString();
     const decision=['progress','closed','archived','bin'].includes(requestInboxView)?`<div class="request-decision ${blocked?'blocked':''}"><strong>${htmlEscape(guide.title)}</strong><div>${htmlEscape(guide.state)}</div></div>`:'',internalWarnings=requestInternalWarningsHTML(warnings),reviewDetails='';
     const selected=selectedRequestIds.has(req.requestId);
-    return `<article class="queue-row request-card ${blocked?'request-blocked':'request-ready'}"><label class="request-card-select"><input type="checkbox" ${selected?'checked':''} onchange="toggleRequestSelection(${jsArg(req.requestId)},this.checked)"> Select for cleanup</label><div class="request-card-head"><div><div class="request-card-title">${htmlEscape(requestCustomerName(req)||'No customer reference')}</div><div class="request-card-ref">Request ${htmlEscape(req.requestId)}</div></div><div class="request-badges">${badge}${showBin?'<span class="badge-bad">Bin</span>':''}</div></div><div class="request-card-meta">Received ${htmlEscape(received)} - ${htmlEscape(requestSourceDisplay(req.source))}</div>${requestContactHTML(req)}<div class="subhead">Requested items</div><div class="request-items">${requestInboxSummary(req)}</div>${internalWarnings}${reviewDetails}${decision}${lifecycleLine?`<div class="request-item-note">${htmlEscape(lifecycleLine)}</div>`:''}${requestExtraHTML(req)}${showBin&&req.binnedAt?`<div class="request-item-note">Binned ${htmlEscape(new Date(req.binnedAt).toLocaleString())}</div>`:''}<div class="btnrow request-actions">${actions}</div></article>`
+    return `<article class="queue-row request-card ${blocked?'request-blocked':'request-ready'} ${selected?'request-selected':''}" data-request-id="${htmlEscape(req.requestId)}"><label class="request-card-select"><input type="checkbox" ${selected?'checked':''} onchange="toggleRequestSelection(${jsArg(req.requestId)},this.checked)"> Select for cleanup</label><div class="request-card-head"><div><div class="request-card-title">${htmlEscape(requestCustomerName(req)||'No customer reference')}</div><div class="request-card-ref">Request ${htmlEscape(req.requestId)}</div></div><div class="request-badges">${badge}${showBin?'<span class="badge-bad">Bin</span>':''}</div></div><div class="request-card-meta">Received ${htmlEscape(received)} - ${htmlEscape(requestSourceDisplay(req.source))}</div>${requestContactHTML(req)}<div class="subhead">Requested items</div><div class="request-items">${requestInboxSummary(req)}</div>${internalWarnings}${reviewDetails}${decision}${lifecycleLine?`<div class="request-item-note">${htmlEscape(lifecycleLine)}</div>`:''}${requestExtraHTML(req)}${showBin&&req.binnedAt?`<div class="request-item-note">Binned ${htmlEscape(new Date(req.binnedAt).toLocaleString())}</div>`:''}<div class="btnrow request-actions">${actions}</div></article>`
   }).join(''):`<div class="muted">No requests in this view.</div>`;
   updateRequestSelectionTools();
   renderRequestAttentionSignals();
 }
 function updateRequestSelectionTools(){const count=selectedRequestIds.size;if(requestSelectionCount)requestSelectionCount.textContent=count+' selected';requestSelectionTools?.classList.toggle('hide',!count)}
-function toggleRequestSelection(id,checked){if(checked)selectedRequestIds.add(id);else selectedRequestIds.delete(id);updateRequestSelectionTools()}
+function toggleRequestSelection(id,checked){if(checked)selectedRequestIds.add(id);else selectedRequestIds.delete(id);document.querySelectorAll('.request-card[data-request-id]').forEach(card=>{if(card.dataset.requestId===id)card.classList.toggle('request-selected',checked)});updateRequestSelectionTools()}
 function clearRequestSelection(){selectedRequestIds.clear();renderRequestInbox()}
 async function archiveSelectedRequests(){const ids=[...selectedRequestIds].filter(id=>requestInbox.some(req=>req.requestId===id));if(!ids.length)return;if(!confirm('Archive '+ids.length+' selected request'+(ids.length===1?'':'s')+'? They can be restored from Archived.'))return;for(const id of ids){const req=requestInbox.find(x=>x.requestId===id);if(!req)continue;try{if(isCloudBackedRequest(req))await updateSharedRequestStatus(req,'closed');req.status='closed';req.archivedAt=new Date().toISOString();req.binned=false}catch(err){console.error(err);showToast('Could not archive '+id);return}}selectedRequestIds.clear();saveLocal();renderRequestInbox();renderStartQuoteFollowup();showToast(ids.length+' request'+(ids.length===1?'':'s')+' archived')}
 function binSelectedRequests(){const ids=[...selectedRequestIds].filter(id=>requestInbox.some(req=>req.requestId===id));if(!ids.length)return;if(!confirm('Move '+ids.length+' selected request'+(ids.length===1?'':'s')+' to the local bin?'))return;const now=new Date().toISOString();ids.forEach(id=>{const req=requestInbox.find(x=>x.requestId===id);if(!req)return;req.binned=true;req.binnedAt=now;if(isCloudBackedRequest(req))ignoreCloudRequest(req)});selectedRequestIds.clear();saveLocal();renderRequestInbox();renderStartQuoteFollowup();showToast(ids.length+' request'+(ids.length===1?'':'s')+' moved to local bin')}
