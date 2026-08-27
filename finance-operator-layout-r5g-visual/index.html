@@ -14,45 +14,45 @@ html,body{margin:0;width:100%;height:100%;background:#07090d;overflow:hidden}
 <script>
 const frame=document.getElementById('reviewFrame');
 frame.addEventListener('load',()=>{
-  const doc=frame.contentDocument;
-  const win=frame.contentWindow;
+  const doc=frame.contentDocument,win=frame.contentWindow;
   if(!doc||!win)return;
   const style=doc.createElement('style');
   style.id='r5g-visual-correction-overlay';
   style.textContent=`
-/* R5G protected hierarchy correction v2 */
-:root{--r5g-edge:#72b8e8;--r5g-edge-bright:#b2e1ff;--r5g-edge-soft:rgba(91,166,216,.24);--r5g-panel:#0b121b;--r5g-line:#31465b}
+/* R5G protected hierarchy correction v3 */
+:root{--r5g-blue:#77a9cc;--r5g-blue-soft:rgba(119,169,204,.18);--r5g-line:#34495b}
 body{background:radial-gradient(circle at top left,#101923 0,#07090d 38%,#05070a 100%)}
-.topbar{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;min-height:54px!important;padding:2px 0 8px!important;margin-bottom:10px!important}
-.top-actions{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important;min-width:max-content!important}
+.topbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;min-height:54px!important;padding:2px 0 8px!important;margin-bottom:10px!important}
+.top-actions{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important;min-width:max-content!important}
 .top-actions .header-action{flex:0 0 auto!important;display:grid!important;place-items:center!important;min-width:42px!important;width:42px!important;min-height:42px!important;padding:0!important}
-#viewBreadcrumb{display:block!important;flex:0 0 auto!important;width:auto!important;white-space:nowrap!important;margin-left:2px!important;color:#b8cad9!important}
-#view-start>.card:first-child{border-color:#405d76!important;background:linear-gradient(180deg,rgba(14,23,34,.99),rgba(8,13,20,.995))!important;box-shadow:0 16px 34px rgba(0,0,0,.3),inset 0 1px 0 rgba(178,225,255,.05)!important}
-#view-start>.card:first-child>.mission-control-layout{padding-bottom:3px}
+#viewBreadcrumb{display:block!important;width:auto!important;white-space:nowrap!important;margin-left:2px!important;color:#a9bac8!important}
+#view-start>.card:first-child{border-color:#3b5368!important;background:linear-gradient(180deg,rgba(14,23,34,.99),rgba(8,13,20,.995))!important;box-shadow:0 16px 34px rgba(0,0,0,.28)!important}
 #view-start>.card:first-child #missionControlCards{padding-top:12px;border-top:1px solid #2b4052}
-#missionControlCards .queue-card,#queueCards .queue-card{position:relative;overflow:hidden;border-color:#344a5f!important;background:linear-gradient(180deg,#0b121b,#080d13)!important;box-shadow:0 8px 20px rgba(0,0,0,.17)!important}
-#missionControlCards .queue-card.r5g-attention,#queueCards .queue-card.r5g-attention{border-color:#5d88a8!important;background:linear-gradient(180deg,#0c1621,#081018)!important;box-shadow:0 0 0 1px rgba(114,184,232,.14),0 10px 25px rgba(0,0,0,.25),inset 0 1px 0 rgba(178,225,255,.055)!important}
-#missionControlCards .queue-card.r5g-attention::before,#queueCards .queue-card.r5g-attention::before,#startActionPrompts .alert-row::before{content:"";position:absolute!important;left:0!important;top:0!important;bottom:auto!important;width:48%!important;height:2px!important;background:linear-gradient(90deg,var(--r5g-edge-bright) 0%,var(--r5g-edge) 26%,rgba(114,184,232,.35) 66%,transparent 100%)!important;box-shadow:0 0 12px rgba(114,184,232,.5)!important;pointer-events:none}
-#missionControlCards .queue-card.r5g-attention::after,#queueCards .queue-card.r5g-attention::after,#startActionPrompts .alert-row::after{content:"";position:absolute;left:0;top:0;width:2px;height:58%;background:linear-gradient(180deg,var(--r5g-edge-bright) 0%,var(--r5g-edge) 32%,rgba(114,184,232,.24) 72%,transparent 100%);box-shadow:0 0 10px rgba(114,184,232,.45);pointer-events:none}
-#missionControlCards .queue-card.r5g-attention .n,#queueCards .queue-card.r5g-attention .n{color:#f5fbff;text-shadow:0 0 14px rgba(126,190,230,.22)}
-#queueCards .queue-card.r5g-attention{border-color:#537996!important;box-shadow:0 0 0 1px rgba(114,184,232,.09),0 8px 20px rgba(0,0,0,.21)!important}
-#queueCards .queue-card.r5g-attention::before{width:38%!important;opacity:.84}
-#queueCards .queue-card.r5g-attention::after{height:45%;opacity:.78}
+#missionControlCards .queue-card,#queueCards .queue-card{position:relative;overflow:hidden;border-color:#33485b!important;background:linear-gradient(180deg,#0b121b,#080d13)!important;box-shadow:0 8px 18px rgba(0,0,0,.16)!important}
+#missionControlCards .queue-card.r5g-attention,#queueCards .queue-card.r5g-attention{border-color:#55748c!important;background:linear-gradient(180deg,#0c151f,#091018)!important;box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.025)!important}
+#missionControlCards .queue-card.r5g-attention::before,#queueCards .queue-card.r5g-attention::before,#startActionPrompts .alert-row::before{content:"";position:absolute;left:0;top:0;width:34%;height:1px;background:linear-gradient(90deg,rgba(171,212,240,.92) 0%,rgba(119,169,204,.7) 38%,transparent 100%);box-shadow:0 0 7px rgba(119,169,204,.28);pointer-events:none}
+#missionControlCards .queue-card.r5g-attention::after,#queueCards .queue-card.r5g-attention::after,#startActionPrompts .alert-row::after{content:"";position:absolute;left:0;top:0;width:1px;height:34%;background:linear-gradient(180deg,rgba(171,212,240,.82) 0%,rgba(119,169,204,.58) 42%,transparent 100%);box-shadow:0 0 6px rgba(119,169,204,.22);pointer-events:none}
+#missionControlCards .queue-card .k,#queueCards .queue-card .k{color:#dbe9f3!important;font-weight:680!important;letter-spacing:.08em!important}
+#missionControlCards .queue-card .s,#queueCards .queue-card .s{color:#9fb3c2!important;font-weight:450!important}
+#missionControlCards .queue-card .n,#queueCards .queue-card .n{color:#f6fbff!important;font-weight:800!important}
+#view-start .subhead{color:#a8bed0!important;font-weight:760!important;letter-spacing:.08em!important}
+#view-start .section-title h2,#view-start .section-title h3{color:#f5f8fb!important;font-weight:760!important}
+#view-start .section-title p{color:#9fb2c0!important;font-weight:450!important}
 #view-start .start-secondary-grid{gap:14px!important;margin-top:14px!important}
-#view-start .start-secondary-grid>.card,#view-start>section.card:not(:first-child){border-color:#293e51!important;background:linear-gradient(180deg,rgba(12,18,27,.985),rgba(8,12,18,.995))!important;box-shadow:0 12px 28px rgba(0,0,0,.19)!important}
+#view-start .start-secondary-grid>.card,#view-start>section.card:not(:first-child){border-color:#293e51!important;background:linear-gradient(180deg,rgba(12,18,27,.985),rgba(8,12,18,.995))!important;box-shadow:0 12px 26px rgba(0,0,0,.18)!important}
 #view-start .start-secondary-grid>.card>.section-title,#view-start>section.card:not(:first-child)>.section-title{padding-bottom:10px;border-bottom:1px solid #283c4e}
-#view-start .section-title h2,#view-start .section-title h3{color:#f2f8fd!important}
-#view-start .section-title p{color:#afc0ce!important}
-#startActionPrompts .alert-row{position:relative;overflow:hidden;border-color:#4b718f!important;background:linear-gradient(180deg,#0b1722,#09131d)!important;box-shadow:0 0 0 1px rgba(114,184,232,.10),0 8px 20px rgba(0,0,0,.2)!important}
-#startActionPrompts .alert-row>div:first-child strong{color:#f5faff!important}
-#startActionPrompts .alert-row>div:first-child p{color:#b8cad8!important}
+#view-start .sysmap button strong{color:#eef5fa!important;font-weight:700!important}
+#view-start .sysmap button small{color:#98acbb!important;font-weight:450!important}
+#startActionPrompts .alert-row{position:relative;overflow:hidden;border-color:#3d5c74!important;background:linear-gradient(180deg,#0b151f,#09121b)!important;box-shadow:0 7px 18px rgba(0,0,0,.18)!important}
+#startActionPrompts .alert-row>div:first-child strong{color:#f5f8fb!important;font-weight:720!important}
+#startActionPrompts .alert-row>div:first-child p{color:#9fb3c2!important;font-weight:450!important}
+#startActionPrompts .badge{color:#a9bed0!important;background:#0b1118!important;border-color:#30475b!important;font-weight:650!important}
 #view-request .request-card{border-color:#30485c!important;background:#091018!important}
-#view-request .request-card.request-selected{border-color:#75aed7!important;background:#0d1a27!important;box-shadow:inset 4px 0 0 #6db3e8,0 0 0 1px rgba(109,179,232,.2),0 8px 22px rgba(0,0,0,.2)!important}
-#view-request .request-card.request-blocked:not(.request-selected){border-left:3px solid #c77d31!important}
-#view-request .request-card.request-ready:not(.request-selected){border-left:3px solid #48708d!important}
+#view-request .request-card.request-selected{border-color:#6e98b6!important;background:#0d1a27!important;box-shadow:inset 2px 0 0 #7ca9c8,0 8px 20px rgba(0,0,0,.2)!important}
+#view-request .request-card.request-blocked:not(.request-selected){border-left:3px solid #b97839!important}
+#view-request .request-card.request-ready:not(.request-selected){border-left:3px solid #486b84!important}
 #view-queues .workflow-stage-summary,#view-queues .workflow-stage-detail,#historyList .queue-row{border-color:#30465a!important;background:#091119!important}
-#view-queues .workflow-stage-summary{border-left:3px solid #517c9d!important}
-#view-queues .workflow-stage-summary.r5g-attention{border-color:#4e7898!important;box-shadow:inset 3px 0 0 #79b4df,0 8px 20px rgba(0,0,0,.18)!important}
+#view-queues .workflow-stage-summary.r5g-attention{border-color:#4d6f88!important;box-shadow:inset 2px 0 0 #6e98b6,0 8px 18px rgba(0,0,0,.17)!important}
 #view-stock>.card{border-color:#30465a!important}
 @media(min-width:761px){
   .wrap{max-width:1240px!important;padding:14px 18px 28px!important}
@@ -78,54 +78,19 @@ body{background:radial-gradient(circle at top left,#101923 0,#07090d 38%,#05070a
   .top-actions .header-action{min-width:36px!important;width:36px!important;min-height:36px!important}
   #viewBreadcrumb{display:none!important}
   #view-start .start-secondary-grid{gap:8px!important;margin-top:8px!important}
-  #missionControlCards .queue-card.r5g-attention,#queueCards .queue-card.r5g-attention{border-color:#638eae!important;box-shadow:0 0 0 1px rgba(114,184,232,.14),0 8px 20px rgba(0,0,0,.22)!important}
-  #missionControlCards .queue-card.r5g-attention::before{width:58%!important;height:2px!important;box-shadow:0 0 14px rgba(114,184,232,.58)!important}
-  #missionControlCards .queue-card.r5g-attention::after{height:68%!important;box-shadow:0 0 12px rgba(114,184,232,.52)!important}
-  #queueCards .queue-card.r5g-attention::before{width:50%!important}
-  #queueCards .queue-card.r5g-attention::after{height:54%!important}
+  #missionControlCards .queue-card.r5g-attention::before{width:42%!important}
+  #missionControlCards .queue-card.r5g-attention::after{height:42%!important}
+  #queueCards .queue-card.r5g-attention::before{width:30%!important;opacity:.82}
+  #queueCards .queue-card.r5g-attention::after{height:30%!important;opacity:.82}
   #startActionPrompts .alert-row{padding-left:15px!important}
-  #startActionPrompts .alert-row>div:first-child p{margin-top:4px!important}
 }
 `;
   doc.head.appendChild(style);
-
-  function numericText(el){
-    if(!el)return 0;
-    const raw=(el.textContent||'').replace(/[^0-9.-]/g,'');
-    const n=Number(raw);
-    return Number.isFinite(n)?n:0;
-  }
-  function isRealJobCard(card){
-    const label=(card.querySelector('.k')?.textContent||'').trim().toLowerCase();
-    if(label.includes('open order value'))return false;
-    return numericText(card.querySelector('.n'))>0;
-  }
-  function compactActionCopy(){
-    doc.querySelectorAll('#startActionPrompts .alert-row>div:first-child p').forEach(p=>{
-      const full=(p.dataset.r5gFull||p.textContent||'').trim();
-      if(!p.dataset.r5gFull)p.dataset.r5gFull=full;
-      let short=full;
-      short=short.replace(/\s+needs the customer confirmation sent and marked sent\.?$/i,'');
-      short=short.replace(/\s+needs the customer update sent\.?$/i,'');
-      short=short.replace(/\s+is waiting for payment before fulfilment\.?$/i,'');
-      short=short.replace(/\s+needs the dispatch reference recorded\.?$/i,'');
-      short=short.replace(/\s+needs label or collection status confirmed\.?$/i,'');
-      if(short&&short!==full)p.textContent=short;
-    });
-  }
-  function applyAttention(){
-    doc.querySelectorAll('#missionControlCards .queue-card,#queueCards .queue-card').forEach(card=>{
-      card.classList.toggle('r5g-attention',isRealJobCard(card));
-    });
-    doc.querySelectorAll('#view-queues .workflow-stage-summary').forEach(card=>{
-      const heading=card.querySelector('.workflow-stage-heading span');
-      card.classList.toggle('r5g-attention',numericText(heading)>0);
-    });
-    compactActionCopy();
-  }
-  applyAttention();
-  const observer=new win.MutationObserver(()=>applyAttention());
-  observer.observe(doc.body,{childList:true,subtree:true,characterData:true});
+  function numericText(el){const raw=(el?.textContent||'').replace(/[^0-9.-]/g,'');const n=Number(raw);return Number.isFinite(n)?n:0}
+  function isRealJobCard(card){const label=(card.querySelector('.k')?.textContent||'').trim().toLowerCase();return !label.includes('open order value')&&numericText(card.querySelector('.n'))>0}
+  function compactActionCopy(){doc.querySelectorAll('#startActionPrompts .alert-row>div:first-child p').forEach(p=>{const full=(p.dataset.r5gFull||p.textContent||'').trim();if(!p.dataset.r5gFull)p.dataset.r5gFull=full;let short=full.replace(/\s+needs the customer confirmation sent and marked sent\.?$/i,'').replace(/\s+needs the customer update sent\.?$/i,'').replace(/\s+is waiting for payment before fulfilment\.?$/i,'').replace(/\s+needs the dispatch reference recorded\.?$/i,'').replace(/\s+needs label or collection status confirmed\.?$/i,'');if(short&&short!==full)p.textContent=short})}
+  function applyAttention(){doc.querySelectorAll('#missionControlCards .queue-card,#queueCards .queue-card').forEach(card=>card.classList.toggle('r5g-attention',isRealJobCard(card)));doc.querySelectorAll('#view-queues .workflow-stage-summary').forEach(card=>card.classList.toggle('r5g-attention',numericText(card.querySelector('.workflow-stage-heading span'))>0));compactActionCopy()}
+  applyAttention();new win.MutationObserver(()=>applyAttention()).observe(doc.body,{childList:true,subtree:true,characterData:true});
 });
 </script>
 </body>
