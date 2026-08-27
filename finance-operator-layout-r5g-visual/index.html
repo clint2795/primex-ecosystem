@@ -3,109 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>PrimeX Finance HQ · R5G Visual Correction Review</title>
+<title>PrimeX Finance HQ · R5G Accepted Interface Review</title>
 <style>
 html,body{margin:0;width:100%;height:100%;background:#07090d;overflow:hidden}
 #reviewFrame{display:block;width:100%;height:100%;border:0;background:#07090d}
 </style>
 </head>
 <body>
-<iframe id="reviewFrame" title="PrimeX Finance R5G protected visual review" src="../finance-operator-layout-review/"></iframe>
-<script>
-const frame=document.getElementById('reviewFrame');
-frame.addEventListener('load',()=>{
-  const doc=frame.contentDocument,win=frame.contentWindow;
-  if(!doc||!win)return;
-  const style=doc.createElement('style');
-  style.id='r5g-visual-correction-overlay';
-  style.textContent=`
-/* R5G restored card UI + restrained actionable emphasis */
-:root{--r5g-blue:#6f9fc2;--r5g-blue-soft:rgba(111,159,194,.14)}
-body{background:radial-gradient(circle at top left,#101923 0,#07090d 38%,#05070a 100%)}
-.topbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;min-height:54px!important;padding:2px 0 8px!important;margin-bottom:10px!important}
-.top-actions{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:7px!important;min-width:max-content!important}
-.top-actions .header-action{flex:0 0 auto!important;display:grid!important;place-items:center!important;min-width:42px!important;width:42px!important;min-height:42px!important;padding:0!important}
-#viewBreadcrumb{display:block!important;width:auto!important;white-space:nowrap!important;margin-left:2px!important;color:#a7b9c7!important}
-#view-start>.card:first-child{border-color:#39536a!important;background:linear-gradient(180deg,rgba(14,23,34,.99),rgba(8,13,20,.995))!important;box-shadow:0 16px 34px rgba(0,0,0,.26)!important}
-#view-start>.card:first-child #missionControlCards{padding-top:12px;border-top:1px solid #2b4052}
-#missionControlCards .queue-card,#queueCards .queue-card{position:relative;border-color:#344a5d!important;background:linear-gradient(180deg,#0b121b,#080d13)!important;box-shadow:0 8px 18px rgba(0,0,0,.16)!important}
-#missionControlCards .queue-card.r5g-actionable,#queueCards .queue-card.r5g-actionable{border-color:#5a7890!important;background:linear-gradient(180deg,#0d1721,#09111a)!important;box-shadow:0 9px 22px rgba(0,0,0,.21),inset 0 1px 0 rgba(183,218,241,.10)!important}
-#missionControlCards .queue-card.r5g-actionable::before,#queueCards .queue-card.r5g-actionable::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;border-radius:2px;background:#6f9fc2;opacity:.92;box-shadow:0 0 7px rgba(111,159,194,.22);pointer-events:none}
-#missionControlCards .queue-card .k,#queueCards .queue-card .k{color:#d9e6ef!important;font-weight:680!important;letter-spacing:.065em!important}
-#missionControlCards .queue-card.r5g-actionable .k,#queueCards .queue-card.r5g-actionable .k{color:#f0f6fa!important}
-#missionControlCards .queue-card .s,#queueCards .queue-card .s{color:#9aafbe!important;font-weight:450!important}
-#missionControlCards .queue-card .n,#queueCards .queue-card .n{color:#f8fbfd!important;font-weight:800!important;text-shadow:none!important}
-#missionControlCards .queue-card.r5g-zero,#queueCards .queue-card.r5g-zero{border-color:#293b4a!important;background:#080e15!important;box-shadow:none!important}
-#missionControlCards .queue-card.r5g-zero .k,#queueCards .queue-card.r5g-zero .k{color:#899ba9!important}
-#missionControlCards .queue-card.r5g-zero .s,#queueCards .queue-card.r5g-zero .s{color:#718492!important}
-#missionControlCards .queue-card.r5g-zero .n,#queueCards .queue-card.r5g-zero .n{color:#aab7c1!important}
-#queueCards .queue-card.r5g-info{border-color:#2e4253!important;background:#091018!important;box-shadow:none!important}
-#queueCards .queue-card.r5g-info .k{color:#9fb0bd!important}
-#queueCards .queue-card.r5g-info .n{color:#e2e9ee!important}
-#view-start .subhead{color:#9fb7ca!important;font-weight:760!important;letter-spacing:.07em!important}
-#view-start .section-title h2,#view-start .section-title h3{color:#f4f8fb!important;font-weight:760!important}
-#view-start .section-title p{color:#9fb2c0!important;font-weight:450!important}
-#view-start .start-secondary-grid{gap:14px!important;margin-top:14px!important}
-#view-start .start-secondary-grid>.card,#view-start>section.card:not(:first-child){border-color:#293e51!important;background:linear-gradient(180deg,rgba(12,18,27,.985),rgba(8,12,18,.995))!important;box-shadow:0 12px 26px rgba(0,0,0,.18)!important}
-#view-start .start-secondary-grid>.card>.section-title,#view-start>section.card:not(:first-child)>.section-title{padding-bottom:10px;border-bottom:1px solid #283c4e}
-#view-start .sysmap button strong{color:#eef5fa!important;font-weight:700!important}
-#view-start .sysmap button small{color:#98acbb!important;font-weight:450!important}
-#startActionPrompts .alert-row{position:relative;overflow:hidden;border-color:#466780!important;background:linear-gradient(180deg,#0b151f,#09121b)!important;box-shadow:0 7px 18px rgba(0,0,0,.18)!important}
-#startActionPrompts .alert-row::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;border-radius:2px;background:#6f9fc2;opacity:.92;pointer-events:none}
-#startActionPrompts .alert-row>div:first-child strong{color:#f5f8fb!important;font-weight:720!important}
-#startActionPrompts .alert-row>div:first-child p{color:#9fb3c2!important;font-weight:450!important}
-#startActionPrompts .badge{color:#a9bed0!important;background:#0b1118!important;border-color:#30475b!important;font-weight:650!important}
-#view-request .request-card{border-color:#30485c!important;background:#091018!important}
-#view-request .request-card.request-selected{border-color:#6e98b6!important;background:#0d1a27!important;box-shadow:inset 3px 0 0 #6f9fc2,0 8px 20px rgba(0,0,0,.2)!important}
-#view-request .request-card.request-blocked:not(.request-selected){border-left:3px solid #b97839!important}
-#view-request .request-card.request-ready:not(.request-selected){border-left:3px solid #486b84!important}
-#view-queues .workflow-stage-summary,#view-queues .workflow-stage-detail,#historyList .queue-row{border-color:#30465a!important;background:#091119!important}
-#view-queues .workflow-stage-summary.r5g-actionable{border-color:#4d6f88!important;box-shadow:inset 3px 0 0 #6f9fc2,0 8px 18px rgba(0,0,0,.17)!important}
-#view-stock>.card{border-color:#30465a!important}
-@media(min-width:761px){
-  .wrap{max-width:1240px!important;padding:14px 18px 28px!important}
-  #missionControlCards{gap:12px!important}
-  #queueCards{gap:10px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
-  #queueCards .queue-card{min-height:116px!important;padding:12px!important}
-  #view-start>.card:first-child{padding:16px!important}
-  #view-start .start-secondary-grid{display:flex!important;flex-direction:column!important;gap:14px!important}
-  #view-start .start-secondary-grid>.card:nth-child(2){order:-1!important}
-  #view-start .start-secondary-grid>.card{width:100%!important;margin:0!important}
-  #view-start .start-secondary-grid>.card:nth-child(1) .sysmap{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important}
-  #view-start .start-secondary-grid>.card:nth-child(1) .sysmap button{min-height:92px!important;padding:11px 12px!important}
-  #startActionPrompts .alert-list{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
-  #startActionPrompts .alert-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto!important;align-items:center!important;gap:10px 14px!important;padding:11px 12px 11px 15px!important;min-height:62px!important}
-  #startActionPrompts .alert-row>div:first-child{grid-column:1!important;grid-row:1!important}
-  #startActionPrompts .alert-row>.badge{grid-column:2!important;grid-row:1!important}
-  #startActionPrompts .alert-row>button.secondary{grid-column:3!important;grid-row:1!important;width:auto!important;min-width:132px!important;margin:0!important}
-  #startActionPrompts .alert-row>div:first-child p{margin:3px 0 0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:720px!important}
-}
-@media(max-width:760px){
-  .topbar{display:flex!important;min-height:38px!important;padding-bottom:2px!important;margin-bottom:4px!important}
-  .top-actions{gap:5px!important}
-  .top-actions .header-action{min-width:36px!important;width:36px!important;min-height:36px!important}
-  #viewBreadcrumb{display:none!important}
-  #view-start .start-secondary-grid{gap:8px!important;margin-top:8px!important}
-  #startActionPrompts .alert-row{padding-left:15px!important}
-}
-`;
-  doc.head.appendChild(style);
-  function numericText(el){const raw=(el?.textContent||'').replace(/[^0-9.-]/g,'');const n=Number(raw);return Number.isFinite(n)?n:0}
-  function classify(){
-    doc.querySelectorAll('#missionControlCards .queue-card,#queueCards .queue-card').forEach(card=>{
-      const label=(card.querySelector('.k')?.textContent||'').trim().toLowerCase();
-      const n=numericText(card.querySelector('.n'));
-      const info=label.includes('open order value');
-      card.classList.toggle('r5g-actionable',n>0&&!info);
-      card.classList.toggle('r5g-zero',n===0&&!info);
-      card.classList.toggle('r5g-info',info);
-    });
-    doc.querySelectorAll('#view-queues .workflow-stage-summary').forEach(card=>card.classList.toggle('r5g-actionable',numericText(card.querySelector('.workflow-stage-heading span'))>0));
-  }
-  function compactActionCopy(){doc.querySelectorAll('#startActionPrompts .alert-row>div:first-child p').forEach(p=>{const full=(p.dataset.r5gFull||p.textContent||'').trim();if(!p.dataset.r5gFull)p.dataset.r5gFull=full;let short=full.replace(/\s+needs the customer confirmation sent and marked sent\.?$/i,'').replace(/\s+needs the customer update sent\.?$/i,'').replace(/\s+is waiting for payment before fulfilment\.?$/i,'').replace(/\s+needs the dispatch reference recorded\.?$/i,'').replace(/\s+needs label or collection status confirmed\.?$/i,'');if(short&&short!==full)p.textContent=short})}
-  function apply(){classify();compactActionCopy()}
-  apply();new win.MutationObserver(()=>apply()).observe(doc.body,{childList:true,subtree:true,characterData:true});
-});
-</script>
+<iframe id="reviewFrame" title="PrimeX Finance R5G accepted interface review" src="../finance-operator-layout-review/"></iframe>
 </body>
 </html>
