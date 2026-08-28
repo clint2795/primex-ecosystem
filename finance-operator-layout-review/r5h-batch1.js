@@ -88,3 +88,13 @@
   // Re-render once so quote-aware dangerous actions are correct immediately.
   renderOrder();
 })();
+
+// R5H Batch 2 loader — protected route only. Kept here so the shared finance/config.js remains unchanged.
+(function primeXR5HBatch2Loader(){
+  if(!location.pathname.includes('/finance-operator-layout-review/')) return;
+  if(document.querySelector('script[data-px-r5h-batch2]')) return;
+  const script=document.createElement('script');
+  script.src='/finance-operator-layout-review/r5h-batch2.js?v=1';
+  script.dataset.pxR5hBatch2='true';
+  document.body.appendChild(script);
+})();
