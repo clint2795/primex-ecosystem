@@ -22,15 +22,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
       box-shadow:inset 1.5px 0 0 #46b3ff,inset 0 1px 0 rgba(174,226,255,.40),0 7px 16px rgba(0,0,0,.18);
     }
     #missionControlCards .queue-card.r5g-actionable .k,
-    #queueCards .queue-card.r5g-actionable .k{
-      color:#e7f2fa;
-      font-weight:600;
-    }
+    #queueCards .queue-card.r5g-actionable .k{color:#e7f2fa;font-weight:600}
     #missionControlCards .queue-card.r5g-actionable .n,
-    #queueCards .queue-card.r5g-actionable .n{
-      color:#f7fcff;
-      font-weight:700;
-    }
+    #queueCards .queue-card.r5g-actionable .n{color:#f7fcff;font-weight:700}
     #missionControlCards .queue-card.r5g-actionable .s,
     #queueCards .queue-card.r5g-actionable .s{color:#a9bdcc}
     #missionControlCards .queue-card.r5g-actionable:hover,
@@ -42,30 +36,16 @@ window.PRIMEX_SUPABASE_CONFIG = {
 
     /* Zero states step back so the eye does not have to read every card. */
     #missionControlCards .queue-card.r5g-passive,
-    #queueCards .queue-card.r5g-passive{
-      border-color:#1e2c3a;
-      background:#080d13;
-      box-shadow:none;
-    }
+    #queueCards .queue-card.r5g-passive{border-color:#1e2c3a;background:#080d13;box-shadow:none}
     #missionControlCards .queue-card.r5g-passive .k,
-    #queueCards .queue-card.r5g-passive .k{
-      color:#899aa9;
-      font-weight:540;
-    }
+    #queueCards .queue-card.r5g-passive .k{color:#899aa9;font-weight:540}
     #missionControlCards .queue-card.r5g-passive .n,
-    #queueCards .queue-card.r5g-passive .n{
-      color:#9aa8b4;
-      font-weight:620;
-    }
+    #queueCards .queue-card.r5g-passive .n{color:#9aa8b4;font-weight:620}
     #missionControlCards .queue-card.r5g-passive .s,
     #queueCards .queue-card.r5g-passive .s{color:#748696}
 
     /* Informational value card remains readable but does not impersonate a task. */
-    #queueCards .queue-card.r5g-info{
-      border-color:#253748;
-      background:#091018;
-      box-shadow:none;
-    }
+    #queueCards .queue-card.r5g-info{border-color:#253748;background:#091018;box-shadow:none}
     #queueCards .queue-card.r5g-info .k{color:#a9bac8;font-weight:560}
     #queueCards .queue-card.r5g-info .n{color:#dce8f1;font-weight:650}
     #queueCards .queue-card.r5g-info .s{color:#8fa2b2}
@@ -77,10 +57,7 @@ window.PRIMEX_SUPABASE_CONFIG = {
     #view-start .section-title p{color:#9eb2c3}
 
     /* Actual next-action jobs should be prominent by position/state, not excessive bold. */
-    #view-start #startActionPrompts .alert-row{
-      border-left:2px solid #46b3ff;
-      background:#0b121b;
-    }
+    #view-start #startActionPrompts .alert-row{border-left:2px solid #46b3ff;background:#0b121b}
     #view-start #startActionPrompts .alert-row > div:first-child strong{font-weight:600}
     #view-start #startActionPrompts .alert-row > div:first-child p{font-weight:430}
 
@@ -101,20 +78,14 @@ window.PRIMEX_SUPABASE_CONFIG = {
     }
 
     /* One operator priority order on every viewport: work before shortcuts. */
-    #view-start .start-secondary-grid{
-      display:grid;
-      grid-template-columns:minmax(0,1fr);
-      gap:10px;
-    }
-    #view-start .start-secondary-grid > section:nth-child(2){order:1}
-    #view-start .start-secondary-grid > section:nth-child(1){order:2}
-    #view-start .start-secondary-grid > section:nth-child(2) #startActionPrompts{width:100%}
+    #view-start .start-secondary-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+    #view-start .r5g-next-actions-section{order:1}
+    #view-start .r5g-quick-actions-section{order:2}
+    #view-start .r5g-next-actions-section #startActionPrompts{width:100%}
 
     /* Desktop: shortcuts use the extra width once real work has been shown first. */
     @media (min-width:761px){
-      #view-start .start-secondary-grid > section:nth-child(1) .sysmap{
-        grid-template-columns:repeat(5,minmax(0,1fr));
-      }
+      #view-start .r5g-quick-actions-section .sysmap{grid-template-columns:repeat(5,minmax(0,1fr))}
     }
   `;
   document.head.appendChild(style);
@@ -122,8 +93,10 @@ window.PRIMEX_SUPABASE_CONFIG = {
   function enforceStartPriorityOrder(){
     const grid=document.querySelector('#view-start .start-secondary-grid');
     if(!grid) return;
-    const quick=grid.querySelector(':scope > section:nth-child(1)');
-    const next=grid.querySelector(':scope > section:nth-child(2)');
+    const quick=[...grid.children].find(section=>section.querySelector('.sysmap'));
+    const next=[...grid.children].find(section=>section.querySelector('#startActionPrompts'));
+    if(quick) quick.classList.add('r5g-quick-actions-section');
+    if(next) next.classList.add('r5g-next-actions-section');
     if(quick&&next&&grid.firstElementChild!==next) grid.insertBefore(next,quick);
   }
 
