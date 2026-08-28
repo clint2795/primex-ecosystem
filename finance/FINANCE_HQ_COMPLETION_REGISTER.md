@@ -4,8 +4,8 @@
 **Status:** APPROVED controlling work register  
 **Owner:** PrimeX owner/operator  
 **Technical record:** `finance/FINANCE_HQ_BUILD_CONTROL_LOG.md`  
-**Current protected checkpoint:** `PX-ROUTE-R5F` / publication record commit `cc2b77c6c483e13d1a20acc01047af63a28d81cb`
-**Current protected review route:** `https://portal.primexbiolabs.co.uk/finance-completion-review/`
+**Current protected checkpoint:** `PX-ROUTE-R5G` / accepted closeout commit `ee2929df244a1ca6e0226ee638285671e4ccf0af`
+**Current protected review route:** `https://portal.primexbiolabs.co.uk/finance-operator-layout-review/`
 **Live Finance:** remains separate and must not be replaced until the cutover gate passes.
 
 ## Purpose
@@ -42,6 +42,7 @@ Every work unit must:
 | R5C message authority | COMPLETE / EVIDENCED | Stale or wrong-direction messages are blocked; first quote carries known availability and timing. |
 | R5D operational truth | COMPLETE / EVIDENCED | Test isolation, quantity-aware stock, local reservation and stage-specific follow-up truth. |
 | R5E request resolution | COMPLETE / EVIDENCED | Custom requests have real resolution actions; stock result and test paths are discoverable. |
+| R5G operator layout/mobile | COMPLETE / EVIDENCED | Desktop, owner-phone and Jade-sized phone review passed; Start priorities, mobile controls and request cleanup remain usable without zoom. |
 
 These checks must be reused as regressions. Do not commission another broad technical audit that simply repeats them.
 
@@ -63,7 +64,7 @@ These checks must be reused as regressions. Do not commission another broad tech
 
 ### 2. R5G — Operator layout and mobile control pass
 
-**State:** THIRD CORRECTED ROUTE PUBLISHED / HASH VERIFIED — full-view owner-phone and Jade-sized review pending
+**State:** COMPLETE / EVIDENCED — OWNER + JADE MOBILE ACCEPTED
 **Job:** Correct the app-wide human-use problems already observed without redesigning commercial or workflow logic.
 
 **Required outcomes:**
@@ -81,11 +82,11 @@ These checks must be reused as regressions. Do not commission another broad tech
 
 **Acceptance viewports:** owner desktop, owner phone portrait, and a Jade-sized phone portrait. Each key task must be usable without browser zoom.
 
-**Implementation evidence:** `finance-operator-layout-review/index.html` starts from the exact R5F protected artifact. Its R5G authority raises mobile body/control sizing, reduces card radius and nesting, widens useful desktop space, compacts Start priorities, separates Workflow records from filters, tightens Request records, and places Stock search/overview before collapsed receive/adjust operations. The approved mobile corrections additionally compact the operator header into one row, hide unavailable Back, remove the phone breadcrumb/build clutter, separate every Start action and Workflow/History record, prevent squeezed one-word wrapping, restore regular body/status weight, remove duplicate Start order/quote entrypoints and make Request selection immediately visible with a fixed cleanup action bar. A subsequent whole-view audit identified Stock as a remaining typography outlier; its product rows, quantities, helpers and controls now use restrained regular/semibold weights while true headings and statuses retain emphasis. `scripts/verify-finance-operator-layout.mjs` parses the candidate JavaScript, proves all non-layout application logic still matches R5F and asserts the shared mobile controls, duplicate-action removals, selection behaviour and Stock hierarchy. All existing R5 commercial, message, operational-truth, workflow and message-direction regressions pass. Previous hosted rollback remains SHA-256 `41b5b00a6f86ca11497502bcbca666d8836282724f58b3195edfb1b6e9fb244c` from publication commit `559546447fe159da972480018ddecf5527c4aea8`. The third corrected protected route was published by commits `4eb0459994ad7159839626976e0e49a5a446ef38` and `30538c1ffb046694dfbd627fbf13e1bc8cbc59e3`; it serves SHA-256 `b9e6cb7e8c96bf6fc8f6ab162a206d6b9127835249cd4a2b30ea1b6cd5c5ce61`, exactly matching the protected source. Full-view owner-phone and Jade-sized review remain required before this work unit can become `COMPLETE / EVIDENCED`.
+**Implementation evidence:** `finance-operator-layout-review/index.html` starts from the exact R5F protected artifact. Its R5G authority raises mobile body/control sizing, reduces card radius and nesting, widens useful desktop space, compacts Start priorities, separates Workflow records from filters, tightens Request records, and places Stock search/overview before collapsed receive/adjust operations. The approved mobile corrections additionally compact the operator header into one row, hide unavailable Back, remove the phone breadcrumb/build clutter, separate every Start action and Workflow/History record, prevent squeezed one-word wrapping, restore regular body/status weight, remove duplicate Start order/quote entrypoints and make Request selection immediately visible with a fixed cleanup action bar. A subsequent whole-view audit identified Stock as a remaining typography outlier; its product rows, quantities, helpers and controls use restrained regular/semibold weights while true headings and statuses retain emphasis. `scripts/verify-finance-operator-layout.mjs` parses the candidate JavaScript, proves all non-layout application logic still matches R5F and asserts the shared mobile controls, duplicate-action removals, selection behaviour and Stock hierarchy. All existing R5 commercial, message, operational-truth, workflow and message-direction regressions pass. The final protected-review helper is route-guarded to `/finance-operator-layout-review/`; live `/finance/` is excluded. Owner desktop and owner-phone review passed. Jade-sized phone review passed after the final mobile priority correction placed `Next actions` before `Quick actions` on every viewport. Final accepted UI-state commit: `ee2929df244a1ca6e0226ee638285671e4ccf0af`. R5G closeout record: `finance/R5G_CLOSEOUT_2026-08-28.md`.
 
 ### 3. R5H — Complete operator-journey acceptance
 
-**State:** BLOCKED until R5G passes  
+**State:** READY — R5G DEPENDENCY PASSED  
 **Job:** Test the combined candidate as an operator would use it, including waiting and failure states. This is missing validation, not a repeat of the completed audits.
 
 **Scenario set:**
