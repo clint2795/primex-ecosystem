@@ -57,6 +57,7 @@
   function ensureBatch2Fields(){
     const approvedBy=field('releaseApprovedBy');
     const advanced=approvedBy?.closest('details');
+    if(approvedBy)approvedBy.readOnly=true;
     if(!advanced||field('paymentReceivedAmount'))return;
     const block=document.createElement('div');
     block.id='r5hBatch2Evidence';
@@ -121,13 +122,23 @@
     const amount=Number(payload.paymentReceivedAmount||0),total=Number(payload.total||0);
     if(!(amount>0)){showToast('Enter the amount actually received before recording payment');field('paymentReceivedAmount')?.focus();return false}
     if(payload.payment==='Part paid'&&total>0&&amount>=total){showToast('Part paid must be less than the order total');field('paymentReceivedAmount')?.focus();return false}
+    if(payload.payment==='Paid'&&total>0&&amount<total){showToast('Received amount is below the order total - use Part paid or correct the amount');field('paymentReceivedAmount')?.focus();return false}
     if(!payload.paymentReceivedAt){showToast('Record when payment was received');field('paymentReceivedAt')?.focus();return false}
     if(!payload.paymentRecordedBy){showToast('Finance login required to record payment');return false}
     return true;
   }
 
   window.saveOrderNow=async function(){
-    const payload=window.orderPayload();
+    ensureBatch2Fields();
+    let payload=window.orderPayload();
+    if(['Paid','Part paid'].includes(String(payload.payment||''))&&!payload.paymentRecordedBy){
+      const op=await requireActiveOperator('recording payment');if(!op)return false;
+      setField('paymentRecordedBy',op.label);payload=window.orderPayload();
+    }
+    if(payload.releaseOverride==='Yes'){
+      const op=await requireActiveOperator('saving an unpaid release override');if(!op)return false;
+      setField('releaseApprovedBy',op.label);payload=window.orderPayload();
+    }
     if(!validatePaymentEvidence(payload))return false;
     if(payload.releaseOverride==='Yes'&&(!payload.releaseApprovedBy||!payload.releaseOverrideReason)){
       showToast('Unpaid release needs an accountable approver and reason');
@@ -142,11 +153,12 @@
   async function collectPaymentEvidence(o,status='Paid'){
     const op=await requireActiveOperator('recording payment');if(!op)return null;
     const total=Number(o.total||0);
-    let amountRaw=prompt(status==='Part paid'?'Amount received so far?':'Amount received?',total>0?total.toFixed(2):'');
+    const amountRaw=prompt(status==='Part paid'?'Amount received so far?':'Amount received?',total>0?total.toFixed(2):'');
     if(amountRaw===null)return null;
     const amount=Number(String(amountRaw).replace(/[^0-9.-]/g,''));
     if(!(amount>0)){showToast('Payment was not changed - enter a valid amount');return null}
     if(status==='Part paid'&&total>0&&amount>=total){showToast('Part paid must be less than the order total');return null}
+    if(status==='Paid'&&total>0&&amount<total){showToast('Received amount is below the order total - record it as Part paid');return null}
     const reference=prompt('Payment reference (optional):',String(o.paymentReference||''));
     if(reference===null)return null;
     return {paymentReceivedAmount:amount,paymentReceivedAt:new Date().toISOString(),paymentReference:String(reference||'').trim(),paymentRecordedBy:op.label,paymentReconciliationNote:o.paymentReconciliationNote||''};
@@ -199,7 +211,7 @@
     const method=String(o?.fulfilment||'');
     const tracking=String(o?.tracking||o?.trackingRef||'').trim();
     if(method==='Customer collection')return ['PrimeX BioLabs - Collection Complete','Your order has been collected.'];
-    if(method==='Local drop-off')return ['PrimeX BioLabs - Drop-off Complete','Your order has been completed by local drop-off.'];
+    if(method==='Local drop-off')return ['PrimeX BioLabs - Drop-off Complete','Your order has been delivered by local drop-off.'];
     if(method==='Royal Mail collection')return ['PrimeX BioLabs - Dispatched Update','Your order has been collected by Royal Mail and is now in the delivery network.'+(tracking?'\n\nTracking / reference: '+tracking:' We’ll share tracking details if they become available.')];
     if(method==='Royal Mail postage')return ['PrimeX BioLabs - Dispatched Update','Your order has been handed over for Royal Mail delivery.'+(tracking?'\n\nTracking / reference: '+tracking:' We’ll share tracking details if they become available.')];
     if(method==='Courier collection')return ['PrimeX BioLabs - Dispatched Update','Your order has been handed over to the courier.'+(tracking?'\n\nTracking / reference: '+tracking:' We’ll share tracking details if they become available.')];
@@ -228,12 +240,13 @@
     if(row.querySelector('.comm-actions'))return;
     const actions=document.createElement('div');actions.className='comm-actions';
     actions.innerHTML='<button class="btn primary" type="button">Generate update</button>'+
-      (savedStatus==='generated'?'<button class="btn" type="button">Copy</button><button class="btn good" type="button">Mark as sent</button>':'');
+      (savedStatus==='generated'?'<button class="btn" type="button">Copy</button><button class="btn" type="button">Open WhatsApp</button><button class="btn good" type="button">Mark as sent</button>':'');
     const buttons=actions.querySelectorAll('button');
     buttons[0].onclick=()=>{generateFulfilment('tracking');setCommStatus('trackingUpdateStatus','generated')};
     if(savedStatus==='generated'){
       buttons[1].onclick=()=>copyCustomerUpdate();
-      buttons[2].onclick=()=>{markCustomerUpdateSentNow();setCommStatus('trackingUpdateStatus','sent')};
+      buttons[2].onclick=()=>openWhatsAppMessage(fulfilmentMsg);
+      buttons[3].onclick=()=>{markCustomerUpdateSentNow();setCommStatus('trackingUpdateStatus','sent')};
     }
     row.appendChild(actions);
   }
@@ -276,7 +289,7 @@
     if(!requiredCustomerUpdateSent(o)){
       const needed=postHandoverCopy(o).title;
       showToast('Complete blocked - '+needed.toLowerCase()+' first');
-      void openOrderTask(id,'customer-update');
+      void openOrderTask(id,'tracking');
       return;
     }
     return originalMarkDeliveredComplete(id);
