@@ -104,15 +104,18 @@ window.PRIMEX_SUPABASE_CONFIG = {
       box-shadow:inset 0 1px 0 rgba(181,232,255,.31);
     }
 
-    /* Desktop: real work gets the width; shortcuts sit below it. */
+    /* One operator priority order on every viewport: work before shortcuts. */
+    #view-start .start-secondary-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
+      gap:10px;
+    }
+    #view-start .start-secondary-grid > section:nth-child(2){order:1}
+    #view-start .start-secondary-grid > section:nth-child(1){order:2}
+    #view-start .start-secondary-grid > section:nth-child(2) #startActionPrompts{width:100%}
+
+    /* Desktop: shortcuts use the extra width once real work has been shown first. */
     @media (min-width:761px){
-      #view-start .start-secondary-grid{
-        grid-template-columns:minmax(0,1fr);
-        gap:10px;
-      }
-      #view-start .start-secondary-grid > section:nth-child(2){order:1}
-      #view-start .start-secondary-grid > section:nth-child(1){order:2}
-      #view-start .start-secondary-grid > section:nth-child(2) #startActionPrompts{width:100%}
       #view-start .start-secondary-grid > section:nth-child(1) .sysmap{
         grid-template-columns:repeat(5,minmax(0,1fr));
       }
