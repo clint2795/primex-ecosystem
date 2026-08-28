@@ -16,20 +16,21 @@ window.PRIMEX_SUPABASE_CONFIG = {
   style.textContent=`
     #missionControlCards .queue-card.r5g-actionable,
     #queueCards .queue-card.r5g-actionable{
-      border-color:#496a84;
-      background:linear-gradient(180deg,#102033 0%,#0b151f 100%);
-      box-shadow:inset 0 2px 0 rgba(110,168,216,.62),0 8px 20px rgba(0,0,0,.18);
+      border-color:#3f6380;
+      background:linear-gradient(180deg,#0b1621 0%,#081018 100%);
+      box-shadow:inset 0 1px 0 rgba(126,183,220,.52),inset 3px 0 0 rgba(74,158,255,.46),0 8px 18px rgba(0,0,0,.20);
     }
     #missionControlCards .queue-card.r5g-actionable .k,
-    #queueCards .queue-card.r5g-actionable .k{color:#d9eaf7}
+    #queueCards .queue-card.r5g-actionable .k{color:#e4eef7}
     #missionControlCards .queue-card.r5g-actionable .n,
-    #queueCards .queue-card.r5g-actionable .n{color:#f6fbff}
+    #queueCards .queue-card.r5g-actionable .n{color:#ffffff}
     #missionControlCards .queue-card.r5g-actionable .s,
-    #queueCards .queue-card.r5g-actionable .s{color:#a8bdcc}
+    #queueCards .queue-card.r5g-actionable .s{color:#9fb4c5}
     #missionControlCards .queue-card.r5g-actionable:hover,
     #queueCards .queue-card.r5g-actionable:hover{
-      border-color:#6287a4;
-      background:linear-gradient(180deg,#12253a 0%,#0c1723 100%);
+      border-color:#557b99;
+      background:linear-gradient(180deg,#0d1a27 0%,#09121b 100%);
+      box-shadow:inset 0 1px 0 rgba(139,197,235,.62),inset 3px 0 0 rgba(74,158,255,.62),0 9px 20px rgba(0,0,0,.23);
     }
 
     /* Clear Start-page heading hierarchy without changing the layout language. */
