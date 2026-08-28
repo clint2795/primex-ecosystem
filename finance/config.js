@@ -81,12 +81,8 @@ window.PRIMEX_SUPABASE_CONFIG = {
       border-left:2px solid #46b3ff;
       background:#0b121b;
     }
-    #view-start #startActionPrompts .alert-row > div:first-child strong{
-      font-weight:600;
-    }
-    #view-start #startActionPrompts .alert-row > div:first-child p{
-      font-weight:430;
-    }
+    #view-start #startActionPrompts .alert-row > div:first-child strong{font-weight:600}
+    #view-start #startActionPrompts .alert-row > div:first-child p{font-weight:430}
 
     /* Start-page action buttons: nearly black face, thin PrimeX edge, minimal fill. */
     #view-start #newEmailQuoteStart,
@@ -123,6 +119,14 @@ window.PRIMEX_SUPABASE_CONFIG = {
   `;
   document.head.appendChild(style);
 
+  function enforceStartPriorityOrder(){
+    const grid=document.querySelector('#view-start .start-secondary-grid');
+    if(!grid) return;
+    const quick=grid.querySelector(':scope > section:nth-child(1)');
+    const next=grid.querySelector(':scope > section:nth-child(2)');
+    if(quick&&next&&grid.firstElementChild!==next) grid.insertBefore(next,quick);
+  }
+
   function updateContainer(container){
     if(!container) return;
     container.querySelectorAll('.queue-card').forEach(card=>{
@@ -138,6 +142,7 @@ window.PRIMEX_SUPABASE_CONFIG = {
   }
 
   function start(){
+    enforceStartPriorityOrder();
     ['missionControlCards','queueCards'].forEach(id=>{
       const container=document.getElementById(id);
       if(!container) return;
