@@ -17,9 +17,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
     /* Outstanding work: crisp status cue, not a heavy glowing frame. */
     #missionControlCards .queue-card.r5g-actionable,
     #queueCards .queue-card.r5g-actionable{
-      border:1px solid #31526b;
+      border:1px solid #3b6280;
       background:linear-gradient(180deg,#0a151f 0%,#071018 100%);
-      box-shadow:inset 1.5px 0 0 #36a6ff,inset 0 1px 0 rgba(157,218,255,.34),0 7px 16px rgba(0,0,0,.18);
+      box-shadow:inset 1.5px 0 0 #46b3ff,inset 0 1px 0 rgba(174,226,255,.40),0 7px 16px rgba(0,0,0,.18);
     }
     #missionControlCards .queue-card.r5g-actionable .k,
     #queueCards .queue-card.r5g-actionable .k{
@@ -35,9 +35,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
     #queueCards .queue-card.r5g-actionable .s{color:#a9bdcc}
     #missionControlCards .queue-card.r5g-actionable:hover,
     #queueCards .queue-card.r5g-actionable:hover{
-      border-color:#456f8e;
+      border-color:#4f7c9e;
       background:linear-gradient(180deg,#0c1a27 0%,#09131d 100%);
-      box-shadow:inset 1.5px 0 0 #52b5ff,inset 0 1px 0 rgba(183,231,255,.46),0 8px 18px rgba(0,0,0,.20);
+      box-shadow:inset 1.5px 0 0 #62c0ff,inset 0 1px 0 rgba(196,237,255,.50),0 8px 18px rgba(0,0,0,.20);
     }
 
     /* Zero states step back so the eye does not have to read every card. */
@@ -78,7 +78,7 @@ window.PRIMEX_SUPABASE_CONFIG = {
 
     /* Actual next-action jobs should be prominent by position/state, not excessive bold. */
     #view-start #startActionPrompts .alert-row{
-      border-left:2px solid #36a6ff;
+      border-left:2px solid #46b3ff;
       background:#0b121b;
     }
     #view-start #startActionPrompts .alert-row > div:first-child strong{
@@ -91,17 +91,17 @@ window.PRIMEX_SUPABASE_CONFIG = {
     /* Start-page action buttons: nearly black face, thin PrimeX edge, minimal fill. */
     #view-start #newEmailQuoteStart,
     #view-start #startActionPrompts .alert-row > button.secondary{
-      border:1px solid #3f789f;
+      border:1px solid #4b8eb8;
       background:#0a121a;
       color:#eef8ff;
-      box-shadow:inset 0 1px 0 rgba(126,207,255,.16);
+      box-shadow:inset 0 1px 0 rgba(140,216,255,.19);
       font-weight:600;
     }
     #view-start #newEmailQuoteStart:hover,
     #view-start #startActionPrompts .alert-row > button.secondary:hover{
-      border-color:#58a9df;
+      border-color:#67b5e4;
       background:#0c1822;
-      box-shadow:inset 0 1px 0 rgba(165,225,255,.28);
+      box-shadow:inset 0 1px 0 rgba(181,232,255,.31);
     }
 
     /* Desktop: real work gets the width; shortcuts sit below it. */
