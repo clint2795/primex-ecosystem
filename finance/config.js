@@ -17,9 +17,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
     /* Outstanding work: unmistakable status treatment without heavy typography. */
     #missionControlCards .queue-card.r5g-actionable,
     #queueCards .queue-card.r5g-actionable{
-      border-color:#4b82a8;
+      border-color:#5796c4;
       background:linear-gradient(180deg,#0b1723 0%,#071019 100%);
-      box-shadow:inset 4px 0 0 #258cff,inset 0 1px 0 rgba(151,211,247,.52),0 8px 18px rgba(0,0,0,.22);
+      box-shadow:inset 2px 0 0 #2f9cff,inset 0 1px 0 rgba(163,220,255,.56),0 8px 18px rgba(0,0,0,.22);
     }
     #missionControlCards .queue-card.r5g-actionable .k,
     #queueCards .queue-card.r5g-actionable .k{
@@ -35,9 +35,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
     #queueCards .queue-card.r5g-actionable .s{color:#a9bdcc}
     #missionControlCards .queue-card.r5g-actionable:hover,
     #queueCards .queue-card.r5g-actionable:hover{
-      border-color:#66a1c8;
+      border-color:#74afe0;
       background:linear-gradient(180deg,#0d1c2a 0%,#09131d 100%);
-      box-shadow:inset 4px 0 0 #3b9cff,inset 0 1px 0 rgba(165,221,253,.62),0 9px 20px rgba(0,0,0,.24);
+      box-shadow:inset 2px 0 0 #4aabff,inset 0 1px 0 rgba(183,231,255,.68),0 9px 20px rgba(0,0,0,.24);
     }
 
     /* Zero states step back so the eye does not have to read every card. */
@@ -82,6 +82,22 @@ window.PRIMEX_SUPABASE_CONFIG = {
     }
     #view-start #startActionPrompts .alert-row > div:first-child p{
       font-weight:430;
+    }
+
+    /* Start-page action buttons: dark PrimeX face with a crisp blue edge, not a washed fill. */
+    #view-start #newEmailQuoteStart,
+    #view-start #startActionPrompts .alert-row > button.secondary{
+      border:1px solid #4a89b6;
+      background:linear-gradient(180deg,#0d2030 0%,#091723 100%);
+      color:#eef8ff;
+      box-shadow:inset 0 1px 0 rgba(151,211,247,.28);
+      font-weight:600;
+    }
+    #view-start #newEmailQuoteStart:hover,
+    #view-start #startActionPrompts .alert-row > button.secondary:hover{
+      border-color:#66a9d8;
+      background:linear-gradient(180deg,#12304a 0%,#0b1d2c 100%);
+      box-shadow:inset 0 1px 0 rgba(183,231,255,.42);
     }
 
     /* Desktop: real work gets the width; shortcuts sit below it. */
