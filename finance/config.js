@@ -14,12 +14,12 @@ window.PRIMEX_SUPABASE_CONFIG = {
   const style=document.createElement('style');
   style.id='px-r5g-actionable-card-style';
   style.textContent=`
-    /* Outstanding work: unmistakable status treatment without heavy typography. */
+    /* Outstanding work: crisp status cue, not a heavy glowing frame. */
     #missionControlCards .queue-card.r5g-actionable,
     #queueCards .queue-card.r5g-actionable{
-      border-color:#5796c4;
-      background:linear-gradient(180deg,#0b1723 0%,#071019 100%);
-      box-shadow:inset 2px 0 0 #2f9cff,inset 0 1px 0 rgba(163,220,255,.56),0 8px 18px rgba(0,0,0,.22);
+      border:1px solid #31526b;
+      background:linear-gradient(180deg,#0a151f 0%,#071018 100%);
+      box-shadow:inset 1.5px 0 0 #36a6ff,inset 0 1px 0 rgba(157,218,255,.34),0 7px 16px rgba(0,0,0,.18);
     }
     #missionControlCards .queue-card.r5g-actionable .k,
     #queueCards .queue-card.r5g-actionable .k{
@@ -35,9 +35,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
     #queueCards .queue-card.r5g-actionable .s{color:#a9bdcc}
     #missionControlCards .queue-card.r5g-actionable:hover,
     #queueCards .queue-card.r5g-actionable:hover{
-      border-color:#74afe0;
-      background:linear-gradient(180deg,#0d1c2a 0%,#09131d 100%);
-      box-shadow:inset 2px 0 0 #4aabff,inset 0 1px 0 rgba(183,231,255,.68),0 9px 20px rgba(0,0,0,.24);
+      border-color:#456f8e;
+      background:linear-gradient(180deg,#0c1a27 0%,#09131d 100%);
+      box-shadow:inset 1.5px 0 0 #52b5ff,inset 0 1px 0 rgba(183,231,255,.46),0 8px 18px rgba(0,0,0,.20);
     }
 
     /* Zero states step back so the eye does not have to read every card. */
@@ -77,6 +77,10 @@ window.PRIMEX_SUPABASE_CONFIG = {
     #view-start .section-title p{color:#9eb2c3}
 
     /* Actual next-action jobs should be prominent by position/state, not excessive bold. */
+    #view-start #startActionPrompts .alert-row{
+      border-left:2px solid #36a6ff;
+      background:#0b121b;
+    }
     #view-start #startActionPrompts .alert-row > div:first-child strong{
       font-weight:600;
     }
@@ -84,20 +88,20 @@ window.PRIMEX_SUPABASE_CONFIG = {
       font-weight:430;
     }
 
-    /* Start-page action buttons: dark PrimeX face with a crisp blue edge, not a washed fill. */
+    /* Start-page action buttons: nearly black face, thin PrimeX edge, minimal fill. */
     #view-start #newEmailQuoteStart,
     #view-start #startActionPrompts .alert-row > button.secondary{
-      border:1px solid #4a89b6;
-      background:linear-gradient(180deg,#0d2030 0%,#091723 100%);
+      border:1px solid #3f789f;
+      background:#0a121a;
       color:#eef8ff;
-      box-shadow:inset 0 1px 0 rgba(151,211,247,.28);
+      box-shadow:inset 0 1px 0 rgba(126,207,255,.16);
       font-weight:600;
     }
     #view-start #newEmailQuoteStart:hover,
     #view-start #startActionPrompts .alert-row > button.secondary:hover{
-      border-color:#66a9d8;
-      background:linear-gradient(180deg,#12304a 0%,#0b1d2c 100%);
-      box-shadow:inset 0 1px 0 rgba(183,231,255,.42);
+      border-color:#58a9df;
+      background:#0c1822;
+      box-shadow:inset 0 1px 0 rgba(165,225,255,.28);
     }
 
     /* Desktop: real work gets the width; shortcuts sit below it. */
