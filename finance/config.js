@@ -127,3 +127,18 @@ window.PRIMEX_SUPABASE_CONFIG = {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
   else start();
 })();
+
+// R5H protected-review logic loader only.
+// This deliberately does not execute on live /finance/.
+(function primeXR5HBatch1Loader(){
+  if(!location.pathname.includes('/finance-operator-layout-review/')) return;
+  function load(){
+    if(document.querySelector('script[data-px-r5h-batch1]')) return;
+    const script=document.createElement('script');
+    script.src='/finance-operator-layout-review/r5h-batch1.js?v=1';
+    script.dataset.pxR5hBatch1='true';
+    document.body.appendChild(script);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',load,{once:true});
+  else load();
+})();
