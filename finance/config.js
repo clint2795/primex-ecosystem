@@ -14,39 +14,74 @@ window.PRIMEX_SUPABASE_CONFIG = {
   const style=document.createElement('style');
   style.id='px-r5g-actionable-card-style';
   style.textContent=`
+    /* Outstanding work: unmistakable status treatment without heavy typography. */
     #missionControlCards .queue-card.r5g-actionable,
     #queueCards .queue-card.r5g-actionable{
-      border-color:#3f6380;
-      background:linear-gradient(180deg,#0b1621 0%,#081018 100%);
-      box-shadow:inset 0 1px 0 rgba(126,183,220,.52),inset 3px 0 0 rgba(74,158,255,.46),0 8px 18px rgba(0,0,0,.20);
+      border-color:#4b82a8;
+      background:linear-gradient(180deg,#0b1723 0%,#071019 100%);
+      box-shadow:inset 4px 0 0 #258cff,inset 0 1px 0 rgba(151,211,247,.52),0 8px 18px rgba(0,0,0,.22);
     }
     #missionControlCards .queue-card.r5g-actionable .k,
-    #queueCards .queue-card.r5g-actionable .k{color:#e4eef7}
+    #queueCards .queue-card.r5g-actionable .k{
+      color:#e7f2fa;
+      font-weight:600;
+    }
     #missionControlCards .queue-card.r5g-actionable .n,
-    #queueCards .queue-card.r5g-actionable .n{color:#ffffff}
+    #queueCards .queue-card.r5g-actionable .n{
+      color:#f7fcff;
+      font-weight:700;
+    }
     #missionControlCards .queue-card.r5g-actionable .s,
-    #queueCards .queue-card.r5g-actionable .s{color:#9fb4c5}
+    #queueCards .queue-card.r5g-actionable .s{color:#a9bdcc}
     #missionControlCards .queue-card.r5g-actionable:hover,
     #queueCards .queue-card.r5g-actionable:hover{
-      border-color:#557b99;
-      background:linear-gradient(180deg,#0d1a27 0%,#09121b 100%);
-      box-shadow:inset 0 1px 0 rgba(139,197,235,.62),inset 3px 0 0 rgba(74,158,255,.62),0 9px 20px rgba(0,0,0,.23);
+      border-color:#66a1c8;
+      background:linear-gradient(180deg,#0d1c2a 0%,#09131d 100%);
+      box-shadow:inset 4px 0 0 #3b9cff,inset 0 1px 0 rgba(165,221,253,.62),0 9px 20px rgba(0,0,0,.24);
     }
+
+    /* Zero states step back so the eye does not have to read every card. */
+    #missionControlCards .queue-card.r5g-passive,
+    #queueCards .queue-card.r5g-passive{
+      border-color:#1e2c3a;
+      background:#080d13;
+      box-shadow:none;
+    }
+    #missionControlCards .queue-card.r5g-passive .k,
+    #queueCards .queue-card.r5g-passive .k{
+      color:#899aa9;
+      font-weight:540;
+    }
+    #missionControlCards .queue-card.r5g-passive .n,
+    #queueCards .queue-card.r5g-passive .n{
+      color:#9aa8b4;
+      font-weight:620;
+    }
+    #missionControlCards .queue-card.r5g-passive .s,
+    #queueCards .queue-card.r5g-passive .s{color:#748696}
+
+    /* Informational value card remains readable but does not impersonate a task. */
+    #queueCards .queue-card.r5g-info{
+      border-color:#253748;
+      background:#091018;
+      box-shadow:none;
+    }
+    #queueCards .queue-card.r5g-info .k{color:#a9bac8;font-weight:560}
+    #queueCards .queue-card.r5g-info .n{color:#dce8f1;font-weight:650}
+    #queueCards .queue-card.r5g-info .s{color:#8fa2b2}
 
     /* Clear Start-page heading hierarchy without changing the layout language. */
     #view-start .section-title h2,
     #view-start .section-title h3,
-    #view-start > .card > .subhead{
-      color:#f1f7fc;
+    #view-start > .card > .subhead{color:#f1f7fc}
+    #view-start .section-title p{color:#9eb2c3}
+
+    /* Actual next-action jobs should be prominent by position/state, not excessive bold. */
+    #view-start #startActionPrompts .alert-row > div:first-child strong{
+      font-weight:600;
     }
-    #view-start .section-title p{
-      color:#9eb2c3;
-    }
-    #view-start .queue-card .k{
-      color:#cbd9e5;
-    }
-    #view-start .queue-card:not(.r5g-actionable) .s{
-      color:#8fa3b5;
+    #view-start #startActionPrompts .alert-row > div:first-child p{
+      font-weight:430;
     }
 
     /* Desktop: real work gets the width; shortcuts sit below it. */
@@ -55,15 +90,9 @@ window.PRIMEX_SUPABASE_CONFIG = {
         grid-template-columns:minmax(0,1fr);
         gap:10px;
       }
-      #view-start .start-secondary-grid > section:nth-child(2){
-        order:1;
-      }
-      #view-start .start-secondary-grid > section:nth-child(1){
-        order:2;
-      }
-      #view-start .start-secondary-grid > section:nth-child(2) #startActionPrompts{
-        width:100%;
-      }
+      #view-start .start-secondary-grid > section:nth-child(2){order:1}
+      #view-start .start-secondary-grid > section:nth-child(1){order:2}
+      #view-start .start-secondary-grid > section:nth-child(2) #startActionPrompts{width:100%}
       #view-start .start-secondary-grid > section:nth-child(1) .sysmap{
         grid-template-columns:repeat(5,minmax(0,1fr));
       }
@@ -77,7 +106,11 @@ window.PRIMEX_SUPABASE_CONFIG = {
       const countEl=card.querySelector('.n');
       const isInformational=!!countEl?.dataset?.value;
       const count=Number(String(countEl?.textContent||'').replace(/[^0-9.-]/g,''));
-      card.classList.toggle('r5g-actionable',!isInformational&&Number.isFinite(count)&&count>0);
+      const actionable=!isInformational&&Number.isFinite(count)&&count>0;
+      const passive=!isInformational&&Number.isFinite(count)&&count===0;
+      card.classList.toggle('r5g-actionable',actionable);
+      card.classList.toggle('r5g-passive',passive);
+      card.classList.toggle('r5g-info',isInformational);
     });
   }
 
