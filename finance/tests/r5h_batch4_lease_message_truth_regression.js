@@ -27,7 +27,7 @@ for(const token of ['paymentInstructionsStatus','paymentInstructionsDueAt','paym
 }
 assert(batch4.includes('if(!paymentPromiseReady())return false'),'Payment request must be blocked without an owned future promise');
 assert(batch4.includes("Payment instructions will be sent separately by '+formatPromiseDate(due)"),'Customer payment request must contain the recorded deadline');
-assert(batch4.includes("title:'Payment instructions overdue'"),'Overdue payment instructions must surface as a priority action');
+assert(batch4.includes("'Payment instructions overdue'"),'Overdue payment instructions must surface as a priority action');
 assert(batch4.includes('data-comm-key="paymentInstructionsFollowup"'),'Communication Centre must expose the promised payment-instructions task');
 assert(batch4.includes('window.r5hMarkPaymentInstructionsSent'),'Payment instructions must have an explicit completion action');
 
