@@ -3,9 +3,9 @@
 **Work unit:** `R5H — Complete operator-journey acceptance`  
 **Authority:** `finance/FINANCE_HQ_COMPLETION_REGISTER.md` / `PX-FINANCE-COMPLETION-2026-08-26`  
 **Protected review route:** `https://portal.primexbiolabs.co.uk/finance-operator-layout-review/`  
-**Live `/finance/`:** LOCKED / untouched by R5H batches 1–2  
+**Live `/finance/`:** LOCKED / untouched by R5H batches 1–3  
 **R5G rollback / accepted UI checkpoint:** `ee2929df244a1ca6e0226ee638285671e4ccf0af`  
-**R5H current main checkpoint after Batch 2:** `0c2bbd73b6476c3a2fcad58ea11081d2182bb56a`
+**R5H current main checkpoint after Batch 3:** `c0dff5cd0da9acc0dfb791bb8963b2026174a1e2`
 
 > This is a working evidence record inside the active R5H work unit. It does not replace the Completion Register. R5H remains open until the full scenario set and human operator acceptance are complete.
 
@@ -74,21 +74,62 @@ No `finance/index.html`, live route source, pricing/commercial authority, produc
 - The Batch 2 Node regression file has been source-inspected but was not executed by the available connector environment. Do not record it as an executed pass until it is run in an execution-capable environment.
 - GitHub source on `main` is confirmed; hosted custom-domain delivery of the new Batch 2 JS still requires a served-route check or operator refresh confirmation.
 
+## Batch 3 — shared reliability, refresh protection and conflict recovery
+
+**Approved purpose:** make reload/shared-refresh, failed backup/retry and owner/Jade edit conflict behaviour truthful and non-destructive on the protected route.
+
+**Commits:**
+- `1eb9068fcf6d1039cb4eddf40c20deb819a8789b` — Add R5H Batch 3 shared reliability guards.
+- `cb01e9c4da8b82d7c239367750fa487463e56e2f` — Load protected Batch 3 only after Batch 2 finishes loading.
+- `c0dff5cd0da9acc0dfb791bb8963b2026174a1e2` — Add focused Batch 3 shared-reliability regression and become the Batch 3 main checkpoint.
+
+**Files changed from the pre-Batch-3 main checkpoint:**
+- `finance-operator-layout-review/r5h-batch1.js` — protected loader sequencing only.
+- `finance-operator-layout-review/r5h-batch3.js` — protected shared-reliability patch.
+- `finance/tests/r5h_batch3_shared_reliability_regression.js` — focused regression source.
+
+No `finance/index.html`, live route, Supabase schema/RLS, commercial/pricing authority, stock calculations, protocol or public intake route changed.
+
+**Defects confirmed before implementation:**
+- The deployed claim RPC returns an empty result when another active operator owns the claim, but auth/network/RPC errors were also collapsed to `false`; `loadOrder()` therefore described infrastructure failure as “Another operator is currently working on this record”.
+- `refreshCloudOrders()` replaced local cloud-backed records with the latest cloud snapshot and only preserved unsynced records that did not match a cloud id/ref. An unsynced edit to an existing cloud-backed record could therefore be overwritten in the browser workspace by manual, focus or realtime refresh before the failed backup was resolved.
+
+**Implemented:**
+- Shared claim acquisition now treats an empty RPC result as the genuine active-claim case and allows auth/network/RPC failures to surface as connection failures instead of impersonating an operator conflict.
+- Failed shared edit-lock checks do not open the record for editing and show a truthful retry message.
+- Before every shared-order refresh, unsynced cloud-backed local records are snapshotted. After refresh, their local copies are restored rather than silently discarded.
+- If the refreshed remote row version differs from the preserved local version, the record is marked as an explicit shared conflict and the latest remote snapshot is held for recovery.
+- Conflict UI states that the local unsynced copy was preserved and offers deliberate choices: keep the local copy for reconciliation, or explicitly load the latest shared version with a destructive confirmation.
+- `Load shared version` replaces only the affected local record after explicit confirmation; it does not silently resolve or overwrite a conflict.
+- Failed edit-lock release is surfaced as a non-fatal warning explaining that the server lease will expire automatically.
+- Existing row-version guarded save logic remains the cloud-write authority; Batch 3 does not introduce a force-overwrite path.
+
+**Verification obtained:**
+- Branch was created from main checkpoint `e39aac69505c7bedae4189741557da18a345c19a` and remained fast-forwardable.
+- Pre-merge compare showed exactly three changed files: protected loader, protected Batch 3 patch and focused regression source.
+- Main was fast-forwarded, not force-updated, to `c0dff5cd0da9acc0dfb791bb8963b2026174a1e2`.
+- `finance/tests/r5h_batch3_shared_reliability_regression.js` asserts the protected route guard, claim-error separation, pending-local preservation, row-version conflict surfacing, explicit shared-version recovery and lease-expiry warning.
+- Deployed Supabase `claim_quote_order` / `release_quote_order_claim` functions were inspected read-only; no database change was made.
+
+**Verification limitation:**
+- The execution container has no outbound DNS/network path to GitHub, so the Batch 3 Node regression could not be executed from the branch checkout there. The source and branch diff were inspected, but the regression must not be recorded as an executed pass yet.
+- Hosted custom-domain delivery of Batch 3 still requires a served-route/browser confirmation before final R5H human acceptance.
+
 ## R5H remaining scenario groups
 
-The controlling Completion Register remains authoritative. After Batches 1–2, the principal unresolved R5H evidence groups are:
+The controlling Completion Register remains authoritative. After Batches 1–3, the principal unresolved R5H evidence groups are:
 
-1. **Reload / backup / retry / shared conflict:** prove local-save survival, failed online backup visibility, retry, optimistic row-version conflict handling and claim behaviour using realistic operator states.
-2. **Owner/Jade concurrency:** prove one operator sees shared changes, an active edit conflict cannot silently overwrite newer work, and lock/claim errors are described truthfully.
-3. **Claim lease behaviour:** current deployed claim lease defaults to 10 minutes; determine whether long-running edits require renewal or whether the stale-save conflict path is sufficient and understandable.
-4. **Multiple concurrent records / empty states / overdue work:** prove active work does not disappear or merge visually/logically across queues and Start priorities.
-5. **Actual outbound body review:** independently inspect generated quote, payment, availability, preparation, packed, collection/drop-off/dispatch and tracking bodies against the underlying record state.
-6. **Human operator acceptance:** final owner and Jade realistic journeys on the protected route after the machine-detectable defects are closed.
+1. **Claim lease / long edit behaviour:** determine whether the 10-minute lease needs renewal during long edits or whether stale-save detection plus explicit recovery is sufficient for normal Clint/Jade use.
+2. **Multiple concurrent records / empty states / overdue work:** prove active work does not disappear, merge or lose priority across Start and Workflow when several orders/quotes exist.
+3. **Actual outbound body review:** independently inspect generated quote, payment, availability, preparation, packed, collection/drop-off/dispatch and tracking bodies against underlying record state.
+4. **Reload / retry human proof:** exercise a real protected-route local save, failed/paused shared backup state, reload, retry and shared refresh without using customer data.
+5. **Owner/Jade concurrency human proof:** prove a genuine second-operator claim becomes read-only while connection failure is described differently.
+6. **Human operator acceptance:** final owner and Jade realistic journeys on the protected route after machine-detectable defects are closed.
 
 ## Current state
 
 - R5H: **IN PROGRESS**.
-- Batches 1–2: implemented on protected route and recorded above.
-- Batch 3 or later code: **NOT APPROVED / NOT STARTED**.
+- Batches 1–3: implemented on protected route and recorded above.
+- Further R5H code: **NOT APPROVED / NOT STARTED** until the next bounded batch is proposed/approved.
 - R5I and later work units: remain blocked/separate according to the Completion Register.
 - Live `/finance/`: remains locked and unchanged.
