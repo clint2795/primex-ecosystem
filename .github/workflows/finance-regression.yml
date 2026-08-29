@@ -1,0 +1,44 @@
+name: Finance regression CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'finance/**'
+      - 'finance-operator-layout-review/**'
+      - '.github/workflows/finance-regression.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'finance/**'
+      - 'finance-operator-layout-review/**'
+      - '.github/workflows/finance-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finance-regressions:
+    name: Finance regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Show runtime
+        run: |
+          node --version
+          npm --version
+
+      - name: Run R5H Batch 2 regression
+        run: node finance/tests/r5h_batch2_regression.js
+
+      - name: Run R5H Batch 3 shared reliability regression
+        run: node finance/tests/r5h_batch3_shared_reliability_regression.js
