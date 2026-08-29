@@ -89,12 +89,19 @@
   renderOrder();
 })();
 
-// R5H Batch 2 loader — protected route only. Kept here so the shared finance/config.js remains unchanged.
-(function primeXR5HBatch2Loader(){
+// R5H protected loaders — each later batch is loaded only after its dependency has finished.
+(function primeXR5HProtectedLoaders(){
   if(!location.pathname.includes('/finance-operator-layout-review/')) return;
   if(document.querySelector('script[data-px-r5h-batch2]')) return;
-  const script=document.createElement('script');
-  script.src='/finance-operator-layout-review/r5h-batch2.js?v=1';
-  script.dataset.pxR5hBatch2='true';
-  document.body.appendChild(script);
+  const batch2=document.createElement('script');
+  batch2.src='/finance-operator-layout-review/r5h-batch2.js?v=1';
+  batch2.dataset.pxR5hBatch2='true';
+  batch2.onload=()=>{
+    if(document.querySelector('script[data-px-r5h-batch3]')) return;
+    const batch3=document.createElement('script');
+    batch3.src='/finance-operator-layout-review/r5h-batch3.js?v=1';
+    batch3.dataset.pxR5hBatch3='true';
+    document.body.appendChild(batch3);
+  };
+  document.body.appendChild(batch2);
 })();
