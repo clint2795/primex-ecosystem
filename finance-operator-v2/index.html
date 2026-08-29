@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PrimeX Finance HQ · Operator UI v2</title>
+<style>
+:root{
+  --font:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --radius:14px;--radius-sm:10px;--rail:248px;--shadow:0 18px 50px rgba(0,0,0,.22);
+  --blue:#59a8e8;--blue-strong:#83c8ff;--green:#74c995;--amber:#e1b567;--red:#e48787;
+}
+html[data-theme="dark"]{
+  --bg:#090c11;--bg-elev:#0c1118;--surface:#101620;--surface-2:#141c27;--surface-3:#192331;
+  --text:#f3f6fa;--muted:#aab6c5;--faint:#738194;--line:#233041;--line-soft:#18222f;--wash:#0c131c;
+  --accent-wash:rgba(89,168,232,.10);--success-wash:rgba(116,201,149,.10);--warn-wash:rgba(225,181,103,.10);
+}
+html[data-theme="light"]{
+  --bg:#edf1f5;--bg-elev:#f7f9fb;--surface:#fff;--surface-2:#f6f8fa;--surface-3:#eef3f7;
+  --text:#101722;--muted:#5f6c7a;--faint:#8793a0;--line:#d6dee7;--line-soft:#e6ebf0;--wash:#f7f9fb;
+  --accent-wash:rgba(42,119,181,.08);--success-wash:rgba(55,142,88,.08);--warn-wash:rgba(173,116,28,.09);
+  --blue:#237bbd;--blue-strong:#0f5f9c;--green:#2f8b56;--amber:#a66815;--red:#b74d4d;--shadow:0 18px 45px rgba(41,55,70,.10);
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;max-width:100%;overflow-x:hidden}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.45}
+button{font:inherit}.app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:var(--rail);background:var(--bg-elev);border-right:1px solid var(--line-soft);padding:18px 14px;display:flex;flex-direction:column;z-index:20}.brand{display:flex;align-items:center;gap:11px;padding:8px 8px 18px}.mark{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-weight:900;color:var(--blue-strong);background:var(--surface)}.brand strong{display:block;font-size:15px}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-top:2px}.nav{display:grid;gap:5px}.nav button,.mobile-nav button{border:0;background:transparent;color:var(--muted);cursor:pointer}.nav button{display:flex;align-items:center;gap:10px;text-align:left;padding:11px 12px;border-radius:10px;font-weight:700}.nav button.active{background:var(--accent-wash);color:var(--text)}.nav-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.75}.sidebar-foot{margin-top:auto;padding:12px 8px;display:flex;align-items:center;justify-content:space-between;gap:8px}.profile{min-width:0}.profile strong{font-size:13px}.profile small{display:block;color:var(--muted);font-size:11px}.theme{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;width:38px;height:38px;cursor:pointer}
+.main{margin-left:var(--rail);min-height:100vh}.topbar{height:68px;position:sticky;top:0;z-index:15;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;align-items:center;gap:8px}.search{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:9px 12px;min-width:230px}.content{max-width:1260px;margin:0 auto;padding:28px}.view{display:none}.view.active{display:block}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:800}.page-title{font-size:30px;line-height:1.15;margin:6px 0 5px;letter-spacing:-.03em}.page-sub{color:var(--muted);margin:0}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:26px}.primary{border:1px solid color-mix(in srgb,var(--blue) 65%,var(--line));background:var(--blue);color:white;border-radius:10px;padding:11px 15px;font-weight:850;cursor:pointer}.secondary{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:10px 14px;font-weight:750;cursor:pointer}.grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.8fr);gap:20px}.panel{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius);box-shadow:var(--shadow)}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 12px}.panel-head h2{font-size:16px;margin:0}.panel-head p{font-size:12px;color:var(--muted);margin:3px 0 0}.count{font-size:12px;color:var(--muted);background:var(--surface-2);border:1px solid var(--line-soft);border-radius:999px;padding:4px 8px}.job-list{padding:0 10px 10px}.job{display:grid;grid-template-columns:1fr auto;gap:14px;padding:14px 10px;border-top:1px solid var(--line-soft);align-items:center}.job:first-child{border-top:0}.job-main{min-width:0}.job-title{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.job-title strong{font-size:14px}.state{font-size:10px;text-transform:uppercase;letter-spacing:.10em;font-weight:900;border-radius:999px;padding:4px 7px;background:var(--surface-2);color:var(--muted)}.state.warn{background:var(--warn-wash);color:var(--amber)}.state.good{background:var(--success-wash);color:var(--green)}.job p{margin:5px 0 0;color:var(--muted);font-size:13px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:var(--faint)}.job-action{display:flex;align-items:center;gap:8px}.job-action button{white-space:nowrap}.mini-stack{padding:0 14px 14px}.metric{padding:13px 0;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:10px}.metric:first-child{border-top:0}.metric strong{font-size:13px}.metric span{font-weight:900}.quiet{color:var(--muted)}
+.request-toolbar{display:flex;gap:9px;align-items:center;margin:18px 0}.seg{display:flex;padding:4px;background:var(--surface);border:1px solid var(--line-soft);border-radius:11px;gap:3px}.seg button{border:0;background:transparent;color:var(--muted);padding:8px 11px;border-radius:8px;font-weight:750;cursor:pointer}.seg button.active{background:var(--surface-3);color:var(--text)}.request-list{display:grid;gap:12px}.request{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius);padding:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}.request h3{margin:0;font-size:16px}.request-line{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:5px;color:var(--muted);font-size:13px}.request-alert{margin-top:9px;font-size:12px;color:var(--amber);font-weight:750}.request-next{display:flex;align-items:center;gap:8px}.request-next small{display:block;text-align:right;color:var(--faint);font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:900}
+.workspace{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px}.stage-rail{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius);padding:10px;align-self:start;position:sticky;top:88px}.stage{display:flex;gap:10px;padding:11px 10px;border-radius:10px;color:var(--muted);align-items:flex-start}.stage.active{background:var(--accent-wash);color:var(--text)}.stage.done{color:var(--green)}.stage-index{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-size:11px;font-weight:900;flex:0 0 auto}.stage.active .stage-index{border-color:var(--blue);color:var(--blue-strong)}.stage strong{display:block;font-size:13px}.stage small{display:block;font-size:11px;color:var(--faint);margin-top:2px}.workspace-card{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius);overflow:hidden}.workspace-head{padding:20px;border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.workspace-head h2{margin:0;font-size:21px}.workspace-head p{margin:4px 0 0;color:var(--muted);font-size:13px}.next-action{padding:18px 20px;background:var(--accent-wash);border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:14px;align-items:center}.next-action strong{display:block}.next-action span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.work-body{padding:20px}.section{padding:0 0 18px;margin-bottom:18px;border-bottom:1px solid var(--line-soft)}.section:last-child{border:0;margin-bottom:0;padding-bottom:0}.section h3{font-size:13px;margin:0 0 10px}.summary-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0}.summary-row span{color:var(--muted)}.summary-row strong{text-align:right}.status-note{padding:11px 12px;border-left:2px solid var(--amber);background:var(--warn-wash);border-radius:8px;font-size:12px;color:var(--muted)}.mobile-nav{display:none}
+@media(max-width:900px){
+  .sidebar{display:none}.main{margin-left:0}.topbar{height:58px;padding:0 14px}.search{display:none}.content{padding:18px 14px 92px}.hero{align-items:flex-start}.page-title{font-size:25px}.grid{grid-template-columns:1fr}.panel{box-shadow:none}.job{grid-template-columns:1fr}.job-action{justify-content:flex-start}.request{grid-template-columns:1fr}.request-next{justify-content:space-between}.request-next small{text-align:left}.workspace{grid-template-columns:1fr}.stage-rail{position:static;display:flex;overflow-x:auto;padding:7px;gap:3px}.stage{min-width:max-content;padding:8px}.stage small{display:none}.workspace-head{padding:17px}.next-action{align-items:flex-start;flex-direction:column}.work-body{padding:17px}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--bg-elev) 95%,transparent);backdrop-filter:blur(16px);border-top:1px solid var(--line-soft);padding:7px max(6px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))}.mobile-nav button{padding:8px 4px;border-radius:9px;font-size:11px;font-weight:750}.mobile-nav button.active{background:var(--accent-wash);color:var(--text)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="mark">PX</div><div><strong>Finance HQ</strong><small>Operator v2 proof</small></div></div>
+    <nav class="nav" id="desktopNav">
+      <button class="active" data-view="start"><span class="nav-dot"></span>Start</button>
+      <button data-view="requests"><span class="nav-dot"></span>Requests</button>
+      <button><span class="nav-dot"></span>Customers</button>
+      <button><span class="nav-dot"></span>Quotes</button>
+      <button><span class="nav-dot"></span>Orders</button>
+      <button><span class="nav-dot"></span>Stock</button>
+      <button><span class="nav-dot"></span>Payments</button>
+      <button><span class="nav-dot"></span>Admin</button>
+    </nav>
+    <div class="sidebar-foot"><div class="profile"><strong>PrimeX BioLabs</strong><small>Clint · Admin</small></div><button class="theme" id="themeToggle" aria-label="Toggle theme">◐</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div class="crumb" id="crumb">Start · Today</div><div class="top-actions"><input class="search" placeholder="Search customers, orders, requests…"><button class="theme" id="themeToggleTop" aria-label="Toggle theme">◐</button></div></header>
+    <div class="content">
+      <section class="view active" id="view-start">
+        <div class="hero"><div><div class="eyebrow">Saturday · Operator overview</div><h1 class="page-title">What needs your attention</h1><p class="page-sub">The important work first. Everything else can wait.</p></div><button class="primary">+ New quote</button></div>
+        <div class="grid">
+          <div class="panel"><div class="panel-head"><div><h2>Needs attention</h2><p>Actionable work only</p></div><span class="count">4 jobs</span></div><div class="job-list">
+            <div class="job"><div class="job-main"><div class="job-title"><strong>Top Essex Builders</strong><span class="state warn">Stock decision</span></div><p>GHK-Cu 50mg × 1 · request PX-7UCU</p><div class="meta"><span>Request</span><span>•</span><span>Owner: Clint</span></div></div><div class="job-action"><button class="primary" data-open-workspace>Resolve stock</button></div></div>
+            <div class="job"><div class="job-main"><div class="job-title"><strong>Clinton Evans</strong><span class="state good">Quote ready</span></div><p>BPC-157 10mg × 1 · £40.00</p><div class="meta"><span>Quote</span><span>•</span><span>Ready to send</span></div></div><div class="job-action"><button class="secondary" data-open-workspace>Open quote</button></div></div>
+            <div class="job"><div class="job-main"><div class="job-title"><strong>PX-881186</strong><span class="state warn">Awaiting payment</span></div><p>Customer accepted · payment follow-up due today</p><div class="meta"><span>Order</span><span>•</span><span>Due 17:00</span></div></div><div class="job-action"><button class="secondary">Record payment</button></div></div>
+            <div class="job"><div class="job-main"><div class="job-title"><strong>PX-458582</strong><span class="state">Preparing</span></div><p>Pack and prepare for Royal Mail collection</p><div class="meta"><span>Fulfilment</span><span>•</span><span>Today</span></div></div><div class="job-action"><button class="secondary">Open order</button></div></div>
+          </div></div>
+          <aside class="panel"><div class="panel-head"><div><h2>Business pulse</h2><p>Useful context, not jobs</p></div></div><div class="mini-stack"><div class="metric"><strong>Open order value</strong><span>£215</span></div><div class="metric"><strong>Quotes waiting</strong><span>3</span></div><div class="metric"><strong>Stock exceptions</strong><span>1</span></div><div class="metric"><strong>Shared backup</strong><span class="quiet">Healthy</span></div></div></aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-requests">
+        <div class="hero"><div><div class="eyebrow">Incoming work</div><h1 class="page-title">Requests</h1><p class="page-sub">Know who wants what, what state it is in, and the next job.</p></div><button class="secondary">Request intake tools</button></div>
+        <div class="request-toolbar"><div class="seg"><button class="active">Needs action</button><button>Ready</button><button>In progress</button><button>Closed</button></div></div>
+        <div class="request-list">
+          <article class="request"><div><div class="job-title"><h3>Top Essex Builders</h3><span class="state warn">Stock decision</span></div><div class="request-line">GHK-Cu 50mg × 1 <span>·</span> WhatsApp preferred</div><div class="request-alert">Important: requested 1 · available 0 · short 1</div></div><div class="request-next"><div><small>Next job</small><strong>Resolve stock</strong></div><button class="primary" data-open-workspace>Open</button></div></article>
+          <article class="request"><div><div class="job-title"><h3>PrimeX Live Test</h3><span class="state good">Ready to quote</span></div><div class="request-line">BPC-157 10mg × 1 <span>·</span> Email preferred</div></div><div class="request-next"><div><small>Next job</small><strong>Create quote</strong></div><button class="primary" data-open-workspace>Create quote</button></div></article>
+          <article class="request"><div><div class="job-title"><h3>Clint QR code test</h3><span class="state">Quote in progress</span></div><div class="request-line">BPC-157 10mg × 1 <span>·</span> WhatsApp</div></div><div class="request-next"><div><small>Next job</small><strong>Finish quote</strong></div><button class="secondary" data-open-workspace>Resume quote</button></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-workspace">
+        <div class="hero"><div><div class="eyebrow">Customer workspace</div><h1 class="page-title">Top Essex Builders</h1><p class="page-sub">Request PX-7UCU · GHK-Cu 50mg × 1</p></div><span class="state warn">Stock decision</span></div>
+        <div class="workspace">
+          <aside class="stage-rail">
+            <div class="stage done"><div class="stage-index">✓</div><div><strong>Request</strong><small>Captured</small></div></div>
+            <div class="stage active"><div class="stage-index">2</div><div><strong>Quote</strong><small>In progress</small></div></div>
+            <div class="stage"><div class="stage-index">3</div><div><strong>Accepted</strong><small>Waiting</small></div></div>
+            <div class="stage"><div class="stage-index">4</div><div><strong>Payment</strong><small>Not started</small></div></div>
+            <div class="stage"><div class="stage-index">5</div><div><strong>Fulfilment</strong><small>Not started</small></div></div>
+            <div class="stage"><div class="stage-index">6</div><div><strong>Complete</strong><small>Not started</small></div></div>
+          </aside>
+          <div class="workspace-card">
+            <div class="workspace-head"><div><h2>Prepare quote</h2><p>Only the current job is expanded. Previous evidence stays available without competing for attention.</p></div><span class="state warn">1 blocker</span></div>
+            <div class="next-action"><div><strong>Next: resolve stock availability</strong><span>Finance currently shows 0 available against 1 requested.</span></div><button class="primary">Open stock</button></div>
+            <div class="work-body">
+              <div class="section"><h3>Customer & request</h3><div class="summary-row"><span>Contact</span><strong>topessexbuilders@gmail.com</strong></div><div class="summary-row"><span>Preferred reply</span><strong>WhatsApp</strong></div><div class="summary-row"><span>Requested</span><strong>GHK-Cu 50mg × 1</strong></div></div>
+              <div class="section"><h3>Quote</h3><div class="summary-row"><span>Price</span><strong>£35.00</strong></div><div class="summary-row"><span>Postage</span><strong>Not chosen</strong></div><div class="status-note">Stock must be confirmed before this quote can be prepared for the customer.</div></div>
+              <div class="section"><h3>When the blocker is cleared</h3><div class="summary-row"><span>Next action</span><strong>Generate customer quote</strong></div><button class="secondary" disabled>Generate quote</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="mobile-nav" id="mobileNav"><button class="active" data-view="start">Start</button><button data-view="requests">Requests</button><button>Orders</button><button>Stock</button><button>More</button></nav>
+</div>
+<script>
+(function(){
+  const root=document.documentElement;
+  const saved=localStorage.getItem('px-finance-theme');
+  const initial=saved||((window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark');
+  root.dataset.theme=initial;
+  function toggleTheme(){const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;localStorage.setItem('px-finance-theme',next)}
+  document.getElementById('themeToggle').onclick=toggleTheme;document.getElementById('themeToggleTop').onclick=toggleTheme;
+  const crumb=document.getElementById('crumb');
+  function show(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+name)?.classList.add('active');document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));crumb.textContent=name==='start'?'Start · Today':name==='requests'?'Requests · Incoming work':'Customer workspace · Quote';window.scrollTo({top:0,behavior:'smooth'})}
+  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
+  document.querySelectorAll('[data-open-workspace]').forEach(b=>b.addEventListener('click',()=>show('workspace')));
+})();
+</script>
+</body>
+</html>
