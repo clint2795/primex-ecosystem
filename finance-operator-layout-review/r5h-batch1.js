@@ -101,6 +101,13 @@
     const batch3=document.createElement('script');
     batch3.src='/finance-operator-layout-review/r5h-batch3.js?v=1';
     batch3.dataset.pxR5hBatch3='true';
+    batch3.onload=()=>{
+      if(document.querySelector('script[data-px-r5h-batch4]')) return;
+      const batch4=document.createElement('script');
+      batch4.src='/finance-operator-layout-review/r5h-batch4.js?v=1';
+      batch4.dataset.pxR5hBatch4='true';
+      document.body.appendChild(batch4);
+    };
     document.body.appendChild(batch3);
   };
   document.body.appendChild(batch2);
