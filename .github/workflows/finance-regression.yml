@@ -6,12 +6,14 @@ on:
     paths:
       - 'finance/**'
       - 'finance-operator-layout-review/**'
+      - 'scripts/verify-finance-r5h-batch1.mjs'
       - '.github/workflows/finance-regression.yml'
   pull_request:
     branches: [main]
     paths:
       - 'finance/**'
       - 'finance-operator-layout-review/**'
+      - 'scripts/verify-finance-r5h-batch1.mjs'
       - '.github/workflows/finance-regression.yml'
   workflow_dispatch:
 
@@ -37,8 +39,23 @@ jobs:
           node --version
           npm --version
 
-      - name: Run R5H Batch 2 regression
-        run: node finance/tests/r5h_batch2_regression.js
+      - name: Run R5H Batch 1 verifier
+        run: node scripts/verify-finance-r5h-batch1.mjs
 
-      - name: Run R5H Batch 3 shared reliability regression
-        run: node finance/tests/r5h_batch3_shared_reliability_regression.js
+      - name: Run all R5H regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          tests=(finance/tests/r5h*_regression.js)
+          if [ ${#tests[@]} -eq 0 ]; then
+            echo 'No R5H regression files found.' >&2
+            exit 1
+          fi
+          printf 'Running %s R5H regression file(s):\n' "${#tests[@]}"
+          printf ' - %s\n' "${tests[@]}"
+          for test_file in "${tests[@]}"; do
+            echo "::group::$test_file"
+            node "$test_file"
+            echo '::endgroup::'
+          done
