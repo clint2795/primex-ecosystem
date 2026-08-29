@@ -25,7 +25,7 @@ assert(neat.includes("titleSection(sections[1],2,5,'Requested Items')"),'Step 2 
 assert(neat.includes("titleSection(sections[2],3,5,'Order Summary')"),'Step 3 must be Order Summary');
 assert(neat.includes("titleSection(sections[3],4,5,'Payment & Save')"),'Step 4 must be Payment & Save');
 assert(neat.includes("titleSection(sections[4],5,5,'Fulfilment & Messages')"),'Step 5 must be Fulfilment & Messages');
-assert(neat.includes("px-step-kicker">?false:true),'Step marker style missing');
+assert(neat.includes('px-step-kicker'),'Step marker style missing');
 
 // Passive explanatory copy must be reduced rather than presented as another heavy job card.
 assert(neat.includes("Quote / enquiry only. Convert to a live order after the customer confirms."),'Quote helper copy should be concise');
