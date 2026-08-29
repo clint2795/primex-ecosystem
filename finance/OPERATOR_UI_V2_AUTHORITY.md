@@ -18,6 +18,35 @@ The interface must answer three questions immediately:
 
 The product must feel premium, calm, obvious and operationally trustworthy before decorative styling is added.
 
+## Approved application target
+
+Operator UI v2 is not a browser-only Finance page. It is the product UI foundation for a proper installable commercial application.
+
+Target delivery surfaces:
+- Windows desktop application
+- macOS desktop application
+- iPhone / iPad application
+- Android application
+- web application for browser access where appropriate
+
+Architecture must therefore avoid browser-only assumptions that would make later application packaging expensive or force a second UI rewrite.
+
+The product should converge on one shared business/domain layer and reusable UI system, with platform-specific shells only where native behaviour genuinely improves the experience.
+
+Future application capabilities may include:
+- secure company/user sign-in
+- role and permission management
+- cloud synchronisation
+- resilient local/offline state where appropriate
+- push / desktop notifications
+- automatic update/version handling
+- audit and backup controls
+- licensing/subscription management
+- company onboarding and configuration
+- installers and app-store distribution
+
+These commercial/platform capabilities are not all part of the immediate v2 shell build, but current architecture must not prevent them.
+
 ## Core interaction model
 
 Daily work is organised around **jobs and state transitions**, not database fields or generic dashboard cards.
@@ -193,6 +222,7 @@ Before any v2 surface is accepted it must:
 - retain clarity in dark and light themes
 - pass Finance regression CI for any engine integration
 - be reviewed at owner desktop and owner phone dimensions
+- remain viable for packaging into desktop/mobile application shells without redesigning the whole product
 
 ## Initial implementation scope
 
@@ -204,5 +234,6 @@ Build the isolated v2 shell in this order:
 4. Requests
 5. Single Job Workspace
 6. Integrate real hardened Finance data/actions progressively after the shell is visually accepted
+7. Move the accepted shell into the proper shared application architecture before commercial packaging
 
 The old protected candidate remains available during reconstruction and is not replaced until v2 proves its workflow.
