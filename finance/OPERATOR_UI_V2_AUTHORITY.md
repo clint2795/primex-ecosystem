@@ -149,6 +149,9 @@ Target qualities:
 - low border density
 - spacing and tonal planes provide most hierarchy
 - crisp typography with visibly different levels for page, job, label, helper and metadata
+- typography must have a deliberate, recognisable production character; do not substitute a near-identical system sans and call it a redesign
+- visual identity changes must be perceptible in one glance when explicitly being tested
+- active-work emphasis should use brighter surface separation and clear cobalt/electric hue, not simply darken or desaturate the interface
 - subtle material depth; no decorative sci-fi effects
 - one obvious primary action per current state
 - semantic warning/success colour only where operationally meaningful
