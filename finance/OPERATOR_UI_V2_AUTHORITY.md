@@ -59,25 +59,23 @@ Only the current stage should demand attention. Previous stages collapse to conc
 
 ## Foundation surfaces
 
-### Start / Work Queue
+### Start / Control Pad
 
 Authoritative operator landing surface.
 
-Show:
-- Needs attention
-- Due today / overdue
-- Recent meaningful changes
-- Current work in progress
-- Quick actions only where genuinely useful
+Start is a **command/control pad**, not a work queue and not a dashboard. It should let an operator immediately run the business, resume current work and see only the operational exceptions that genuinely need attention.
 
-Every actionable row must identify:
-- customer / record
-- current state
-- reason it needs attention
-- next action
-- owner / deadline when applicable
+Primary Start structure:
+- Continue current job / resume work
+- Core actions such as New quote, New order, Requests and Stock
+- Operational controls such as Payments, Packing / Dispatch, Customer messages and Replenishment
+- Compact needs-attention strip for genuine blockers, overdue work or exceptions
+- Tappable live status counts only when they lead directly to useful work
+- Recent / resume shortcuts for active records
 
-Do not make passive statistics look like jobs.
+The needs-attention queue is one part of Start, not the whole screen.
+
+Do not turn Start into passive KPI cards, charts or decorative dashboard statistics. Every visible control or count must either launch work, resume work or surface a meaningful operational exception.
 
 ### Requests
 
@@ -113,7 +111,7 @@ Current stage is expanded. Previous stages summarise. Future stages stay subdued
 
 ### Desktop
 
-Persistent left sidebar.
+Default desktop shell uses a persistent left sidebar.
 
 Target information architecture:
 - Start
@@ -124,6 +122,16 @@ Target information architecture:
 - Stock
 - Payments
 - Admin
+
+Desktop responsibilities:
+- **Left sidebar = where am I going?**
+- **Start control pad = what can I do?**
+- **Main workspace = what am I working on?**
+- **Sidebar utility area = profile / company / settings / theme**
+
+Profile, company identity, Settings and theme controls belong at the bottom of the sidebar or inside Settings, not inside job/workflow screens.
+
+Future personalisation may offer an expanded sidebar and compact icon rail, but the navigation model must remain stable.
 
 ### Mobile
 
@@ -136,7 +144,7 @@ Default bottom navigation target:
 - Stock
 - More
 
-Secondary modules live under More rather than squeezing seven equal tabs across the screen.
+Secondary modules and Settings live under More rather than squeezing additional equal tabs across the screen. Theme controls should not consume workflow-space on mobile.
 
 ## Visual system
 
@@ -145,7 +153,7 @@ PrimeX production UI must not resemble generic SaaS, gamer dashboards or flat bl
 Target qualities:
 - engineered near-black / graphite surfaces in dark mode
 - refined warm-neutral light surfaces in light mode
-- restrained PrimeX blue used for focus, selection and primary action only
+- restrained PrimeX icy-blue used for focus, selection and primary action only
 - low border density
 - spacing and tonal planes provide most hierarchy
 - crisp typography with visibly different levels for page, job, label, helper and metadata
@@ -280,7 +288,7 @@ Build the isolated v2 shell in this order:
 
 1. Design tokens + dark/light theme engine
 2. Responsive shell: desktop sidebar / mobile navigation
-3. Start / Work Queue
+3. Start / Control Pad
 4. Requests
 5. Single Job Workspace
 6. Integrate real hardened Finance data/actions progressively after the shell is visually accepted
