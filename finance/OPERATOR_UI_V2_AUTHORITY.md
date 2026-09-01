@@ -237,6 +237,21 @@ When inbound stock is received, Finance should identify affected waiting request
 
 This model supersedes weaker generic out-of-stock / “awaiting replenishment” messaging as the target for R5I stock operations and v2 customer workflow integration.
 
+## Approved action-state language
+
+Action controls must communicate where they sit in the workflow without becoming visually dead or visually noisy.
+
+Use the same control footprint as it progresses through state:
+- **Future / locked:** graphite fill, restrained icy-blue outline, bright readable label, and a short prerequisite helper explaining what must happen first. It must look like a real control that will become available, not like passive text or a dead grey button.
+- **Ready / active:** the same control becomes the full PrimeX icy-blue primary treatment and is the dominant action for that state.
+- **Completed:** replace the large action emphasis with a compact success confirmation/evidence treatment; do not leave a large green action slab in place after completion.
+
+Future/locked controls may use a small lock or progression icon where useful, but icons must support meaning rather than decorate the control.
+
+The button should not move or transform into an unrelated component when it becomes available. Progressive activation should teach the workflow through continuity of position, size and label.
+
+Routine workflow should remain graphite + icy-blue. Green is reserved for completed/successful state, amber for genuine attention/caution, and red for true blocking/critical states. Do not add semantic colour merely to make a screen more visually interesting.
+
 ## Interaction hierarchy
 
 Every production surface follows:
