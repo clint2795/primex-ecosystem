@@ -202,6 +202,41 @@ Do not rewrite or weaken existing proven controls merely to simplify the UI:
 
 The new shell may call or adapt these capabilities but must not silently duplicate their business rules.
 
+## Approved availability and replenishment customer model
+
+When requested stock is unavailable or short, Finance must separate the internal replenishment job from the customer communication job.
+
+Customer-service rule:
+
+**Give the customer the most specific truthful position currently available. If a reliable availability date or window cannot yet be given, give a specific next-update date instead.**
+
+Customer-facing availability states should progress with confidence rather than expose supplier operations:
+- availability being confirmed → customer request is held against next available stock and a specific next-update date is promised
+- replenishment confirmed → customer can be told the requested item is allocated against incoming stock, while the final availability window is still being confirmed
+- expected window known → customer receives the genuine expected availability date/range
+- stock received → customer is notified and the request resumes toward quote/order completion
+
+Do not expose supplier names, supplier response delays, purchasing friction or other internal replenishment details in customer messaging.
+
+Do not use vague open-ended wording such as “we’ll let you know” when a more specific service commitment can be made.
+
+If no stock ETA is known, the specific customer commitment is the **next update date**. Finance must create and retain that follow-up job so the request cannot silently disappear while replenishment is unresolved.
+
+Internal replenishment state should support, at minimum:
+- replenishment needed
+- awaiting availability confirmation
+- inbound confirmed
+- quantity needed for open requests
+- quantity incoming
+- expected date/range when known
+- next supplier/internal chase date
+- next customer update date
+- affected open requests
+
+When inbound stock is received, Finance should identify affected waiting requests and surface them for resumption rather than requiring the operator to rediscover them manually.
+
+This model supersedes weaker generic out-of-stock / “awaiting replenishment” messaging as the target for R5I stock operations and v2 customer workflow integration.
+
 ## Interaction hierarchy
 
 Every production surface follows:
