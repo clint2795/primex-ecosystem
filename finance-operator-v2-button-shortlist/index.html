@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PrimeX Operator UI · Button Shortlist</title>
+<style>
+:root{--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--r:10px}
+html[data-theme="dark"]{--bg:#080b10;--panel:#0e131a;--panel2:#121821;--line:#28313c;--text:#f7f9fb;--muted:#aab4c0;--quiet:#7f8a96}
+html[data-theme="light"]{--bg:#f4f6f8;--panel:#ffffff;--panel2:#f8fafc;--line:#d9dfe7;--text:#171b22;--muted:#5f6873;--quiet:#88919c}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:var(--font)}body{padding:0}.wrap{max-width:920px;margin:0 auto;padding:24px 18px 48px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:20px}.top h1{font-size:30px;line-height:1.05;margin:0;letter-spacing:-.03em}.top p{margin:6px 0 0;color:var(--muted);font-size:15px}.toggle{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:10px 12px;font-weight:650}.section{margin-top:18px;border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden}.head{padding:16px 16px 10px;border-bottom:1px solid var(--line)}.head h2{margin:0;font-size:20px}.head p{margin:5px 0 0;color:var(--muted);font-size:14px}.grid{padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.opt{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px}.label{font-size:12px;color:var(--quiet);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}.btn{width:100%;border:0;border-radius:10px;padding:15px 16px;font-size:17px;font-weight:750;letter-spacing:-.01em;box-shadow:0 1px 2px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.18)}.btn span{opacity:.78;font-weight:700;margin-left:6px}.g1d{background:#00b63e;color:white}.g1l{background:#0aa83c;color:white}.o3d{background:#ff7a00;color:white}.o3l{background:#e86b00;color:white}.o4d{background:#ff4d12;color:white}.o4l{background:#e84a14;color:white}.r2d{background:#f20d35;color:white}.r2l{background:#d80f32;color:white}.r4d{background:#e30b5a;color:white}.r4l{background:#c90d50;color:white}.foot{margin-top:18px;color:var(--muted);font-size:14px;line-height:1.45}.foot strong{color:var(--text)}@media(max-width:640px){.top{align-items:flex-start}.top h1{font-size:28px}.grid{grid-template-columns:1fr}.wrap{padding-top:20px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><div><h1>Button shortlist</h1><p>Your shortlisted semantic colours only.</p></div><button class="toggle" id="themeToggle">Light mode</button></div>
+
+  <section class="section"><div class="head"><h2>Green · G1</h2><p>Success / confirmed / available</p></div><div class="grid"><div class="opt"><div class="label">Dark mode</div><button class="btn g1d">G1 <span>Mark complete</span></button></div><div class="opt"><div class="label">Light mode</div><button class="btn g1l">G1 <span>Mark complete</span></button></div></div></section>
+
+  <section class="section"><div class="head"><h2>Orange · O3 / O4</h2><p>Warning / review / needs attention</p></div><div class="grid"><div class="opt"><div class="label">O3 · Dark</div><button class="btn o3d">O3 <span>Needs review</span></button></div><div class="opt"><div class="label">O3 · Light</div><button class="btn o3l">O3 <span>Needs review</span></button></div><div class="opt"><div class="label">O4 · Dark</div><button class="btn o4d">O4 <span>Needs review</span></button></div><div class="opt"><div class="label">O4 · Light</div><button class="btn o4l">O4 <span>Needs review</span></button></div></div></section>
+
+  <section class="section"><div class="head"><h2>Red · R2 / R4</h2><p>Danger / destructive / critical</p></div><div class="grid"><div class="opt"><div class="label">R2 · Dark</div><button class="btn r2d">R2 <span>Critical action</span></button></div><div class="opt"><div class="label">R2 · Light</div><button class="btn r2l">R2 <span>Critical action</span></button></div><div class="opt"><div class="label">R4 · Dark</div><button class="btn r4d">R4 <span>Critical action</span></button></div><div class="opt"><div class="label">R4 · Light</div><button class="btn r4l">R4 <span>Critical action</span></button></div></div></section>
+
+  <div class="foot"><strong>Use:</strong> judge the colour itself first. We can tune border, hover, pressed and focus states after the semantic base colours are locked.</div>
+</main>
+<script>
+const root=document.documentElement,toggle=document.getElementById('themeToggle');
+function setTheme(t){root.dataset.theme=t;toggle.textContent=t==='dark'?'Light mode':'Dark mode';localStorage.setItem('px-button-shortlist-theme',t)}
+setTheme(localStorage.getItem('px-button-shortlist-theme')||'dark');
+toggle.onclick=()=>setTheme(root.dataset.theme==='dark'?'light':'dark');
+</script>
+</body>
+</html>
