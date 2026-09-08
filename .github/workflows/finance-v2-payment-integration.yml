@@ -1,0 +1,39 @@
+name: Finance v2 payment integration
+on:
+  pull_request:
+    paths:
+      - 'finance-operator-v2-job-ready-quote-proof/**'
+      - 'finance/tests/r5h_payment_module_regression.mjs'
+      - '.github/workflows/finance-v2-payment-integration.yml'
+  workflow_dispatch:
+jobs:
+  payment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Payment interaction regressions
+        run: node --test finance/tests/r5h_payment_module_regression.mjs
+      - name: Verify module and route boundaries
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const dir='finance-operator-v2-job-ready-quote-proof/';
+          const html=fs.readFileSync(dir+'index.html','utf8');
+          const module=fs.readFileSync(dir+'payment-module.js','utf8');
+          const css=fs.readFileSync(dir+'payment-module.css','utf8');
+          assert.match(html,/import \{createPaymentTask\} from '\.\/payment-module\.js'/);
+          assert.match(html,/id="payment-mount"/);
+          assert.match(html,/data-emphasis="strong"/);
+          assert.match(html,/payment\.snapshot\(\)\.confirmed/);
+          assert.match(module,/amount>available\(\)/);
+          assert.match(module,/state\.confirmed=true/);
+          assert.match(css,/@media\(max-width:359px\)/);
+          assert.doesNotMatch(html+module,/https?:\/\/[^'"\s]*supabase/);
+          console.log('Route/module boundaries verified.');
+          NODE
