@@ -23,3 +23,12 @@ jobs:
         run: node --test scripts/r5h-quote-adapter.test.mjs
       - name: Verify production isolation
         run: git diff --exit-code ${{ github.event.pull_request.base.sha }} HEAD -- finance/index.html finance/config.js finance-operator-layout-review/index.html
+      - name: Export isolated source fixture
+        uses: actions/upload-artifact@v4
+        with:
+          name: r5h-quote-source-fixture
+          path: |
+            finance-operator-layout-review/index.html
+            finance-operator-v2-job-ready-quote-proof/quote-domain-adapter.js
+            scripts/r5h-quote-adapter.test.mjs
+          retention-days: 1
