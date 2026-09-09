@@ -16,7 +16,7 @@ function harness(){
  case 'convert':state={...state,id:'O-1',isQuote:false,sourceQuoteId:'Q-1',commercialLock:state.acceptedSnapshot};return true;
  case 'saveConvertedOrder':saved=structuredClone(state);return true;
  default:throw Error('Unexpected command '+name);
- }};
+ }}};
  return{adapter:createQuoteDomainAdapter(port),calls,set:s=>{state=s},get:()=>state,save:s=>{saved=s}};
 }
 test('draft saving delegates to authority and retains source identity',async()=>{const h=harness();await h.adapter.saveDraft();assert.deepEqual(h.calls,['saveDraft']);assert.equal(h.adapter.read().id,'Q-1')});
