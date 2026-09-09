@@ -7,15 +7,13 @@ const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m=
 const source=scripts.join('\n');
 new vm.Script(source,{filename:file});
 const functions=[...source.matchAll(/(?:^|\n)\s*(?:async\s+)?function\s+([\w$]+)\s*\(/g)].map(m=>m[1]);
-const patterns=[/quote/i,/accept/i,/convert/i,/commercial/i,/message/i,/saveOrder/i,/loadOrder/i,/stock/i];
-const relevant=functions.filter(n=>patterns.some(p=>p.test(n)));
-console.log('Source:',file);
-console.log('Script bytes:',source.length);
-console.log('Relevant function names:',JSON.stringify(relevant));
-for(const name of relevant){
+const names=['newQuote','newEmailQuote','loadOrder','saveOrderNow','approveCurrentQuote','startSendQuoteWorkflow','markCurrentQuoteAccepted','convertCurrentQuoteToLive','customerMessageIsCurrent','ensureCustomerMessageCurrent','customerMessageDependencyFingerprint','orderPayload','markCommunicationSent','markConfirmationSent','setCommStatus','commercialSnapshotData','quoteApprovalIssues','currentSupabaseWriteUser','showView'];
+console.log('Source:',file,'Script bytes:',source.length);
+console.log('Relevant functions:',JSON.stringify(functions.filter(n=>/quote|accept|convert|commercial|message|saveOrder|loadOrder|stock/i.test(n))));
+for(const name of names){
  const re=new RegExp('(?:^|\\n)\\s*(?:async\\s+)?function\\s+'+name+'\\s*\\(');
  const match=re.exec(source);if(!match)continue;
- const start=match.index; const opening=source.indexOf('{',start);if(opening<0)continue;
+ const start=match.index;const opening=source.indexOf('{',start);if(opening<0)continue;
  let depth=0,end=opening,inString=null,escaped=false,comment=null;
  for(let i=opening;i<source.length;i++){
   const c=source[i],n=source[i+1];
@@ -26,8 +24,7 @@ for(const name of relevant){
   if(c==='"'||c==="'"||c==='`'){inString=c;continue;}
   if(c==='{')depth++;if(c==='}'&&--depth===0){end=i+1;break;}
  }
- const body=source.slice(start,end);
- if(/quote|accept|convert|saveOrder|loadOrder/i.test(name))console.log('\n### '+name+'\n'+body.slice(0,18000));
+ console.log('\n### '+name+'\n'+source.slice(start,end).slice(0,18000));
 }
 assert(source.includes('COMMERCIAL_AUTHORITY_VERSION'));
-console.log('\nSource inventory complete; no application state was executed or changed.');
+console.log('\nInventory complete; no application state executed or changed.');
