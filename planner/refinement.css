@@ -204,3 +204,59 @@
     font-size: 11.5px;
   }
 }
+
+/* Supporting category cards: preserve the original proportions and typography,
+   but give the angled facet a subtle physical lift using neutral light and shadow. */
+.category-card {
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.028),
+    inset 0 -1px 0 rgba(0,0,0,.32),
+    0 8px 18px rgba(0,0,0,.16);
+}
+.category-card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -18%;
+  right: 24px;
+  width: 34%;
+  height: 138%;
+  transform: skewX(-24deg);
+  pointer-events: none;
+  background:
+    linear-gradient(102deg,
+      rgba(255,255,255,.035) 0%,
+      rgba(111,164,201,.028) 24%,
+      rgba(13,34,51,.16) 58%,
+      rgba(0,0,0,.22) 100%);
+  border-left: 1px solid rgba(142,188,219,.075);
+  border-right: 1px solid rgba(0,0,0,.28);
+  box-shadow:
+    -7px 0 14px rgba(85,139,176,.018),
+    9px 0 16px rgba(0,0,0,.13);
+}
+.category-card::after {
+  right: 48px;
+  z-index: 1;
+  background: linear-gradient(180deg,
+    rgba(148,192,220,.13),
+    rgba(70,126,165,.075) 48%,
+    rgba(13,30,44,.035));
+  box-shadow:
+    1px 0 0 rgba(255,255,255,.018),
+    7px 0 13px rgba(0,0,0,.09);
+}
+.category-card > span,
+.category-card > b {
+  position: relative;
+  z-index: 2;
+}
+.category-card:hover,
+.category-card:focus-visible,
+.category-card.is-active {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.042),
+    inset 0 -1px 0 rgba(0,0,0,.34),
+    0 10px 22px rgba(0,0,0,.2);
+}
