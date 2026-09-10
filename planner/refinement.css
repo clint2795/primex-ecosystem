@@ -1,0 +1,168 @@
+/* PrimeX Early Access refinement — 2026-09-10
+   Visual-only pass: improve mobile legibility, move family symbol to upper-right,
+   add restrained vertical family accent beside compound names, and keep cards neutral/premium.
+*/
+
+/* Product cards: family colour is an identifier, not a wash. */
+.product-card {
+  padding: 20px 18px 48px;
+  background: linear-gradient(152deg, #0d1827 0%, #091522 58%, #060c16 100%);
+  border-color: rgba(126, 151, 170, .22);
+}
+.product-card::before {
+  background: linear-gradient(118deg, rgba(255,255,255,.012), transparent 48%);
+}
+.card-plane {
+  opacity: .48;
+  background: linear-gradient(135deg, rgba(29,61,91,.26), rgba(6,14,23,.08));
+}
+.family-id {
+  position: absolute;
+  z-index: 4;
+  top: 16px;
+  right: 16px;
+  left: auto;
+  width: 23px;
+  height: 23px;
+  background: rgba(5,12,20,.92);
+}
+.product-card h3 {
+  position: relative;
+  margin: 46px 0 0;
+  padding-left: 12px;
+  font-size: 20px;
+  line-height: 1.12;
+}
+.product-card h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  bottom: 1px;
+  width: 2px;
+  background: var(--accent);
+}
+.card-spec {
+  margin-top: 8px;
+  padding-left: 12px;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.card-contents {
+  padding-left: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.family-rail {
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 42%, transparent) 58%, transparent 92%);
+}
+
+/* Bring the general type scale into a more consistent customer-reading range. */
+.route-note span,
+.eyebrow,
+.category-card small,
+.site-footer .container {
+  font-size: 11px;
+}
+.route-note p,
+.section-heading > p,
+.drawer-header p:last-child,
+.request-guidance {
+  font-size: 13px;
+}
+.intro-copy > p:last-child {
+  font-size: 16px;
+}
+.category-card strong {
+  font-size: 15px;
+}
+.category-card em,
+.availability p,
+.card-action,
+.form-grid label > span,
+.review-list > div,
+.consent,
+.form-status,
+.send-grid button {
+  font-size: 12px;
+}
+.availability p {
+  line-height: 1.7;
+}
+
+@media (max-width: 740px) {
+  .container { width: min(calc(100% - 30px), 1180px); }
+
+  .wordmark-main { font-size: 18px; }
+  .wordmark small { font-size: 10.5px; }
+  .header-status { max-width: 205px; font-size: 10px; line-height: 1.45; }
+
+  .route-note span,
+  .eyebrow,
+  .category-card small,
+  .site-footer .container { font-size: 11px; }
+
+  .route-note p { font-size: 13px; line-height: 1.55; }
+  .intro-copy h1 { font-size: 42px; line-height: 1.02; }
+  .intro-copy > p:last-child { font-size: 16px; line-height: 1.62; }
+
+  .section-heading h2,
+  .details-heading h2 { font-size: 31px; }
+  .section-heading > p { font-size: 14px; line-height: 1.5; }
+
+  .featured-grid { gap: 10px; }
+  .featured-grid .product-card {
+    min-height: 212px;
+    padding: 18px 15px 48px;
+  }
+  .family-id {
+    top: 14px;
+    right: 14px;
+    width: 23px;
+    height: 23px;
+  }
+  .product-card h3 {
+    margin-top: 46px;
+    padding-left: 11px;
+    font-size: 20px;
+  }
+  .card-spec {
+    padding-left: 11px;
+    font-size: 13px;
+  }
+  .card-contents {
+    max-width: 92%;
+    padding-left: 11px;
+    font-size: 12px;
+  }
+  .card-action {
+    min-height: 36px;
+    min-width: 72px;
+    padding: 0 11px;
+    font-size: 12px;
+  }
+
+  .request-intro h2 { font-size: 18px; }
+  .request-empty { font-size: 13px; }
+
+  .support-section { padding-top: 48px; }
+  .category-card { min-height: 126px; padding: 19px 17px; }
+  .category-card strong { font-size: 16px; line-height: 1.3; }
+  .category-card em { font-size: 13px; line-height: 1.45; }
+  .category-card > b { font-size: 19px; }
+
+  .drawer-header h3 { font-size: 25px; }
+  .drawer-header p:last-child { font-size: 13px; }
+  .availability { grid-template-columns: 28px 1fr; gap: 14px; }
+  .availability > span { width: 24px; height: 24px; font-size: 11px; }
+  .availability p { font-size: 13px; line-height: 1.7; }
+
+  .site-footer .container { line-height: 1.6; }
+}
+
+@media (max-width: 390px) {
+  .intro-copy h1 { font-size: 39px; }
+  .featured-grid { grid-template-columns: 1fr; }
+  .featured-grid .product-card { min-height: 210px; }
+}
