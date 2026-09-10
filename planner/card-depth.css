@@ -56,15 +56,22 @@
   right: 16px;
 }
 .family-rail {
-  height: 3px;
-  opacity: .98;
-  background: var(--accent);
-  box-shadow: 0 -1px 7px color-mix(in srgb, var(--accent) 28%, transparent);
+  position: absolute;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 4px !important;
+  display: block !important;
+  z-index: 20;
+  opacity: 1;
+  background: var(--accent) !important;
+  box-shadow: 0 -1px 8px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
-/* Content sits in the upper-middle, leaving deliberate room for the action below. */
+/* Content sits deliberately higher in the card, leaving the lower third for the action. */
 .product-card h3 {
-  margin-top: 28px;
+  margin-top: 18px;
   padding-left: 12px;
   font-size: 21px;
   line-height: 1.08;
@@ -143,7 +150,7 @@
     height: 22px;
   }
   .product-card h3 {
-    margin-top: 25px;
+    margin-top: 14px;
     padding-left: 11px;
     font-size: 20px;
   }
@@ -186,7 +193,7 @@
     height: 21px;
   }
   .product-card h3 {
-    margin-top: 22px;
+    margin-top: 10px;
     padding-left: 10px;
     font-size: 19px;
   }
