@@ -86,7 +86,7 @@ These checks must be reused as regressions. Do not commission another broad tech
 
 ### 3. R5H — Complete operator-journey acceptance
 
-**State:** READY — R5G DEPENDENCY PASSED  
+**State:** IN PROGRESS — QUOTE ENGINE MOUNT LOCALLY VERIFIED; SHARED OPERATOR ACCEPTANCE PENDING
 **Job:** Test the combined candidate as an operator would use it, including waiting and failure states. This is missing validation, not a repeat of the completed audits.
 
 **Scenario set:**
@@ -106,6 +106,8 @@ These checks must be reused as regressions. Do not commission another broad tech
 - empty queues, multiple concurrent orders, overdue actions and error recovery.
 
 **Pass condition:** every action has a clear result; every waiting promise has an owner and date; no customer message requires an unrecorded follow-up; no task disappears between screens; actual generated customer output is reviewed independently from its operator screen.
+
+**9 September Quote-workspace evidence:** The protected R5G Quote engine is now mounted inside the v2 Customer Job proof through a narrow asynchronous port. The engine remains the sole authority for quote data, pricing, stock, totals, approval, persistence, customer copy, sent evidence, accepted snapshots, conversion and source linkage. An isolated browser run completed request-to-quote, edit/save/approve, actual message review, proof-only deliberate handoff, sent evidence, acceptance lock, conversion and separate live-order save, then returned the Customer Job to Payment. Shortage and stale-message blocks also passed. The mount has no network access or shared-storage access, and no message or stock/database mutation left the proof. Focused tests cover delayed authoritative-save confirmation, failed operations/retries, duplicate conversion, stale commercial authority, shared-conflict fail-closed behaviour and role-scoped pricing access. Authenticated two-operator owner/Jade behaviour is still an explicit acceptance gate; no current role assignment was inferred from the historical Drive brief. Full evidence: `finance/R5H_QUOTE_INTEGRATION_EVIDENCE_2026-09-09.md`.
 
 ### 4. R5I — Stock operations and replenishment
 

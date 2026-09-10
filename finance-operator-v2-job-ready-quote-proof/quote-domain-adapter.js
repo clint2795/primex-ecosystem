@@ -28,23 +28,35 @@ export function createQuoteDomainAdapter(port){
     async open(id){if(!id)fail('Select a quote.');return run('open',id,(_,s)=>s.id===id&&s.isQuote)},
     async newQuote(source='manual'){return run('newQuote',source,(_,s)=>s.isQuote&&!s.acceptedSnapshot)},
     async saveDraft(){const s=editable();if(!s.isQuote)fail('Open a quote first.');return run('saveDraft',null,(_,s,r)=>r!==false&&!!saved(s.id))},
-    async approve(){const s=editable();if(!s.isQuote)fail('Open a quote first.');return run('approve',null,(_,s)=>s.approvalCurrent&&!!s.quoteApproval)},
+    async approve(){const s=editable();if(!s.isQuote)fail('Open a quote first.');return run('approve',null,(_,s)=>{const o=saved(s.id);return s.approvalCurrent&&!!s.quoteApproval&&o?.quoteApproval?.fingerprint===s.quoteApproval.fingerprint})},
     async prepareMessage(){savedApproved();return run('prepareMessage',null,(_,s)=>s.messagePrepared===true)},
+    async prepareHandoff(channel){
+      const {s}=savedApproved();
+      if(!s.messagePrepared||!s.messageCurrent)fail('Prepare and review the current customer message first.');
+      if(!['email','whatsapp','copy'].includes(channel))fail('Choose email, WhatsApp or copy handoff.');
+      return run('prepareHandoff',channel,(_,s)=>s.handoffEvidence?.channel===channel&&s.handoffEvidence?.fingerprint===s.messageFingerprint);
+    },
+    async recordSent(){
+      const {s}=savedApproved();
+      if(!s.messageCurrent||!s.handoffEvidence||s.handoffEvidence.fingerprint!==s.messageFingerprint)fail('Complete the deliberate customer-message handoff first.');
+      return run('recordSent',null,(_,s)=>{const o=saved(s.id);return s.quoteStatus==='Quote sent / waiting customer'&&o?.quoteStatus==='Quote sent / waiting customer'&&o?.confirmation==='Yes'});
+    },
     async recordAcceptance(){
       const {s,o}=savedApproved();
       if(s.quoteStatus!=='Quote sent / waiting customer'||o.quoteStatus!=='Quote sent / waiting customer'||o.confirmation!=='Yes')fail('Record the actual customer message as sent before acceptance.');
       if(!s.messageCurrent)fail('The saved customer message must be current.');
-      return run('recordAcceptance',null,(_,s)=>!!s.acceptedSnapshot&&s.quoteStatus==='Customer replied / ready to convert');
+      return run('recordAcceptance',null,(_,s)=>{const savedQuote=saved(s.id);return !!s.acceptedSnapshot&&s.quoteStatus==='Customer replied / ready to convert'&&!!savedQuote?.acceptedSnapshot&&savedQuote.quoteStatus==='Customer replied / ready to convert'});
     },
     async convert(){
       const s=read();if(!s.isQuote||!s.acceptedSnapshot)fail('A locked accepted quote is required.');
       if(s.convertedOrderId)fail('This quote is already converted.');
+      const accepted=saved(s.id);if(!accepted?.acceptedSnapshot)fail('Wait for the accepted quote to finish saving before conversion.');
       const source=s.id;
       return run('convert',null,(_,s,r)=>s.isQuote===false&&s.sourceQuoteId===source&&!!s.commercialLock&&r!==false);
     },
     async saveConvertedOrder(){
       const s=read();if(s.isQuote||!s.sourceQuoteId||!s.commercialLock)fail('Open a converted live order first.');
-      return run('saveConvertedOrder',null,(_,s,r)=>r!==false&&!!saved(s.id));
+      return run('saveConvertedOrder',null,(_,s,r)=>{const live=saved(s.id),source=saved(s.sourceQuoteId);return r!==false&&live?.sourceQuoteId===s.sourceQuoteId&&source?.convertedOrderId===s.id});
     },
     get busy(){return busy}
   });
