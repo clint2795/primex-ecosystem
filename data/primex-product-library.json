@@ -20,8 +20,8 @@
       "productKind": "single_vial",
       "catalogSection": "featured",
       "displayOrder": 10,
-      "publicPrice": 35,
-      "priceDisplay": "£35",
+      "publicPrice": 55,
+      "priceDisplay": "£55",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#20C8B8",
@@ -36,8 +36,8 @@
       "productKind": "single_vial",
       "catalogSection": "featured",
       "displayOrder": 20,
-      "publicPrice": 40,
-      "priceDisplay": "£40",
+      "publicPrice": 45,
+      "priceDisplay": "£45",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#20C8B8",
@@ -52,8 +52,8 @@
       "productKind": "single_vial",
       "catalogSection": "featured",
       "displayOrder": 30,
-      "publicPrice": 65,
-      "priceDisplay": "£65",
+      "publicPrice": 95,
+      "priceDisplay": "£95",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#2F7FA8",
@@ -68,8 +68,8 @@
       "productKind": "single_vial",
       "catalogSection": "featured",
       "displayOrder": 40,
-      "publicPrice": 40,
-      "priceDisplay": "£40",
+      "publicPrice": 55,
+      "priceDisplay": "£55",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#8064D8",
@@ -84,8 +84,8 @@
       "productKind": "single_vial",
       "catalogSection": "beyond",
       "displayOrder": 50,
-      "publicPrice": 50,
-      "priceDisplay": "£50",
+      "publicPrice": 49,
+      "priceDisplay": "£49",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#2F7FA8",
@@ -94,17 +94,15 @@
     },
     {
       "productCode": "AMINO1MQ50",
-      "aliases": [
-        "AMINO50"
-      ],
+      "aliases": ["AMINO50"],
       "displayName": "5-Amino-1MQ",
       "strength": "50mg",
       "supplyFormat": "1 vial",
       "productKind": "single_vial",
       "catalogSection": "beyond",
       "displayOrder": 60,
-      "publicPrice": 85,
-      "priceDisplay": "£85",
+      "publicPrice": 110,
+      "priceDisplay": "£110",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#2F7FA8",
@@ -126,16 +124,7 @@
       "accent": "#f08a2f",
       "family": "Research set",
       "contentsDisplay": "BPC-157 10mg + TB-500 10mg · separate vials",
-      "components": [
-        {
-          "productCode": "BPC10",
-          "quantity": 1
-        },
-        {
-          "productCode": "TB50010",
-          "quantity": 1
-        }
-      ]
+      "components": [{"productCode":"BPC10","quantity":1},{"productCode":"TB50010","quantity":1}]
     },
     {
       "productCode": "SET-GLOW70",
@@ -152,20 +141,7 @@
       "accent": "#8f65e5",
       "family": "Research set",
       "contentsDisplay": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg · separate vials",
-      "components": [
-        {
-          "productCode": "GHKCU50",
-          "quantity": 1
-        },
-        {
-          "productCode": "BPC10",
-          "quantity": 1
-        },
-        {
-          "productCode": "TB50010",
-          "quantity": 1
-        }
-      ]
+      "components": [{"productCode":"GHKCU50","quantity":1},{"productCode":"BPC10","quantity":1},{"productCode":"TB50010","quantity":1}]
     },
     {
       "productCode": "SET-KLOW80",
@@ -182,24 +158,7 @@
       "accent": "#7f92a6",
       "family": "Research set",
       "contentsDisplay": "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg + KPV 10mg · separate vials",
-      "components": [
-        {
-          "productCode": "GHKCU50",
-          "quantity": 1
-        },
-        {
-          "productCode": "BPC10",
-          "quantity": 1
-        },
-        {
-          "productCode": "TB50010",
-          "quantity": 1
-        },
-        {
-          "productCode": "KPV10",
-          "quantity": 1
-        }
-      ]
+      "components": [{"productCode":"GHKCU50","quantity":1},{"productCode":"BPC10","quantity":1},{"productCode":"TB50010","quantity":1},{"productCode":"KPV10","quantity":1}]
     },
     {
       "productCode": "RTA20",
@@ -241,8 +200,8 @@
       "productKind": "single_vial",
       "catalogSection": "wider",
       "displayOrder": 120,
-      "publicPrice": 50,
-      "priceDisplay": "£50",
+      "publicPrice": 65,
+      "priceDisplay": "£65",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#20C8B8",
@@ -273,8 +232,8 @@
       "productKind": "single_vial",
       "catalogSection": "wider",
       "displayOrder": 140,
-      "publicPrice": 55,
-      "priceDisplay": "£55",
+      "publicPrice": 75,
+      "priceDisplay": "£75",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#B4C833",
@@ -289,8 +248,8 @@
       "productKind": "single_vial",
       "catalogSection": "wider",
       "displayOrder": 150,
-      "publicPrice": 75,
-      "priceDisplay": "£75",
+      "publicPrice": 95,
+      "priceDisplay": "£95",
       "priceMode": "fixed",
       "activeForNewRequest": true,
       "accent": "#2F7FA8",
