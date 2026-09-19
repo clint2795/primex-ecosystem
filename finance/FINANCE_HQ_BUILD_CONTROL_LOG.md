@@ -2,6 +2,20 @@
 
 > Controlling completion queue: `finance/FINANCE_HQ_COMPLETION_REGISTER.md` (`PX-FINANCE-COMPLETION-2026-08-26`). Read it before proposing or starting further Finance work. This log remains the technical history; the completion register controls what is next and prevents completed work being repeated.
 
+## PX-ROUTE-R5H — Source-grounded Quote engine mount (LOCAL VERIFIED) — 2026-09-09
+
+- Continuation source and rollback: branch `review/r5h-quote-integration`, source-export checkpoint `21729ec`; protected integration rollback remains `d4eb44634e54551d5c64a51f43ef42f9c3d300bf` as recorded in the R5H plan.
+- Replaced the static Quote demonstration in `finance-operator-v2-job-ready-quote-proof/` with a sandboxed mount of the unchanged protected R5G Finance source. The adapter contains orchestration only; it does not copy product rules, prices, stock, totals, messages or commercial transitions.
+- The embedded proof has an explicit no-network content security policy, memory-only storage, disabled shared-sync startup and no real email/WhatsApp launch. It can exercise the real engine without changing customer, stock, Finance or Supabase records.
+- The adapter now waits for authoritative saved approval, sent evidence, accepted snapshot and both sides of quote-to-live linkage before exposing the next operation. Read-only records, stale messages, missing handoff evidence, unsaved acceptance and duplicate conversion fail closed.
+- Browser journey passed: structured request to quote, real RTA20 catalogue price and stock, edit, draft save, approval, actual generated message review, deliberate copy handoff, recorded sent evidence, customer acceptance, £150 accepted-total lock, conversion, separate live-order save and Customer Job transition to Payment.
+- Browser exceptions passed: changing dispatch after message preparation blocked the stale handoff; GHKCU50 with no held stock required a shortage/update route and approved only with the required availability facts. Responsive inspection passed at 390×844 and 1440×900 without horizontal overflow; mobile controls remained at least 44px high.
+- Automated verification passed: 12 Quote adapter/source-boundary tests, R5H Batch 3 shared reliability, Batch 4 lease/message truth, outbound-body audit, Finance operator layout, email-only handoff and all 7 payment-module regressions. `git diff --check` passed apart from existing Windows line-ending notices.
+- Two repository-wide legacy verifiers remain independently blocked/failing outside this change: commercial-authority verification references a cutover SQL file absent from this branch and `origin/main`; message-direction verification checks the older `finance/index.html` generator signature. Neither protected/live source was changed to hide those results.
+- Shared-conflict code, lease-loss read-only behaviour and `admin`/`finance` pricing scope are regression-covered. Authenticated owner/Jade two-session acceptance remains pending because the current user-role assignment was not present in the current repository evidence or the historical Drive working brief; no role was invented and no Supabase query/schema/RLS change was made.
+- Files: `finance-operator-v2-job-ready-quote-proof/index.html`, `quote-domain-adapter.js`, `quote-engine-port.js`, `quote-workspace.css`, `quote-workspace.js`, `scripts/r5h-quote-adapter.test.mjs`, this log, the completion register and the R5H evidence record.
+- Status: local implementation and isolated rendered proof complete. No commit, push, publication, deployment, merge or cutover performed. Protected publication and owner/Jade authenticated acceptance remain gates.
+
 ## PX-ROUTE-R5G — Operator Layout and Mobile Control (LOCAL VERIFIED) — 2026-08-26
 
 - Accepted source and rollback: published R5F protected artifact `finance-completion-review/index.html`; publication record commit `cc2b77c6c483e13d1a20acc01047af63a28d81cb`.
