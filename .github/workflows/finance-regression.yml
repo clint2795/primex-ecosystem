@@ -6,14 +6,28 @@ on:
     paths:
       - 'finance/**'
       - 'finance-operator-layout-review/**'
+      - 'data/primex-product-library.json'
+      - 'planner/app.js'
+      - 'planner/index.html'
+      - 'order-request/index.html'
+      - 'scripts/verify-commercial-authority.mjs'
       - 'scripts/verify-finance-r5h-batch1.mjs'
+      - 'supabase/functions/submit-request/**'
+      - 'supabase/migrations/20260817183000_commercial_pricing_review_v45g.sql'
       - '.github/workflows/finance-regression.yml'
   pull_request:
     branches: [main]
     paths:
       - 'finance/**'
       - 'finance-operator-layout-review/**'
+      - 'data/primex-product-library.json'
+      - 'planner/app.js'
+      - 'planner/index.html'
+      - 'order-request/index.html'
+      - 'scripts/verify-commercial-authority.mjs'
       - 'scripts/verify-finance-r5h-batch1.mjs'
+      - 'supabase/functions/submit-request/**'
+      - 'supabase/migrations/20260817183000_commercial_pricing_review_v45g.sql'
       - '.github/workflows/finance-regression.yml'
   workflow_dispatch:
 
@@ -41,6 +55,9 @@ jobs:
 
       - name: Run R5H Batch 1 verifier
         run: node scripts/verify-finance-r5h-batch1.mjs
+
+      - name: Verify live commercial authority alignment
+        run: node scripts/verify-commercial-authority.mjs
 
       - name: Run all R5H regressions
         shell: bash

@@ -2,6 +2,20 @@
 
 > Controlling completion queue: `finance/FINANCE_HQ_COMPLETION_REGISTER.md` (`PX-FINANCE-COMPLETION-2026-08-26`). Read it before proposing or starting further Finance work. This log remains the technical history; the completion register controls what is next and prevents completed work being repeated.
 
+## Operational launch candidate — current commercial truth and blocker cleanup — 2026-09-23
+
+- Finance v2 visual experimentation stopped. All R5H/v2 branches, payment work, Customer Job architecture and benchmark checkpoints remain preserved as future product-development evidence.
+- Operational candidate remains the mature original `finance/index.html`; it was not rebuilt or broadly redesigned.
+- Finance Public prices now match the commercial authority actually consumed by live Early Access at `data/primex-product-library.json`: GHK-Cu 50mg £55, BPC-157 10mg £45, MOTS-c 40mg £95, DSIP 5mg £55, NAD+ 500mg £49, 5-Amino-1MQ 50mg £110, TB-500 10mg £65, Thymosin Alpha-1 10mg £75 and SS-31 30mg £95.
+- Wolverine £85, Glow £120 and Klow £165 remain unchanged with the settled separate-vial definitions. Klow remains Glow plus KPV 10mg. GHK-Cu 100mg remains historical-only and unavailable for new quotes.
+- Repaired `scripts/verify-commercial-authority.mjs` by removing its stale dependency on a deleted historical cutover file, making its rule-block parsing line-ending safe, and updating it to the current live authority.
+- Wired the commercial-authority regression and all of its source inputs into Finance CI so Early Access and Finance catalogue/pricing drift cannot pass silently.
+- Logged-out startup no longer attempts a shared-order refresh, eliminating a false browser error while preserving authenticated shared refresh behaviour.
+- Quote approval now reports the actual first blocking issue instead of always saying that prices are unresolved.
+- The `Mark already sent` recovery path now advances a sent quote to `Quote sent / waiting customer`, matching the primary sent-evidence path.
+- No live Early Access, genuine intake, Supabase schema/RLS, protocol work, genuine data, wider quote-only range or unrelated route changed.
+- Local verification: current-authority regression, all existing R5H regressions, payment isolation tests, desktop start and exact 390px start passed; no horizontal overflow or fresh browser errors.
+
 ## PX-ROUTE-R5G — Operator Layout and Mobile Control (LOCAL VERIFIED) — 2026-08-26
 
 - Accepted source and rollback: published R5F protected artifact `finance-completion-review/index.html`; publication record commit `cc2b77c6c483e13d1a20acc01047af63a28d81cb`.
