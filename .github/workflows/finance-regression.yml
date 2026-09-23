@@ -64,7 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          tests=(finance/tests/r5h*_regression.js)
+          tests=(finance/tests/r5h*_regression.js finance/tests/operational*_regression.js)
           if [ ${#tests[@]} -eq 0 ]; then
             echo 'No R5H regression files found.' >&2
             exit 1

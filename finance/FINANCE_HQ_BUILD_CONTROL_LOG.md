@@ -1848,3 +1848,14 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Protected publication commits: route `4eb0459994ad7159839626976e0e49a5a446ef38`; verifier `30538c1ffb046694dfbd627fbf13e1bc8cbc59e3`.
 - Hosted SHA-256 `b9e6cb7e8c96bf6fc8f6ab162a206d6b9127835249cd4a2b30ea1b6cd5c5ce61` exactly matches the protected source. Live `/finance/` remains untouched.
 - R5G remains open pending full owner-phone and Jade-sized review; R5H has not started.
+
+## Operational launch candidate — pre-Beta gate hardening — 2026-09-23
+
+- Continued from accepted checkpoint `098f6b4f3903eff7cf9a580fdfbfa11614ab2599` on `operational/finance-launch-candidate`.
+- Ported only the proven shared-workspace reliability controls into the mature Finance candidate: truthful claim-error handling, preservation of unsynced local edits, explicit remote-version conflict recovery, visible failed-release expiry, and a 10-minute lease renewed every four minutes.
+- Controlled local quote test used BPC-157 10mg at the current £45 standard price with no customer contact details. Quote approval, prepared-message state, controlled sent evidence, acceptance, £45 accepted-total lock, conversion, source linkage, duplicate blocking, save/reload persistence and local recovery state all passed.
+- Conversion alone did not save the live order and did not affect stock. With no authenticated shared session on localhost, the saved live record remained `local_only`, recoverable, and non-stock-affecting as designed.
+- Desktop 1280px and exact 390px checks showed no horizontal overflow and no browser errors.
+- All R5H, payment-isolation, commercial-authority, combined-candidate and new operational gate regressions passed.
+- Clint's protected session was verified as connected with `admin` access. A separate Jade-authenticated browser session was not available, so real simultaneous Clint/Jade visibility, contention, lease release/expiry and successful shared-save/stock activation remain unproven. No Supabase schema/RLS change was made.
+- Status: not cleared for isolated Beta until the separate Jade session and authenticated shared-save transition are completed.
