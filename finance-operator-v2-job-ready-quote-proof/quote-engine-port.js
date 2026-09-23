@@ -19,14 +19,14 @@ function bridgeScript(){return String.raw`<script>
   const read=()=>{
     const payload=orderPayload(),savedRecord=saved(payload.id),sourceRecord=payload.sourceQuoteId?saved(payload.sourceQuoteId):null;
     const isQuote=val('orderType')==='Quote / enquiry',liveOrderSaved=!isQuote&&!!payload.sourceQuoteId&&savedRecord?.sourceQuoteId===payload.sourceQuoteId&&sourceRecord?.convertedOrderId===payload.id;
-    return clone({...payload,isQuote,liveOrderSaved,readOnly:!!current.cloudReadOnly,approvalCurrent:quoteApprovalCurrent(),messagePrepared:!!String(confirmationMsg?.value||'').trim(),messageCurrent:customerMessageIsCurrent(confirmationMsg),messageFingerprint:messageFingerprint(),handoffEvidence,convertedOrderId:savedRecord?.convertedOrderId||'',sentEvidence:(savedRecord?.confirmation==='Yes'||sourceRecord?.confirmation==='Yes'),sourceQuoteStatus:sourceRecord?.quoteStatus||'',sourceQuoteAcceptedSnapshot:sourceRecord?.acceptedSnapshot||null,authorityVersion:COMMERCIAL_AUTHORITY_VERSION,isolated:true});
+    return clone({...payload,isQuote,liveOrderSaved,savedCurrent:!!savedRecord,readOnly:!!current.cloudReadOnly,approvalCurrent:quoteApprovalCurrent(),messagePrepared:!!String(confirmationMsg?.value||'').trim(),messageCurrent:customerMessageIsCurrent(confirmationMsg),messageFingerprint:messageFingerprint(),handoffEvidence,convertedOrderId:savedRecord?.convertedOrderId||'',sentEvidence:(savedRecord?.confirmation==='Yes'||sourceRecord?.confirmation==='Yes'),sourceQuoteStatus:sourceRecord?.quoteStatus||'',sourceQuoteAcceptedSnapshot:sourceRecord?.acceptedSnapshot||null,authorityVersion:COMMERCIAL_AUTHORITY_VERSION,isolated:true});
   };
   const packet=()=>({state:read(),list:list()});
   const waitFor=async predicate=>{for(let i=0;i<160;i++){const value=predicate();if(value)return value;await new Promise(r=>setTimeout(r,25))}throw new Error('Authoritative saved state was not confirmed in time.')};
   const command=async(name,payload)=>{
     if(name==='newQuote'){
       handoffEvidence=null;
-      if(payload==='request'){const before=new Set(requestInbox.map(r=>r.requestId));createLocalTestRequest();const req=requestInbox.find(r=>!before.has(r.requestId));if(!req)throw new Error('The Finance request fixture was not created.');convertRequestToQuote(req.requestId)}
+      if(payload==='request'){const before=new Set(requestInbox.map(r=>r.requestId));createLocalTestRequest();const req=requestInbox.find(r=>!before.has(r.requestId));if(!req)throw new Error('The Finance request fixture was not created.');convertRequestToQuote(req.requestId);set('postageDecision','none');set('postageCharge',0);set('quoteAvailabilityNoteMode','available');set('quoteExpectedDispatch','Within 2 working days')}
       else if(payload==='email')newEmailQuote();else newQuote();
       showView('order');return packet();
     }
