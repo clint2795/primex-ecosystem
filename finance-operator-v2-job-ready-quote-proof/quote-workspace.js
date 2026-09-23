@@ -44,7 +44,8 @@ export async function createQuoteWorkspace(root,{onState=()=>{},onComplete=()=>{
   const paint=()=>{
     const state=adapter.read()||{},quoteLines=Array.isArray(state.lines)?state.lines:[];
     title.textContent=state.id?`Quote ${state.id}`:'New quote';
-    subtitle.textContent=`Revision ${state.quoteApproval?.revision||1} · ${state.authorityVersion||'Authority unavailable'} · ${state.tier||'standard'} pricing`;
+    const availability=state.quoteAvailabilityNoteMode==='available'?'Available now':state.quoteExpectedDispatch||'Timing to confirm';
+    subtitle.textContent=`Revision ${state.quoteApproval?.revision||1} · ${state.tier==='standard'?'Standard price':state.tier||'Standard price'} · ${availability}`;
     headTotal.textContent=money(state.total);
     lines.innerHTML=quoteLines.length?quoteLines.map(line=>`<div class="ledger-row"><div class="line-name"><strong>${esc(line.name||'Quote line')}</strong><small>${esc(line.pid||line.sid||line.priceSource||'Authoritative product')}</small></div><span class="line-number" data-label="Qty">${qty(line)}</span><span class="line-number" data-label="Unit">${money(line.price)}</span><span class="line-number line-total" data-label="Line">${money(extended(line))}</span></div>`).join(''):'<div class="ledger-empty">No product lines are present in this quote.</div>';
     const productTotal=quoteLines.reduce((sum,line)=>sum+extended(line),0),materials=Number(state.materialsCharge||0),postage=Number(state.postageCharge||0);
@@ -53,7 +54,7 @@ export async function createQuoteWorkspace(root,{onState=()=>{},onComplete=()=>{
     message.textContent=state.confirmationMsg||'No customer message has been prepared for this revision.';
     if(state.sentEvidence){notice.textContent=state.isQuote?'Sent evidence is recorded against this quote.':'Source quote evidence remains linked to the live order.';notice.className='workspace-notice good'}
     else if(state.handoffEvidence){notice.textContent=`${state.handoffEvidence.channel} handoff prepared in this isolated proof. Nothing was sent.`;notice.className='workspace-notice attention'}
-    else{notice.textContent='Protected proof · no shared writes, stock changes or customer contact.';notice.className='workspace-notice'}
+    else{notice.textContent='Review workspace · customer contact and shared writes are disabled.';notice.className='workspace-notice'}
     onState(state);
   };
   const run=async(label,operation)=>{notice.textContent=label+'…';notice.className='workspace-notice';root.querySelectorAll('button').forEach(button=>button.disabled=true);try{await operation();paint()}catch(error){notice.textContent=error.message;notice.className='workspace-notice attention'}finally{root.querySelectorAll('button').forEach(button=>button.disabled=false)}};
