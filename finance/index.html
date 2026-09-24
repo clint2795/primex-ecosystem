@@ -464,6 +464,14 @@ body{font-size:15px}
 /* Operational launch candidate: targeted Start / Mission Control flattening. */
 #view-start .start-mission{margin:12px 0 18px;padding:4px 0 18px;border-bottom:1px solid #172536}
 #view-start .start-mission>.section-title{padding-left:12px;border-left:2px solid #557d9a}
+#view-start .start-priority{margin:2px 0 14px;padding:13px 0;border-top:1px solid #1b2b39;border-bottom:1px solid #1b2b39}
+#view-start .start-priority h3{margin:0 0 9px;font-size:16px;color:#eef6fc}
+#view-start .start-priority.is-clear{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 0}
+#view-start .start-priority.is-clear h3{margin:0;color:#9fc3da;font-size:14px}
+#view-start .start-priority.is-clear .start-flat-list{padding:0;border:0}
+#view-start .start-all-clear{color:#8fa4b6;font-size:13px;line-height:1.45;padding:7px 0}
+#view-start .start-intake-clear,#view-start .start-workflow-clear{display:block}
+#view-start .start-attention-row{border-left-color:#6e9cbc!important;background:#0b141d!important}
 #view-start .start-flat-list{border-top:1px solid #172536;padding-top:4px}
 #view-start .start-flat-list:empty{display:none}
 #view-start>.card{border-radius:6px}
@@ -474,12 +482,21 @@ body{font-size:15px}
   #view-start .start-mission>.section-title{margin-bottom:4px;padding:0 0 14px 10px}
   #view-start .start-mission>.section-title>.btn{width:100%;min-height:46px;margin-top:13px;border-radius:4px}
   #view-start .start-mission .queue-grid{display:block}
+  #view-start .start-priority{margin:2px 8px 10px;padding:11px 0}
+  #view-start .start-priority.is-clear{display:block;padding:9px 0}
+  #view-start .start-priority.is-clear h3{margin-bottom:2px}
+  #view-start .start-all-clear{padding:5px 2px}
   #view-start .start-mission .subhead{margin:18px 0 4px!important;padding:0 10px 7px;border-bottom:1px solid #172536}
   #view-start .start-mission .queue-card{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"label count" "action count";align-items:center;width:100%;min-height:68px;margin:0;padding:12px 10px;border:0;border-bottom:1px solid #172536;border-left:2px solid #35536f;background:transparent;box-shadow:none;transform:none}
   #view-start .start-mission .queue-card:last-child{border-bottom:0}
   #view-start .start-mission .queue-card .k{grid-area:label;color:#c6d5e0;letter-spacing:.08em}
   #view-start .start-mission .queue-card .n{grid-area:count;margin:0 0 0 14px;font-size:23px;color:#eaf5fc}
   #view-start .start-mission .queue-card .s{grid-area:action;margin:3px 0 0;color:#8fa4b6}
+  #view-start .start-mission .queue-card.start-attention-row{min-height:54px;padding-top:8px;padding-bottom:8px}
+  #view-start .start-priority .alert-row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"copy badge" "copy action";align-items:start;gap:8px 10px}
+  #view-start .start-priority .alert-row>div{grid-area:copy}
+  #view-start .start-priority .alert-row>.badge{grid-area:badge;justify-self:end}
+  #view-start .start-priority .alert-row>.btn{grid-area:action;justify-self:end;min-height:42px}
   #view-start>.card{margin:10px 0;padding:14px 10px;border-radius:5px}
   #view-start .sysmap{gap:0;border-top:1px solid #172536}
   #view-start .sysmap button{min-height:62px;padding:11px 9px;border:0;border-bottom:1px solid #172536;border-left:2px solid #2f485e;border-radius:0;background:transparent}
@@ -508,13 +525,17 @@ body{font-size:15px}
   </header>
   <main id="view-start" class="view active">
     <section class="start-mission">
-      <div class="section-title"><div><h2>Mission Control</h2><p>Live entry points first, followed by the existing workflow totals.</p></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
+      <div class="section-title"><div><h2>Mission Control</h2></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
       <div class="queue-grid" id="missionControlCards">
         <button class="queue-card" onclick="showView('request')"><div class="k">New Requests</div><div class="n">0</div><div class="s">Open Requests</div></button>
         <button class="queue-card" onclick="openFirstCustomerMessageTask()"><div class="k">Customer Messages</div><div class="n">0</div><div class="s">Open first actionable task</div></button>
         <button class="queue-card" onclick="showView('stock')"><div class="k">Stock Alerts</div><div class="n">0</div><div class="s">Open Stock</div></button>
       </div>
-      <div class="subhead" style="margin-top:14px">Workflow totals</div>
+      <section id="startNextActionsSection" class="start-priority" aria-live="polite">
+        <h3 id="startNextActionsHeading">Next actions</h3>
+        <div id="startActionPrompts" class="start-flat-list"></div>
+      </section>
+      <div class="subhead" style="margin-top:14px">Active workflow</div>
       <div class="queue-grid" id="queueCards">
         <button class="queue-card"><div class="k">Awaiting payment</div><div class="n">0</div><div class="s">fallback shown before app starts</div></button>
         <button class="queue-card"><div class="k">To pack / fulfil</div><div class="n">0</div><div class="s">0 postage items</div></button>
@@ -523,14 +544,10 @@ body{font-size:15px}
       </div>
     </section>
     <section class="card">
-      <div class="section-title"><div><h3>Quick actions</h3><p>Common daily shortcuts.</p></div></div>
-      <div class="sysmap"><button onclick="newQuote();showView('order')"><strong>Quote / enquiry</strong><small>Price a request without affecting stock</small></button><button onclick="showView('queues');openQueue('quote-ready')"><strong>Open quotes</strong><small>Review active quotes and convert when ready</small></button><button onclick="showView('history');renderHistory('live')"><strong>Repeat order</strong><small>Find a completed customer/order and duplicate it</small></button><button onclick="showView('history')"><strong>Order history</strong><small>Find completed, past, converted or cancelled work</small></button><button onclick="showView('request')"><strong>Request Inbox</strong><small>Review new enquiries</small></button><button onclick="showView('stock')"><strong>Stock</strong><small>Receive stock, adjust counts, and check low items</small></button></div>
+      <div class="section-title"><div><h3>Shortcuts</h3></div></div>
+      <div class="sysmap"><button onclick="newQuote();showView('order')"><strong>Quote / enquiry</strong><small>Start directly in quote mode</small></button><button onclick="showView('queues');openQueue('quote-ready')"><strong>Quotes ready to send</strong><small>Open the send queue</small></button><button onclick="showView('history');renderHistory('live')"><strong>Repeat order</strong><small>Duplicate a completed order</small></button></div>
     </section>
-    <section class="card">
-      <div class="section-title"><div><h3 id="startNextActionsHeading">Next actions 0</h3><p>Priority prompts from open orders, customer messages, dispatch and stock.</p></div></div>
-      <div id="startActionPrompts" class="start-flat-list" style="margin-top:12px"></div>
-    </section>
-    <section class="card">
+    <section class="card" id="startStockAlertsSection">
       <div class="section-title"><div><h3 id="startStockAlertsHeading">Urgent stock alerts 0</h3><p>Only active items with reorder tracking switched on.</p></div><button class="btn" onclick="showView('stock')">Open stock</button></div>
       <div id="startStockAlerts" class="start-flat-list" style="margin-top:12px"></div>
     </section>
@@ -1024,7 +1041,9 @@ const queueList2=document.getElementById('queueList2');
 const historyList=document.getElementById('historyList');
 const dispatchQuickAccess=document.getElementById('dispatchQuickAccess');
 const startStockAlerts=document.getElementById('startStockAlerts');
+const startStockAlertsSection=document.getElementById('startStockAlertsSection');
 const startActionPrompts=document.getElementById('startActionPrompts');
+const startNextActionsSection=document.getElementById('startNextActionsSection');
 const startCommsActions=document.getElementById('startCommsActions');
 const quoteFollowupStart=document.getElementById('quoteFollowupStart');
 const stockFocusContext=document.getElementById('stockFocusContext');
@@ -2737,7 +2756,9 @@ function startWorkflowSummaryData(data=queueData()){const byKey=k=>data.find(x=>
 function openWorkflowSummary(group){const data=queueData(),summary=startWorkflowSummaryData(data).find(x=>x.group===group);if(!summary)return;const target=summary.keys.find(k=>(data.find(x=>x.key===k)?.orders.length||0)>0)||summary.keys[0];showView('queues');openQueue(target)}
 function openOrderValueInclude(o){return isOpenWork(o)&&normalStatus(o)!=='Sent / collected'}
 function activeValueCardHTML(){
-  const total=money(dashboardOrders().reduce((a,o)=>a+(openOrderValueInclude(o)?o.total:0),0));
+  const value=dashboardOrders().reduce((a,o)=>a+(openOrderValueInclude(o)?Number(o.total||0):0),0);
+  if(value<=0)return '';
+  const total=money(value);
   return `<button class="queue-card"><div class="k">Open order value</div><div class="n" data-value="${htmlEscape(total)}">${htmlEscape(total)}</div><div class="s">Live orders still needing action</div></button>`;
 }
 const WORKFLOW_GUIDANCE={
@@ -2765,7 +2786,10 @@ function showWorkflowOverview(){window.lastQueue='';const data=queueData();rende
 function renderQueues(){
   const data=queueData();
   renderRequestAttentionSignals();
-  queueCards.innerHTML=startWorkflowSummaryData(data).map(startQueueCardHTML).join('')+activeValueCardHTML();
+  const activeSummary=startWorkflowSummaryData(data).filter(item=>item.count>0);
+  const activeValue=activeValueCardHTML();
+  queueCards.classList.toggle('start-workflow-clear',!activeSummary.length&&!activeValue);
+  queueCards.innerHTML=activeSummary.map(startQueueCardHTML).join('')+activeValue||'<div class="start-all-clear">No active quote or order work.</div>';
   queueCards2.innerHTML=data.map(x=>queueCardHTML(x,'')).join('');
   window.lastQueue='';workflowGuidance?.classList.add('hide');queueList2.innerHTML=workflowBoardHTML(data)
 }
@@ -3040,17 +3064,18 @@ function stopStockingItem(k){
 function renderStartStockAlerts(){
   if(!startStockAlerts)return;
   const alerts=stockAlerts();
-  if(startStockAlertsHeading)startStockAlertsHeading.textContent='Urgent stock alerts '+alerts.length;
+  startStockAlertsSection?.classList.toggle('hide',!alerts.length);
+  if(startStockAlertsHeading)startStockAlertsHeading.textContent='Stock alerts '+alerts.length;
+  if(!alerts.length){startStockAlerts.innerHTML='';return}
   const shown=alerts.slice(0,6);
   const extra=alerts.length>shown.length?`<div class="tiny" style="margin-top:8px">${alerts.length-shown.length} more stock alert${alerts.length-shown.length===1?'':'s'} in Stock.</div>`:'';
-  startStockAlerts.innerHTML=shown.length?shown.map(a=>`<div class="summary-line"><span>${htmlEscape(STOCK_LABELS[a.k]||a.k)}</span><strong>${htmlEscape(a.label)} - ${stock[a.k]||0}</strong></div>`).join('')+extra:'<div class="muted">No urgent stock alerts.</div>';
+  startStockAlerts.innerHTML=shown.map(a=>`<div class="summary-line"><span>${htmlEscape(STOCK_LABELS[a.k]||a.k)}</span><strong>${htmlEscape(a.label)} - ${stock[a.k]||0}</strong></div>`).join('')+extra;
 }
 function renderStartActionPrompts(){
   if(!startActionPrompts)return;
   const allAlerts=deriveActionAlerts();
-  if(startNextActionsHeading)startNextActionsHeading.textContent='Next actions '+allAlerts.length;
   const alerts=allAlerts.slice(0,8);
-  if(alerts.length){startActionPrompts.innerHTML='<div class="alert-list">'+alerts.map(alertHtml).join('')+'</div>';return}
+  if(alerts.length){if(startNextActionsHeading)startNextActionsHeading.textContent='Next actions '+allAlerts.length;startNextActionsSection?.classList.remove('is-clear');startActionPrompts.innerHTML='<div class="alert-list">'+alerts.map(alertHtml).join('')+'</div>';return}
   const live=dashboardOrders().filter(isOpenWork);
   let prompts=[];
   const conf=live.filter(o=>(o.confirmation||'No')!=='Yes');
@@ -3061,7 +3086,9 @@ function renderStartActionPrompts(){
   if(conf.length)prompts.push(['Confirmation to send',conf.length]);
   if(upd.length)prompts.push(['Customer update to send',upd.length]);
   if(miss.length)prompts.push(['Missing tracking/label ref',miss.length]);
-  startActionPrompts.innerHTML=prompts.length?prompts.map(p=>`<div class="summary-line"><span>${htmlEscape(p[0])}</span><strong>${p[1]}</strong></div>`).join(''):'<div class="muted">No urgent order prompts.</div>';
+  if(startNextActionsHeading)startNextActionsHeading.textContent=prompts.length?'Next actions '+prompts.reduce((n,p)=>n+p[1],0):'All clear';
+  startNextActionsSection?.classList.toggle('is-clear',!prompts.length);
+  startActionPrompts.innerHTML=prompts.length?prompts.map(p=>`<div class="summary-line"><span>${htmlEscape(p[0])}</span><strong>${p[1]}</strong></div>`).join(''):'<div class="start-all-clear">No urgent order, message, dispatch or stock actions.</div>';
 }
 function messageActionsForOrder(o){
   const actions=[];
@@ -3089,11 +3116,13 @@ function renderMissionControlCards(){
   const requests=activeRequestIntakeItems().length;
   const messages=commsActionOrders().length;
   const stockCount=stockAlerts().length;
-  missionControlCards.innerHTML=[
+  const items=[
     ['New Requests',requests,'Open Requests',"showView('request')"],
     ['Customer Messages',messages,'Open first actionable task','openFirstCustomerMessageTask()'],
     ['Stock Alerts',stockCount,'Open Stock',"showView('stock')"]
-  ].map(x=>'<button class="queue-card" onclick="'+x[3]+'"><div class="k">'+x[0]+'</div><div class="n">'+x[1]+'</div><div class="s">'+x[2]+'</div></button>').join('');
+  ].filter(x=>x[1]>0);
+  missionControlCards.classList.toggle('hide',!items.length);
+  missionControlCards.innerHTML=items.map(x=>'<button class="queue-card start-attention-row" onclick="'+x[3]+'"><div class="k">'+x[0]+'</div><div class="n">'+x[1]+'</div><div class="s">'+x[2]+'</div></button>').join('');
 }
 function renderStartCommsActions(){
   if(!startCommsActions)return;
@@ -3448,7 +3477,7 @@ function deriveActionAlerts(){
 }
 function alertHtml(a){
   const action=a.actionTarget==='order'?'openOrderTask('+jsArg(a.sourceId)+','+jsArg(a.task||'')+')':"showView('stock')";
-  return '<div class="alert-row '+htmlEscape(a.severity)+'"><div><strong>'+htmlEscape(a.title)+'</strong><p>'+htmlEscape(a.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(a.category)+'</span><button type="button" class="secondary" onclick="'+action+'">Open next action</button></div>';
+  return '<div class="alert-row '+htmlEscape(a.severity)+'"><div><strong>'+htmlEscape(a.title)+'</strong><p>'+htmlEscape(a.message)+'</p></div><span class="badge badge-neutral">'+htmlEscape(a.category)+'</span><button type="button" class="btn subtle" onclick="'+action+'">Open next action</button></div>';
 }
 function renderActionBanner(){
   if(!actionBanner)return;

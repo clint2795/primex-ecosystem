@@ -1869,3 +1869,13 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - Exact 390px verification: 390px document width, no horizontal overflow, all fixed-navigation actions present at 46px height, New Order at 46px, operational rows at 62–68px, and no clipped or hidden Start actions.
 - Desktop 1280px verification showed no horizontal overflow and preserved the existing two-column working layout.
 - All R5H, payment-isolation, operational, commercial-authority and combined-candidate regressions passed. No workflow, pricing, stock, payment, Supabase or shared-reliability logic changed.
+
+## Operational launch candidate — Start action hierarchy — 2026-09-24
+
+- Continued from targeted mobile checkpoint `09ffaf2c1ef98a347cf3d58c5977bcbe160fef35`.
+- Moved active request, customer-message and stock signals directly below New Order; zero signals are suppressed and return automatically when their existing counts become non-zero.
+- Moved Next actions above workflow summaries. Its zero state is one compact all-clear line; genuine alerts retain the existing derived-action logic and surface immediately.
+- Workflow summary now renders only non-zero stages plus a non-zero open-order value. A quiet state uses one compact `No active quote or order work` line.
+- Reduced Shortcuts to Quote / enquiry, Quotes ready to send and Repeat order. Removed History, Requests and Stock duplicates already present in fixed navigation.
+- Exact 390px quiet and controlled-action renders both measured 390px wide with no horizontal overflow; fixed navigation remained complete. Desktop 1280px remained overflow-free.
+- All R5H, payment-isolation, operational, commercial-authority and combined-candidate regressions passed. Business and shared-workspace logic remained unchanged.
