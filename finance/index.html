@@ -460,6 +460,35 @@ body{font-size:15px}
   .stock-find-panel{padding:11px}
   .stock-find-meta{align-items:flex-start}
 }
+
+/* Operational launch candidate: targeted Start / Mission Control flattening. */
+#view-start .start-mission{margin:12px 0 18px;padding:4px 0 18px;border-bottom:1px solid #172536}
+#view-start .start-mission>.section-title{padding-left:12px;border-left:2px solid #557d9a}
+#view-start .start-flat-list{border-top:1px solid #172536;padding-top:4px}
+#view-start .start-flat-list:empty{display:none}
+#view-start>.card{border-radius:6px}
+#view-start .sysmap button,#view-start .queue-card,#view-start .alert-row,#view-start .stock-row{border-radius:4px}
+@media(max-width:760px){
+  #view-start{margin-left:-2px;margin-right:-2px}
+  #view-start .start-mission{margin-top:8px;padding:2px 2px 16px}
+  #view-start .start-mission>.section-title{margin-bottom:4px;padding:0 0 14px 10px}
+  #view-start .start-mission>.section-title>.btn{width:100%;min-height:46px;margin-top:13px;border-radius:4px}
+  #view-start .start-mission .queue-grid{display:block}
+  #view-start .start-mission .subhead{margin:18px 0 4px!important;padding:0 10px 7px;border-bottom:1px solid #172536}
+  #view-start .start-mission .queue-card{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"label count" "action count";align-items:center;width:100%;min-height:68px;margin:0;padding:12px 10px;border:0;border-bottom:1px solid #172536;border-left:2px solid #35536f;background:transparent;box-shadow:none;transform:none}
+  #view-start .start-mission .queue-card:last-child{border-bottom:0}
+  #view-start .start-mission .queue-card .k{grid-area:label;color:#c6d5e0;letter-spacing:.08em}
+  #view-start .start-mission .queue-card .n{grid-area:count;margin:0 0 0 14px;font-size:23px;color:#eaf5fc}
+  #view-start .start-mission .queue-card .s{grid-area:action;margin:3px 0 0;color:#8fa4b6}
+  #view-start>.card{margin:10px 0;padding:14px 10px;border-radius:5px}
+  #view-start .sysmap{gap:0;border-top:1px solid #172536}
+  #view-start .sysmap button{min-height:62px;padding:11px 9px;border:0;border-bottom:1px solid #172536;border-left:2px solid #2f485e;border-radius:0;background:transparent}
+  #view-start .sysmap button:last-child{border-bottom:0}
+  #view-start .start-flat-list{margin-left:0;margin-right:0;padding:2px 0 0}
+  #view-start .start-flat-list .alert-row,#view-start .start-flat-list .stock-row{margin:0;padding:12px 8px;border:0;border-bottom:1px solid #172536;border-left:2px solid #35536f;border-radius:0;background:transparent}
+  #view-start .start-flat-list>:last-child{border-bottom:0}
+  #view-start .btn{min-height:42px}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
@@ -478,7 +507,7 @@ body{font-size:15px}
     </div>
   </header>
   <main id="view-start" class="view active">
-    <section class="card">
+    <section class="start-mission">
       <div class="section-title"><div><h2>Mission Control</h2><p>Live entry points first, followed by the existing workflow totals.</p></div><button class="btn primary" id="newOrderStart">+ New Order</button></div>
       <div class="queue-grid" id="missionControlCards">
         <button class="queue-card" onclick="showView('request')"><div class="k">New Requests</div><div class="n">0</div><div class="s">Open Requests</div></button>
@@ -499,11 +528,11 @@ body{font-size:15px}
     </section>
     <section class="card">
       <div class="section-title"><div><h3 id="startNextActionsHeading">Next actions 0</h3><p>Priority prompts from open orders, customer messages, dispatch and stock.</p></div></div>
-      <div id="startActionPrompts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
+      <div id="startActionPrompts" class="start-flat-list" style="margin-top:12px"></div>
     </section>
     <section class="card">
       <div class="section-title"><div><h3 id="startStockAlertsHeading">Urgent stock alerts 0</h3><p>Only active items with reorder tracking switched on.</p></div><button class="btn" onclick="showView('stock')">Open stock</button></div>
-      <div id="startStockAlerts" class="card slim" style="box-shadow:none;margin-top:12px"></div>
+      <div id="startStockAlerts" class="start-flat-list" style="margin-top:12px"></div>
     </section>
     <section class="card security">
       <div class="section-title"><div><h3>Backup</h3><p>Download a safety copy before heavy order entry or app updates.</p></div><button class="btn good" onclick="exportFinanceBackup()">Export backup</button></div>

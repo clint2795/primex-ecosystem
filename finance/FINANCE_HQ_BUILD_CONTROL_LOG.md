@@ -1859,3 +1859,13 @@ Deployment poke for v44E3H GitHub Pages refresh.
 - All R5H, payment-isolation, commercial-authority, combined-candidate and new operational gate regressions passed.
 - Clint's protected session was verified as connected with `admin` access. A separate Jade-authenticated browser session was not available, so real simultaneous Clint/Jade visibility, contention, lease release/expiry and successful shared-save/stock activation remain unproven. No Supabase schema/RLS change was made.
 - Status: not cleared for isolated Beta until the separate Jade session and authenticated shared-save transition are completed.
+
+## Operational launch candidate — targeted Start/mobile flattening — 2026-09-24
+
+- Continued from accepted operational checkpoint `33a2aaddf9202c443483d89a66f3d1d0f573c7bc`.
+- Removed the outer Mission Control card while retaining its heading, concise guidance, New Order action, live entry rows and workflow totals.
+- Replaced the nested Next actions and Urgent stock alerts content cards with flat list wells; flattened Quick action tiles into aligned divider rows on mobile.
+- Retained the dark PrimeX base, semantic colours and directional blue edge-line treatment while reducing rounding on affected Start surfaces only.
+- Exact 390px verification: 390px document width, no horizontal overflow, all fixed-navigation actions present at 46px height, New Order at 46px, operational rows at 62–68px, and no clipped or hidden Start actions.
+- Desktop 1280px verification showed no horizontal overflow and preserved the existing two-column working layout.
+- All R5H, payment-isolation, operational, commercial-authority and combined-candidate regressions passed. No workflow, pricing, stock, payment, Supabase or shared-reliability logic changed.
